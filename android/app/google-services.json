@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "675811772534",
+    "project_id": "dishgenie-8d35f",
+    "storage_bucket": "dishgenie-8d35f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675811772534:android:7fcecdd128e15440def757",
+        "android_client_info": {
+          "package_name": "com.dishgenie.recipeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAODRkxr4wML3oB6qU0oFNHNPdCS7jlQ58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

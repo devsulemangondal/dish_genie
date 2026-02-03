@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:minHeight="@dimen/small_ad_height">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="@dimen/small_ad_padding"
+    android:paddingBottom="@dimen/small_ad_padding"
+    android:paddingStart="@dimen/small_ad_padding"
+    android:paddingEnd="@dimen/small_ad_padding">
+
+    <!-- Left Section: Media/Icon View - Square icon, full image visible -->
+    <com.google.android.gms.ads.nativead.MediaView
+        android:id="@+id/ad_media"
+        android:layout_width="@dimen/small_ad_media_size"
+        android:layout_height="@dimen/small_ad_media_size"
+        android:layout_marginEnd="10dp" />
+
+    <!-- Middle Section: Text Content (AD Badge, Headline, Body) -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="start|center_vertical">
+
+        <!-- AD Badge and Headline Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+
+            <!-- Red "AD" Badge - Pill shaped -->
+            <TextView
+                android:id="@+id/ad_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AD"
+                android:textColor="#FFFFFF"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:background="@drawable/ad_badge_background"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:layout_marginEnd="6dp" />
+
+            <!-- Headline - same color as body but extra bold for emphasis -->
+            <TextView
+                android:id="@+id/ad_headline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="?attr/nativeAdTextSecondary"
+                android:textSize="@dimen/small_ad_headline_size"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-black"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <!-- Body Text -->
+        <TextView
+            android:id="@+id/ad_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/nativeAdTextSecondary"
+            android:textSize="@dimen/small_ad_body_size"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:lineSpacingExtra="2dp"
+            android:lineSpacingMultiplier="1.1"
+            android:minHeight="28dp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+    <!-- Right Section: Call to Action Button - 3/4 of image height -->
+    <TextView
+        android:id="@+id/ad_call_to_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="INSTALL"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:background="@drawable/install_button_background"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:minHeight="@dimen/small_ad_cta_height"
+        android:minWidth="@dimen/small_ad_cta_min_width"
+        android:gravity="center"
+        android:layout_gravity="center_vertical"
+        android:clickable="true"
+        android:focusable="true" />
+
+</LinearLayout>
+
+</com.google.android.gms.ads.nativead.NativeAdView>

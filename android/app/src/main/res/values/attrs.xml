@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom theme attributes for native ad colors that automatically adapt to light/dark mode -->
+    <attr name="nativeAdTextPrimary" format="color" />
+    <attr name="nativeAdTextSecondary" format="color" />
+    <attr name="nativeAdBackground" format="color" />
+    <attr name="nativeAdBorder" format="color" />
+</resources>

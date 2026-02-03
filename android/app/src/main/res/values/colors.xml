@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#FFFFFF</color>
+    
+    <!-- Native Ad Colors - Light Mode -->
+    <color name="native_ad_text_primary">#000000</color> <!-- Pure black for maximum visibility on light background -->
+    <color name="native_ad_text_secondary">#4B5563</color> <!-- Darker gray for better visibility on light background -->
+    <color name="native_ad_background">#FAFAFA</color> <!-- Light gray background - more prominent -->
+    <color name="native_ad_border">#E5E7EB</color> <!-- Light border color -->
+</resources>

@@ -1,0 +1,736 @@
+{
+  "commonHome": "الرئيسية",
+  "commonRecipes": "الوصفات",
+  "commonPlan": "الخطة",
+  "commonShop": "التسوق",
+  "commonChat": "المحادثة",
+  "commonSettings": "الإعدادات",
+  "commonBack": "رجوع",
+  "commonNext": "التالي",
+  "commonSkip": "تخطي",
+  "commonCancel": "إلغاء",
+  "commonSave": "حفظ",
+  "commonDelete": "حذف",
+  "commonRemove": "إزالة",
+  "commonAdd": "إضافة",
+  "commonSearch": "بحث",
+  "commonLoading": "جاري التحميل...",
+  "adLoading": "جاري تحميل الإعلان",
+  "commonError": "خطأ",
+  "commonSuccess": "نجاح",
+  "commonFavorites": "المفضلة",
+  "commonViewAll": "عرض الكل",
+  "commonGetStarted": "ابدأ الآن",
+  "commonContinue": "متابعة",
+  "commonClose": "إغلاق",
+  "commonConfirm": "تأكيد",
+  "commonDone": "تم",
+  "commonShare": "مشاركة",
+  "commonVersion": "الإصدار",
+  "commonExit": "خروج",
+  "exitDialogTitle": "الخروج من التطبيق؟",
+  "exitDialogMessage": "هل أنت متأكد أنك تريد الخروج من التطبيق؟",
+  "exitDialogCancel": "إلغاء",
+  "exitDialogExit": "خروج",
+  "languageSelectionTitle": "اختر لغتك",
+  "languageSelectionSubtitle": "حدد لغتك المفضلة",
+  "languageSelectionContinue": "متابعة",
+  "onboardingSkip": "تخطي",
+  "onboardingNext": "التالي",
+  "onboardingGetStarted": "ابدأ الآن",
+  "onboardingStep1Title": "وصفات مدعومة بالذكاء الاصطناعي",
+  "onboardingStep1Description": "احصل على وصفات مخصصة بناءً على مكوناتك وتفضيلاتك واحتياجاتك الغذائية. يصنع الذكاء الاصطناعي لدينا أطباقاً لذيذة خصيصاً لك.",
+  "onboardingStep2Title": "تخطيط وجبات ذكي",
+  "onboardingStep2Description": "خطط لأسبوعك مع خطط وجبات مخصصة تتوافق مع أهدافك الصحية وميزانيتك ومستوى مهاراتك في الطبخ.",
+  "onboardingStep3Title": "قوائم مشتريات ذكية",
+  "onboardingStep3Description": "إنشاء قوائم تسوق تلقائياً من خطط وجباتك. أضف العناصر بالصوت واحصل على اقتراحات ذكية لتوفير الوقت والمال.",
+  "onboardingStep4Title": "طاهيك الشخصي بالذكاء الاصطناعي",
+  "onboardingStep4Description": "اطرح الأسئلة واحصل على نصائح الطبخ والنصائح الغذائية المخصصة من مساعد مطبخك الذكي.",
+  "homeGreeting": "ماذا يمكنني أن أطبخ",
+  "homeGreetingEnd": "لك اليوم؟",
+  "homeSubtitle": "مساعد مطبخك السحري بالذكاء الاصطناعي",
+  "homeSearchPlaceholder": "ابحث عن وصفات، مكونات...",
+  "homeQuickActions": "إجراءات سريعة",
+  "homeGenerateRecipe": "إنشاء وصفة",
+  "homeAiCreates": "الذكاء الاصطناعي يصنع الأطباق",
+  "homeMealPlanner": "مخطط الوجبات",
+  "homePlanWeek": "خطط لأسبوعك",
+  "homeSmartGrocery": "مشتريات ذكية",
+  "homeShoppingLists": "قوائم التسوق",
+  "homeAiChefChat": "دردشة الطاهي الذكي",
+  "homeAskQuestions": "اطرح الأسئلة",
+  "authSignIn": "تسجيل الدخول",
+  "authSignUp": "إنشاء حساب",
+  "authEmail": "البريد الإلكتروني",
+  "authPassword": "كلمة المرور",
+  "authFullName": "الاسم الكامل",
+  "authCreateAccount": "إنشاء حساب",
+  "authNoAccount": "ليس لديك حساب؟",
+  "authHasAccount": "لديك حساب بالفعل؟",
+  "authWelcomeBack": "مرحباً بعودتك إلى DishGenie!",
+  "authWelcomeNew": "مرحباً بك في DishGenie! تم إنشاء حسابك.",
+  "authInvalidCredentials": "بريد إلكتروني أو كلمة مرور غير صحيحة",
+  "authAlreadyRegistered": "هذا البريد مسجل بالفعل. حاول تسجيل الدخول.",
+  "authEnterName": "الرجاء إدخال اسمك",
+  "authSigningIn": "جاري تسجيل الدخول...",
+  "authCreatingAccount": "جاري إنشاء الحساب...",
+  "authMagicalAssistant": "مساعد مطبخك السحري",
+  "recipesTitle": "وصفات الذكاء الاصطناعي",
+  "recipesSubtitle": "اكتشف وأنشئ",
+  "recipesBrowse": "تصفح",
+  "recipesAiGenerate": "إنشاء بالذكاء الاصطناعي",
+  "recipesQuick": "سريع",
+  "recipesHighProtein": "عالي البروتين",
+  "recipesChicken": "دجاج",
+  "recipesSeafood": "مأكولات بحرية",
+  "recipesEggs": "بيض",
+  "recipesHealthy": "صحي",
+  "recipesKids": "للأطفال",
+  "recipesBudget": "اقتصادي",
+  "recipesGrilled": "مشوي",
+  "recipesVegetarian": "نباتي",
+  "recipesVegan": "نباتي صرف",
+  "recipesNoResults": "لم يتم العثور على وصفات",
+  "recipesTryOther": "لم أتمكن من العثور على وصفات تطابق",
+  "recipesClearSearch": "مسح البحث",
+  "recipesResultsFor": "نتائج لـ",
+  "recipesWhatIngredients": "ما المكونات لديك؟",
+  "recipesIngredientsPlaceholder": "مثال: دجاج، ثوم، طماطم، أرز...",
+  "recipesScan": "مسح",
+  "recipesVoice": "صوت",
+  "recipesStop": "إيقاف",
+  "recipesCuisine": "المطبخ",
+  "recipesDietType": "نوع النظام الغذائي",
+  "recipesHealthGoal": "الهدف الصحي",
+  "recipesCookingMood": "مزاج الطبخ",
+  "recipesCookingTime": "وقت الطبخ",
+  "recipesTargetCalories": "السعرات المستهدفة",
+  "recipesGenerateRecipe": "إنشاء الوصفة",
+  "recipesCreatingRecipe": "جاري إنشاء وصفتك...",
+  "recipesCreatingRecipeWith": "جاري إنشاء وصفات بـ {ingredients}...",
+  "@recipesCreatingRecipeWith": {
+    "placeholders": {
+      "ingredients": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "recipesYourIngredients": "مكوناتك",
+  "recipesEnterIngredients": "الرجاء إدخال المكونات",
+  "recipesMin": "د",
+  "recipesServings": "حصص",
+  "recipesTime": "الوقت",
+  "recipesCal": "سعرة",
+  "recipesGenerating": "جاري الإنشاء...",
+  "recipesNewRecipe": "وصفة جديدة",
+  "recipesWhatCraving": "ماذا تشتهي؟",
+  "recipesMoodsComfortFood": "طعام مريح",
+  "recipesMoodsLightFresh": "خفيف وطازج",
+  "recipesMoodsHighEnergy": "طاقة عالية",
+  "recipesMoodsSweetCravings": "حلويات",
+  "recipesMoodsSpicyFix": "حار",
+  "recipesMoodsQuickBite": "وجبة سريعة",
+  "recipesCuisinesPakistani": "باكستاني",
+  "recipesCuisinesIndian": "هندي",
+  "recipesCuisinesItalian": "إيطالي",
+  "recipesCuisinesMediterranean": "متوسطي",
+  "recipesCuisinesThai": "تايلاندي",
+  "recipesCuisinesKorean": "كوري",
+  "recipesCuisinesMiddleEastern": "شرق أوسطي",
+  "recipesCuisinesAmerican": "أمريكي",
+  "recipesDietsBalanced": "متوازن",
+  "recipesDietsKeto": "كيتو",
+  "recipesDietsVegan": "نباتي صرف",
+  "recipesDietsVegetarian": "نباتي",
+  "recipesDietsHalal": "حلال",
+  "recipesDietsDesi": "ديسي",
+  "recipesGoalsWeightLoss": "خسارة الوزن",
+  "recipesGoalsMuscle": "بناء العضلات",
+  "recipesGoalsMaintain": "الحفاظ",
+  "recipesGoalsEnergy": "الطاقة",
+  "mealPlannerTitle": "مخطط الوجبات الذكي",
+  "mealPlannerSubtitle": "خطط مخصصة لأهدافك",
+  "mealPlannerGeneratePlan": "إنشاء خطة الوجبات",
+  "mealPlannerCreatingPlan": "جاري إنشاء خطتك...",
+  "mealPlannerYourProfile": "ملفك الشخصي",
+  "mealPlannerFamilySize": "حجم العائلة",
+  "mealPlannerDailyCalories": "السعرات اليومية",
+  "mealPlannerPlanDuration": "مدة الخطة",
+  "mealPlannerDays": "أيام",
+  "mealPlannerDay": "يوم",
+  "mealPlannerHealthGoal": "الهدف الصحي",
+  "mealPlannerLoseWeight": "إنقاص الوزن",
+  "mealPlannerBuildMuscle": "بناء العضلات",
+  "mealPlannerStayHealthy": "البقاء بصحة جيدة",
+  "mealPlannerDietType": "نوع النظام الغذائي",
+  "mealPlannerBalanced": "متوازن",
+  "mealPlannerKeto": "كيتو",
+  "mealPlannerVegan": "نباتي",
+  "mealPlannerHalal": "حلال",
+  "mealPlannerHighProtein": "عالي البروتين",
+  "mealPlannerBudget": "اقتصادي",
+  "mealPlannerModerate": "متوسط",
+  "mealPlannerPremium": "فاخر",
+  "mealPlannerSkill": "المهارة",
+  "mealPlannerBeginner": "مبتدئ",
+  "mealPlannerIntermediate": "متوسط",
+  "mealPlannerAdvanced": "متقدم",
+  "mealPlannerIntermittentFasting": "الصيام المتقطع",
+  "mealPlannerNone": "لا شيء",
+  "mealPlannerAllergies": "الحساسية / تجنب",
+  "mealPlannerAllergiesPlaceholder": "مثال: فول سوداني، محار، منتجات ألبان...",
+  "mealPlannerGroceryList": "قائمة المشتريات",
+  "mealPlannerBreakfast": "الفطور",
+  "mealPlannerLunch": "الغداء",
+  "mealPlannerDinner": "العشاء",
+  "mealPlannerSnacks": "الوجبات الخفيفة",
+  "mealPlannerSwap": "تبديل",
+  "mealPlannerSwapping": "جاري التبديل...",
+  "mealPlannerMinCalories": "الحد الأدنى 1000 سعرة حرارية",
+  "mealPlannerMaxCalories": "الحد الأقصى 5000 سعرة حرارية",
+  "mealPlannerCal": "سعرة",
+  "mealPlannerDailyTotal": "المجموع اليومي",
+  "mealPlannerProtein": "البروتين",
+  "mealPlannerCarbs": "الكربوهيدرات",
+  "mealPlannerFat": "الدهون",
+  "mealPlannerProteinShort": "ب",
+  "mealPlannerCarbsShort": "ك",
+  "mealPlannerMealPrepTips": "نصائح تحضير الوجبات",
+  "mealPlannerCreateNewPlan": "إنشاء خطة جديدة",
+  "mealPlannerToday": "اليوم",
+  "groceryTitle": "مشتريات ذكية",
+  "grocerySubtitle": "تسوق مدعوم بالذكاء الاصطناعي",
+  "groceryQuickActions": "إجراءات سريعة",
+  "groceryAddItem": "إضافة عنصر",
+  "groceryScanProduct": "مسح المنتج",
+  "groceryScanKitchen": "مسح المطبخ",
+  "groceryFromPlan": "من الخطة",
+  "groceryWeeklyList": "القائمة الأسبوعية",
+  "groceryVoiceAssistant": "المساعد الصوتي",
+  "groceryListeningHint": "جاري الاستماع...",
+  "groceryVoiceHint": "قل \"أضف دجاج، طماطم، حليب...\"",
+  "groceryCategories": "الفئات",
+  "groceryProduce": "الخضروات والفواكه",
+  "groceryProtein": "البروتين",
+  "groceryDairy": "منتجات الألبان",
+  "groceryPantry": "المخزن",
+  "groceryFrozen": "المجمدات",
+  "groceryGrains": "الحبوب",
+  "groceryOther": "أخرى",
+  "grocerySmartSuggestions": "اقتراحات ذكية",
+  "groceryLowStock": "أنت تنفد من البصل",
+  "groceryRecipeNeed": "أضف الزبادي لوصفة الثلاثاء",
+  "groceryFrequentItem": "استُخدم الأرز 3 مرات هذا الأسبوع — إعادة التخزين؟",
+  "groceryExpiringItem": "ينتهي الحليب غداً — استخدم أو استبدل",
+  "groceryAdded": "تمت الإضافة",
+  "groceryAddedStatus": "تمت الإضافة",
+  "grocerySavedLists": "القوائم المحفوظة",
+  "groceryCurrentList": "القائمة الحالية",
+  "groceryViewList": "عرض القائمة",
+  "groceryTotal": "الإجمالي",
+  "groceryBought": "تم الشراء",
+  "groceryEstCost": "التكلفة المقدرة",
+  "groceryShoppingMode": "التسوق",
+  "groceryShopMode": "وضع التسوق",
+  "groceryBudgetMode": "وضع الميزانية",
+  "groceryBudgetPlaceholder": "أدخل الميزانية (على سبيل المثال، 2000 روبية باكستانية)",
+  "groceryOn": "تشغيل",
+  "groceryOff": "إيقاف",
+  "groceryAddItemPlaceholder": "إضافة عنصر...",
+  "groceryItemName": "اسم العنصر...",
+  "groceryQuantity": "الكمية",
+  "groceryCategory": "الفئة",
+  "groceryAddToList": "أضف إلى القائمة",
+  "groceryItemAdded": "تمت إضافة العنصر!",
+  "groceryItemRequired": "اسم العنصر مطلوب",
+  "groceryCreateMealPlanFirst": "الرجاء إنشاء خطة وجبات أولاً",
+  "groceryItems": "عناصر",
+  "groceryNoItemsYet": "لا توجد عناصر بعد",
+  "groceryNoItemsHint": "أضف عناصر أو أنشئ من خطة الوجبات",
+  "groceryGenerateDemoList": "إنشاء قائمة تجريبية",
+  "groceryEstimatedTotal": "المجموع المقدر",
+  "grocerySearchItems": "البحث عن العناصر...",
+  "groceryYourItems": "عناصرك",
+  "grocerySearchResults": "نتائج البحث",
+  "groceryItemsIn": "العناصر في",
+  "groceryNoItemsFound": "لم يتم العثور على عناصر لـ",
+  "groceryAddAsNewItem": "إضافة كعنصر جديد",
+  "groceryQuickAdd": "إضافة سريعة",
+  "groceryAddToCategory": "إضافة عناصر إلى هذه الفئة",
+  "groceryListShared": "القائمة مشتركة!",
+  "groceryListCopied": "تم نسخ القائمة إلى الحافظة!",
+  "groceryListSaved": "تم حفظ القائمة!",
+  "groceryNoItemsToShare": "لا توجد عناصر للمشاركة",
+  "groceryNoItemsToSave": "لا توجد عناصر لحفظها",
+  "groceryCreatingSmartList": "جارٍ إنشاء القائمة الذكية...",
+  "groceryUpdatingList": "جارٍ تحديث القائمة...",
+  "groceryHome": "الرئيسية",
+  "groceryList": "القائمة",
+  "groceryAdd": "إضافة",
+  "savedListListNotFound": "لم يتم العثور على القائمة",
+  "savedListListNotFoundHint": "يبدو أن قائمة البقالة هذه قد اختفت!",
+  "savedListGoBack": "عُد",
+  "savedListAddToCurrentList": "أضف إلى القائمة الحالية",
+  "savedListRegenerateWithAI": "تجديد مع الذكاء الاصطناعي",
+  "savedListDeleteList": "حذف القائمة",
+  "savedListItemsAdded": "العناصر المضافة إلى القائمة الحالية!",
+  "savedListFailedToAdd": "فشلت إضافة العناصر",
+  "savedListOptimizedWithAI": "قائمة الأمثل مع اقتراحات الذكاء الاصطناعي!",
+  "savedListFailedToRegenerate": "فشل في التجديد",
+  "savedListDeleteConfirm": "هل أنت متأكد أنك تريد الحذف",
+  "savedListCannotUndo": "لا يمكن التراجع عن هذا الإجراء.",
+  "savedListDeleting": "جارٍ الحذف...",
+  "savedListAddItemTitle": "إضافة عنصر",
+  "savedListItemNamePlaceholder": "اسم العنصر",
+  "savedListQuantityPlaceholder": "الكمية (على سبيل المثال، 2 كجم)",
+  "savedListCategoryPlaceholder": "الفئة (مثل منتجات الألبان)",
+  "savedListEnterItemName": "الرجاء إدخال اسم العنصر",
+  "savedListNutritionSummary": "ملخص التغذية",
+  "savedListTotalProtein": "إجمالي البروتين",
+  "savedListEstCalories": "EST. سعرات حرارية",
+  "savedListAiOptimizing": "يقوم الذكاء الاصطناعي بتحسين قائمتك...",
+  "chatTitle": "دردشة DishGenie",
+  "chatSubtitle": "مساعد الطبخ الذكي",
+  "chatGreeting": "مرحباً، أنا DishGenie!",
+  "chatGreetingSubtitle": "اسألني أي شيء عن الطبخ، الوصفات، التغذية، أو تخطيط الوجبات.",
+  "chatPlaceholder": "اسألني أي شيء...",
+  "chatListening": "جاري الاستماع...",
+  "chatThinking": "جاري التفكير...",
+  "chatSuggestion1": "ماذا يمكنني أن أطبخ بالدجاج والأرز؟",
+  "chatSuggestion2": "أعطني فكرة فطور صحية",
+  "chatSuggestion3": "كيف أستبدل البيض في الخبز؟",
+  "chatSuggestion4": "ما هو عشاء سريع في 15 دقيقة؟",
+  "chatNewChat": "محادثة جديدة",
+  "chatCopy": "نسخ",
+  "chatMessageCopied": "تم نسخ الرسالة",
+  "chatEdit": "تحرير",
+  "chatHistoryTitle": "سجل المحادثات",
+  "chatHistoryConversation": "محادثة",
+  "chatHistoryConversations": "محادثات",
+  "chatHistorySearchPlaceholder": "البحث في المحادثات...",
+  "chatHistoryEmpty": "لا توجد محادثات محفوظة بعد",
+  "chatHistoryEmptyHint": "ستظهر محادثاتك هنا تلقائياً",
+  "chatHistoryNoResults": "لم يتم العثور على محادثات",
+  "chatHistoryTryDifferent": "جرب مصطلح بحث مختلف",
+  "chatHistoryStartChatting": "ابدأ المحادثة",
+  "chatHistoryToday": "اليوم",
+  "chatHistoryYesterday": "أمس",
+  "chatHistoryDaysAgo": "أيام مضت",
+  "chatHistoryMessages": "رسائل",
+  "chatHistoryNoMessages": "لا توجد رسائل",
+  "chatHistoryOpen": "فتح",
+  "chatHistoryDeleted": "تم حذف المحادثة!",
+  "chatHistoryRenamed": "تم تغيير اسم المحادثة!",
+  "chatHistoryAllCleared": "تم مسح جميع المحادثات!",
+  "chatHistoryClearAll": "مسح الكل",
+  "chatHistoryDeleteConfirmTitle": "حذف هذه المحادثة؟",
+  "chatHistoryDeleteConfirmMessage": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف المحادثة نهائياً.",
+  "chatHistoryClearAllTitle": "مسح جميع المحادثات؟",
+  "chatHistoryClearAllMessage": "سيتم حذف جميع محادثاتك المحفوظة نهائياً. لا يمكن التراجع عن هذا الإجراء.",
+  "favoritesTitle": "مجموعتي",
+  "favoritesSubtitle": "محتواك المحفوظ",
+  "favoritesNoFavorites": "لا توجد مفضلات بعد",
+  "favoritesNoFavoritesHint": "اضغط على أيقونة القلب على الوصفات التي تحبها!",
+  "favoritesNoSaved": "لا توجد وصفات محفوظة بعد",
+  "favoritesNoSavedHint": "اضغط على أيقونة العلامة المرجعية لحفظ الوصفات لوقت لاحق!",
+  "favoritesNoMealPlans": "لا توجد خطط وجبات محفوظة",
+  "favoritesNoMealPlansHint": "أنشئ خطة وجبات لتظهر هنا!",
+  "favoritesNoGrocery": "لا توجد قائمة مشتريات",
+  "favoritesNoGroceryHint": "أضف عناصر إلى قائمة مشترياتك لتظهر هنا!",
+  "favoritesBrowseRecipes": "تصفح الوصفات",
+  "favoritesCreateMealPlan": "إنشاء خطة وجبات",
+  "favoritesGoToGrocery": "الذهاب للمشتريات",
+  "favoritesPlans": "الخطط",
+  "favoritesCalPerDay": "سعرة/يوم",
+  "favoritesViewPlan": "عرض الخطة",
+  "favoritesCheckedItems": "عناصر تم شراؤها",
+  "settingsTitle": "الإعدادات",
+  "settingsLanguage": "اللغة",
+  "settingsLanguageSubtitle": "تغيير لغة التطبيق",
+  "settingsSupport": "الدعم",
+  "settingsFeedback": "الملاحظات",
+  "settingsFeedbackSubtitle": "أرسل لنا أفكارك",
+  "settingsRateUs": "قيّمنا",
+  "settingsRateUsSubtitle": "أحببت التطبيق؟ قيّمنا!",
+  "settingsShareApp": "مشاركة التطبيق",
+  "settingsShareAppSubtitle": "أخبر أصدقاءك",
+  "settingsHelpSupport": "المساعدة / الدعم",
+  "settingsHelpSupportSubtitle": "الأسئلة الشائعة والتواصل معنا",
+  "settingsLegal": "قانوني",
+  "settingsPrivacyPolicy": "سياسة الخصوصية",
+  "settingsTermsConditions": "الشروط والأحكام",
+  "settingsData": "البيانات",
+  "settingsClearAllData": "مسح جميع البيانات",
+  "settingsClearDataSubtitle": "إعادة التطبيق للحالة الأولية",
+  "settingsClearDataConfirm": "مسح جميع البيانات؟",
+  "settingsClearDataWarning": "سيؤدي هذا إلى حذف جميع بياناتك المحفوظة بشكل دائم بما في ذلك:",
+  "settingsSavedRecipes": "الوصفات والمفضلات المحفوظة",
+  "settingsMealPlans": "خطط الوجبات",
+  "settingsGroceryLists": "قوائم المشتريات",
+  "settingsChatHistory": "سجل المحادثات",
+  "settingsPreferencesSettings": "التفضيلات والإعدادات",
+  "settingsCannotUndo": "لا يمكن التراجع عن هذا الإجراء.",
+  "settingsDataCleared": "تمت إعادة تعيين جميع بيانات التطبيق.",
+  "settingsSendFeedback": "إرسال الملاحظات",
+  "settingsYourName": "اسمك",
+  "settingsYourMessage": "رسالتك...",
+  "settingsFeedbackSent": "شكراً لك على ملاحظاتك.",
+  "settingsNameRequired": "الاسم مطلوب",
+  "settingsMessageRequired": "الرسالة مطلوبة",
+  "settingsFaqTitle": "الأسئلة الشائعة",
+  "settingsFaq1Q": "كيف أقوم بإنشاء الوصفات؟",
+  "settingsFaq1A": "اضغط على 'إنشاء وصفة' من الشاشة الرئيسية أو استخدم شريط البحث لوصف ما تريد طبخه.",
+  "settingsFaq2Q": "هل بياناتي آمنة؟",
+  "settingsFaq2A": "نعم، جميع بياناتك مشفرة ومخزنة بأمان. لا نشارك معلوماتك الشخصية أبداً.",
+  "settingsFaq3Q": "هل يمكنني استخدام التطبيق بدون إنترنت؟",
+  "settingsFaq3A": "الميزات الأساسية تعمل بدون إنترنت، لكن إنشاء الذكاء الاصطناعي يتطلب اتصالاً بالإنترنت.",
+  "settingsFaq4Q": "كيف أحفظ وصفاتي المفضلة؟",
+  "settingsFaq4A": "اضغط على أيقونة القلب على أي وصفة لحفظها في المفضلة للوصول السريع لاحقاً.",
+  "settingsContactUs": "تواصل معنا",
+  "settingsViewPrivacyPolicy": "عرض سياسة الخصوصية",
+  "settingsViewTerms": "عرض الشروط والأحكام",
+  "settingsViewOnWebsite": "عرض الكامل",
+  "settingsOnWebsite": "على موقعنا.",
+  "settingsRatingThanks": "شكراً لاهتمامك! التقييم متاح على الأجهزة المحمولة.",
+  "settingsLinkCopied": "تم نسخ الرابط!",
+  "settingsShareLinkCopied": "تم نسخ رابط المشاركة إلى الحافظة",
+  "scannerTitle": "ماسح المكونات",
+  "scannerSubtitle": "امسح مكوناتك",
+  "scannerTakePhoto": "التقاط صورة",
+  "scannerAnalyzing": "جاري تحليل مكوناتك...",
+  "scannerDetected": "المكونات المكتشفة",
+  "scannerAddAll": "إضافة الكل للوصفة",
+  "scannerUseIngredients": "استخدام المكونات",
+  "scannerNoIngredients": "لم يتم اكتشاف مكونات. حاول مرة أخرى بصورة أوضح.",
+  "recipeDetailPrepTime": "التحضير",
+  "recipeDetailCookTime": "الطبخ",
+  "recipeDetailServings": "حصص",
+  "recipeDetailCalories": "السعرات",
+  "recipeDetailCal": "سعرة",
+  "recipeDetailMin": "د",
+  "recipeDetailIngredients": "المكونات",
+  "recipeDetailInstructions": "التعليمات",
+  "recipeDetailNutrition": "التغذية",
+  "recipeDetailNutritionPerServing": "التغذية لكل حصة",
+  "recipeDetailProtein": "البروتين",
+  "recipeDetailCarbs": "الكربوهيدرات",
+  "recipeDetailFat": "الدهون",
+  "recipeDetailFiber": "الألياف",
+  "recipeDetailTips": "النصائح",
+  "recipeDetailChefsTip": "نصيحة الشيف",
+  "recipeDetailAddToGrocery": "إضافة للمشتريات",
+  "recipeDetailStartCooking": "ابدأ الطبخ",
+  "recipeDetailStartCookingAI": "ابدأ الطبخ مع الشيف الذكي",
+  "recipeDetailRecipeNotFound": "الوصفة غير موجودة",
+  "recipeDetailGenerateCustom": "دعني أُنشئ لك وصفة مخصصة!",
+  "recipeDetailGenieHelp": "تحتاج مساعدة؟ اسألني عن النصائح أو البدائل أو التوجيه خطوة بخطوة!",
+  "tagsHighProtein": "عالي البروتين",
+  "tagsDesi": "ديسي",
+  "tagsComfort": "مريح",
+  "tagsCreamy": "كريمي",
+  "tagsVegetarian": "نباتي",
+  "tagsBudget": "اقتصادي",
+  "tagsHealthy": "صحي",
+  "tagsBreakfast": "فطور",
+  "tagsLowCarb": "قليل الكربوهيدرات",
+  "tagsKeto": "كيتو",
+  "tagsQuick": "سريع",
+  "tagsOmega3": "أوميغا-3",
+  "tagsKidsFriendly": "للأطفال",
+  "tagsDessert": "حلوى",
+  "tagsSweet": "حلو",
+  "tagsIndulgent": "فاخر",
+  "tagsMiddleEastern": "شرق أوسطي",
+  "tagsItalian": "إيطالي",
+  "tagsAsian": "آسيوي",
+  "tagsColorful": "ملون",
+  "tagsSpicy": "حار",
+  "tagsVegan": "نباتي صرف",
+  "weeklyPlanTitle": "نظرة على أسبوعك",
+  "weeklyPlanNoPlans": "لا توجد خطط وجبات بعد",
+  "weeklyPlanCreatePlan": "أنشئ خطة وجبات لترى أسبوعك هنا!",
+  "weeklyPlanStartPlanning": "ابدأ التخطيط",
+  "weeklyPlanTodaysMeals": "وجبات اليوم",
+  "weeklyPlanMeals": "وجبات",
+  "weeklyPlanCal": "سعرة",
+  "weeklyPlanCreated": "أُنشئت",
+  "weeklyPlanMon": "إثن",
+  "weeklyPlanTue": "ثلا",
+  "weeklyPlanWed": "أرب",
+  "weeklyPlanThu": "خمي",
+  "weeklyPlanFri": "جمع",
+  "weeklyPlanSat": "سبت",
+  "weeklyPlanSun": "أحد",
+  "savedMealPlanTitle": "خطة الوجبات المحفوظة",
+  "savedMealPlanContinuePlan": "متابعة الخطة",
+  "splashAppName": "ديشجيني",
+  "splashSubtitle": "رفيقك في المطبخ بالذكاء الاصطناعي",
+  "commonErrorMessage": "خطأ: {error}",
+  "@commonErrorMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "commonCouldNotOpenUrl": "لا يمكن فتح {url}",
+  "@commonCouldNotOpenUrl": {
+    "placeholders": {
+      "url": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "settingsAppearance": "المظهر",
+  "settingsTheme": "المظهر",
+  "settingsChooseTheme": "اختر المظهر",
+  "settingsThemeLight": "فاتح",
+  "settingsThemeDark": "داكن",
+  "settingsThemeSystem": "النظام",
+  "landingAppName": "ديشجيني الذكاء الاصطناعي",
+  "landingDownloadForIOS": "تحميل لنظام iOS",
+  "landingGetOnAndroid": "احصل على أندرويد",
+  "landingFreeToDownload": "تحميل مجاني • لا حاجة لبطاقة الائتمان",
+  "commonCopied": "منسوخ!",
+  "homeFeaturedRecipes": "وصفات مميزة",
+  "favoritesCreatedRecently": "تم إنشاؤها مؤخرًا",
+  "scannerAiIngredientScanner": "الماسح الضوئي للمكونات AI",
+  "scannerTakePhotoDescription": "التقط صورة لمكوناتك وسأقترح عليك وصفات لذيذة!",
+  "scannerOpenCamera": "افتح الكاميرا",
+  "scannerUploadPhoto": "تحميل الصورة",
+  "scannerRecipePreferences": "تفضيلات الوصفة",
+  "scannerDietType": "نوع النظام الغذائي",
+  "scannerCookingTime": "وقت الطبخ",
+  "@scannerCookingTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "scannerTargetCalories": "السعرات الحرارية المستهدفة",
+  "@scannerTargetCalories": {
+    "placeholders": {
+      "calories": {
+        "type": "String"
+      }
+    }
+  },
+  "scannerViewRecipeSuggestions": "عرض {count} اقتراحات الوصفات",
+  "@scannerViewRecipeSuggestions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "scannerGenerateRecipes": "توليد وصفات",
+  "scannerNoRecipesGenerated": "لم يتم إنشاء أي وصفات حتى الآن",
+  "scannerViewFullRecipe": "عرض الوصفة الكاملة",
+  "scannerNutritionPerServing": "التغذية لكل وجبة",
+  "scannerCalories": "سعرات حرارية",
+  "scannerFats": "الدهون",
+  "scannerRecipeSuggestions": "اقتراحات الوصفة",
+  "scannerRecipe": "وصفة",
+  "scannerNoRecipeSelected": "لم يتم اختيار أي وصفة",
+  "scannerErrorPickingImage": "خطأ في اختيار الصورة: {error}",
+  "@scannerErrorPickingImage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "scannerErrorCapturingImage": "خطأ في التقاط الصورة: {error}",
+  "@scannerErrorCapturingImage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "scannerErrorAnalyzingImage": "خطأ في تحليل الصورة: {error}",
+  "@scannerErrorAnalyzingImage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "scannerNoIngredientsDetected": "لم يتم الكشف عن أي مكونات. يرجى تجربة صورة أخرى.",
+  "premiumSuccess": "نجاح!",
+  "premiumWelcomeMessage": "مرحباً بك في DishGenie Pro! استمتع بجميع الميزات المميزة.",
+  "premiumPurchasesRestored": "تمت استعادة المشتريات بنجاح",
+  "premiumSubscriptionLoading": "جاري تحميل خطط الاشتراك. يرجى المحاولة مرة أخرى بعد لحظة.",
+  "premiumYouArePro": "أنت محترف!",
+  "premiumUnlockTitle": "فتح DishGenie Pro",
+  "premiumSubtitle": "مساعد الطبخ الذكي الشخصي",
+  "premiumFeature": "الميزة",
+  "premiumPro": "محترف",
+  "premiumBasic": "أساسي",
+  "premiumFullAccess": "وصول مميز كامل",
+  "premiumSubscribeNow": "اشترك الآن",
+  "premiumRestorePurchases": "استعادة المشتريات",
+  "premiumPrivacyPolicy": "سياسة الخصوصية",
+  "premiumTermsOfUse": "شروط الاستخدام",
+  "premiumFailedToInitiatePurchase": "فشل في بدء الشراء",
+  "premiumError": "خطأ: {error}",
+  "@premiumError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumFeatureUnlimitedRecipes": "وصفات ذكاء اصطناعي غير محدودة",
+  "premiumFeatureNutritionAnalytics": "تحليلات غذائية كاملة",
+  "premiumFeatureVoiceAssistant": "مساعد طبخ صوتي",
+  "premiumFeatureImageAnalysis": "تحليل صور الوصفات",
+  "premiumFeatureGroceryList": "قائمة مشتريات ذكية",
+  "premiumFeatureAdFree": "تجربة خالية من الإعلانات",
+  "scannerMin": "دقيقة",
+  "scannerKcal": "سعر حراري",
+  "commonReset": "إعادة ضبط",
+  "groceryAddItemHint": "إضافة عنصر...",
+  "groceryListCleared": "تم مسح قائمة البقالة",
+  "groceryMyGroceryList": "قائمة البقالة الخاصة بي",
+  "groceryResetList": "إعادة تعيين القائمة",
+  "groceryResetListConfirm": "هل أنت متأكد أنك تريد مسح كافة العناصر من قائمة البقالة الخاصة بك؟ لا يمكن التراجع عن هذا الإجراء.",
+  "grocerySaved": "أنقذ",
+  "weeklyPlanPersonalizedMeals": "وجبات مخصصة لك",
+  "weeklyPlanView": "عرض",
+  "weeklyPlanGenerateAIMealPlan": "إنشاء خطة وجبات بالذكاء الاصطناعي",
+  "appTitle": "ديشجيني",
+  "searchTitle": "بحث",
+  "searchSubtitle": "العثور على الوصفات والمكونات",
+  "searchHint": "ابحث عن وصفات، مكونات.",
+  "searchTrySearching": "جرب البحث عن:",
+  "searchSuggestionPasta": "معكرونة",
+  "searchSuggestionHealthy": "صحي",
+  "searchSuggestionQuick": "سريع",
+  "searchSuggestionChicken": "دجاج",
+  "searchSuggestionDessert": "حلوى",
+  "scannerEnterIngredientName": "الرجاء إدخال اسم المكون",
+  "commonSend": "إرسال",
+  "chatErrorNotConfigured": "واجهة برمجة تطبيقات الدردشة غير مُعدة. يرجى الاتصال بالدعم أو التحقق من إعدادات التطبيق.",
+  "chatErrorRateLimit": "تم تجاوز حد المعدل. يرجى المحاولة مرة أخرى لاحقاً.",
+  "chatErrorGeneric": "عذراً، لم أتمكن من معالجة طلبك. يرجى المحاولة مرة أخرى.",
+  "premiumPurchaseFailed": "فشل الشراء",
+  "premiumUpgrade": "يرقي",
+  "scannerLimitReached": "لقد وصلت إلى الحد الأقصى المسموح به لعدد {limit} من أجيال الوصفات المجانية. الترقية إلى الإصدار المميز للوصول غير المحدود!",
+  "@scannerLimitReached": {
+    "placeholders": {
+      "limit": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "scannerAiDisabled": "إنشاء وصفة الذكاء الاصطناعي معطل حاليًا. الترقية إلى الإصدار المميز للوصول غير المحدود!",
+  "scannerAddIngredient": "أضف المكون",
+  "scannerIngredientName": "اسم المكون",
+  "scannerIngredientNameHint": "على سبيل المثال، الطماطم",
+  "scannerQuantity": "كمية",
+  "scannerQuantityHint": "على سبيل المثال، 2 متوسطة",
+  "scannerCategory": "فئة",
+  "scannerCaptureOrUpload": "التقط أو قم بتحميل صورة لمكوناتك",
+  "scannerDietBalanced": "متوازن",
+  "scannerDietHighProtein": "نسبة عالية من البروتين",
+  "scannerDietLowCarb": "منخفض الكربوهيدرات",
+  "scannerDietKeto": "كيتو",
+  "scannerDietVegetarian": "نباتي",
+  "scannerDietVegan": "نباتي",
+  "scannerDetectedIngredients": "المكونات المكتشفة",
+  "scannerIngredients": "مكونات",
+  "scannerInstructions": "تعليمات",
+  "chatLimitReached": "لقد وصلت إلى الحد الخاص بك",
+  "chatLimitReachedMessage": "لقد استخدمت جميع الرسائل المجانية البالغ عددها {limit}. الترقية إلى الإصدار المميز للوصول غير المحدود!",
+  "@chatLimitReachedMessage": {
+    "placeholders": {
+      "limit": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "chatAiChefDisabled": "دردشة AI Chef معطلة حاليًا. الترقية إلى الإصدار المميز للوصول غير المحدود!",
+  "commonUpgrade": "الترقية إلى بريميوم",
+  "backButtonCancel": "يلغي",
+  "backButtonExit": "مخرج",
+  "appHeaderTitle": "ديشجيني",
+  "premiumCardUnlock": "فتح ",
+  "premiumCardDishGeniePro": "ديشجيني برو",
+  "premiumCardSubtitle": "تجربة خالية من الإعلانات، وميزات ذكاء اصطناعي غير محدودة",
+  "scannerCookingTimeLabel": "وقت الطبخ",
+  "scannerTargetCaloriesLabel": "السعرات الحرارية المستهدفة",
+  "groceryDemoRecipeChickenBiryani": "برياني دجاج",
+  "groceryDemoRecipeDalMakhani": "دال ماخاني",
+  "groceryDemoRecipeAlooParatha": "ألو باراثا",
+  "groceryPlaceholderWeeklyGrocery": "مشتريات أسبوعية",
+  "groceryPlaceholderMonthlyStock": "مخزون شهري",
+  "groceryPlaceholderHighProteinDiet": "نظام غذائي عالي البروتين",
+  "groceryVoiceHintExample": "قل \"أضف الدجاج والطماطم...\"",
+  "searchPlaceholder1": "✨اسأل الجني أي شيء...",
+  "searchPlaceholder2": "🍳ما الطبخ اليوم؟",
+  "searchPlaceholder3": "🌟 رغبتك هي أمري ...",
+  "searchPlaceholder4": "🥗 هل ترغب بشيء صحي؟",
+  "searchPlaceholder5": "🛒 إضافة إلى قائمة البقالة...",
+  "ingredientOnions": "البصل",
+  "ingredientYogurt": "زبادي",
+  "ingredientRice": "أرز",
+  "ingredientMilk": "لبن",
+  "ingredientTomatoes": "الطماطم",
+  "ingredientPotatoes": "البطاطس",
+  "ingredientEggs": "بيض",
+  "ingredientBread": "خبز",
+  "ingredientOil": "زيت",
+  "scannerLimitReachedTitle": "لقد وصلت إلى الحد الخاص بك",
+  "landingHeroTitle": "تعرف على الشيف الذي يعمل بالذكاء الاصطناعي - أنشئ الوصفات وخطط الوجبات وقوائم البقالة الذكية على الفور",
+  "landingHeroSubtitle": "مساعد مطبخك الشخصي الذي يعمل بالذكاء الاصطناعي. أنشئ وصفات صحية، وخطط لوجبات الأسبوع، وأنشئ قوائم بقالة ذكية - كل ذلك مصمم حسب ذوقك وميزانيتك وأهدافك.",
+  "landingWhyDishGenie": "لماذا ديش جيني؟",
+  "landingKitchenSupercharged": "مطبخك، فائق الشحن",
+  "landingFeatureRecipeBuilderTitle": "منشئ الوصفات الذكية",
+  "landingFeatureRecipeBuilderDesc": "قم بإنشاء وصفات مخصصة من المكونات الموجودة لديك في المنزل باستخدام الذكاء الاصطناعي",
+  "landingFeatureMealPlansTitle": "خطط الوجبات الشخصية",
+  "landingFeatureMealPlansDesc": "خطط وجبات أسبوعية وشهرية مدعومة بالذكاء الاصطناعي ومصممة خصيصًا لتناسب أهدافك",
+  "landingFeatureGroceryTitle": "قائمة البقالة الذكية",
+  "landingFeatureGroceryDesc": "إنشاء قوائم تسوق تلقائيًا مرتبة حسب الفئة مع خيارات الميزانية",
+  "landingSimpleEasy": "بسيطة وسهلة",
+  "landingHowItWorks": "كيف يعمل",
+  "landingStep1Title": "اضبط تفضيلاتك",
+  "landingStep1Desc": "أخبرنا بأهدافك الغذائية، والحساسية، وتفضيلات المطبخ",
+  "landingStep2Title": "احصل على توصيات الذكاء الاصطناعي",
+  "landingStep2Desc": "احصل على وصفات شخصية وخطط وجبات على الفور",
+  "landingStep3Title": "كوك وتتبع",
+  "landingStep3Desc": "اتبع الإرشادات خطوة بخطوة وتتبع تقدمك في التغذية",
+  "landingLovedByThousands": "محبوب من قبل الآلاف",
+  "landingWhatUsersSay": "ماذا يقول مستخدمونا",
+  "landingTestimonial1Name": "سارة م.",
+  "landingTestimonial1Role": "أمي مشغولة",
+  "landingTestimonial1Quote": "قام DishGenie بتغيير تخطيط وجباتي. أقوم بتوفير أكثر من 5 ساعات كل أسبوع!",
+  "landingTestimonial2Name": "أحمد ك.",
+  "landingTestimonial2Role": "عشاق اللياقة البدنية",
+  "landingTestimonial2Quote": "إن تتبع السعرات الحرارية والوصفات الغنية بالبروتين هي بالضبط ما أحتاجه.",
+  "landingTestimonial3Name": "بريا س.",
+  "landingTestimonial3Role": "طالب",
+  "landingTestimonial3Quote": "وصفات منتديات صديقة للميزانية التي طعمها مثل المنزل. بالتأكيد أحبه!",
+  "landingStartCookingSmarter": "ابدأ الطهي بطريقة أكثر ذكاءً اليوم",
+  "landingJoinThousands": "انضم إلى الآلاف من الطهاة المنزليين الذين أحدثوا تحولاً في تجربة مطبخهم من خلال تخطيط الوجبات المدعوم بالذكاء الاصطناعي.",
+  "landingCopyright": "© 2024 ديش جيني AI. جميع الحقوق محفوظة.",
+  "recipesLimitReached": "لقد وصلت إلى الحد الخاص بك",
+  "recipesLimitReachedMessage": "لقد استخدمت جميع أجيال الوصفات المجانية البالغ عددها {limit}. الترقية إلى الإصدار المميز للوصول غير المحدود!",
+  "@recipesLimitReachedMessage": {
+    "placeholders": {
+      "limit": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "recipesAiRecipeDisabled": "إنشاء وصفة الذكاء الاصطناعي معطل حاليًا. الترقية إلى الإصدار المميز للوصول غير المحدود!",
+  "premiumPerWeek": "/أسبوع"
+}

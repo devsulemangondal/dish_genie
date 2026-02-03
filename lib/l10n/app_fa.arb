@@ -1,0 +1,746 @@
+{
+  "@chatLimitReachedMessage": {
+    "placeholders": {
+      "limit": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "@commonCouldNotOpenUrl": {
+    "placeholders": {
+      "url": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "@commonErrorMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "@premiumError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "@recipesCreatingRecipeWith": {
+    "placeholders": {
+      "ingredients": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "@recipesLimitReachedMessage": {
+    "placeholders": {
+      "limit": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "@scannerCookingTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@scannerErrorAnalyzingImage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@scannerErrorCapturingImage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@scannerErrorPickingImage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@scannerLimitReached": {
+    "placeholders": {
+      "limit": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "@scannerTargetCalories": {
+    "placeholders": {
+      "calories": {
+        "type": "String"
+      }
+    }
+  },
+  "@scannerViewRecipeSuggestions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "adLoading": "در حال بارگذاری تبلیغ",
+  "appHeaderTitle": "دیش جنی",
+  "appTitle": "دیش جنی",
+  "authAlreadyRegistered": "این ایمیل قبلاً ثبت شده است. سعی کنید وارد شوید.",
+  "authCreateAccount": "ایجاد حساب",
+  "authCreatingAccount": "در حال ایجاد حساب...",
+  "authEmail": "ایمیل",
+  "authEnterName": "لطفاً نام خود را وارد کنید",
+  "authFullName": "نام کامل",
+  "authHasAccount": "قبلاً حساب دارید؟",
+  "authInvalidCredentials": "ایمیل یا رمز عبور نامعتبر",
+  "authMagicalAssistant": "دستیار جادویی آشپزخانه شما",
+  "authNoAccount": "حساب ندارید؟",
+  "authPassword": "رمز عبور",
+  "authSignIn": "ورود",
+  "authSignUp": "ثبت‌نام",
+  "authSigningIn": "در حال ورود...",
+  "authWelcomeBack": "خوش آمدید به DishGenie!",
+  "authWelcomeNew": "به DishGenie خوش آمدید! حساب شما ایجاد شد.",
+  "backButtonCancel": "لغو کنید",
+  "backButtonExit": "خارج شوید",
+  "chatAiChefDisabled": "چت AI Chef در حال حاضر غیرفعال است. برای دسترسی نامحدود به Premium ارتقا دهید!",
+  "chatCopy": "کپی",
+  "chatEdit": "ویرایش",
+  "chatErrorGeneric": "با عرض پوزش، نتوانستم درخواست شما را پردازش کنم. لطفا دوباره امتحان کنید.",
+  "chatErrorNotConfigured": "Chat API پیکربندی نشده است. لطفاً با پشتیبانی تماس بگیرید یا تنظیمات برنامه خود را بررسی کنید.",
+  "chatErrorRateLimit": "از حد مجاز فراتر رفت. لطفاً بعداً دوباره امتحان کنید.",
+  "chatGreeting": "سلام، من DishGenie هستم!",
+  "chatGreetingSubtitle": "هر سؤالی درباره آشپزی، دستور پخت، تغذیه یا برنامه‌ریزی وعده غذایی دارید بپرسید.",
+  "chatHistoryAllCleared": "همه گفتگوها پاک شدند!",
+  "chatHistoryClearAll": "پاک کردن همه",
+  "chatHistoryClearAllMessage": "تمام مکالمات ذخیره شده شما برای همیشه حذف خواهند شد. این عمل قابل بازگشت نیست.",
+  "chatHistoryClearAllTitle": "همه گفتگوها پاک شوند؟",
+  "chatHistoryConversation": "مکالمه",
+  "chatHistoryConversations": "مکالمه",
+  "chatHistoryDaysAgo": "روز پیش",
+  "chatHistoryDeleteConfirmMessage": "این عمل قابل بازگشت نیست. مکالمه برای همیشه حذف خواهد شد.",
+  "chatHistoryDeleteConfirmTitle": "این گفتگو حذف شود؟",
+  "chatHistoryDeleted": "گفتگو حذف شد!",
+  "chatHistoryEmpty": "هنوز گفتگوی ذخیره شده‌ای نیست",
+  "chatHistoryEmptyHint": "مکالمات شما به طور خودکار اینجا نمایش داده می‌شوند",
+  "chatHistoryMessages": "پیام",
+  "chatHistoryNoMessages": "پیامی نیست",
+  "chatHistoryNoResults": "گفتگویی پیدا نشد",
+  "chatHistoryOpen": "باز کردن",
+  "chatHistoryRenamed": "گفتگو تغییر نام یافت!",
+  "chatHistorySearchPlaceholder": "جستجوی گفتگوها...",
+  "chatHistoryStartChatting": "شروع گفتگو",
+  "chatHistoryTitle": "تاریخچه گفتگو",
+  "chatHistoryToday": "امروز",
+  "chatHistoryTryDifferent": "عبارت جستجوی دیگری امتحان کنید",
+  "chatHistoryYesterday": "دیروز",
+  "chatLimitReached": "شما به حد مجاز خود رسیده اید",
+  "chatLimitReachedMessage": "شما از همه پیام‌های رایگان {limit} استفاده کرده‌اید. برای دسترسی نامحدود به Premium ارتقا دهید!",
+  "chatListening": "در حال گوش دادن...",
+  "chatMessageCopied": "پیام کپی شد",
+  "chatNewChat": "گفتگوی جدید",
+  "chatPlaceholder": "هر چیزی بپرسید...",
+  "chatSubtitle": "دستیار آشپزی هوشمند شما",
+  "chatSuggestion1": "با مرغ و برنج چه چیزی می‌توانم بپزم؟",
+  "chatSuggestion2": "یک ایده صبحانه سالم بده",
+  "chatSuggestion3": "چگونه تخم‌مرغ را در پخت جایگزین کنم؟",
+  "chatSuggestion4": "یک شام سریع ۱۵ دقیقه‌ای چیست؟",
+  "chatThinking": "در حال فکر کردن...",
+  "chatTitle": "گفتگوی DishGenie",
+  "commonAdd": "افزودن",
+  "commonBack": "بازگشت",
+  "commonCancel": "لغو",
+  "commonChat": "گفتگو",
+  "commonClose": "بستن",
+  "commonConfirm": "تأیید",
+  "commonContinue": "ادامه",
+  "commonCopied": "کپی شده!",
+  "commonCouldNotOpenUrl": "{url} باز نشد",
+  "commonDelete": "حذف",
+  "commonDone": "انجام شد",
+  "commonError": "خطا",
+  "commonErrorMessage": "خطا: {error}",
+  "commonExit": "خروج",
+  "commonFavorites": "علاقه‌مندی‌ها",
+  "commonGetStarted": "شروع کنید",
+  "commonHome": "خانه",
+  "commonLoading": "در حال بارگذاری...",
+  "commonNext": "بعدی",
+  "commonPlan": "برنامه",
+  "commonRecipes": "دستور پخت‌ها",
+  "commonRemove": "حذف",
+  "commonReset": "بازنشانی کنید",
+  "commonSave": "ذخیره",
+  "commonSearch": "جستجو",
+  "commonSend": "ارسال کنید",
+  "commonSettings": "تنظیمات",
+  "commonShare": "اشتراک‌گذاری",
+  "commonShop": "خرید",
+  "commonSkip": "رد کردن",
+  "commonSuccess": "موفق",
+  "commonUpgrade": "به Premium ارتقا دهید",
+  "commonVersion": "نسخه",
+  "commonViewAll": "مشاهده همه",
+  "exitDialogCancel": "لغو",
+  "exitDialogExit": "خروج",
+  "exitDialogMessage": "آیا مطمئن هستید که می‌خواهید از برنامه خارج شوید؟",
+  "exitDialogTitle": "خروج از برنامه؟",
+  "favoritesBrowseRecipes": "مرور دستور پخت‌ها",
+  "favoritesCalPerDay": "کالری/روز",
+  "favoritesCheckedItems": "مورد خریداری شده",
+  "favoritesCreateMealPlan": "ایجاد برنامه غذایی",
+  "favoritesCreatedRecently": "اخیرا ایجاد شده است",
+  "favoritesGoToGrocery": "رفتن به خرید",
+  "favoritesNoFavorites": "هنوز علاقه‌مندی ندارید",
+  "favoritesNoFavoritesHint": "روی آیکون قلب در دستور پخت‌هایی که دوست دارید بزنید!",
+  "favoritesNoGrocery": "لیست خریدی ندارید",
+  "favoritesNoGroceryHint": "موارد را به لیست خرید خود اضافه کنید تا اینجا ببینید!",
+  "favoritesNoMealPlans": "برنامه غذایی ذخیره شده‌ای ندارید",
+  "favoritesNoMealPlansHint": "یک برنامه غذایی ایجاد کنید تا اینجا ببینید!",
+  "favoritesNoSaved": "هنوز دستور پخت ذخیره شده‌ای ندارید",
+  "favoritesNoSavedHint": "روی آیکون نشانک بزنید تا دستور پخت‌ها را برای بعد ذخیره کنید!",
+  "favoritesPlans": "برنامه‌ها",
+  "favoritesSubtitle": "محتوای ذخیره شده شما",
+  "favoritesTitle": "مجموعه من",
+  "favoritesViewPlan": "مشاهده برنامه",
+  "groceryAdd": "اضافه کنید",
+  "groceryAddAsNewItem": "به عنوان آیتم جدید اضافه کنید",
+  "groceryAddItem": "افزودن مورد",
+  "groceryAddItemHint": "افزودن مورد...",
+  "groceryAddItemPlaceholder": "افزودن مورد...",
+  "groceryAddToCategory": "آیتم‌ها را به این دسته اضافه کنید",
+  "groceryAddToList": "به لیست اضافه کنید",
+  "groceryAdded": "اضافه شد",
+  "groceryAddedStatus": "اضافه شد",
+  "groceryBought": "خریداری شده",
+  "groceryBudgetMode": "حالت بودجه",
+  "groceryBudgetPlaceholder": "بودجه را وارد کنید (به عنوان مثال، 2000 PKR)",
+  "groceryCategories": "دسته‌بندی‌ها",
+  "groceryCategory": "دسته‌بندی",
+  "groceryCreateMealPlanFirst": "لطفاً ابتدا یک برنامه غذایی ایجاد کنید",
+  "groceryCreatingSmartList": "در حال ایجاد فهرست هوشمند...",
+  "groceryCurrentList": "لیست فعلی",
+  "groceryDairy": "لبنیات",
+  "groceryDemoRecipeAlooParatha": "آلو پاراتا",
+  "groceryDemoRecipeChickenBiryani": "مرغ بریانی",
+  "groceryDemoRecipeDalMakhani": "دال ماخانی",
+  "groceryEstCost": "هزینه تخمینی",
+  "groceryEstimatedTotal": "کل تخمینی",
+  "groceryExpiringItem": "شیر فردا منقضی می‌شود — استفاده کنید یا جایگزین کنید",
+  "groceryFrequentItem": "برنج 3 بار این هفته استفاده شد — دوباره پر کنید؟",
+  "groceryFromPlan": "از برنامه",
+  "groceryFrozen": "منجمد",
+  "groceryGenerateDemoList": "ایجاد لیست نسخه ی نمایشی",
+  "groceryGrains": "غلات",
+  "groceryHome": "خانه",
+  "groceryItemAdded": "مورد اضافه شد!",
+  "groceryItemName": "نام مورد",
+  "groceryItemRequired": "نام مورد الزامی است",
+  "groceryItems": "مورد",
+  "groceryItemsIn": "آیتم‌ها در",
+  "groceryList": "فهرست",
+  "groceryListCleared": "لیست خواربار پاک شد",
+  "groceryListCopied": "فهرست در کلیپ‌بورد کپی شد!",
+  "groceryListSaved": "فهرست ذخیره شد!",
+  "groceryListShared": "لیست به اشتراک گذاشته شد",
+  "groceryListeningHint": "در حال گوش دادن...",
+  "groceryLowStock": "پیاز شما در حال تمام شدن است",
+  "groceryMyGroceryList": "لیست مواد غذایی من",
+  "groceryNoItemsFound": "هیچ آیتمی برای یافت نشد",
+  "groceryNoItemsHint": "آیتم اضافه کنید یا از برنامه غذایی ایجاد کنید",
+  "groceryNoItemsToSave": "هیچ آیتمی برای ذخیره وجود ندارد",
+  "groceryNoItemsToShare": "هیچ آیتمی برای به اشتراک گذاری وجود ندارد",
+  "groceryNoItemsYet": "هنوز آیتمی وجود ندارد",
+  "groceryOff": "خاموش",
+  "groceryOn": "روشن",
+  "groceryOther": "سایر",
+  "groceryPantry": "انبار",
+  "groceryPlaceholderHighProteinDiet": "رژیم غذایی پر پروتئین",
+  "groceryPlaceholderMonthlyStock": "موجودی ماهانه",
+  "groceryPlaceholderWeeklyGrocery": "خرید هفتگی",
+  "groceryProduce": "میوه و سبزیجات",
+  "groceryProtein": "پروتئین",
+  "groceryQuantity": "تعداد",
+  "groceryQuickActions": "اقدامات سریع",
+  "groceryQuickAdd": "افزودن سریع",
+  "groceryRecipeNeed": "برای دستور سه‌شنبه ماست اضافه کنید",
+  "groceryResetList": "بازنشانی لیست",
+  "groceryResetListConfirm": "آیا مطمئن هستید که می خواهید همه اقلام را از لیست مواد غذایی خود پاک کنید؟ این عمل قابل لغو نیست.",
+  "grocerySaved": "ذخیره شد",
+  "grocerySavedLists": "لیست‌های ذخیره شده",
+  "groceryScanKitchen": "اسکن آشپزخانه",
+  "groceryScanProduct": "اسکن محصول",
+  "grocerySearchItems": "جستجوی آیتم‌ها...",
+  "grocerySearchResults": "نتایج جستجو",
+  "groceryShopMode": "حالت خرید",
+  "groceryShoppingMode": "خرید",
+  "grocerySmartSuggestions": "پیشنهادات هوشمند",
+  "grocerySubtitle": "لیست خرید شما",
+  "groceryTitle": "خرید هوشمند",
+  "groceryTotal": "مجموع",
+  "groceryUpdatingList": "در حال به روز رسانی لیست...",
+  "groceryViewList": "مشاهده لیست",
+  "groceryVoiceAssistant": "دستیار صوتی",
+  "groceryVoiceHint": "بگویید \"اضافه کن مرغ، گوجه، شیر...\"",
+  "groceryVoiceHintExample": "بگویید «مرغ، گوجه فرنگی را اضافه کنید...»",
+  "groceryWeeklyList": "لیست هفتگی",
+  "groceryYourItems": "آیتم‌های شما",
+  "homeAiChefChat": "گفتگو با سرآشپز هوشمند",
+  "homeAiCreates": "هوش مصنوعی غذا می‌سازد",
+  "homeAskQuestions": "سؤال بپرس",
+  "homeFeaturedRecipes": "دستور العمل های ویژه",
+  "homeGenerateRecipe": "ایجاد دستور پخت",
+  "homeGreeting": "امروز چه چیزی",
+  "homeGreetingEnd": "برایت بپزم؟",
+  "homeMealPlanner": "برنامه‌ریز وعده غذایی",
+  "homePlanWeek": "هفته‌ات را برنامه‌ریزی کن",
+  "homeQuickActions": "اقدامات سریع",
+  "homeSearchPlaceholder": "جستجوی دستور پخت، مواد...",
+  "homeShoppingLists": "لیست‌های خرید",
+  "homeSmartGrocery": "خرید هوشمند",
+  "homeSubtitle": "دستیار جادویی آشپزخانه هوشمند شما",
+  "ingredientBread": "نان",
+  "ingredientEggs": "تخم مرغ",
+  "ingredientMilk": "شیر",
+  "ingredientOil": "روغن",
+  "ingredientOnions": "پیاز",
+  "ingredientPotatoes": "سیب زمینی",
+  "ingredientRice": "برنج",
+  "ingredientTomatoes": "گوجه فرنگی",
+  "ingredientYogurt": "ماست",
+  "landingAppName": "DishGenie AI",
+  "landingCopyright": "© 2024 DishGenie AI. تمامی حقوق محفوظ است.",
+  "landingDownloadForIOS": "دانلود برای iOS",
+  "landingFeatureGroceryDesc": "لیست های خرید را به صورت خودکار تولید کنید که بر اساس دسته بندی با گزینه های بودجه سازماندهی شده اند",
+  "landingFeatureGroceryTitle": "لیست خواربارفروشی هوشمند",
+  "landingFeatureMealPlansDesc": "برنامه های غذایی هفتگی و ماهانه مبتنی بر هوش مصنوعی متناسب با اهداف شما",
+  "landingFeatureMealPlansTitle": "برنامه های غذایی شخصی شده",
+  "landingFeatureRecipeBuilderDesc": "با استفاده از هوش مصنوعی از موادی که در خانه دارید دستور العمل های شخصی سازی کنید",
+  "landingFeatureRecipeBuilderTitle": "سازنده دستور پخت هوشمند",
+  "landingFreeToDownload": "دانلود رایگان • بدون نیاز به کارت اعتباری",
+  "landingGetOnAndroid": "اندروید را دریافت کنید",
+  "landingHeroSubtitle": "دستیار آشپزخانه شخصی شما با هوش مصنوعی. دستور العمل های سالم تولید کنید، وعده های غذایی را برای هفته برنامه ریزی کنید، و لیست های خواربارفروشی هوشمند ایجاد کنید - همه با سلیقه، بودجه و اهداف شما مطابقت دارند.",
+  "landingHeroTitle": "با سرآشپز هوش مصنوعی خود آشنا شوید - فورا دستور العمل ها، برنامه های غذایی و فهرست خواربار هوشمند را ایجاد کنید",
+  "landingHowItWorks": "چگونه کار می کند",
+  "landingJoinThousands": "به هزاران آشپز خانگی بپیوندید که تجربه آشپزخانه خود را با برنامه ریزی غذایی مبتنی بر هوش مصنوعی تغییر داده اند.",
+  "landingKitchenSupercharged": "آشپزخانه شما، سوپرشارژ",
+  "landingLovedByThousands": "مورد علاقه هزاران نفر",
+  "landingSimpleEasy": "ساده و آسان",
+  "landingStartCookingSmarter": "از امروز هوشمندانه تر آشپزی را شروع کنید",
+  "landingStep1Desc": "اهداف غذایی، آلرژی ها و ترجیحات آشپزی خود را به ما بگویید",
+  "landingStep1Title": "تنظیمات برگزیده خود را تنظیم کنید",
+  "landingStep2Desc": "دستور العمل های شخصی و برنامه های غذایی را فورا دریافت کنید",
+  "landingStep2Title": "توصیه های هوش مصنوعی را دریافت کنید",
+  "landingStep3Desc": "راهنماهای گام به گام را دنبال کنید و پیشرفت تغذیه خود را دنبال کنید",
+  "landingStep3Title": "آشپزی و ردیابی",
+  "landingTestimonial1Name": "سارا ام.",
+  "landingTestimonial1Quote": "DishGenie برنامه ریزی غذایی من را تغییر داد. من هر هفته بیش از 5 ساعت صرفه جویی می کنم!",
+  "landingTestimonial1Role": "مامان مشغوله",
+  "landingTestimonial2Name": "احمد ک.",
+  "landingTestimonial2Quote": "دستور العمل های ردیابی کالری و پروتئین بالا دقیقاً همان چیزی است که من به آن نیاز داشتم.",
+  "landingTestimonial2Role": "علاقه مندان به تناسب اندام",
+  "landingTestimonial3Name": "پریا اس.",
+  "landingTestimonial3Quote": "دستور العمل های دسی مقرون به صرفه که طعمی شبیه به خانه دارند. کاملا آن را دوست دارم!",
+  "landingTestimonial3Role": "دانشجو",
+  "landingWhatUsersSay": "آنچه کاربران ما می گویند",
+  "landingWhyDishGenie": "چرا DishGenie؟",
+  "languageSelectionContinue": "ادامه",
+  "languageSelectionSubtitle": "زبان مورد نظر خود را انتخاب کنید",
+  "languageSelectionTitle": "زبان خود را انتخاب کنید",
+  "mealPlannerAdvanced": "پیشرفته",
+  "mealPlannerAllergies": "حساسیت‌ها / پرهیز",
+  "mealPlannerAllergiesPlaceholder": "مثال: بادام‌زمینی، میگو، لبنیات...",
+  "mealPlannerBalanced": "متعادل",
+  "mealPlannerBeginner": "مبتدی",
+  "mealPlannerBreakfast": "صبحانه",
+  "mealPlannerBudget": "اقتصادی",
+  "mealPlannerBuildMuscle": "عضله‌سازی",
+  "mealPlannerCal": "کالری",
+  "mealPlannerCarbs": "کربوهیدرات",
+  "mealPlannerCarbsShort": "ک",
+  "mealPlannerCreateNewPlan": "ایجاد برنامه جدید",
+  "mealPlannerCreatingPlan": "در حال ایجاد برنامه شما...",
+  "mealPlannerDailyCalories": "کالری روزانه",
+  "mealPlannerDailyTotal": "جمع روزانه",
+  "mealPlannerDay": "روز",
+  "mealPlannerDays": "روز",
+  "mealPlannerDietType": "نوع رژیم",
+  "mealPlannerDinner": "شام",
+  "mealPlannerFamilySize": "تعداد اعضای خانواده",
+  "mealPlannerFat": "چربی",
+  "mealPlannerGeneratePlan": "ایجاد برنامه غذایی",
+  "mealPlannerGroceryList": "لیست خرید",
+  "mealPlannerHalal": "حلال",
+  "mealPlannerHealthGoal": "هدف سلامتی",
+  "mealPlannerHighProtein": "پروتئین بالا",
+  "mealPlannerIntermediate": "متوسط",
+  "mealPlannerIntermittentFasting": "روزه متناوب",
+  "mealPlannerKeto": "کتو",
+  "mealPlannerLoseWeight": "کاهش وزن",
+  "mealPlannerLunch": "ناهار",
+  "mealPlannerMaxCalories": "حداکثر ۵۰۰۰ کالری مجاز است",
+  "mealPlannerMealPrepTips": "نکات آماده‌سازی غذا",
+  "mealPlannerMinCalories": "حداقل ۱۰۰۰ کالری مورد نیاز است",
+  "mealPlannerModerate": "متوسط",
+  "mealPlannerNone": "هیچ",
+  "mealPlannerPlanDuration": "مدت برنامه",
+  "mealPlannerPremium": "ممتاز",
+  "mealPlannerProtein": "پروتئین",
+  "mealPlannerProteinShort": "پ",
+  "mealPlannerSkill": "مهارت",
+  "mealPlannerSnacks": "میان‌وعده",
+  "mealPlannerStayHealthy": "حفظ سلامتی",
+  "mealPlannerSubtitle": "برنامه‌های شخصی برای اهداف شما",
+  "mealPlannerSwap": "تعویض",
+  "mealPlannerSwapping": "در حال تعویض...",
+  "mealPlannerTitle": "برنامه‌ریز وعده غذایی هوشمند",
+  "mealPlannerToday": "امروز",
+  "mealPlannerVegan": "گیاهخوار",
+  "mealPlannerYourProfile": "پروفایل شما",
+  "onboardingGetStarted": "شروع کنید",
+  "onboardingNext": "بعدی",
+  "onboardingSkip": "رد کردن",
+  "onboardingStep1Description": "دستور پخت‌های شخصی‌سازی شده بر اساس مواد، ترجیحات و نیازهای غذایی شما دریافت کنید. هوش مصنوعی ما غذاهای خوشمزه فقط برای شما می‌سازد.",
+  "onboardingStep1Title": "دستور پخت‌های هوشمند",
+  "onboardingStep2Description": "هفته خود را با برنامه‌های غذایی شخصی که با اهداف سلامتی، بودجه و سطح مهارت آشپزی شما مطابقت دارد برنامه‌ریزی کنید.",
+  "onboardingStep2Title": "برنامه‌ریزی هوشمند وعده غذایی",
+  "onboardingStep3Description": "لیست خرید را از برنامه‌های غذایی خود به صورت خودکار ایجاد کنید. اقلام را با صدا اضافه کنید و پیشنهادات هوشمند برای صرفه‌جویی در زمان و هزینه دریافت کنید.",
+  "onboardingStep3Title": "لیست خرید هوشمند",
+  "onboardingStep4Description": "سؤال بپرسید، نکات آشپزی دریافت کنید و توصیه‌های تغذیه‌ای شخصی از دستیار آشپزخانه هوشمند خود بگیرید.",
+  "onboardingStep4Title": "سرآشپز شخصی هوشمند شما",
+  "premiumBasic": "اساسی",
+  "premiumCardDishGeniePro": "DishGenie Pro",
+  "premiumCardSubtitle": "تجربه بدون تبلیغات و ویژگی‌های نامحدود هوش مصنوعی",
+  "premiumCardUnlock": "باز کردن قفل ",
+  "premiumError": "خطا: {error}",
+  "premiumFailedToInitiatePurchase": "شروع خرید انجام نشد",
+  "premiumFeature": "ویژگی",
+  "premiumFeatureAdFree": "تجربه رایگان آگهی",
+  "premiumFeatureGroceryList": "لیست خواربارفروشی هوشمند",
+  "premiumFeatureImageAnalysis": "تجزیه و تحلیل تصویر دستور غذا",
+  "premiumFeatureNutritionAnalytics": "تجزیه و تحلیل کامل تغذیه",
+  "premiumFeatureUnlimitedRecipes": "دستور العمل های نامحدود AI",
+  "premiumFeatureVoiceAssistant": "دستیار آشپزی صوتی",
+  "premiumFullAccess": "دسترسی کامل حق بیمه",
+  "premiumPerWeek": "/Week",
+  "premiumPrivacyPolicy": "سیاست حفظ حریم خصوصی",
+  "premiumPro": "PRO",
+  "premiumPurchaseFailed": "خرید ناموفق بود",
+  "premiumPurchasesRestored": "خریدها با موفقیت بازیابی شدند",
+  "premiumRestorePurchases": "بازیابی خریدها",
+  "premiumSubscribeNow": "اکنون مشترک شوید",
+  "premiumSubscriptionLoading": "طرح های اشتراک در حال بارگیری هستند. لطفاً چند لحظه دیگر دوباره امتحان کنید.",
+  "premiumSubtitle": "دستیار آشپزی هوش مصنوعی شخصی شما",
+  "premiumSuccess": "موفقیت!",
+  "premiumTermsOfUse": "شرایط استفاده",
+  "premiumUnlockTitle": "قفل DishGenie Pro را باز کنید",
+  "premiumUpgrade": "ارتقا دهید",
+  "premiumWelcomeMessage": "به DishGenie Pro خوش آمدید! از تمام ویژگی های برتر لذت ببرید.",
+  "premiumYouArePro": "شما حرفه ای هستید!",
+  "recipeDetailAddToGrocery": "افزودن به خرید",
+  "recipeDetailAddedToFavorites": "به علاقه‌مندی‌ها اضافه شد!",
+  "recipeDetailCal": "کالری",
+  "recipeDetailCalories": "کالری",
+  "recipeDetailCarbs": "کربوهیدرات",
+  "recipeDetailCheckOutRecipe": "این دستور پخت را ببینید",
+  "recipeDetailChefsTip": "نکته سرآشپز",
+  "recipeDetailCookTime": "پخت",
+  "recipeDetailCouldNotShare": "نمی‌توان دستور پخت را به اشتراک گذاشت",
+  "recipeDetailFat": "چربی",
+  "recipeDetailFiber": "فیبر",
+  "recipeDetailGenerateCustom": "بگذارید یک دستور پخت سفارشی برایتان بسازم!",
+  "recipeDetailGenieHelp": "کمک می‌خواهید؟ از من نکات، جایگزین‌ها یا راهنمای قدم به قدم بخواهید!",
+  "recipeDetailIngredients": "مواد لازم",
+  "recipeDetailInstructions": "دستورالعمل‌ها",
+  "recipeDetailLinkCopied": "لینک کپی شد!",
+  "recipeDetailMin": "دقیقه",
+  "recipeDetailNutrition": "تغذیه",
+  "recipeDetailNutritionPerServing": "تغذیه در هر پرس",
+  "recipeDetailPrepTime": "آماده‌سازی",
+  "recipeDetailProtein": "پروتئین",
+  "recipeDetailRecipeNotFound": "دستور پخت یافت نشد",
+  "recipeDetailRecipeSaved": "دستور پخت ذخیره شد!",
+  "recipeDetailRemovedFromFavorites": "از علاقه‌مندی‌ها حذف شد",
+  "recipeDetailRemovedFromSaved": "از ذخیره شده‌ها حذف شد",
+  "recipeDetailSavedDescription": "این دستور پخت در مجموعه شما ذخیره شد",
+  "recipeDetailServings": "پرس",
+  "recipeDetailShareThisRecipe": "اشتراک‌گذاری دستور پخت",
+  "recipeDetailShareWithFriends": "با دوستان به اشتراک بگذارید",
+  "recipeDetailStartCooking": "شروع آشپزی",
+  "recipeDetailStartCookingAI": "شروع آشپزی با سرآشپز هوشمند",
+  "recipeDetailTips": "نکات",
+  "recipesAiGenerate": "ایجاد با هوش مصنوعی",
+  "recipesAiRecipeDisabled": "تولید دستور العمل هوش مصنوعی در حال حاضر غیرفعال است. برای دسترسی نامحدود به Premium ارتقا دهید!",
+  "recipesBrowse": "مرور",
+  "recipesBudget": "اقتصادی",
+  "recipesCal": "کالری",
+  "recipesChicken": "مرغ",
+  "recipesClearSearch": "پاک کردن جستجو",
+  "recipesCookingMood": "حال و هوای آشپزی",
+  "recipesCookingTime": "زمان پخت",
+  "recipesCreatingRecipe": "در حال ایجاد دستور پخت شما...",
+  "recipesCreatingRecipeWith": "ایجاد دستور پخت با {ingredients}...",
+  "recipesCuisine": "نوع آشپزی",
+  "recipesCuisinesAmerican": "آمریکایی",
+  "recipesCuisinesIndian": "هندی",
+  "recipesCuisinesItalian": "ایتالیایی",
+  "recipesCuisinesKorean": "کره‌ای",
+  "recipesCuisinesMediterranean": "مدیترانه‌ای",
+  "recipesCuisinesMiddleEastern": "خاورمیانه",
+  "recipesCuisinesPakistani": "پاکستانی",
+  "recipesCuisinesThai": "تایلندی",
+  "recipesDietType": "نوع رژیم",
+  "recipesDietsBalanced": "متعادل",
+  "recipesDietsDesi": "دسی",
+  "recipesDietsHalal": "حلال",
+  "recipesDietsKeto": "کتو",
+  "recipesDietsVegan": "وگان",
+  "recipesDietsVegetarian": "گیاهخواری",
+  "recipesEggs": "تخم‌مرغ",
+  "recipesEnterIngredients": "لطفاً مواد خود را وارد کنید",
+  "recipesGenerateRecipe": "ایجاد دستور پخت",
+  "recipesGenerating": "در حال ایجاد...",
+  "recipesGoalsEnergy": "انرژی",
+  "recipesGoalsMaintain": "حفظ",
+  "recipesGoalsMuscle": "عضله‌سازی",
+  "recipesGoalsWeightLoss": "کاهش وزن",
+  "recipesGrilled": "کباب شده",
+  "recipesHealthGoal": "هدف سلامتی",
+  "recipesHealthy": "سالم",
+  "recipesHighProtein": "پروتئین بالا",
+  "recipesIngredientsPlaceholder": "مثال: مرغ، سیر، گوجه، برنج...",
+  "recipesKids": "کودکان",
+  "recipesLimitReached": "شما به حد مجاز خود رسیده اید",
+  "recipesLimitReachedMessage": "شما از همه نسل‌های دستور پخت رایگان {limit} استفاده کرده‌اید. برای دسترسی نامحدود به Premium ارتقا دهید!",
+  "recipesMin": "دقیقه",
+  "recipesMoodsComfortFood": "غذای راحت",
+  "recipesMoodsHighEnergy": "انرژی بالا",
+  "recipesMoodsLightFresh": "سبک و تازه",
+  "recipesMoodsQuickBite": "میان‌وعده",
+  "recipesMoodsSpicyFix": "تند",
+  "recipesMoodsSweetCravings": "شیرینی",
+  "recipesNewRecipe": "دستور پخت جدید",
+  "recipesNoResults": "دستور پختی یافت نشد",
+  "recipesQuick": "سریع",
+  "recipesResultsFor": "نتایج برای",
+  "recipesScan": "اسکن",
+  "recipesSeafood": "غذای دریایی",
+  "recipesServings": "پرس",
+  "recipesStop": "توقف",
+  "recipesSubtitle": "کشف و ایجاد کنید",
+  "recipesTargetCalories": "کالری هدف",
+  "recipesTime": "زمان",
+  "recipesTitle": "دستور پخت‌های هوشمند",
+  "recipesTryOther": "نتوانستم دستور پختی پیدا کنم که مطابقت داشته باشد",
+  "recipesVegan": "وگان",
+  "recipesVegetarian": "گیاهخواری",
+  "recipesVoice": "صدا",
+  "recipesWhatCraving": "هوس چه غذایی دارید؟",
+  "recipesWhatIngredients": "چه موادی دارید؟",
+  "recipesYourIngredients": "مواد شما",
+  "savedListAddItemTitle": "آیتم را اضافه کنید",
+  "savedListAddToCurrentList": "به لیست فعلی اضافه کنید",
+  "savedListAiOptimizing": "هوش مصنوعی لیست شما را بهینه می کند...",
+  "savedListCannotUndo": "این عمل قابل لغو نیست.",
+  "savedListCategoryPlaceholder": "دسته (به عنوان مثال، لبنیات)",
+  "savedListDeleteConfirm": "آیا مطمئن هستید که می خواهید حذف کنید؟",
+  "savedListDeleteList": "حذف لیست",
+  "savedListDeleting": "در حال حذف...",
+  "savedListEnterItemName": "لطفا نام مورد را وارد کنید",
+  "savedListEstCalories": "برآورد کالری",
+  "savedListFailedToAdd": "موارد اضافه نشد",
+  "savedListFailedToRegenerate": "بازسازی نشد",
+  "savedListGoBack": "به عقب برگرد",
+  "savedListItemNamePlaceholder": "نام مورد",
+  "savedListItemsAdded": "موارد اضافه شده به لیست فعلی!",
+  "savedListListNotFound": "لیست پیدا نشد",
+  "savedListListNotFoundHint": "به نظر می رسد این لیست مواد غذایی ناپدید شده است!",
+  "savedListNutritionSummary": "خلاصه تغذیه",
+  "savedListOptimizedWithAI": "لیست با پیشنهادات هوش مصنوعی بهینه شده است!",
+  "savedListQuantityPlaceholder": "مقدار (به عنوان مثال، 2 کیلوگرم)",
+  "savedListRegenerateWithAI": "با هوش مصنوعی بازسازی کنید",
+  "savedListTotalProtein": "پروتئین کل",
+  "savedMealPlanContinuePlan": "ادامه برنامه",
+  "savedMealPlanTitle": "برنامه غذایی ذخیره شده",
+  "scannerAddAll": "افزودن همه به دستور پخت",
+  "scannerAddIngredient": "مواد را اضافه کنید",
+  "scannerAiDisabled": "تولید دستور العمل هوش مصنوعی در حال حاضر غیرفعال است. برای دسترسی نامحدود به Premium ارتقا دهید!",
+  "scannerAiIngredientScanner": "اسکنر عناصر هوش مصنوعی",
+  "scannerAnalyzing": "در حال تحلیل مواد شما...",
+  "scannerCalories": "کالری",
+  "scannerCaptureOrUpload": "از مواد خود عکس بگیرید یا آپلود کنید",
+  "scannerCategory": "دسته بندی",
+  "scannerCookingTime": "زمان پخت و پز",
+  "scannerCookingTimeLabel": "زمان پخت و پز",
+  "scannerDetected": "مواد شناسایی شده",
+  "scannerDetectedIngredients": "مواد تشکیل دهنده شناسایی شده",
+  "scannerDietBalanced": "متعادل",
+  "scannerDietHighProtein": "پروتئین بالا",
+  "scannerDietKeto": "کتو",
+  "scannerDietLowCarb": "کربوهیدرات کم",
+  "scannerDietType": "نوع رژیم غذایی",
+  "scannerDietVegan": "وگان",
+  "scannerDietVegetarian": "گیاهخواری",
+  "scannerEnterIngredientName": "لطفا نام ماده تشکیل دهنده را وارد کنید",
+  "scannerErrorAnalyzingImage": "خطا در تجزیه و تحلیل تصویر: {error}",
+  "scannerErrorCapturingImage": "خطا در گرفتن تصویر: {error}",
+  "scannerErrorPickingImage": "خطا در انتخاب تصویر: {error}",
+  "scannerFats": "چربی ها",
+  "scannerGenerateRecipes": "ایجاد دستور العمل",
+  "scannerIngredientName": "نام مواد تشکیل دهنده",
+  "scannerIngredientNameHint": "به عنوان مثال، گوجه فرنگی",
+  "scannerIngredients": "مواد تشکیل دهنده",
+  "scannerInstructions": "دستورالعمل ها",
+  "scannerKcal": "کیلو کالری",
+  "scannerLimitReached": "به حد مجاز {limit} نسل دستور پخت رایگان رسیده‌اید. برای دسترسی نامحدود به Premium ارتقا دهید!",
+  "scannerLimitReachedTitle": "شما به حد مجاز خود رسیده اید",
+  "scannerMin": "دقیقه",
+  "scannerNoIngredients": "موادی شناسایی نشد. با عکس واضح‌تر دوباره امتحان کنید.",
+  "scannerNoIngredientsDetected": "هیچ ماده ای شناسایی نشد لطفا تصویر دیگری را امتحان کنید.",
+  "scannerNoRecipeSelected": "هیچ دستور غذایی انتخاب نشده است",
+  "scannerNoRecipesGenerated": "هنوز هیچ دستور العملی تولید نشده است",
+  "scannerNutritionPerServing": "تغذیه در هر وعده",
+  "scannerOpenCamera": "دوربین را باز کنید",
+  "scannerQuantity": "مقدار",
+  "scannerQuantityHint": "به عنوان مثال، 2 متوسط",
+  "scannerRecipe": "دستور غذا",
+  "scannerRecipePreferences": "ترجیحات دستور غذا",
+  "scannerRecipeSuggestions": "پیشنهادات دستور غذا",
+  "scannerSubtitle": "مواد خود را اسکن کنید",
+  "scannerTakePhoto": "عکس بگیرید",
+  "scannerTakePhotoDescription": "از مواد خود عکس بگیرید و من دستور العمل های خوشمزه را پیشنهاد می کنم!",
+  "scannerTargetCalories": "کالری مورد نظر",
+  "scannerTargetCaloriesLabel": "کالری مورد نظر",
+  "scannerTitle": "اسکنر مواد",
+  "scannerUploadPhoto": "آپلود عکس",
+  "scannerUseIngredients": "استفاده از مواد",
+  "scannerViewFullRecipe": "مشاهده دستور کامل",
+  "scannerViewRecipeSuggestions": "مشاهده {count} پیشنهادات دستور غذا",
+  "searchHint": "دستور العمل ها، مواد تشکیل دهنده را جستجو کنید.",
+  "searchPlaceholder1": "✨ از جن هر چیزی بپرس...",
+  "searchPlaceholder2": "🍳 امروز چه آشپزی می شود؟",
+  "searchPlaceholder3": "🌟 آرزوی تو فرمان من است...",
+  "searchPlaceholder4": "🥗 هوس چیزی سالم دارید؟",
+  "searchPlaceholder5": "🛒 افزودن به لیست مواد غذایی...",
+  "searchSubtitle": "دستور العمل ها و مواد تشکیل دهنده را پیدا کنید",
+  "searchSuggestionChicken": "مرغ",
+  "searchSuggestionDessert": "دسر",
+  "searchSuggestionHealthy": "سالم",
+  "searchSuggestionPasta": "پاستا",
+  "searchSuggestionQuick": "سریع",
+  "searchTitle": "جستجو کنید",
+  "searchTrySearching": "جستجو برای:",
+  "settingsAppearance": "ظاهر",
+  "settingsCannotUndo": "این عمل قابل بازگشت نیست.",
+  "settingsChatHistory": "تاریخچه گفتگو",
+  "settingsChooseTheme": "تم را انتخاب کنید",
+  "settingsClearAllData": "پاک کردن همه داده‌ها",
+  "settingsClearDataConfirm": "همه داده‌ها پاک شوند؟",
+  "settingsClearDataSubtitle": "بازنشانی برنامه به حالت اولیه",
+  "settingsClearDataWarning": "این کار تمام داده‌های ذخیره شده شما را برای همیشه حذف می‌کند از جمله:",
+  "settingsContactUs": "تماس با ما",
+  "settingsData": "داده‌ها",
+  "settingsDataCleared": "تمام داده‌های برنامه بازنشانی شد.",
+  "settingsFaq1A": "روی 'ایجاد دستور پخت' از صفحه اصلی بزنید یا از نوار جستجو برای توصیف آنچه می‌خواهید بپزید استفاده کنید.",
+  "settingsFaq1Q": "چگونه دستور پخت ایجاد کنم؟",
+  "settingsFaq2A": "بله، تمام داده‌های شما رمزگذاری شده و به صورت امن ذخیره می‌شوند. ما هرگز اطلاعات شخصی شما را به اشتراک نمی‌گذاریم.",
+  "settingsFaq2Q": "آیا داده‌های من امن هستند؟",
+  "settingsFaq3A": "ویژگی‌های اساسی آفلاین کار می‌کنند، اما ایجاد با هوش مصنوعی نیاز به اتصال اینترنت دارد.",
+  "settingsFaq3Q": "آیا می‌توانم از برنامه آفلاین استفاده کنم؟",
+  "settingsFaq4A": "روی آیکون قلب در هر دستور پخت بزنید تا آن را در علاقه‌مندی‌ها برای دسترسی سریع بعداً ذخیره کنید.",
+  "settingsFaq4Q": "چگونه دستور پخت‌های مورد علاقه‌ام را ذخیره کنم؟",
+  "settingsFaqTitle": "سؤالات متداول",
+  "settingsFeedback": "بازخورد",
+  "settingsFeedbackSent": "از بازخورد شما متشکریم.",
+  "settingsFeedbackSubtitle": "نظرات خود را برای ما ارسال کنید",
+  "settingsGroceryLists": "لیست‌های خرید",
+  "settingsHelpSupport": "کمک / پشتیبانی",
+  "settingsHelpSupportSubtitle": "سؤالات متداول و تماس با ما",
+  "settingsLanguage": "زبان",
+  "settingsLanguageSubtitle": "تغییر زبان برنامه",
+  "settingsLegal": "قانونی",
+  "settingsLinkCopied": "لینک کپی شد!",
+  "settingsMealPlans": "برنامه‌های غذایی",
+  "settingsMessageRequired": "پیام الزامی است",
+  "settingsNameRequired": "نام الزامی است",
+  "settingsOnWebsite": "در وب‌سایت ما.",
+  "settingsPreferencesSettings": "ترجیحات و تنظیمات",
+  "settingsPrivacyPolicy": "سیاست حریم خصوصی",
+  "settingsRateUs": "امتیاز دهید",
+  "settingsRateUsSubtitle": "برنامه را دوست دارید؟ امتیاز دهید!",
+  "settingsRatingThanks": "از علاقه‌مندی شما متشکریم! امتیازدهی در دستگاه‌های موبایل در دسترس است.",
+  "settingsSavedRecipes": "دستور پخت‌ها و علاقه‌مندی‌های ذخیره شده",
+  "settingsSendFeedback": "ارسال بازخورد",
+  "settingsShareApp": "اشتراک‌گذاری برنامه",
+  "settingsShareAppSubtitle": "به دوستانتان بگویید",
+  "settingsShareLinkCopied": "لینک اشتراک‌گذاری در کلیپ‌بورد کپی شد",
+  "settingsSupport": "پشتیبانی",
+  "settingsTermsConditions": "شرایط و ضوابط",
+  "settingsTheme": "موضوع",
+  "settingsThemeDark": "تاریک",
+  "settingsThemeLight": "نور",
+  "settingsThemeSystem": "سیستم",
+  "settingsTitle": "تنظیمات",
+  "settingsViewOnWebsite": "مشاهده کامل",
+  "settingsViewPrivacyPolicy": "مشاهده سیاست حریم خصوصی",
+  "settingsViewTerms": "مشاهده شرایط و ضوابط",
+  "settingsYourMessage": "پیام شما...",
+  "settingsYourName": "نام شما",
+  "splashAppName": "دیش جنی",
+  "splashSubtitle": "همراه آشپزخانه هوش مصنوعی شما",
+  "tagsAsian": "آسیایی",
+  "tagsBreakfast": "صبحانه",
+  "tagsBudget": "اقتصادی",
+  "tagsColorful": "رنگارنگ",
+  "tagsComfort": "راحت",
+  "tagsCreamy": "خامه‌ای",
+  "tagsDesi": "دسی",
+  "tagsDessert": "دسر",
+  "tagsHealthy": "سالم",
+  "tagsHighProtein": "پروتئین بالا",
+  "tagsIndulgent": "لوکس",
+  "tagsItalian": "ایتالیایی",
+  "tagsKeto": "کتو",
+  "tagsKidsFriendly": "مناسب کودکان",
+  "tagsLowCarb": "کم کربوهیدرات",
+  "tagsMiddleEastern": "خاورمیانه‌ای",
+  "tagsOmega3": "امگا-۳",
+  "tagsQuick": "سریع",
+  "tagsSpicy": "تند",
+  "tagsSweet": "شیرین",
+  "tagsVegan": "وگان",
+  "tagsVegetarian": "گیاهخواری",
+  "weeklyPlanCal": "کالری",
+  "weeklyPlanCreatePlan": "یک برنامه غذایی ایجاد کنید تا هفته خود را اینجا ببینید!",
+  "weeklyPlanCreated": "ایجاد شده",
+  "weeklyPlanFri": "جمعه",
+  "weeklyPlanGenerateAIMealPlan": "ایجاد برنامه غذایی هوش مصنوعی",
+  "weeklyPlanMeals": "وعده",
+  "weeklyPlanMon": "دوش",
+  "weeklyPlanNoPlans": "هنوز برنامه غذایی ندارید",
+  "weeklyPlanPersonalizedMeals": "وعده‌های غذایی شخصی‌سازی شده برای شما",
+  "weeklyPlanSat": "شنبه",
+  "weeklyPlanStartPlanning": "شروع برنامه‌ریزی",
+  "weeklyPlanSun": "یکش",
+  "weeklyPlanThu": "پنج",
+  "weeklyPlanTitle": "نگاهی به هفته شما",
+  "weeklyPlanTodaysMeals": "وعده‌های امروز",
+  "weeklyPlanTue": "سش",
+  "weeklyPlanView": "مشاهده",
+  "weeklyPlanWed": "چهار"
+}

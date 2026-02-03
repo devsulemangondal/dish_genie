@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Small Native Ad Dimensions -->
+    <dimen name="small_ad_height">80dp</dimen>
+    <dimen name="small_ad_padding">8dp</dimen>
+    <dimen name="small_ad_media_size">64dp</dimen>
+    <dimen name="small_ad_headline_size">14sp</dimen>
+    <dimen name="small_ad_body_size">12sp</dimen>
+    <dimen name="small_ad_cta_height">48dp</dimen>
+    <dimen name="small_ad_cta_min_width">100dp</dimen>
+    
+    <!-- Medium Native Ad Dimensions -->
+    <dimen name="medium_ad_height">150dp</dimen>
+    <dimen name="medium_ad_padding">12dp</dimen>
+    <dimen name="medium_ad_media_size">120dp</dimen>
+    <dimen name="medium_ad_headline_size">16sp</dimen>
+    <dimen name="medium_ad_body_size">13sp</dimen>
+    <dimen name="medium_ad_cta_height">56dp</dimen>
+</resources>
