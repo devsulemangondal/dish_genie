@@ -562,6 +562,11 @@
       }
     }
   },
+  "noInternetTitle": "No internet",
+  "noInternetMessage": "Please check your connection and try again.",
+  "permissionDeniedTitle": "Permission required",
+  "permissionDeniedMessage": "Camera and microphone access is needed for this feature. Please enable it in system settings.",
+  "permissionOpenSettings": "Open Settings",
   "settingsAppearance": "Appearance",
   "settingsTheme": "Theme",
   "settingsChooseTheme": "Choose Theme",

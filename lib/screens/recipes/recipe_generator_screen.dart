@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../core/dialogs/app_dialogs.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
 import '../../core/navigation/pro_navigation.dart';
@@ -177,6 +178,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
       );
       return;
     }
+    if (!await ensureConnectedAndShowDialog(context)) return;
 
     // Check if user can generate AI recipes based on remote config
     final premiumProvider = context.read<PremiumProvider>();
@@ -265,7 +267,10 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                         onTap: () => context.push('/favorites'),
                         borderRadius: BorderRadius.circular(20),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -280,7 +285,9 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                 ),
                               ),
                             ],
@@ -1119,7 +1126,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  '${context.t('recipes.time')}: ${_cookingTime}${context.t('recipes.min')}',
+                                  '${context.t('recipes.time')}: $_cookingTime${context.t('recipes.min')}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -1662,7 +1669,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-              ).copyWith(elevation: MaterialStateProperty.all(0)),
+              ).copyWith(elevation: WidgetStateProperty.all(0)),
               child: Container(
                 decoration: BoxDecoration(
                   gradient: AppColors.gradientPrimary,

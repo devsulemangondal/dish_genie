@@ -11,17 +11,11 @@
 /// - If you do put values here, treat this file as **secret** and never commit
 ///   real keys to a public repository.
 class SupabaseConfig {
-  /// Supabase project URL (e.g. https://xxxx.supabase.co).
-  ///
-  /// Leave empty to fall back to the default project URL used in
-  /// `ApiConfigService` (matches the web app project).
-  static const String supabaseUrl = '';
+  /// Supabase project URL (matches web app VITE_SUPABASE_URL).
+  static const String supabaseUrl = 'https://kqhufomrgvpagbziwwok.supabase.co';
 
-  /// Supabase anon (public) key.
-  ///
-  /// Leave empty during development if you don't want to hard‑code keys.
-  /// In that case, configure:
-  /// - Environment variable `VITE_SUPABASE_PUBLISHABLE_KEY` equivalent, or
-  /// - Firebase Remote Config key `supabase_anon_key`.
-  static const String supabaseAnonKey = '';
+  /// Supabase anon (public) key (matches web app VITE_SUPABASE_PUBLISHABLE_KEY).
+  /// For production builds, consider using Firebase Remote Config instead.
+  static const String supabaseAnonKey =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxaHVmb21yZ3ZwYWdieml3d29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4Njc3NjAsImV4cCI6MjA4MDQ0Mzc2MH0.HI2iJoM1tsrJewbEdKIUEpQ5CkLFOwv--aS0L8vZ0j4';
 }

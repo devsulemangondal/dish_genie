@@ -15,6 +15,7 @@ import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/recipe/recipe_image_widget.dart';
 import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../core/dialogs/app_dialogs.dart';
 import '../../services/app_open_ad_manager.dart';
 import '../../services/scanner_service.dart';
 import '../../services/recipe_service.dart';
@@ -119,14 +120,19 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              '${context.t('common.error')}: ${context.t('scanner.error.capturing.image', {'error': e.toString()})}',
+        final err = e.toString().toLowerCase();
+        if (err.contains('permission') || err.contains('camera')) {
+          showPermissionDeniedDialog(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '${context.t('common.error')}: ${context.t('scanner.error.capturing.image', {'error': e.toString()})}',
+              ),
+              backgroundColor: AppColors.destructive,
             ),
-            backgroundColor: AppColors.destructive,
-          ),
-        );
+          );
+        }
       }
     }
   }
@@ -165,10 +171,12 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
 
       if (mounted) {
         // If recipes were generated directly from the scan, increment limit
-        if (result != null && result.recipes.isNotEmpty && !premiumProvider.isPremium) {
+        if (result != null &&
+            result.recipes.isNotEmpty &&
+            !premiumProvider.isPremium) {
           premiumProvider.incrementAiRecipeCount();
         }
-        
+
         setState(() {
           _isAnalyzing = false;
           if (result != null && result.ingredients.isNotEmpty) {
@@ -233,11 +241,13 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
         if (mounted) {
           final limit = premiumProvider.getAiRecipeLimit();
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  limit != null
-                      ? context.t('scanner.limit.reached', {'limit': limit.toString()})
-                      : context.t('scanner.ai.disabled'),
+            SnackBar(
+              content: Text(
+                limit != null
+                    ? context.t('scanner.limit.reached', {
+                        'limit': limit.toString(),
+                      })
+                    : context.t('scanner.ai.disabled'),
               ),
               backgroundColor: AppColors.destructive,
               duration: const Duration(seconds: 4),
@@ -630,7 +640,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _newIngredientCategory,
+                initialValue: _newIngredientCategory,
                 decoration: InputDecoration(
                   labelText: context.t('scanner.category'),
                   border: OutlineInputBorder(
@@ -717,7 +727,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
     required int aiRecipeCount,
   }) {
     final premiumProvider = context.read<PremiumProvider>();
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -755,11 +765,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
           const SizedBox(height: 32),
           // Limit Reached Banner (if limit reached)
           if (!canGenerateRecipe && !premiumProvider.isPremium)
-            _buildLimitReachedBanner(
-              context,
-              aiRecipeLimit,
-              aiRecipeCount,
-            ),
+            _buildLimitReachedBanner(context, aiRecipeLimit, aiRecipeCount),
           if (!canGenerateRecipe && !premiumProvider.isPremium)
             const SizedBox(height: 16),
           // Preferences Card (before camera section)
@@ -801,7 +807,10 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                     decoration: BoxDecoration(
                       gradient: canGenerateRecipe
                           ? const LinearGradient(
-                              colors: [AppColors.geniePurple, AppColors.geniePink],
+                              colors: [
+                                AppColors.geniePurple,
+                                AppColors.geniePink,
+                              ],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             )
@@ -819,20 +828,18 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                         Icons.camera_alt,
                         color: canGenerateRecipe
                             ? Colors.white
-                            : Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.4),
+                            : Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withOpacity(0.4),
                       ),
                       label: Text(
                         context.t('scanner.open.camera'),
                         style: TextStyle(
                           color: canGenerateRecipe
                               ? Colors.white
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.4),
+                              : Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withOpacity(0.4),
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -851,27 +858,23 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
-                    onPressed: canGenerateRecipe
-                        ? _pickImageFromGallery
-                        : null,
+                    onPressed: canGenerateRecipe ? _pickImageFromGallery : null,
                     icon: Icon(
                       Icons.photo_library,
                       color: canGenerateRecipe
                           ? Theme.of(context).colorScheme.onSurface
-                          : Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.4),
+                          : Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withOpacity(0.4),
                     ),
                     label: Text(
                       context.t('scanner.upload.photo'),
                       style: TextStyle(
                         color: canGenerateRecipe
                             ? Theme.of(context).colorScheme.onSurface
-                            : Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.4),
+                            : Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withOpacity(0.4),
                       ),
                     ),
                     style: OutlinedButton.styleFrom(
@@ -879,11 +882,8 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                       foregroundColor: Theme.of(context).colorScheme.onSurface,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       side: BorderSide(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(
-                              canGenerateRecipe ? 0.2 : 0.1,
-                            ),
+                        color: Theme.of(context).colorScheme.onSurface
+                            .withOpacity(canGenerateRecipe ? 0.2 : 0.1),
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -1439,7 +1439,10 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
     } else if (lowerTag.contains('quick') || lowerTag.contains('fast')) {
       return (bg: colorScheme.errorContainer, fg: colorScheme.onErrorContainer);
     }
-    return (bg: colorScheme.surfaceVariant, fg: colorScheme.onSurfaceVariant);
+    return (
+      bg: colorScheme.surfaceContainerHighest,
+      fg: colorScheme.onSurfaceVariant,
+    );
   }
 
   Widget _buildRecipeCard(Recipe recipe) {
@@ -1477,22 +1480,17 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                         placeholder: Container(
                           color: Theme.of(
                             context,
-                          ).colorScheme.surfaceVariant,
+                          ).colorScheme.surfaceContainerHighest,
                           child: const Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
+                            child: CircularProgressIndicator(strokeWidth: 2),
                           ),
                         ),
                         errorWidget: Container(
                           color: Theme.of(
                             context,
-                          ).colorScheme.surfaceVariant,
+                          ).colorScheme.surfaceContainerHighest,
                           child: const Center(
-                            child: Text(
-                              '🍽️',
-                              style: TextStyle(fontSize: 32),
-                            ),
+                            child: Text('🍽️', style: TextStyle(fontSize: 32)),
                           ),
                         ),
                       ),
@@ -1940,7 +1938,9 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                     if (limit != null) ...[
                       const SizedBox(height: 4),
                       Text(
-                        context.t('recipes.limit.reached.message', {'limit': limit.toString()}),
+                        context.t('recipes.limit.reached.message', {
+                          'limit': limit.toString(),
+                        }),
                         style: TextStyle(
                           fontSize: 14,
                           color: Theme.of(
@@ -1982,7 +1982,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-              ).copyWith(elevation: MaterialStateProperty.all(0)),
+              ).copyWith(elevation: WidgetStateProperty.all(0)),
               child: Container(
                 decoration: BoxDecoration(
                   gradient: AppColors.gradientPrimary,

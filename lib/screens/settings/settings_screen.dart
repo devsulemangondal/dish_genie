@@ -1,22 +1,24 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../core/localization/l10n_extension.dart';
-import '../../core/theme/colors.dart';
-import '../../widgets/common/sticky_header.dart';
-import '../../widgets/common/bottom_nav.dart';
-import '../../widgets/common/rtl_icon.dart';
-import '../../widgets/common/premium_card.dart';
 import 'package:provider/provider.dart';
-import '../../providers/theme_provider.dart';
-import '../../providers/meal_plan_provider.dart';
-import '../../providers/grocery_provider.dart';
-import '../../providers/chat_provider.dart';
-import '../../providers/language_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../core/localization/l10n_extension.dart';
 import '../../core/localization/language_config.dart';
+import '../../core/theme/colors.dart';
+import '../../providers/chat_provider.dart';
+import '../../providers/grocery_provider.dart';
+import '../../providers/language_provider.dart';
+import '../../providers/meal_plan_provider.dart';
+import '../../providers/theme_provider.dart';
+import '../../widgets/common/bottom_nav.dart';
+import '../../widgets/common/premium_card.dart';
+import '../../widgets/common/rtl_icon.dart';
+import '../../widgets/common/sticky_header.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -373,16 +375,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             icon: isDark ? Icons.dark_mode : Icons.light_mode,
                             title: context.t('settingsTheme'),
                             subtitle: themeText,
-                            rightElement: Switch(
-                              value: isDark,
-                              onChanged: (value) async {
-                                // Toggle between light and dark
-                                await themeProvider.setThemeMode(
-                                  value ? ThemeMode.dark : ThemeMode.light,
-                                );
-                              },
-                              activeColor: AppColors.primary,
-                            ),
+                            onTap: () async {
+                              final mode = await showDialog<ThemeMode>(
+                                context: context,
+                                builder: (ctx) => SimpleDialog(
+                                  title: Text(context.t('settingsChooseTheme')),
+                                  children: [
+                                    SimpleDialogOption(
+                                      onPressed: () =>
+                                          Navigator.pop(ctx, ThemeMode.system),
+                                      child: Text(
+                                          context.t('settingsThemeSystem')),
+                                    ),
+                                    SimpleDialogOption(
+                                      onPressed: () =>
+                                          Navigator.pop(ctx, ThemeMode.light),
+                                      child: Text(
+                                          context.t('settingsThemeLight')),
+                                    ),
+                                    SimpleDialogOption(
+                                      onPressed: () =>
+                                          Navigator.pop(ctx, ThemeMode.dark),
+                                      child: Text(
+                                          context.t('settingsThemeDark')),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (mode != null) {
+                                await themeProvider.setThemeMode(mode);
+                              }
+                            },
                           );
                         },
                       ),
@@ -415,7 +438,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             icon: Icons.language,
                             title: context.t('settings.language'),
                             subtitle: languageName,
-                            onTap: () => context.go('/language-picker'),
+                            onTap: () => context.push('/language-picker'),
                           );
                         },
                       ),
@@ -630,7 +653,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         fontWeight: FontWeight.w600,
                         color: isDestructive
                             ? Theme.of(context).colorScheme.error
-                            : Theme.of(context).colorScheme.onBackground,
+                            : Theme.of(context).colorScheme.onSurface,
                       ),
                       textDirection: Directionality.of(context),
                     ),

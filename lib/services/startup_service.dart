@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 
+import 'api_config_service.dart';
 import 'remote_config_service.dart';
 import 'storage_service.dart';
+import 'supabase_service.dart';
 
 /// Service for handling app startup initialization tasks
 class StartupService {
@@ -44,6 +46,32 @@ class StartupService {
           );
         }
         // Continue even if RemoteConfig fails - it will use defaults
+      }
+
+      // Load Supabase URL and anon key (from Remote Config or lib/config/supabase_config.dart)
+      try {
+        await ApiConfigService.initialize();
+        if (ApiConfigService.isConfigured) {
+          await SupabaseService.initialize(
+            url: ApiConfigService.apiUrl!,
+            anonKey: ApiConfigService.apiKey!,
+          );
+          if (kDebugMode) {
+            print(
+              '[StartupService] ✅ SupabaseService initialized (meal plan, chat, etc. will work)',
+            );
+          }
+        } else {
+          if (kDebugMode) {
+            print(
+              '[StartupService] ⚠️ Supabase not configured: set supabase_url and supabase_anon_key in Firebase Remote Config, or in lib/config/supabase_config.dart',
+            );
+          }
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('[StartupService] ⚠️ Supabase initialization failed: $e');
+        }
       }
 
       _isInitialized = true;

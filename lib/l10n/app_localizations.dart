@@ -3136,6 +3136,36 @@ abstract class AppLocalizations {
   /// **'Could not open {url}'**
   String commonCouldNotOpenUrl(String url);
 
+  /// No description provided for @noInternetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet'**
+  String get noInternetTitle;
+
+  /// No description provided for @noInternetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your connection and try again.'**
+  String get noInternetMessage;
+
+  /// No description provided for @permissionDeniedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission required'**
+  String get permissionDeniedTitle;
+
+  /// No description provided for @permissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera and microphone access is needed for this feature. Please enable it in system settings.'**
+  String get permissionDeniedMessage;
+
+  /// No description provided for @permissionOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get permissionOpenSettings;
+
   /// No description provided for @settingsAppearance.
   ///
   /// In en, this message translates to:

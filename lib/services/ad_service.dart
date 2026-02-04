@@ -1,81 +1,118 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
+
+import '../core/router/app_router.dart';
+import '../l10n/app_localizations.dart';
+import '../providers/language_provider.dart';
 import 'remote_config_service.dart';
 import 'storage_service.dart';
-import '../providers/language_provider.dart';
-import '../l10n/app_localizations.dart';
-import '../core/router/app_router.dart';
 
 class AdService {
   // Test Ad Unit IDs (for development)
-  static const String _testNativeAdUnitId = 'ca-app-pub-3940256099942544/2247696110';
-  static const String _testInterstitialAdUnitId = 'ca-app-pub-3940256099942544/1033173712';
+  static const String _testNativeAdUnitId =
+      'ca-app-pub-3940256099942544/2247696110';
+  static const String _testInterstitialAdUnitId =
+      'ca-app-pub-3940256099942544/1033173712';
   // Official Google test App Open Ad Unit ID for Android
   // Source: https://developers.google.com/admob/android/test-ads
-  static const String _testAppOpenAdUnitId = 'ca-app-pub-3940256099942544/9257395921';
+  static const String _testAppOpenAdUnitId =
+      'ca-app-pub-3940256099942544/9257395921';
 
   // Production Ad Unit IDs (from the plan)
-  static const String _productionAppOpenAdUnitId = 'ca-app-pub-6882687050623219/2543111627';
-  static const String _productionSplashInterAdUnitId = 'ca-app-pub-6882687050623219/3856193297';
-  static const String _productionLanguageNativeAdUnitId = 'ca-app-pub-6882687050623219/7841887375';
-  static const String _productionHomeNativeAdUnitId = 'ca-app-pub-6882687050623219/1276479023';
-  static const String _productionRecipeNativeAdUnitId = 'ca-app-pub-6882687050623219/5104043397';
-  static const String _productionPlanNativeAdUnitId = 'ca-app-pub-6882687050623219/6150349996';
-  static const String _productionShopNativeAdUnitId = 'ca-app-pub-6882687050623219/3856193297';
-  static const String _productionChatNativeAdUnitId = 'ca-app-pub-6882687050623219/2686775378';
-  static const String _productionRecipeDetailNativeAdUnitId = 'ca-app-pub-6882687050623219/2543111627';
-  static const String _productionCameraNativeAdUnitId = 'ca-app-pub-6882687050623219/1812677406';
-  static const String _productionBottomInterAdUnitId = 'ca-app-pub-6882687050623219/8916948280';
-  static const String _productionCardInterAdUnitId = 'ca-app-pub-6882687050623219/5160895477';
-  static const String _productionGeneratePlanInterAdUnitId = 'ca-app-pub-6882687050623219/1276479023';
-  static const String _productionCookingAiInterAdUnitId = 'ca-app-pub-6882687050623219/2211104985';
+  static const String _productionAppOpenAdUnitId =
+      'ca-app-pub-6882687050623219/2543111627';
+  static const String _productionSplashInterAdUnitId =
+      'ca-app-pub-6882687050623219/3856193297';
+  static const String _productionLanguageNativeAdUnitId =
+      'ca-app-pub-6882687050623219/7841887375';
+  static const String _productionHomeNativeAdUnitId =
+      'ca-app-pub-6882687050623219/1276479023';
+  static const String _productionRecipeNativeAdUnitId =
+      'ca-app-pub-6882687050623219/5104043397';
+  static const String _productionPlanNativeAdUnitId =
+      'ca-app-pub-6882687050623219/6150349996';
+  static const String _productionShopNativeAdUnitId =
+      'ca-app-pub-6882687050623219/3856193297';
+  static const String _productionChatNativeAdUnitId =
+      'ca-app-pub-6882687050623219/2686775378';
+  static const String _productionRecipeDetailNativeAdUnitId =
+      'ca-app-pub-6882687050623219/2543111627';
+  static const String _productionCameraNativeAdUnitId =
+      'ca-app-pub-6882687050623219/1812677406';
+  static const String _productionBottomInterAdUnitId =
+      'ca-app-pub-6882687050623219/8916948280';
+  static const String _productionCardInterAdUnitId =
+      'ca-app-pub-6882687050623219/5160895477';
+  static const String _productionGeneratePlanInterAdUnitId =
+      'ca-app-pub-6882687050623219/1276479023';
+  static const String _productionCookingAiInterAdUnitId =
+      'ca-app-pub-6882687050623219/2211104985';
 
-  // Get ad unit IDs (use test IDs in debug/test/profile mode, production IDs in release bundle)
+  // ========== FOR TESTING ONLY: Test ads in release APK ==========
+  // Set to true: release APK shows Google test ads (current – for testing).
+  // Set to false: release APK uses production ad units (real ads).
+  // TODO: Before publishing to Play Store, set _forceTestAds = false to show real ads.
+  static const bool _forceTestAds = true;
+  // ================================================================
+
+  // Get ad unit IDs. When _forceTestAds is true we always use test IDs (no kReleaseMode check).
   static String _getAdUnitId(String productionId, {String? testAdType}) {
-    // Use test IDs in debug/test/profile mode, production IDs in release bundle
-    // kReleaseMode is true only in release builds (flutter build --release)
-    // In debug/profile/test builds, always use test IDs
-    if (!kReleaseMode) {
-      // Use appropriate test ID based on ad type
-      if (testAdType == 'native' || testAdType == 'Native') {
-        return _testNativeAdUnitId;
-      } else if (testAdType == 'interstitial' || testAdType == 'Inter') {
-        return _testInterstitialAdUnitId;
-      } else if (testAdType == 'appOpen' || testAdType == 'AppOpen') {
-        return _testAppOpenAdUnitId;
-      } else {
-        // Fallback: infer from productionId if testAdType not provided
-        if (productionId.contains('Native')) {
-          return _testNativeAdUnitId;
-        } else if (productionId.contains('Inter')) {
-          return _testInterstitialAdUnitId;
-        } else {
-          return _testAppOpenAdUnitId;
-        }
-      }
+    if (_forceTestAds) {
+      if (testAdType == 'native' || testAdType == 'Native') return _testNativeAdUnitId;
+      if (testAdType == 'interstitial' || testAdType == 'Inter') return _testInterstitialAdUnitId;
+      if (testAdType == 'appOpen' || testAdType == 'AppOpen') return _testAppOpenAdUnitId;
+      if (productionId.contains('Native')) return _testNativeAdUnitId;
+      if (productionId.contains('Inter')) return _testInterstitialAdUnitId;
+      return _testAppOpenAdUnitId;
     }
-    // Use production IDs in release bundle only
+    if (!kReleaseMode) {
+      if (testAdType == 'native' || testAdType == 'Native') return _testNativeAdUnitId;
+      if (testAdType == 'interstitial' || testAdType == 'Inter') return _testInterstitialAdUnitId;
+      if (testAdType == 'appOpen' || testAdType == 'AppOpen') return _testAppOpenAdUnitId;
+      if (productionId.contains('Native')) return _testNativeAdUnitId;
+      if (productionId.contains('Inter')) return _testInterstitialAdUnitId;
+      return _testAppOpenAdUnitId;
+    }
     return productionId;
   }
 
-  static String get appOpenAdUnitId => _getAdUnitId(_productionAppOpenAdUnitId, testAdType: 'appOpen');
-  static String get splashInterAdUnitId => _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial');
-  static String get languageNativeAdUnitId => _getAdUnitId(_productionLanguageNativeAdUnitId, testAdType: 'native');
-  static String get homeNativeAdUnitId => _getAdUnitId(_productionHomeNativeAdUnitId, testAdType: 'native');
-  static String get recipeNativeAdUnitId => _getAdUnitId(_productionRecipeNativeAdUnitId, testAdType: 'native');
-  static String get planNativeAdUnitId => _getAdUnitId(_productionPlanNativeAdUnitId, testAdType: 'native');
-  static String get shopNativeAdUnitId => _getAdUnitId(_productionShopNativeAdUnitId, testAdType: 'native');
-  static String get chatNativeAdUnitId => _getAdUnitId(_productionChatNativeAdUnitId, testAdType: 'native');
-  static String get recipeDetailNativeAdUnitId => _getAdUnitId(_productionRecipeDetailNativeAdUnitId, testAdType: 'native');
-  static String get cameraNativeAdUnitId => _getAdUnitId(_productionCameraNativeAdUnitId, testAdType: 'native');
-  static String get bottomInterAdUnitId => _getAdUnitId(_productionBottomInterAdUnitId, testAdType: 'interstitial');
-  static String get cardInterAdUnitId => _getAdUnitId(_productionCardInterAdUnitId, testAdType: 'interstitial');
-  static String get generatePlanInterAdUnitId => _getAdUnitId(_productionGeneratePlanInterAdUnitId, testAdType: 'interstitial');
-  static String get cookingAiInterAdUnitId => _getAdUnitId(_productionCookingAiInterAdUnitId, testAdType: 'interstitial');
+  static String get appOpenAdUnitId =>
+      _getAdUnitId(_productionAppOpenAdUnitId, testAdType: 'appOpen');
+  static String get splashInterAdUnitId =>
+      _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial');
+  static String get languageNativeAdUnitId =>
+      _getAdUnitId(_productionLanguageNativeAdUnitId, testAdType: 'native');
+  static String get homeNativeAdUnitId =>
+      _getAdUnitId(_productionHomeNativeAdUnitId, testAdType: 'native');
+  static String get recipeNativeAdUnitId =>
+      _getAdUnitId(_productionRecipeNativeAdUnitId, testAdType: 'native');
+  static String get planNativeAdUnitId =>
+      _getAdUnitId(_productionPlanNativeAdUnitId, testAdType: 'native');
+  static String get shopNativeAdUnitId =>
+      _getAdUnitId(_productionShopNativeAdUnitId, testAdType: 'native');
+  static String get chatNativeAdUnitId =>
+      _getAdUnitId(_productionChatNativeAdUnitId, testAdType: 'native');
+  static String get recipeDetailNativeAdUnitId =>
+      _getAdUnitId(_productionRecipeDetailNativeAdUnitId, testAdType: 'native');
+  static String get cameraNativeAdUnitId =>
+      _getAdUnitId(_productionCameraNativeAdUnitId, testAdType: 'native');
+  static String get bottomInterAdUnitId =>
+      _getAdUnitId(_productionBottomInterAdUnitId, testAdType: 'interstitial');
+  static String get cardInterAdUnitId =>
+      _getAdUnitId(_productionCardInterAdUnitId, testAdType: 'interstitial');
+  static String get generatePlanInterAdUnitId => _getAdUnitId(
+    _productionGeneratePlanInterAdUnitId,
+    testAdType: 'interstitial',
+  );
+  static String get cookingAiInterAdUnitId => _getAdUnitId(
+    _productionCookingAiInterAdUnitId,
+    testAdType: 'interstitial',
+  );
 
   static bool _isInitialized = false;
 
@@ -86,11 +123,14 @@ class AdService {
     _isInitialized = true;
   }
 
-  // Check internet connectivity
+  // Check internet connectivity (connectivity_plus returns List<ConnectivityResult>)
   static Future<bool> _checkInternetConnectivity() async {
     try {
-      final connectivityResult = await Connectivity().checkConnectivity();
-      return connectivityResult != ConnectivityResult.none;
+      final results = await Connectivity().checkConnectivity();
+      return results.any((r) =>
+          r == ConnectivityResult.wifi ||
+          r == ConnectivityResult.mobile ||
+          r == ConnectivityResult.ethernet);
     } catch (e) {
       return false;
     }
@@ -138,9 +178,10 @@ class AdService {
     // Determine factory ID based on screen key
     // Use medium layout for: plan, recipeDetail, language
     // Use small layout for: home, recipe, shop, chat, camera
-    final factoryId = (screenKey == 'plan' || 
-                       screenKey == 'recipeDetail' || 
-                       screenKey == 'language')
+    final factoryId =
+        (screenKey == 'plan' ||
+            screenKey == 'recipeDetail' ||
+            screenKey == 'language')
         ? 'mediumAd'
         : 'smallAd';
 
@@ -185,7 +226,7 @@ class AdService {
       }
 
       await RemoteConfigService.initialize();
-      
+
       switch (screenKey) {
         case 'language':
           return RemoteConfigService.languageNative;
@@ -319,13 +360,13 @@ class AdService {
   static final Map<String, InterstitialAd?> _interstitialAds = {};
   static final Map<String, bool> _isLoadingInterstitial = {};
   static final Map<String, bool> _isShowingInterstitial = {};
-  
+
   // Track when interstitial ad was dismissed to prevent app open ad from showing immediately
   static DateTime? _lastInterstitialDismissedTime;
-  
+
   // Track when app open ad was dismissed to prevent interstitial ads from showing immediately
   static DateTime? _lastAppOpenAdDismissedTime;
-  
+
   // Cooldown period to prevent ads from chaining
   static const Duration _cooldownAfterAppOpenAd = Duration(seconds: 2);
 
@@ -389,7 +430,9 @@ class AdService {
     // Check cooldown period after app open ad dismissal
     // This prevents interstitial ads from showing immediately after an app open ad is closed
     if (_lastAppOpenAdDismissedTime != null) {
-      final timeSinceAppOpenAd = DateTime.now().difference(_lastAppOpenAdDismissedTime!);
+      final timeSinceAppOpenAd = DateTime.now().difference(
+        _lastAppOpenAdDismissedTime!,
+      );
       if (timeSinceAppOpenAd < _cooldownAfterAppOpenAd) {
         if (kDebugMode) {
           print(
@@ -404,7 +447,7 @@ class AdService {
     bool loaderShown = false;
     bool loaderDismissed = false;
     NavigatorState? rootNavigator;
-    
+
     // Helper function to safely dismiss loader
     void dismissLoader() {
       if (loaderDismissed || !loaderShown) return;
@@ -416,8 +459,8 @@ class AdService {
       // Fallback if no navigator captured and we still have a mounted context.
       final NavigatorState? fallbackNavigator =
           (navigator == null && context != null && context.mounted)
-              ? Navigator.of(context, rootNavigator: true)
-              : null;
+          ? Navigator.of(context, rootNavigator: true)
+          : null;
 
       final NavigatorState? navToUse = navigator ?? fallbackNavigator;
       if (navToUse == null || !navToUse.mounted) return;
@@ -465,19 +508,19 @@ class AdService {
     // Load the ad if loadAdFunction is provided and ad is not already loaded
     InterstitialAd? ad = _interstitialAds[adType];
     Timer? pollTimer;
-    
+
     try {
       if (ad == null && loadAdFunction != null) {
         final completer = Completer<void>();
         int pollCount = 0;
         const int maxPolls = 50; // 50 * 100ms = 5 seconds max
-        
+
         // Poll for ad to be loaded or failed (check every 100ms)
         pollTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
           pollCount++;
           final loadedAd = _interstitialAds[adType];
           final isLoading = _isLoadingInterstitial[adType] == true;
-          
+
           // Check if ad loaded successfully
           if (loadedAd != null) {
             timer.cancel();
@@ -493,7 +536,9 @@ class AdService {
               completer.complete();
             }
             if (kDebugMode) {
-              print('⚠️ [AdService] Ad loading failed for type: $adType (loading stopped but no ad available)');
+              print(
+                '⚠️ [AdService] Ad loading failed for type: $adType (loading stopped but no ad available)',
+              );
             }
           }
           // Timeout after max polls
@@ -507,7 +552,7 @@ class AdService {
             }
           }
         });
-        
+
         // Start loading the ad
         try {
           await loadAdFunction();
@@ -520,7 +565,7 @@ class AdService {
             completer.complete();
           }
         }
-        
+
         // Wait for ad to load, fail, or timeout
         try {
           await completer.future;
@@ -529,7 +574,7 @@ class AdService {
             print('❌ [AdService] Error waiting for ad: $e');
           }
         }
-        
+
         // Get the ad after loading attempt
         ad = _interstitialAds[adType];
       }
@@ -541,7 +586,9 @@ class AdService {
     // Check if ad is already being shown to prevent duplicate shows
     if (_isShowingInterstitial[adType] == true) {
       if (kDebugMode) {
-        print('⚠️ [AdService] Interstitial ad for type "$adType" is already being shown, skipping duplicate');
+        print(
+          '⚠️ [AdService] Interstitial ad for type "$adType" is already being shown, skipping duplicate',
+        );
       }
       dismissLoader();
       onAdFailedToShow?.call(null);
@@ -552,7 +599,7 @@ class AdService {
     if (ad != null && context != null && context.mounted) {
       // Mark as showing to prevent duplicate shows
       _isShowingInterstitial[adType] = true;
-      
+
       ad.fullScreenContentCallback = FullScreenContentCallback(
         onAdShowedFullScreenContent: (ad) {
           // Dismiss loading overlay as soon as ad appears
@@ -579,7 +626,9 @@ class AdService {
         },
         onAdFailedToShowFullScreenContent: (ad, error) {
           if (kDebugMode) {
-            print('❌ [AdService] Ad failed to show for type: $adType, error: $error');
+            print(
+              '❌ [AdService] Ad failed to show for type: $adType, error: $error',
+            );
           }
           // Reset showing flag
           _isShowingInterstitial[adType] = false;
@@ -594,7 +643,9 @@ class AdService {
         ad.show();
       } catch (e) {
         if (kDebugMode) {
-          print('❌ [AdService] Exception calling ad.show() for type: $adType: $e');
+          print(
+            '❌ [AdService] Exception calling ad.show() for type: $adType: $e',
+          );
         }
         _isShowingInterstitial[adType] = false;
         _interstitialAds[adType] = null;
@@ -607,7 +658,9 @@ class AdService {
       dismissLoader();
       // Ad not available - call failed callback
       if (kDebugMode) {
-        print('⚠️ [AdService] Interstitial ad for type "$adType" not available, skipping');
+        print(
+          '⚠️ [AdService] Interstitial ad for type "$adType" not available, skipping',
+        );
       }
       // Reset showing flag if ad is not available
       _isShowingInterstitial[adType] = false;
@@ -624,7 +677,7 @@ class AdService {
     if (!RemoteConfigService.splashInter) {
       return;
     }
-    
+
     return loadInterstitialAdForType(
       adType: 'splash',
       adUnitId: splashInterAdUnitId,
@@ -762,10 +815,11 @@ class AdService {
   }
 
   static bool get showAds => RemoteConfigService.showAds;
-  
+
   /// Get the time when last interstitial ad was dismissed
   /// Used by app open ad manager to prevent showing app open ad immediately after interstitial
-  static DateTime? get lastInterstitialDismissedTime => _lastInterstitialDismissedTime;
+  static DateTime? get lastInterstitialDismissedTime =>
+      _lastInterstitialDismissedTime;
 
   /// Check if any interstitial ad is currently showing
   /// Used by app open ad manager to prevent showing app open ad while interstitial is active
@@ -778,7 +832,9 @@ class AdService {
   static void notifyAppOpenAdDismissed() {
     _lastAppOpenAdDismissedTime = DateTime.now();
     if (kDebugMode) {
-      print('📋 [AdService] App open ad dismissed, starting cooldown for interstitial ads');
+      print(
+        '📋 [AdService] App open ad dismissed, starting cooldown for interstitial ads',
+      );
     }
   }
 
@@ -828,7 +884,7 @@ class _AdLoadingDialogState extends State<_AdLoadingDialog> {
       await Future.delayed(const Duration(milliseconds: 400));
       if (mounted) {
         setState(() {
-          _dots = _dots.length >= 3 ? '' : _dots + '.';
+          _dots = _dots.length >= 3 ? '' : '$_dots.';
         });
         return mounted;
       }
@@ -841,7 +897,7 @@ class _AdLoadingDialogState extends State<_AdLoadingDialog> {
     // Get theme colors for consistent background
     final theme = Theme.of(context);
     // Use solid background color matching the theme (no transparency)
-    final backgroundColor = theme.colorScheme.background;
+    final backgroundColor = theme.colorScheme.surface;
 
     return PopScope(
       canPop: false, // Prevent dismissing while loading
@@ -887,7 +943,10 @@ class _AdLoadingDialogState extends State<_AdLoadingDialog> {
                         );
                         final isRTL = languageProvider.isRTL;
                         final localizations = AppLocalizations.of(context);
-                        final loadingText = (localizations?.adLoading ?? 'Loading ad').replaceAll('...', '').trim();
+                        final loadingText =
+                            (localizations?.adLoading ?? 'Loading ad')
+                                .replaceAll('...', '')
+                                .trim();
                         final textWithDots = isRTL
                             ? '$_dots$loadingText'
                             : '$loadingText$_dots';

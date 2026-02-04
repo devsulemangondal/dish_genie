@@ -16,6 +16,7 @@ import '../../providers/chat_provider.dart';
 import '../../providers/premium_provider.dart';
 import '../../data/models/chat_message.dart';
 import '../../services/voice_service.dart';
+import '../../core/dialogs/app_dialogs.dart';
 import '../../services/card_ad_tracker.dart';
 import '../../services/ad_service.dart';
 import '../../services/remote_config_service.dart';
@@ -37,6 +38,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     }
     return content;
   }
+
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isVoiceListening = false;
@@ -229,6 +231,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
   }
 
   Future<void> _proceedWithMessage(String text) async {
+    if (!await ensureConnectedAndShowDialog(context)) return;
     _messageController.clear();
 
     // Increment AI chef message count for free users
@@ -361,6 +364,10 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
             _isVoiceListening = false;
             _voiceTranscript = '';
           });
+          if (mounted &&
+              error.toString().toLowerCase().contains('permission')) {
+            showPermissionDeniedDialog(context);
+          }
         },
       );
     }
@@ -383,12 +390,13 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
         premiumProvider.isPremium || premiumProvider.canSendAiChefMessage();
     final aiChefLimit = premiumProvider.getAiChefMessageLimit();
     final aiChefMessageCount = premiumProvider.aiChefMessageCount;
-    
+
     // Determine if limit banner should be shown
     // Show banner if:
     // 1. User is not premium AND
     // 2. Either ai_chef is "off" (feature disabled) OR message count >= limit
-    final shouldShowLimitBanner = !premiumProvider.isPremium && 
+    final shouldShowLimitBanner =
+        !premiumProvider.isPremium &&
         (aiChefLimit == null || aiChefMessageCount >= aiChefLimit);
 
     // Scroll to bottom when new messages arrive (especially during streaming)
@@ -428,7 +436,8 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                     title: context.t('chat.title'),
                     onBack: _handleBack,
                     backgroundColor: Colors.transparent,
-                    statusBarColor: Theme.of(context).brightness == Brightness.dark
+                    statusBarColor:
+                        Theme.of(context).brightness == Brightness.dark
                         ? const Color(0xFF1A1F35)
                         : AppColors.genieBlush,
                     rightContent: Row(
@@ -976,7 +985,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
               width: avatarSize,
               height: avatarSize,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -1004,7 +1013,11 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
               title: Text(context.t('chat.copy')),
               onTap: () async {
                 Navigator.pop(context);
-                await Clipboard.setData(ClipboardData(text: _getMessageContent(context, message.content)));
+                await Clipboard.setData(
+                  ClipboardData(
+                    text: _getMessageContent(context, message.content),
+                  ),
+                );
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -1033,7 +1046,10 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                       provider.messages.length,
                     );
                     // Set the message content in the input field
-                    _messageController.text = _getMessageContent(context, message.content);
+                    _messageController.text = _getMessageContent(
+                      context,
+                      message.content,
+                    );
                     // Focus the input field
                     FocusScope.of(context).requestFocus(FocusNode());
                   }
@@ -1210,7 +1226,9 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                     if (limit != null) ...[
                       SizedBox(height: 4),
                       Text(
-                        context.t('chat.limit.reached.message', {'limit': limit.toString()}),
+                        context.t('chat.limit.reached.message', {
+                          'limit': limit.toString(),
+                        }),
                         style: TextStyle(
                           fontSize: fontSize,
                           color: Theme.of(
@@ -1258,7 +1276,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-              ).copyWith(elevation: MaterialStateProperty.all(0)),
+              ).copyWith(elevation: WidgetStateProperty.all(0)),
               child: Container(
                 decoration: BoxDecoration(
                   gradient: AppColors.gradientPrimary,

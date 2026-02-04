@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
-import '../../widgets/common/bottom_nav.dart';
-import '../../widgets/common/genie_mascot.dart';
-import '../../widgets/common/search_bar.dart' as custom;
-import '../../widgets/common/quick_action_card.dart';
-import '../../widgets/common/floating_sparkles.dart';
-import '../../widgets/common/weekly_plan_preview.dart';
-import '../../widgets/common/saved_meal_plan_card.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/ads/screen_native_ad_widget.dart';
+import '../../widgets/common/bottom_nav.dart';
+import '../../widgets/common/floating_sparkles.dart';
+import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/common/pro_button.dart';
+import '../../widgets/common/quick_action_card.dart';
+import '../../widgets/common/saved_meal_plan_card.dart';
+import '../../widgets/common/search_bar.dart' as custom;
+import '../../widgets/common/weekly_plan_preview.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -183,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Settings button on the right
                         IconButton(
                           icon: const Icon(Icons.settings),
-                          onPressed: () => context.go('/settings'),
+                          onPressed: () => context.push('/settings'),
                           color: Theme.of(
                             context,
                           ).colorScheme.onSurface.withOpacity(0.7),
@@ -241,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               fontWeight: FontWeight.bold,
                                               color: Theme.of(
                                                 context,
-                                              ).colorScheme.onBackground,
+                                              ).colorScheme.onSurface,
                                               height: 1.0,
                                             ),
                                       ),
@@ -269,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'home.search.placeholder',
                                   ),
                                   onSearch: (query) {
-                                    context.go(
+                                    context.push(
                                       '/recipes?search=${Uri.encodeComponent(query)}',
                                     );
                                   },
@@ -318,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             AppColors.geniePurple,
                                           ],
                                           delay: 100,
-                                          onTap: () => context.go('/recipes'),
+                                          onTap: () => context.push('/recipes'),
                                         ),
                                         QuickActionCard(
                                           title: context.t('home.meal.planner'),
@@ -331,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             AppColors.genieLavender,
                                           ],
                                           delay: 200,
-                                          onTap: () => context.go('/planner'),
+                                          onTap: () => context.push('/planner'),
                                         ),
                                         QuickActionCard(
                                           title: context.t(
@@ -346,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             AppColors.geniePink,
                                           ],
                                           delay: 300,
-                                          onTap: () => context.go('/grocery'),
+                                          onTap: () => context.push('/grocery'),
                                         ),
                                         QuickActionCard(
                                           title: context.t('home.ai.chef.chat'),
@@ -359,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             AppColors.geniePink,
                                           ],
                                           delay: 400,
-                                          onTap: () => context.go('/chat'),
+                                          onTap: () => context.push('/chat'),
                                         ),
                                       ],
                                     ); // GridView.count closes here

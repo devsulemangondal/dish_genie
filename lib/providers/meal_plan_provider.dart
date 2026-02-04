@@ -47,19 +47,19 @@ class MealPlanProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      // Check if Supabase is initialized
       if (!SupabaseService.isInitialized) {
         throw Exception(
-          'Service is not configured. Please check your app settings or contact support.',
+          'Meal plan service is not configured. Set supabase_url and supabase_anon_key in Firebase Remote Config, or in lib/config/supabase_config.dart (use your Supabase project URL and anon key from the Dashboard).',
         );
       }
 
-      // Get Supabase URL and key
       final supabaseUrl = SupabaseService.url;
       final supabaseKey = SupabaseService.anonKey;
 
       if (supabaseUrl == null || supabaseKey == null) {
-        throw Exception('Supabase credentials are not configured');
+        throw Exception(
+          'Supabase credentials are missing. Add supabase_anon_key in Firebase Remote Config or in lib/config/supabase_config.dart.',
+        );
       }
 
       // Get current language (matching web app pattern)

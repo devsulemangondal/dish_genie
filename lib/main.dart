@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'app.dart';
 import 'services/startup_service.dart';
 

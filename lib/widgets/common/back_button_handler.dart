@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/theme/colors.dart';
+
 import '../../core/localization/l10n_extension.dart';
+import '../../core/theme/colors.dart';
 
 /// Global back button handler.
 ///
@@ -195,15 +196,16 @@ class _BackButtonHandlerState extends State<BackButtonHandler> {
 
       final isHome = widget.homeRoutes.contains(routePath);
 
-      // Global rule:
-      // - Home => confirm exit
-      // - Child route (e.g. /grocery/:id) => go to parent (e.g. /grocery)
-      // - Other => navigate to home
+      // Global rule: Home => confirm exit; else pop to previous screen if possible, else go home
       if (isHome) {
         _showExitConfirmation(context);
       } else {
-        final parent = _parentRoute(routePath);
-        router.go(parent ?? '/');
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          final parent = _parentRoute(routePath);
+          router.go(parent ?? '/');
+        }
       }
     });
   }

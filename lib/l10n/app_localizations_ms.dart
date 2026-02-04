@@ -1566,6 +1566,22 @@ class AppLocalizationsMs extends AppLocalizations {
   }
 
   @override
+  String get noInternetTitle => 'No internet';
+
+  @override
+  String get noInternetMessage => 'Please check your connection and try again.';
+
+  @override
+  String get permissionDeniedTitle => 'Permission required';
+
+  @override
+  String get permissionDeniedMessage =>
+      'Camera and microphone access is needed for this feature. Please enable it in system settings.';
+
+  @override
+  String get permissionOpenSettings => 'Open Settings';
+
+  @override
   String get settingsAppearance => 'Penampilan';
 
   @override

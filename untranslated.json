@@ -1,101 +1,226 @@
 {
   "af": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "ar": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "bn": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "de": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "fa": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "fil": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "fr": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "hi": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "id": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "it": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "ja": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "kk": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "ko": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "ms": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "nl": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "pl": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "pt": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "ru": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "th": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "tr": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "uk": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "ur": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "uz": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "vi": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ],
 
   "zh": [
-    "commonRetry"
+    "commonRetry",
+    "noInternetTitle",
+    "noInternetMessage",
+    "permissionDeniedTitle",
+    "permissionDeniedMessage",
+    "permissionOpenSettings"
   ]
 }
