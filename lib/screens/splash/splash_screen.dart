@@ -1,6 +1,8 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'dart:async';
+import '../../config/pro_config.dart';
 import '../../services/storage_service.dart';
 import '../../services/remote_config_service.dart';
 import '../../services/startup_service.dart';
@@ -178,7 +180,12 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
     
     if (isFirstLaunch) {
-      // Always show pro screen on first launch
+      // On iOS, skip Pro screen when showProOnIos is false
+      if (Platform.isIOS && !ProConfig.showProOnIos) {
+        debugPrint('[SplashScreen] 📱 iOS: Pro hidden, going to language-selection');
+        context.go('/language-selection');
+        return;
+      }
       debugPrint('[SplashScreen] 📱 Navigating to Pro screen (first launch)');
       context.go('/pro?src=splash');
       return;
@@ -188,6 +195,16 @@ class _SplashScreenState extends State<SplashScreen>
     final openPro = await _shouldOpenPro();
     if (!mounted) return;
     if (openPro) {
+      // On iOS, skip Pro screen when showProOnIos is false
+      if (Platform.isIOS && !ProConfig.showProOnIos) {
+        final isLanguageSelected = languageSelectedResult ?? false;
+        if (!isLanguageSelected) {
+          context.go('/language-selection');
+        } else {
+          context.go('/');
+        }
+        return;
+      }
       context.go('/pro?src=splash');
       return;
     }

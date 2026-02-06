@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../config/pro_config.dart';
 import '../../core/theme/colors.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
@@ -12,6 +14,10 @@ class ProButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS && !ProConfig.showProOnIos) {
+      return const SizedBox.shrink();
+    }
+
     final isPremium = context.watch<PremiumProvider>().isPremium;
 
     return FutureBuilder<bool>(

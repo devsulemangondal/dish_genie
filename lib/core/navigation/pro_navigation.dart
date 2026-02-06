@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../config/pro_config.dart';
 
 /// Navigation helper for Pro screen
 class ProNavigation {
@@ -14,6 +16,11 @@ class ProNavigation {
   }) async {
     try {
       if (!context.mounted) return false;
+
+      // On iOS, do not open Pro screen when showProOnIos is false
+      if (Platform.isIOS && !ProConfig.showProOnIos) {
+        return false;
+      }
 
       if (replace) {
         context.go('/pro');

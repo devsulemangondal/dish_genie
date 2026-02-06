@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../config/pro_config.dart';
 import '../../core/theme/colors.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
@@ -11,6 +13,10 @@ class PremiumCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS && !ProConfig.showProOnIos) {
+      return const SizedBox.shrink();
+    }
+
     return FutureBuilder<bool>(
       future: RemoteConfigService.initialize(),
       builder: (context, snapshot) {
