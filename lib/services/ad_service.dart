@@ -127,6 +127,15 @@ class AdService {
   static Future<void> initialize() async {
     if (_isInitialized) return;
 
+    // Don't initialize Google Mobile Ads on iOS if ads are disabled
+    if (Platform.isIOS && !AdConfig.showAdsOnIos) {
+      if (kDebugMode) {
+        print('🚫 [AdService] Skipping MobileAds initialization on iOS (ads disabled)');
+      }
+      _isInitialized = true;
+      return;
+    }
+
     await MobileAds.instance.initialize();
     _isInitialized = true;
   }
