@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import '../../config/ad_config.dart';
 import '../../services/ad_service.dart';
 import '../../services/remote_config_service.dart';
 import '../../core/theme/colors.dart';
@@ -41,6 +43,12 @@ class _ScreenNativeAdWidgetState extends State<ScreenNativeAdWidget> {
   }
 
   Future<void> _checkConfigAndLoadAd() async {
+    // Don't load ads on iOS if ads are disabled
+    if (Platform.isIOS && !AdConfig.showAdsOnIos) {
+      _shouldShowAd = false;
+      return;
+    }
+
     // Check premium status first - premium users don't see ads
     // Use a microtask to ensure context is ready
     bool isPremium = false;
@@ -354,6 +362,11 @@ class _ScreenNativeAdWidgetState extends State<ScreenNativeAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Don't show ads on iOS if ads are disabled
+    if (Platform.isIOS && !AdConfig.showAdsOnIos) {
+      return const SizedBox.shrink();
+    }
+
     // Check premium status - premium users don't see ads
     final premiumProvider = Provider.of<PremiumProvider>(context, listen: false);
     if (premiumProvider.isPremium) {

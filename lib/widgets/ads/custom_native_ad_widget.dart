@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../config/ad_config.dart';
 import '../../core/theme/colors.dart';
 import '../../services/ad_service.dart';
 import '../../services/remote_config_service.dart';
@@ -60,6 +61,11 @@ class _CustomNativeAdWidgetState extends State<CustomNativeAdWidget> {
   }
 
   Future<void> _checkAndLoadAd() async {
+    // Don't load ads on iOS if ads are disabled
+    if (Platform.isIOS && !AdConfig.showAdsOnIos) {
+      return;
+    }
+
     // Check specific remote config for this screen FIRST (before any loading)
     try {
       await RemoteConfigService.initialize();
@@ -323,6 +329,11 @@ class _CustomNativeAdWidgetState extends State<CustomNativeAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Don't show ads on iOS if ads are disabled
+    if (Platform.isIOS && !AdConfig.showAdsOnIos) {
+      return const SizedBox.shrink();
+    }
+
     // Check if ads should be shown
     if (!AdService.showAds || !_isInternetAvailable) {
       return const SizedBox.shrink();
