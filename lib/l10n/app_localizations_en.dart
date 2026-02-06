@@ -1649,6 +1649,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumTermsOfUse => 'Terms of Use';
 
   @override
+  String get premiumCancelAnyTime => 'Cancel any time';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'Failed to initiate purchase';
 
   @override

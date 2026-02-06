@@ -1658,6 +1658,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumTermsOfUse => 'Kullanım Koşulları';
 
   @override
+  String get premiumCancelAnyTime => 'İstediğiniz zaman iptal edin';
+
+  @override
   String get premiumFailedToInitiatePurchase =>
       'Satın alma işlemi başlatılamadı';
 

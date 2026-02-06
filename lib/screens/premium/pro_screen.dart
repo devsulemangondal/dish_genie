@@ -1,11 +1,13 @@
-import 'dart:ui';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import '../../core/localization/l10n_extension.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
 import '../../providers/premium_provider.dart';
 import '../../services/ad_service.dart';
@@ -13,7 +15,6 @@ import '../../services/billing_service.dart';
 import '../../services/remote_config_service.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/common/floating_sparkles.dart';
-import 'dart:async';
 
 class ProScreen extends StatefulWidget {
   const ProScreen({super.key});
@@ -83,7 +84,8 @@ class _ProScreenState extends State<ProScreen> {
     // Listen to purchase updates
     _purchaseSubscription = BillingService.purchaseStream.listen((purchase) {
       // Check if this purchase is for the selected product
-      final isSelectedProduct = _selectedProduct != null && 
+      final isSelectedProduct =
+          _selectedProduct != null &&
           purchase.productID == _selectedProduct!.id;
 
       switch (purchase.status) {
@@ -135,7 +137,6 @@ class _ProScreenState extends State<ProScreen> {
       setState(() {});
     }
   }
-
 
   Future<void> _exitProFlow() async {
     // If user entered via push() (e.g., from settings), just pop back
@@ -330,130 +331,144 @@ class _ProScreenState extends State<ProScreen> {
       }
     }
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Background gradient
-          Container(
-            decoration: BoxDecoration(
-              gradient: AppColors.getGradientHero(context),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            // Background gradient
+            Container(
+              decoration: BoxDecoration(
+                gradient: AppColors.getGradientHero(context),
+              ),
             ),
-          ),
-          // Floating sparkles (matching other screens)
-          const FloatingSparkles(),
-          // Main content - Fixed layout, no scrolling
-          Column(
-            children: [
-              // Top bar with cross button
-              SafeArea(
-                bottom: false,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () async {
-                          await _exitProFlow();
-                        },
-                        icon: Icon(
-                          Icons.close,
-                          color: Theme.of(context).colorScheme.onSurface,
+            // Floating sparkles (matching other screens)
+            const FloatingSparkles(),
+            // Main content - Fixed layout, no scrolling
+            Column(
+              children: [
+                // Top bar with close button (circle card) - only way to close
+                SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Material(
+                          color: Theme.of(context).cardColor,
+                          shape: const CircleBorder(),
+                          elevation: 2,
+                          shadowColor: Colors.black26,
+                          child: InkWell(
+                            onTap: () async {
+                              await _exitProFlow();
+                            },
+                            customBorder: const CircleBorder(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Icon(
+                                Icons.close,
+                                size: 22,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                          ),
                         ),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: SafeArea(
-                  top: false,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final screenHeight = constraints.maxHeight;
-                      final screenWidth = constraints.maxWidth;
-                      final isSmallScreen = screenHeight < 700;
-                      final availableHeight = screenHeight;
+                Expanded(
+                  child: SafeArea(
+                    top: false,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final screenHeight = constraints.maxHeight;
+                        final screenWidth = constraints.maxWidth;
+                        final isSmallScreen = screenHeight < 700;
+                        final availableHeight = screenHeight;
 
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.05,
-                          vertical: screenHeight * 0.015,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (isPremium) ...[
-                              _buildPremiumBadge(),
+                        return SingleChildScrollView(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.05,
+                            vertical: screenHeight * 0.015,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (isPremium) ...[
+                                _buildPremiumBadge(),
+                                SizedBox(height: availableHeight * 0.015),
+                              ],
+                              _buildHeroSection(screenWidth, availableHeight),
                               SizedBox(height: availableHeight * 0.015),
-                            ],
-                            _buildHeroSection(screenWidth, availableHeight),
-                            SizedBox(height: availableHeight * 0.015),
-                            Expanded(
-                              flex: isPremium ? 2 : 3,
-                              child: _buildFeaturesListCompact(
+                              _buildFeaturesListCompact(
                                 screenWidth,
                                 availableHeight,
                               ),
-                            ),
-                            SizedBox(height: availableHeight * 0.015),
-                            if (!isPremium) ...[
-                              // Price text with highlighted price
-                              RichText(
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                text: TextSpan(
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                      ?.copyWith(
-                                        fontSize: isSmallScreen ? 13 : 15,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withOpacity(0.7),
-                                      ),
-                                  children: [
-                                    TextSpan(
-                                      text: weeklyProduct != null
-                                          ? '${weeklyProduct.price}${context.t('premium.per.week')}'
-                                          : '\$1.99${context.t('premium.per.week')}',
-                                      style: TextStyle(
-                                        color: AppColors.primary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          ' ${context.t('premium.full.access')}',
-                                    ),
-                                  ],
-                                ),
-                              ),
                               SizedBox(height: availableHeight * 0.015),
-                              if (weeklyProduct != null) ...[
-                                _buildPurchaseButton(
-                                  weeklyProduct,
-                                  isPopular: true,
-                                  screenHeight: availableHeight,
+                              if (!isPremium) ...[
+                                RichText(
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          fontSize: isSmallScreen ? 13 : 15,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withOpacity(0.7),
+                                        ),
+                                    children: [
+                                      TextSpan(
+                                        text: weeklyProduct != null
+                                            ? '${weeklyProduct.price}${context.t('premium.per.week')}'
+                                            : '\$1.99${context.t('premium.per.week')}',
+                                        style: TextStyle(
+                                          color: AppColors.primary,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                            ' ${context.t('premium.full.access')}',
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ] else ...[
-                                _buildDummyPurchaseButton(availableHeight),
+                                SizedBox(height: availableHeight * 0.015),
+                                if (weeklyProduct != null) ...[
+                                  _buildPurchaseButton(
+                                    weeklyProduct,
+                                    isPopular: true,
+                                    screenHeight: availableHeight,
+                                  ),
+                                ] else ...[
+                                  _buildDummyPurchaseButton(availableHeight),
+                                ],
                               ],
+                              SizedBox(height: availableHeight * 0.01),
+                              _buildCancelTermsPrivacyLine(screenWidth),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).padding.bottom + 8,
+                              ),
                             ],
-                            SizedBox(height: availableHeight * 0.01),
-                            _buildTermsAndPrivacyCompact(screenWidth),
-                          ],
-                        ),
-                      );
-                    },
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -626,26 +641,77 @@ class _ProScreenState extends State<ProScreen> {
             ],
           ),
         ),
-        // Features list - use Flexible to allow shrinking
-        Flexible(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            itemCount: features.length,
-            itemBuilder: (context, index) {
-              return _buildFeatureComparisonRow(
-                features[index],
-                index,
-                features.length,
-                screenWidth,
-                columnWidth,
-                availableHeight,
-              );
-            },
-          ),
+        // Features list - shrinkWrap so parent can scroll; no fixed height
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+          itemCount: features.length,
+          itemBuilder: (context, index) {
+            return _buildFeatureComparisonRow(
+              features[index],
+              index,
+              features.length,
+              screenWidth,
+              columnWidth,
+              availableHeight,
+            );
+          },
         ),
       ],
+    );
+  }
+
+  /// One line: Cancel subscription • Terms • Privacy Policy (each tappable).
+  Widget _buildCancelTermsPrivacyLine(double screenWidth) {
+    final isSmallScreen = screenWidth < 360;
+    final fontSize = isSmallScreen ? 10.0 : 12.0;
+    final style = TextStyle(
+      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+      fontSize: fontSize,
+      decoration: TextDecoration.underline,
+      decorationColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+    );
+    const separator = ' • ';
+
+    const spacing = 12.0;
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(width: spacing),
+            _LinkText(
+              text: context.t('premium.terms.of.use'),
+              style: style,
+              onTap: () => _launchURL(
+                'https://sites.google.com/view/dodishgenieterms/home',
+              ),
+            ),
+            SizedBox(width: spacing),
+            Text(separator, style: style),
+            SizedBox(width: spacing),
+            _LinkText(
+              text: context.t('premium.cancel.any.time'),
+              style: style,
+              onTap: () => _launchURL(
+                'https://sites.google.com/view/dodishgenieterms/home',
+              ),
+            ),
+
+            Text(separator, style: style),
+            SizedBox(width: spacing),
+            _LinkText(
+              text: context.t('premium.privacy.policy'),
+              style: style,
+              onTap: () =>
+                  _launchURL('https://sites.google.com/view/dodishgenie/home'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -769,11 +835,11 @@ class _ProScreenState extends State<ProScreen> {
                 )
                 .copyWith(
                   backgroundColor: isPopular
-                      ? MaterialStateProperty.all<Color>(Colors.transparent)
+                      ? WidgetStateProperty.all<Color>(Colors.transparent)
                       : null,
                 )
                 .copyWith(
-                  overlayColor: MaterialStateProperty.all<Color>(
+                  overlayColor: WidgetStateProperty.all<Color>(
                     AppColors.primary.withOpacity(0.1),
                   ),
                 ),
@@ -882,7 +948,7 @@ class _ProScreenState extends State<ProScreen> {
             });
 
             final success = await BillingService.loadProducts(retry: true);
-            
+
             if (mounted) {
               setState(() {
                 _isLoadingProducts = false;
@@ -893,7 +959,8 @@ class _ProScreenState extends State<ProScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      BillingService.lastError ?? context.t('premium.subscription.loading'),
+                      BillingService.lastError ??
+                          context.t('premium.subscription.loading'),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -906,7 +973,7 @@ class _ProScreenState extends State<ProScreen> {
                 // Products loaded successfully, try to get the product and purchase
                 final products = BillingService.products;
                 ProductDetails? weeklyProduct;
-                
+
                 try {
                   weeklyProduct = products.firstWhere(
                     (p) => p.id == BillingService.weeklySubscriptionId,
@@ -986,61 +1053,28 @@ class _ProScreenState extends State<ProScreen> {
       ),
     );
   }
+}
 
-  Widget _buildTermsAndPrivacyCompact(double screenWidth) {
-    final isSmallScreen = screenWidth < 360;
-    final fontSize = isSmallScreen ? 10.0 : 12.0;
-    final horizontalPadding = isSmallScreen ? 4.0 : 8.0;
+/// Inline tappable text link (no button chrome).
+class _LinkText extends StatelessWidget {
+  final String text;
+  final TextStyle style;
+  final VoidCallback onTap;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextButton(
-            onPressed: () =>
-                _launchURL('https://sites.google.com/view/dodishgenie/home'),
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: 4,
-              ),
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            child: Text(
-              context.t('premium.privacy.policy'),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                fontSize: fontSize,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () => _launchURL(
-              'https://sites.google.com/view/dodishgenieterms/home',
-            ),
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: 4,
-              ),
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            child: Text(
-              context.t('premium.terms.of.use'),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                fontSize: fontSize,
-              ),
-            ),
-          ),
-        ],
-      ),
+  const _LinkText({
+    required this.text,
+    required this.style,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Text(text, style: style),
     );
   }
-
 }
 
 class _FeatureComparison {

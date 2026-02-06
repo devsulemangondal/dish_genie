@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
 import '../../providers/meal_plan_provider.dart';
 import 'rtl_helper.dart';
-import 'rtl_icon.dart';
 
 class WeeklyPlanPreview extends StatefulWidget {
   final int delay;
@@ -29,9 +29,10 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
     Future.delayed(Duration(milliseconds: widget.delay), () {
       if (mounted) _controller.forward();
     });
@@ -56,24 +57,27 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
     final mealPlanProvider = context.watch<MealPlanProvider>();
     final mealPlan = mealPlanProvider.currentMealPlan;
     final selectedDay = mealPlanProvider.selectedDay ?? DateTime.now();
-    
+
     // Get locale from Localizations
     final locale = Localizations.localeOf(context);
-    
+
     // Generate full day names using DateFormat
     final weekDays = List.generate(7, (index) {
       // Monday = 1, so we calculate the date for each day of the week
       // Starting from Monday (index 0)
-      final monday = DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1));
+      final monday = DateTime.now().subtract(
+        Duration(days: DateTime.now().weekday - 1),
+      );
       final dayDate = monday.add(Duration(days: index));
       return DateFormat('EEEE', locale.toString()).format(dayDate);
     });
-    
+
     const defaultMealIcons = ['🍳', '🥗', '🍲', '🥪', '🍛', '🍜', '🥘'];
 
     // Use selected day instead of today
     final referenceDate = selectedDay;
-    final currentDayIndex = (referenceDate.weekday + 5) % 7; // Convert to Monday=0
+    final currentDayIndex =
+        (referenceDate.weekday + 5) % 7; // Convert to Monday=0
 
     return AnimatedBuilder(
       animation: _fadeAnimation,
@@ -131,7 +135,9 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                                     borderRadius: BorderRadius.circular(12),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: AppColors.primary.withOpacity(0.2),
+                                        color: AppColors.primary.withOpacity(
+                                          0.2,
+                                        ),
                                         blurRadius: 8,
                                         offset: const Offset(0, 2),
                                       ),
@@ -146,7 +152,8 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         mealPlan?.name ??
@@ -157,13 +164,15 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface,
                                         ),
                                       ),
                                       Text(
-                                        context.t('weeklyPlanPersonalizedMeals'),
+                                        context.t(
+                                          'weeklyPlanPersonalizedMeals',
+                                        ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -217,32 +226,47 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                           child: Row(
                             children: List.generate(7, (index) {
                               // Calculate the actual date for this day in the week
-                              final monday = DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1));
+                              final monday = DateTime.now().subtract(
+                                Duration(days: DateTime.now().weekday - 1),
+                              );
                               final dayDate = monday.add(Duration(days: index));
                               // Check if this day matches the selected day
-                              final isSelectedDay = selectedDay.year == dayDate.year &&
+                              final isSelectedDay =
+                                  selectedDay.year == dayDate.year &&
                                   selectedDay.month == dayDate.month &&
                                   selectedDay.day == dayDate.day;
                               // Use selected day highlight if it's in this week, otherwise use today
                               final isToday = index == currentDayIndex;
-                              final shouldHighlight = isSelectedDay || (!_isDateInCurrentWeek(selectedDay) && isToday);
+                              final shouldHighlight =
+                                  isSelectedDay ||
+                                  (!_isDateInCurrentWeek(selectedDay) &&
+                                      isToday);
                               return Container(
                                 width: 70,
                                 height: 70,
-                                margin: RtlEdgeInsets.only(context: context, right: index < 6 ? 4 : 0),
+                                margin: RtlEdgeInsets.only(
+                                  context: context,
+                                  right: index < 6 ? 4 : 0,
+                                ),
                                 padding: const EdgeInsets.all(6),
                                 decoration: BoxDecoration(
                                   color: shouldHighlight
                                       ? AppColors.primary
-                                      : Theme.of(context).colorScheme.surface.withOpacity(0.5),
+                                      : Theme.of(
+                                          context,
+                                        ).colorScheme.surface.withOpacity(0.5),
                                   borderRadius: BorderRadius.circular(12),
                                   border: shouldHighlight
                                       ? Border.all(
-                                          color: AppColors.primary.withOpacity(0.3),
+                                          color: AppColors.primary.withOpacity(
+                                            0.3,
+                                          ),
                                           width: 1,
                                         )
                                       : Border.all(
-                                          color: Theme.of(context).dividerColor.withOpacity(0.3),
+                                          color: Theme.of(
+                                            context,
+                                          ).dividerColor.withOpacity(0.3),
                                           width: 1,
                                         ),
                                 ),
@@ -262,7 +286,10 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                                         fontWeight: FontWeight.w600,
                                         color: shouldHighlight
                                             ? Colors.white
-                                            : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                            : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface
+                                                  .withOpacity(0.6),
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -276,7 +303,6 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                         ),
                       ),
                       if (mealPlan != null && mealPlan.meals.isNotEmpty) ...[
-
                         // Today's meals preview
                         Container(
                           padding: const EdgeInsets.all(12),
@@ -291,7 +317,9 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                                 context.t('weekly.plan.todays.meals'),
                                 style: TextStyle(
                                   fontSize: 11,
-                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface.withOpacity(0.6),
                                 ),
                               ),
                               // Show meals for selected day
@@ -302,35 +330,45 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                                         mealDate.month == selectedDay.month &&
                                         mealDate.day == selectedDay.day;
                                   })
-                                  .map((meal) => Padding(
-                                        padding: const EdgeInsets.only(bottom: 6),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '${meal.mealType == 'breakfast' ? '🍳' : meal.mealType == 'lunch' ? '🥗' : '🍲'} ${meal.recipeTitle}',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Theme.of(context).colorScheme.onSurface,
-                                              ),
+                                  .map(
+                                    (meal) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 6),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '${meal.mealType == 'breakfast'
+                                                ? '🍳'
+                                                : meal.mealType == 'lunch'
+                                                ? '🥗'
+                                                : '🍲'} ${meal.recipeTitle}',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onSurface,
                                             ),
-                                            Text(
-                                              '${context.t('weekly.plan.cal')}',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                                              ),
+                                          ),
+                                          Text(
+                                            context.t('weekly.plan.cal'),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface
+                                                  .withOpacity(0.6),
                                             ),
-                                          ],
-                                        ),
-                                      ))
-                                  .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                             ],
                           ),
                         ),
                       ], // CTA Button
-                        SizedBox(height: 8),
+                      SizedBox(height: 8),
                       SizedBox(
                         width: double.infinity,
                         child: Container(
@@ -349,7 +387,9 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                               onTap: () => context.go('/planner'),
                               borderRadius: BorderRadius.circular(12),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

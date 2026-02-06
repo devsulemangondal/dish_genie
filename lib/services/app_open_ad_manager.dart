@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import '../config/ad_config.dart';
 import 'ad_service.dart';
 import '../providers/premium_provider.dart';
 import '../services/remote_config_service.dart';
@@ -188,6 +191,8 @@ class AppOpenAdManager {
 
   /// Load app open ad (only if internet is available)
   Future<void> _loadAd() async {
+    if (Platform.isIOS && !AdConfig.showAdsOnIos) return;
+
     // Don't load if already loading or ad is available
     if (_isLoadingAd || _isAdAvailable) return;
 
@@ -394,6 +399,8 @@ class AppOpenAdManager {
 
   /// Call this on app resume - navigates to loader screen
   void resume() {
+    if (Platform.isIOS && !AdConfig.showAdsOnIos) return;
+
     if (kDebugMode) {
       print('========== RESUME CALLED ==========');
       print('📊 State: _isShowingAd=$_isShowingAd, _isResuming=$_isResuming');
@@ -715,12 +722,13 @@ class AppOpenAdManager {
 
         try {
           if (kDebugMode) {
-            print('✅ [AppOpenAdManager] Navigating to loader screen...');
+            print('✅ [AppOpenAdManager] Pushing loader screen (keep current route under stack)...');
           }
-          router.go('/app-open-ad-loader');
+          // Use push so when loader is popped after ad, user returns to the screen they were on
+          router.push('/app-open-ad-loader');
           if (kDebugMode) {
             print(
-              '✅ [AppOpenAdManager] Navigated to loader screen successfully',
+              '✅ [AppOpenAdManager] Pushed loader screen successfully',
             );
           }
           // Force visual update to ensure screen is shown immediately
@@ -759,6 +767,8 @@ class AppOpenAdManager {
   /// Check if loader should be shown
   Future<bool> _shouldShowLoader() async {
     try {
+      if (Platform.isIOS && !AdConfig.showAdsOnIos) return false;
+
       if (kDebugMode) {
         print('🔍 [AppOpenAdManager] Checking if loader should be shown...');
       }
@@ -915,6 +925,9 @@ class AppOpenAdManager {
   /// Loads an App Open Ad (public method for loader screen)
   /// Retries once if error code 3 occurs (format mismatch - often transient)
   Future<AppOpenAd?> loadAd({int retryCount = 0}) async {
+    if (Platform.isIOS && !AdConfig.showAdsOnIos) {
+      return null;
+    }
     if (kDebugMode) {
       print(
         '📥 [AppOpenAdManager] loadAd() called (attempt ${retryCount + 1})',

@@ -1,17 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
-import '../../widgets/common/sticky_header.dart';
+import '../../data/models/grocery_item.dart';
+import '../../data/models/grocery_list.dart';
+import '../../providers/grocery_provider.dart';
+import '../../services/storage_service.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/loading_genie.dart';
-import '../../providers/grocery_provider.dart';
-import '../../data/models/grocery_list.dart';
-import '../../data/models/grocery_item.dart';
-import '../../services/storage_service.dart';
-import 'dart:convert';
+import '../../widgets/common/sticky_header.dart';
 
 class SavedListDetailScreen extends StatefulWidget {
   final String listId;
@@ -25,6 +27,7 @@ class SavedListDetailScreen extends StatefulWidget {
 class _SavedListDetailScreenState extends State<SavedListDetailScreen> {
   GroceryList? _groceryList;
   bool _isLoading = true;
+  bool _isRegenerating = false;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -121,27 +124,120 @@ class _SavedListDetailScreenState extends State<SavedListDetailScreen> {
     }
   }
 
-  Future<void> _regenerateWithAI() async {
+  Future<void> _toggleItemChecked(String itemId) async {
     if (_groceryList == null) return;
 
+    final items = _groceryList!.items.map((item) {
+      if (item.id == itemId) return item.copyWith(checked: !item.checked);
+      return item;
+    }).toList();
+    final updatedList = _groceryList!.copyWith(items: items);
+
+    setState(() => _groceryList = updatedList);
+
+    try {
+      final savedListsJson = await StorageService.getSavedGroceryLists();
+      if (savedListsJson != null) {
+        final List<dynamic> savedLists = json.decode(savedListsJson);
+        final index = savedLists.indexWhere(
+          (list) => (list as Map<String, dynamic>)['id'] == widget.listId,
+        );
+        if (index != -1) {
+          final jsonMap = updatedList.toJson();
+          jsonMap['id'] = widget.listId;
+          savedLists[index] = jsonMap;
+          await StorageService.saveSavedGroceryLists(json.encode(savedLists));
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.t('commonErrorMessage', {'error': e.toString()}),
+            ),
+            backgroundColor: AppColors.destructive,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _regenerateWithAI() async {
+    if (_groceryList == null || _groceryList!.items.isEmpty) return;
+    if (_isRegenerating) return;
+
+    setState(() => _isRegenerating = true);
+
     final provider = context.read<GroceryProvider>();
-    final recipeIds = _groceryList!.items
-        .map((item) => item.name)
-        .toList(); // Simplified - in production, map to recipe IDs
+    // Pass current items as a single "recipe" so the AI can optimize/regenerate the list
+    final ingredients = _groceryList!.items
+        .map((i) => '${i.name} ${i.quantity} ${i.unit}'.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+    if (ingredients.isEmpty) {
+      ingredients.addAll(_groceryList!.items.map((i) => i.name));
+    }
+    final recipes = [
+      {'title': _groceryList!.name, 'ingredients': ingredients},
+    ];
 
     final newList = await provider.generateGroceryList(
-      recipeIds: recipeIds,
+      recipes: recipes,
       budget: _groceryList!.estimatedCost,
     );
 
-    if (newList != null && mounted) {
+    if (!mounted) return;
+    setState(() => _isRegenerating = false);
+
+    if (newList != null) {
+      // Keep same id and name so it stays the same saved list
+      final listToSave = newList.copyWith(
+        id: _groceryList!.id ?? widget.listId,
+        name: _groceryList!.name,
+      );
+      setState(() => _groceryList = listToSave);
+
+      try {
+        final savedListsJson = await StorageService.getSavedGroceryLists();
+        if (savedListsJson != null) {
+          final List<dynamic> savedLists = json.decode(savedListsJson);
+          final index = savedLists.indexWhere(
+            (list) => (list as Map<String, dynamic>)['id'] == widget.listId,
+          );
+          if (index != -1) {
+            final updatedJson = listToSave.toJson();
+            updatedJson['id'] = widget.listId;
+            savedLists[index] = updatedJson;
+            await StorageService.saveSavedGroceryLists(json.encode(savedLists));
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                context.t('commonErrorMessage', {'error': e.toString()}),
+              ),
+              backgroundColor: AppColors.destructive,
+            ),
+          );
+        }
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.t('saved.list.optimized.with.a.i')),
           backgroundColor: AppColors.primary,
         ),
       );
-      setState(() => _groceryList = newList);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.t('saved.list.failed.to.regenerate')),
+          backgroundColor: AppColors.destructive,
+        ),
+      );
     }
   }
 
@@ -452,7 +548,9 @@ class _SavedListDetailScreenState extends State<SavedListDetailScreen> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: _regenerateWithAI,
+                            onPressed: _isRegenerating
+                                ? null
+                                : _regenerateWithAI,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
                               foregroundColor: Theme.of(
@@ -463,9 +561,20 @@ class _SavedListDetailScreenState extends State<SavedListDetailScreen> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                             ),
-                            child: Text(
-                              context.t('saved.list.regenerate.with.a.i'),
-                            ),
+                            child: _isRegenerating
+                                ? SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Theme.of(context).colorScheme.onError,
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    context.t('saved.list.regenerate.with.a.i'),
+                                  ),
                           ),
                         ),
                       ],
@@ -626,7 +735,7 @@ class _SavedListDetailScreenState extends State<SavedListDetailScreen> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: item.checked
-            ? Theme.of(context).colorScheme.surfaceVariant
+            ? Theme.of(context).colorScheme.surfaceContainerHighest
             : Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
       ),
@@ -634,7 +743,7 @@ class _SavedListDetailScreenState extends State<SavedListDetailScreen> {
         children: [
           Checkbox(
             value: item.checked,
-            onChanged: null, // Read-only in saved list
+            onChanged: (value) => _toggleItemChecked(item.id),
             activeColor: AppColors.primary,
           ),
           Expanded(

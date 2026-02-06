@@ -1657,6 +1657,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get premiumTermsOfUse => 'ব্যবহারের শর্তাবলী';
 
   @override
+  String get premiumCancelAnyTime => 'যেকোনো সময় বাতিল করুন';
+
+  @override
   String get premiumFailedToInitiatePurchase =>
       'কেনাকাটা শুরু করতে ব্যর্থ হয়েছে৷';
 

@@ -1669,6 +1669,9 @@ class AppLocalizationsFil extends AppLocalizations {
   String get premiumTermsOfUse => 'Mga Tuntunin sa Paggamit';
 
   @override
+  String get premiumCancelAnyTime => 'Kanselahin anumang oras';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'Nabigong simulan ang pagbili';
 
   @override

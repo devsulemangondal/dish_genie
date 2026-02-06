@@ -145,14 +145,20 @@ class AppRouter {
             return RecipeDetailScreen(slug: slug);
           },
         ),
-        // GoRoute(
-        //   path: '/ai-recipe',
-        //   name: 'ai-recipe-detail',
-        //   builder: (context, state) {
-        //     final recipe = state.extra as Recipe;
-        //     return AiRecipeDetailScreen(recipe: recipe);
-        //   },
-        // ),
+        GoRoute(
+          path: '/ai-recipe',
+          name: 'ai-recipe-detail',
+          builder: (context, state) {
+            final recipe = state.extra as Recipe?;
+            if (recipe == null) {
+              return const NotFoundScreen();
+            }
+            return RecipeDetailScreen(
+              slug: recipe.slug ?? recipe.id,
+              initialRecipe: recipe,
+            );
+          },
+        ),
         GoRoute(
           path: '/planner',
           name: 'planner',

@@ -1654,6 +1654,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get premiumTermsOfUse => 'Gebruiksvoorwaarden';
 
   @override
+  String get premiumCancelAnyTime => 'Opzeggen wanneer u wilt';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'Kan de aankoop niet starten';
 
   @override

@@ -1655,6 +1655,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get premiumTermsOfUse => 'Gebruiksvoorwaardes';
 
   @override
+  String get premiumCancelAnyTime => 'Kan enige tyd kanselleer';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'Kon nie aankoop begin nie';
 
   @override

@@ -1656,6 +1656,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get premiumTermsOfUse => 'Умови використання';
 
   @override
+  String get premiumCancelAnyTime => 'Скасувати в будь-який час';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'Не вдалося розпочати покупку';
 
   @override

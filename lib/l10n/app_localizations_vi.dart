@@ -1654,6 +1654,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumTermsOfUse => 'Điều khoản sử dụng';
 
   @override
+  String get premiumCancelAnyTime => 'Hủy bất cứ lúc nào';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'Không thể bắt đầu mua hàng';
 
   @override

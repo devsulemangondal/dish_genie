@@ -1662,6 +1662,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get premiumTermsOfUse => 'Foydalanish shartlari';
 
   @override
+  String get premiumCancelAnyTime => 'Istalgan vaqtda bekor qiling';
+
+  @override
   String get premiumFailedToInitiatePurchase =>
       'Xaridni boshlash amalga oshmadi';
 

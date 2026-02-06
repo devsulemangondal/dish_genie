@@ -1,28 +1,27 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../core/theme/colors.dart';
+
 import '../../core/localization/l10n_extension.dart';
-import '../../services/voice_service.dart';
+import '../../core/theme/colors.dart';
 import '../../providers/grocery_provider.dart';
+import '../../services/voice_service.dart';
 import 'rtl_helper.dart';
 
 class SearchBar extends StatefulWidget {
   final Function(String)? onSearch;
   final String? placeholder;
 
-  const SearchBar({
-    super.key,
-    this.onSearch,
-    this.placeholder,
-  });
+  const SearchBar({super.key, this.onSearch, this.placeholder});
 
   @override
   State<SearchBar> createState() => _SearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMixin {
+class _SearchBarState extends State<SearchBar>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final LayerLink _layerLink = LayerLink();
@@ -46,35 +45,97 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
 
   // Food terms for auto-suggestions
   final List<String> _foodTerms = [
-    'Mutton', 'Mince', 'Meat', 'Masala', 'Mixed vegetables', 'Mango', 'Milk', 'Mushroom',
-    'Chicken', 'Chapati', 'Cheese', 'Curry', 'Cauliflower', 'Carrot', 'Coriander',
-    'Biryani', 'Butter', 'Beef', 'Beans', 'Bread', 'Broccoli', 'Banana',
-    'Rice', 'Roti', 'Raita', 'Radish',
-    'Potato', 'Paratha', 'Paneer', 'Pasta', 'Pepper', 'Peas',
-    'Tomato', 'Tikka', 'Tandoori', 'Tofu', 'Turkey',
-    'Onion', 'Olive oil', 'Orange',
-    'Egg', 'Eggplant',
-    'Fish', 'Flour',
-    'Garlic', 'Ginger', 'Ghee', 'Grapes',
-    'Honey', 'Halal',
+    'Mutton',
+    'Mince',
+    'Meat',
+    'Masala',
+    'Mixed vegetables',
+    'Mango',
+    'Milk',
+    'Mushroom',
+    'Chicken',
+    'Chapati',
+    'Cheese',
+    'Curry',
+    'Cauliflower',
+    'Carrot',
+    'Coriander',
+    'Biryani',
+    'Butter',
+    'Beef',
+    'Beans',
+    'Bread',
+    'Broccoli',
+    'Banana',
+    'Rice',
+    'Roti',
+    'Raita',
+    'Radish',
+    'Potato',
+    'Paratha',
+    'Paneer',
+    'Pasta',
+    'Pepper',
+    'Peas',
+    'Tomato',
+    'Tikka',
+    'Tandoori',
+    'Tofu',
+    'Turkey',
+    'Onion',
+    'Olive oil',
+    'Orange',
+    'Egg',
+    'Eggplant',
+    'Fish',
+    'Flour',
+    'Garlic',
+    'Ginger',
+    'Ghee',
+    'Grapes',
+    'Honey',
+    'Halal',
     'Ice cream',
     'Jalapeño',
-    'Kebab', 'Kale', 'Ketchup',
-    'Lemon', 'Lentils', 'Lamb', 'Lettuce',
-    'Naan', 'Nuts',
-    'Spinach', 'Samosa', 'Salad', 'Salmon', 'Shrimp', 'Soy sauce',
+    'Kebab',
+    'Kale',
+    'Ketchup',
+    'Lemon',
+    'Lentils',
+    'Lamb',
+    'Lettuce',
+    'Naan',
+    'Nuts',
+    'Spinach',
+    'Samosa',
+    'Salad',
+    'Salmon',
+    'Shrimp',
+    'Soy sauce',
     'Yogurt',
     'Zucchini',
-    'Aloo', 'Apple', 'Avocado',
-    'Daal', 'Dahi',
-    'Vegetable', 'Vinegar',
-    'Water', 'Watermelon', 'Wheat',
+    'Aloo',
+    'Apple',
+    'Avocado',
+    'Daal',
+    'Dahi',
+    'Vegetable',
+    'Vinegar',
+    'Water',
+    'Watermelon',
+    'Wheat',
   ];
 
   // Grocery command patterns
   final List<RegExp> _groceryPatterns = [
-    RegExp(r'^add\s+(.+?)(?:\s+to\s+(?:the\s+)?(?:grocery|shopping)\s*(?:list)?)?$', caseSensitive: false),
-    RegExp(r'^(?:put|get|buy|need|i need|we need)\s+(.+?)(?:\s+(?:to|on)\s+(?:the\s+)?(?:grocery|shopping)\s*(?:list)?)?$', caseSensitive: false),
+    RegExp(
+      r'^add\s+(.+?)(?:\s+to\s+(?:the\s+)?(?:grocery|shopping)\s*(?:list)?)?$',
+      caseSensitive: false,
+    ),
+    RegExp(
+      r'^(?:put|get|buy|need|i need|we need)\s+(.+?)(?:\s+(?:to|on)\s+(?:the\s+)?(?:grocery|shopping)\s*(?:list)?)?$',
+      caseSensitive: false,
+    ),
     RegExp(r'^grocery\s+(?:add\s+)?(.+)$', caseSensitive: false),
     RegExp(r'^shopping\s+list\s+(?:add\s+)?(.+)$', caseSensitive: false),
   ];
@@ -109,7 +170,8 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
             if (mounted) {
               setState(() {
                 final phrases = _getMagicPhrases(context);
-              _currentPhraseIndex = (_currentPhraseIndex + 1) % phrases.length;
+                _currentPhraseIndex =
+                    (_currentPhraseIndex + 1) % phrases.length;
               });
               _placeholderController.reset();
               _startPlaceholderAnimation();
@@ -152,9 +214,11 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
             .split(RegExp(r',|\sand\s|\s&\s'))
             .map((item) => item.trim())
             .where((item) => item.isNotEmpty)
-            .map((item) => item.isEmpty
-                ? item
-                : item[0].toUpperCase() + item.substring(1).toLowerCase())
+            .map(
+              (item) => item.isEmpty
+                  ? item
+                  : item[0].toUpperCase() + item.substring(1).toLowerCase(),
+            )
             .toList();
       }
     }
@@ -209,15 +273,22 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                 return InkWell(
                   onTap: () => _handleSuggestionClick(suggestion),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                          ? Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.1)
                           : Colors.transparent,
                       border: index < _suggestions.length - 1
                           ? Border(
                               bottom: BorderSide(
-                                color: Theme.of(context).dividerColor.withOpacity(0.3),
+                                color: Theme.of(
+                                  context,
+                                ).dividerColor.withOpacity(0.3),
                                 width: 1,
                               ),
                             )
@@ -246,8 +317,12 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                               fontSize: 14,
                               color: isSelected
                                   ? Theme.of(context).colorScheme.onSurface
-                                  : Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withOpacity(0.8),
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -292,18 +367,29 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
           // Check if this is a grocery command
           final groceryItems = _extractGroceryItems(text);
           if (groceryItems != null && groceryItems.isNotEmpty) {
-            final groceryProvider = Provider.of<GroceryProvider>(context, listen: false);
+            final groceryProvider = Provider.of<GroceryProvider>(
+              context,
+              listen: false,
+            );
             groceryProvider.addItemsByName(groceryItems);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Row(
                   children: [
-                    Icon(Icons.shopping_cart, size: 20, color: Theme.of(context).colorScheme.onPrimary),
+                    Icon(
+                      Icons.shopping_cart,
+                      size: 20,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        context.t('grocery.added.items', {'count': '${groceryItems.length}'}),
-                        style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                        context.t('grocery.added.items', {
+                          'count': '${groceryItems.length}',
+                        }),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                       ),
                     ),
                   ],
@@ -336,9 +422,7 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
             _isListening = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${context.t('common.error')}: $error'),
-            ),
+            SnackBar(content: Text('${context.t('common.error')}: $error')),
           );
         },
       );
@@ -346,9 +430,16 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
   }
 
   void _handleSubmit(String value) {
-    if (value.trim().isNotEmpty) {
-      widget.onSearch?.call(value);
-      context.go('/recipes?search=${Uri.encodeComponent(value)}&generate=true');
+    final trimmed = value.trim();
+    if (trimmed.isNotEmpty) {
+      widget.onSearch?.call(trimmed);
+      context.go(
+        '/recipes?search=${Uri.encodeComponent(trimmed)}&generate=true',
+      );
+    } else {
+      // AI button with empty field: still open recipe generator so user can type there
+      widget.onSearch?.call('');
+      context.go('/recipes');
     }
   }
 
@@ -365,8 +456,11 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final magicPhrases = _getMagicPhrases(context);
-    final currentPlaceholder = widget.placeholder ??
-        (widget.placeholder == null && !_focusNode.hasFocus && _controller.text.isEmpty
+    final currentPlaceholder =
+        widget.placeholder ??
+        (widget.placeholder == null &&
+                !_focusNode.hasFocus &&
+                _controller.text.isEmpty
             ? magicPhrases[_currentPhraseIndex]
             : context.t('home.search.placeholder'));
 
@@ -401,7 +495,9 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                     children: [
                       Icon(
                         Icons.search,
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withOpacity(0.6),
                         size: 20,
                       ),
                       Positioned(
@@ -434,18 +530,20 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       disabledBorder: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
                       hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withOpacity(0.6),
                         fontSize: 16,
                       ),
                     ),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.8),
                     ),
                   ),
                 ),
@@ -471,31 +569,37 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                     ),
                   ),
                 ),
-                // AI/Search button with blue-to-green gradient
-                Container(
-                  width: 40,
-                  height: 40,
-                  margin: RtlEdgeInsets.only(context: context, right: 8),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [AppColors.geniePurple, AppColors.genieLavender], // Blue to green
-                    ),
+                // AI button: navigate to recipe generator (with or without search text)
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      _focusNode.unfocus();
+                      _handleSubmit(_controller.text);
+                    },
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.geniePurple.withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      margin: RtlEdgeInsets.only(context: context, right: 8),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppColors.geniePurple,
+                            AppColors.genieLavender,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.geniePurple.withOpacity(0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () => _handleSubmit(_controller.text),
-                      borderRadius: BorderRadius.circular(12),
                       child: const Icon(
                         Icons.auto_awesome,
                         color: Colors.white,

@@ -1653,6 +1653,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get premiumTermsOfUse => 'उपयोग की शर्तें';
 
   @override
+  String get premiumCancelAnyTime => 'किसी भी समय रद्द करें';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'खरीदारी शुरू करने में विफल';
 
   @override

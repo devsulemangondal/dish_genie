@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
+import '../config/ad_config.dart';
 import '../core/router/app_router.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/language_provider.dart';
@@ -116,6 +118,12 @@ class AdService {
 
   static bool _isInitialized = false;
 
+  /// When false: no ads on iOS. When true: show ads on iOS. Android always shows ads.
+  static bool get _shouldShowAdsOnPlatform {
+    if (Platform.isIOS) return AdConfig.showAdsOnIos;
+    return true; // Android and other platforms always show ads
+  }
+
   static Future<void> initialize() async {
     if (_isInitialized) return;
 
@@ -146,6 +154,8 @@ class AdService {
     Function(NativeAd)? onAdLoaded,
     Function(LoadAdError)? onAdFailedToLoad,
   }) async {
+    if (!_shouldShowAdsOnPlatform) return null;
+
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
       return null;
@@ -376,6 +386,8 @@ class AdService {
     Function(InterstitialAd)? onAdLoaded,
     Function(LoadAdError)? onAdFailedToLoad,
   }) async {
+    if (!_shouldShowAdsOnPlatform) return;
+
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
       return;
@@ -421,6 +433,10 @@ class AdService {
     Function(Ad?)? onAdFailedToShow,
     Future<void> Function()? loadAdFunction,
   }) async {
+    if (!_shouldShowAdsOnPlatform) {
+      onAdFailedToShow?.call(null);
+      return;
+    }
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
       onAdFailedToShow?.call(null);
@@ -743,6 +759,8 @@ class AdService {
     Function(AppOpenAd)? onAdLoaded,
     Function(LoadAdError)? onAdFailedToLoad,
   }) async {
+    if (!_shouldShowAdsOnPlatform) return;
+
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
       return;
@@ -789,6 +807,7 @@ class AdService {
     Function(AppOpenAd)? onAdShowed,
     Function(AppOpenAd)? onAdFailedToShow,
   }) {
+    if (!_shouldShowAdsOnPlatform) return;
     if (_appOpenAd != null && !_isShowingAppOpen) {
       _isShowingAppOpen = true;
       _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(

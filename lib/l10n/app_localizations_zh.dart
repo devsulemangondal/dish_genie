@@ -1620,6 +1620,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumTermsOfUse => '使用条款';
 
   @override
+  String get premiumCancelAnyTime => '随时取消';
+
+  @override
   String get premiumFailedToInitiatePurchase => '启动购买失败';
 
   @override

@@ -1660,6 +1660,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get premiumTermsOfUse => 'Пайдалану шарттары';
 
   @override
+  String get premiumCancelAnyTime => 'Кез келген уақытта болдырып отыру';
+
+  @override
   String get premiumFailedToInitiatePurchase =>
       'Сатып алуды бастау мүмкін болмады';
 

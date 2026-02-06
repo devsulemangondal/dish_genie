@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
-import '../../widgets/common/sticky_header.dart';
+import '../../data/models/meal_plan.dart';
+import '../../data/models/recipe.dart';
+import '../../providers/grocery_provider.dart';
+import '../../providers/meal_plan_provider.dart';
+import '../../providers/recipe_provider.dart';
+import '../../services/storage_service.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
+import '../../widgets/common/sticky_header.dart';
 import '../../widgets/recipe/recipe_image_widget.dart';
-import '../../services/storage_service.dart';
-import '../../providers/meal_plan_provider.dart';
-import '../../providers/grocery_provider.dart';
-import '../../providers/recipe_provider.dart';
-import '../../data/models/recipe.dart';
-import '../../data/models/meal_plan.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -63,6 +64,9 @@ class _FavoritesScreenState extends State<FavoritesScreen>
 
   @override
   Widget build(BuildContext context) {
+    final groceryProvider = context.watch<GroceryProvider>();
+    final groceryItemCount = groceryProvider.groceryList?.items.length ?? 0;
+
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
@@ -90,6 +94,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
               children: [
                 StickyHeader(
                   title: context.t('favorites.title'),
+                  subtitle: context.t('favorites.subtitle'),
                   onBack: () {
                     if (context.canPop()) {
                       context.pop();
@@ -119,16 +124,21 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                       final isSmallScreen = screenWidth < 360;
                       final isVerySmallScreen = screenWidth < 320;
                       final showText = screenWidth >= 320;
-                      
+
                       return TabBar(
                         isScrollable: false,
                         tabAlignment: TabAlignment.fill,
                         padding: EdgeInsets.all(isSmallScreen ? 2.0 : 4.0),
                         controller: _tabController,
                         labelColor: Theme.of(context).colorScheme.onPrimary,
-                        unselectedLabelColor: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(0.7),
+                        unselectedLabelColor: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(
+                              Theme.of(context).brightness == Brightness.dark
+                                  ? 0.9
+                                  : 0.7,
+                            ),
                         indicator: BoxDecoration(
                           gradient: AppColors.getGradientPrimary(context),
                           borderRadius: BorderRadius.circular(12),
@@ -136,11 +146,19 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                         indicatorSize: TabBarIndicatorSize.tab,
                         dividerColor: Colors.transparent,
                         labelStyle: TextStyle(
-                          fontSize: isVerySmallScreen ? 10 : isSmallScreen ? 11 : 13,
+                          fontSize: isVerySmallScreen
+                              ? 10
+                              : isSmallScreen
+                              ? 11
+                              : 13,
                           fontWeight: FontWeight.w600,
                         ),
                         unselectedLabelStyle: TextStyle(
-                          fontSize: isVerySmallScreen ? 10 : isSmallScreen ? 11 : 13,
+                          fontSize: isVerySmallScreen
+                              ? 10
+                              : isSmallScreen
+                              ? 11
+                              : 13,
                           fontWeight: FontWeight.w500,
                         ),
                         tabs: [
@@ -153,7 +171,11 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                 children: [
                                   Icon(
                                     Icons.favorite,
-                                    size: isVerySmallScreen ? 14 : isSmallScreen ? 15 : 16,
+                                    size: isVerySmallScreen
+                                        ? 14
+                                        : isSmallScreen
+                                        ? 15
+                                        : 16,
                                   ),
                                   if (showText) ...[
                                     SizedBox(width: isVerySmallScreen ? 2 : 4),
@@ -162,7 +184,11 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                        fontSize: isVerySmallScreen ? 10 : isSmallScreen ? 11 : 13,
+                                        fontSize: isVerySmallScreen
+                                            ? 10
+                                            : isSmallScreen
+                                            ? 11
+                                            : 13,
                                       ),
                                     ),
                                   ],
@@ -179,7 +205,11 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                 children: [
                                   Icon(
                                     Icons.bookmark,
-                                    size: isVerySmallScreen ? 14 : isSmallScreen ? 15 : 16,
+                                    size: isVerySmallScreen
+                                        ? 14
+                                        : isSmallScreen
+                                        ? 15
+                                        : 16,
                                   ),
                                   if (showText) ...[
                                     SizedBox(width: isVerySmallScreen ? 2 : 4),
@@ -188,7 +218,11 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                        fontSize: isVerySmallScreen ? 10 : isSmallScreen ? 11 : 13,
+                                        fontSize: isVerySmallScreen
+                                            ? 10
+                                            : isSmallScreen
+                                            ? 11
+                                            : 13,
                                       ),
                                     ),
                                   ],
@@ -205,16 +239,24 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                 children: [
                                   Icon(
                                     Icons.calendar_today,
-                                    size: isVerySmallScreen ? 14 : isSmallScreen ? 15 : 16,
+                                    size: isVerySmallScreen
+                                        ? 14
+                                        : isSmallScreen
+                                        ? 15
+                                        : 16,
                                   ),
                                   if (showText) ...[
                                     SizedBox(width: isVerySmallScreen ? 2 : 4),
                                     Text(
-                                      context.t('favorites.plans'),
+                                      '${_mealPlans.length}',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                        fontSize: isVerySmallScreen ? 10 : isSmallScreen ? 11 : 13,
+                                        fontSize: isVerySmallScreen
+                                            ? 10
+                                            : isSmallScreen
+                                            ? 11
+                                            : 13,
                                       ),
                                     ),
                                   ],
@@ -231,16 +273,24 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                 children: [
                                   Icon(
                                     Icons.shopping_cart,
-                                    size: isVerySmallScreen ? 14 : isSmallScreen ? 15 : 16,
+                                    size: isVerySmallScreen
+                                        ? 14
+                                        : isSmallScreen
+                                        ? 15
+                                        : 16,
                                   ),
                                   if (showText) ...[
                                     SizedBox(width: isVerySmallScreen ? 2 : 4),
                                     Text(
-                                      context.t('common.shop'),
+                                      '$groceryItemCount',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                        fontSize: isVerySmallScreen ? 10 : isSmallScreen ? 11 : 13,
+                                        fontSize: isVerySmallScreen
+                                            ? 10
+                                            : isSmallScreen
+                                            ? 11
+                                            : 13,
                                       ),
                                     ),
                                   ],
@@ -400,7 +450,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   ),
                   child: Icon(
                     Icons.shopping_cart,
-                    color: Theme.of(context).cardColor,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     size: 24,
                   ),
                 ),
@@ -411,9 +461,10 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                     children: [
                       Text(
                         groceryList.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -421,9 +472,12 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                         '$checkedItems/$totalItems ${context.t('favorites.checked.items')}',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withOpacity(0.6),
+                          color: Theme.of(context).colorScheme.onSurface
+                              .withOpacity(
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? 0.85
+                                    : 0.6,
+                              ),
                         ),
                       ),
                     ],
@@ -438,9 +492,11 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   'Est. ${groceryList.estimatedCost}',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withOpacity(0.6),
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? 0.85
+                          : 0.6,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -448,9 +504,11 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   '•',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withOpacity(0.6),
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? 0.85
+                          : 0.6,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -458,9 +516,11 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   '$totalItems ${context.t('grocery.items')}',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withOpacity(0.6),
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? 0.85
+                          : 0.6,
+                    ),
                   ),
                 ),
               ],
@@ -494,7 +554,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                             child: Text(
                               context.t('grocery.view.list'),
                               style: TextStyle(
-                                color: Theme.of(context).cardColor,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -570,7 +630,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
   ) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: AppColors.getCardShadow(context),
       ),
@@ -618,7 +678,9 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                               end: Alignment.bottomCenter,
                               colors: [
                                 Colors.transparent,
-                                AppColors.foreground.withOpacity(0.4),
+                                Theme.of(
+                                  context,
+                                ).colorScheme.shadow.withOpacity(0.5),
                               ],
                             ),
                           ),
@@ -637,9 +699,10 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                     children: [
                       Text(
                         recipe.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -649,9 +712,12 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                         '${recipe.time} • ${recipe.calories} cal',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withOpacity(0.6),
+                          color: Theme.of(context).colorScheme.onSurface
+                              .withOpacity(
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? 0.85
+                                    : 0.6,
+                              ),
                         ),
                       ),
                     ],
@@ -678,11 +744,18 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.delete_outline, size: 13),
+                    Icon(
+                      Icons.delete_outline,
+                      size: 13,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       context.t('common.remove'),
-                      style: const TextStyle(fontSize: 11),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ],
                 ),
@@ -696,11 +769,13 @@ class _FavoritesScreenState extends State<FavoritesScreen>
 
   Widget _buildMealPlanCard(BuildContext context, MealPlan plan) {
     final days = plan.endDate.difference(plan.startDate).inDays + 1;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final secondaryOpacity = isDark ? 0.85 : 0.6;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: AppColors.getCardShadow(context),
       ),
@@ -718,7 +793,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                 ),
                 child: Icon(
                   Icons.calendar_today,
-                  color: Theme.of(context).cardColor,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   size: 24,
                 ),
               ),
@@ -729,9 +804,10 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   children: [
                     Text(
                       plan.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -741,7 +817,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                         fontSize: 12,
                         color: Theme.of(
                           context,
-                        ).colorScheme.onSurface.withOpacity(0.6),
+                        ).colorScheme.onSurface.withOpacity(secondaryOpacity),
                       ),
                     ),
                   ],
@@ -758,7 +834,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   fontSize: 14,
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
+                  ).colorScheme.onSurface.withOpacity(secondaryOpacity),
                 ),
               ),
               const SizedBox(width: 8),
@@ -768,7 +844,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   fontSize: 14,
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
+                  ).colorScheme.onSurface.withOpacity(secondaryOpacity),
                 ),
               ),
               const SizedBox(width: 8),
@@ -778,7 +854,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   fontSize: 14,
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
+                  ).colorScheme.onSurface.withOpacity(secondaryOpacity),
                 ),
               ),
               const SizedBox(width: 8),
@@ -788,7 +864,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   fontSize: 14,
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
+                  ).colorScheme.onSurface.withOpacity(secondaryOpacity),
                 ),
               ),
               const SizedBox(width: 8),
@@ -798,7 +874,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   fontSize: 14,
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
+                  ).colorScheme.onSurface.withOpacity(secondaryOpacity),
                 ),
               ),
             ],
@@ -826,7 +902,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                           child: Text(
                             context.t('favorites.view.plan'),
                             style: TextStyle(
-                              color: Theme.of(context).cardColor,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -875,16 +951,19 @@ class _FavoritesScreenState extends State<FavoritesScreen>
             const SizedBox(height: 16),
             Text(
               title,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               hint,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(
+                  Theme.of(context).brightness == Brightness.dark ? 0.85 : 0.6,
+                ),
               ),
               textAlign: TextAlign.center,
             ),
@@ -916,7 +995,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                         Text(
                           buttonText,
                           style: TextStyle(
-                            color: Theme.of(context).cardColor,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

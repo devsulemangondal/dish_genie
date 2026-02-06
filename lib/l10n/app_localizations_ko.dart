@@ -1627,6 +1627,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumTermsOfUse => '이용약관';
 
   @override
+  String get premiumCancelAnyTime => '언제든지 취소';
+
+  @override
   String get premiumFailedToInitiatePurchase => '구매를 시작하지 못했습니다.';
 
   @override

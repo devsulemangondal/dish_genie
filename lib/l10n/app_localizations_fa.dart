@@ -1659,6 +1659,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get premiumTermsOfUse => 'شرایط استفاده';
 
   @override
+  String get premiumCancelAnyTime => 'در هر زمان لغو کنید';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'شروع خرید انجام نشد';
 
   @override

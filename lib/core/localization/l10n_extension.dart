@@ -766,6 +766,7 @@ extension L10nExtension on BuildContext {
     'permission.denied.title': (l) => l.permissionDeniedTitle,
     'permission.denied.message': (l) => l.permissionDeniedMessage,
     'permission.open.settings': (l) => l.permissionOpenSettings,
+    'premium.cancel.any.time': (l) => l.premiumCancelAnyTime,
   };
 
   /// Map for parameterized getters that take String parameters

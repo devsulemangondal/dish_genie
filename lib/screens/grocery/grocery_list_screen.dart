@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:uuid/uuid.dart';
+
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
-import '../../widgets/common/bottom_nav.dart';
-import '../../widgets/common/sticky_header.dart';
-import '../../widgets/common/floating_sparkles.dart';
-import '../../widgets/common/loading_genie.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
-import '../../providers/grocery_provider.dart';
-import '../../providers/meal_plan_provider.dart';
 import '../../data/models/grocery_item.dart';
 import '../../data/models/grocery_list.dart';
-import '../../services/voice_service.dart';
-import '../../services/grocery_service.dart';
+import '../../providers/grocery_provider.dart';
+import '../../providers/meal_plan_provider.dart';
 import '../../providers/premium_provider.dart';
-import '../../services/card_ad_tracker.dart';
 import '../../services/ad_service.dart';
+import '../../services/card_ad_tracker.dart';
+import '../../services/grocery_service.dart';
 import '../../services/remote_config_service.dart';
+import '../../services/voice_service.dart';
+import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/ads/screen_native_ad_widget.dart';
+import '../../widgets/common/bottom_nav.dart';
+import '../../widgets/common/floating_sparkles.dart';
+import '../../widgets/common/loading_genie.dart';
+import '../../widgets/common/sticky_header.dart';
 import 'widgets/grocery_quick_actions.dart';
 
 class GroceryListScreen extends StatefulWidget {
@@ -49,6 +50,12 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
   final Set<String> _dismissedSmartSuggestions = {};
 
   bool _hasLoadedSavedLists = false;
+
+  /// True after user saves the current list; cleared when list is modified.
+  bool _currentListSaved = false;
+
+  /// Item count when list was last saved; used to detect modifications.
+  int _savedItemCount = 0;
 
   @override
   void initState() {
@@ -456,6 +463,10 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
       await provider.loadSavedLists();
 
       if (mounted) {
+        setState(() {
+          _currentListSaved = true;
+          _savedItemCount = list.items.length;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(context.t('grocery.list.saved')),
@@ -516,7 +527,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
-                value: _selectedCategory,
+                initialValue: _selectedCategory,
                 decoration: InputDecoration(
                   labelText: context.t('grocery.category'),
                   border: OutlineInputBorder(
@@ -846,6 +857,12 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     GroceryList list,
     GroceryProvider provider,
   ) {
+    // Clear saved state when list is modified (e.g. add/remove/toggle items)
+    if (_currentListSaved && list.items.length != _savedItemCount) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _currentListSaved = false);
+      });
+    }
     final itemsByCategory = provider.getItemsByCategory();
 
     // Filter out checked items when shop mode is enabled
@@ -951,7 +968,11 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                 ),
                 const SizedBox(width: 4),
                 IconButton(
-                  icon: Icon(Icons.bookmark_border, size: 20),
+                  icon: Icon(
+                    _currentListSaved ? Icons.bookmark : Icons.bookmark_border,
+                    size: 20,
+                    color: _currentListSaved ? AppColors.primary : null,
+                  ),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () => _saveList(context, list),
@@ -991,7 +1012,9 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                 const SizedBox(height: 8),
                 LinearProgressIndicator(
                   value: progress,
-                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerHighest,
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                   minHeight: 8,
                   borderRadius: BorderRadius.circular(4),
@@ -2517,7 +2540,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ).copyWith(
-                      backgroundColor: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(
                         Colors.transparent,
                       ),
                     ),

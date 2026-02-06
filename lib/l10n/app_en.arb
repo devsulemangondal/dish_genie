@@ -592,6 +592,7 @@
   "premiumRestorePurchases": "Restore Purchases",
   "premiumPrivacyPolicy": "Privacy Policy",
   "premiumTermsOfUse": "Terms of Use",
+  "premiumCancelAnyTime": "Cancel any time",
   "premiumFailedToInitiatePurchase": "Failed to initiate purchase",
   "premiumError": "Error: {error}",
   "@premiumError": {

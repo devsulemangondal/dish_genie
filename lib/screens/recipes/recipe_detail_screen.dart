@@ -19,8 +19,14 @@ import '../../widgets/recipe/recipe_image_widget.dart';
 
 class RecipeDetailScreen extends StatefulWidget {
   final String slug;
+  /// When set (e.g. from /ai-recipe), use this recipe instead of loading by slug.
+  final Recipe? initialRecipe;
 
-  const RecipeDetailScreen({super.key, required this.slug});
+  const RecipeDetailScreen({
+    super.key,
+    required this.slug,
+    this.initialRecipe,
+  });
 
   @override
   State<RecipeDetailScreen> createState() => _RecipeDetailScreenState();
@@ -45,7 +51,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _loadRecipe();
+    if (widget.initialRecipe != null) {
+      _recipe = widget.initialRecipe;
+      _isLoading = false;
+    } else {
+      _loadRecipe();
+    }
     _loadFavorites();
     _trackCardOpen();
   }

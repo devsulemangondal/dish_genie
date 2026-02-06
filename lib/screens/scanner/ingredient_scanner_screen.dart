@@ -1,28 +1,30 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../../core/localization/l10n_extension.dart';
-import '../../core/theme/colors.dart';
-import '../../widgets/common/sticky_header.dart';
-import '../../widgets/common/floating_sparkles.dart';
-import '../../widgets/common/loading_genie.dart';
-import '../../widgets/common/genie_mascot.dart';
-import '../../widgets/recipe/recipe_image_widget.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
+
 import '../../core/dialogs/app_dialogs.dart';
-import '../../services/app_open_ad_manager.dart';
-import '../../services/scanner_service.dart';
-import '../../services/recipe_service.dart';
-import '../../data/models/recipe.dart';
-import '../../providers/recipe_provider.dart';
-import '../../providers/premium_provider.dart';
+import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
+import '../../core/theme/colors.dart';
+import '../../data/models/recipe.dart';
+import '../../providers/premium_provider.dart';
+import '../../providers/recipe_provider.dart';
+import '../../services/app_open_ad_manager.dart';
+import '../../services/recipe_service.dart';
+import '../../services/scanner_service.dart';
+import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/ads/screen_native_ad_widget.dart';
+import '../../widgets/common/floating_sparkles.dart';
+import '../../widgets/common/genie_mascot.dart';
+import '../../widgets/common/loading_genie.dart';
+import '../../widgets/common/sticky_header.dart';
+import '../../widgets/recipe/recipe_image_widget.dart';
 
 enum ScannerViewMode { camera, ingredients, recipes, recipeDetail }
 
@@ -1089,11 +1091,12 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
   }
 
   Widget _buildIngredientsView() {
+    final bottomPadding = 24.0 + MediaQuery.of(context).padding.bottom;
     return Column(
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.fromLTRB(16, 16, 16, bottomPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1359,8 +1362,9 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
       );
     }
 
+    final bottomPadding = 24.0 + MediaQuery.of(context).padding.bottom;
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, bottomPadding),
       itemCount: _scanResult!.recipes.length,
       itemBuilder: (context, index) {
         final recipe = _scanResult!.recipes[index];

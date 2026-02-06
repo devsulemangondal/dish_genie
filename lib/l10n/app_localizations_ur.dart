@@ -1658,6 +1658,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get premiumTermsOfUse => 'استعمال کی شرائط';
 
   @override
+  String get premiumCancelAnyTime => 'کسی بھی وقت منسوخ کریں';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'خریداری شروع کرنے میں ناکام';
 
   @override

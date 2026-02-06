@@ -576,6 +576,7 @@
   "premiumRestorePurchases": "استعادة المشتريات",
   "premiumPrivacyPolicy": "سياسة الخصوصية",
   "premiumTermsOfUse": "شروط الاستخدام",
+  "premiumCancelAnyTime": "إلغاء في أي وقت",
   "premiumFailedToInitiatePurchase": "فشل في بدء الشراء",
   "premiumError": "خطأ: {error}",
   "@premiumError": {

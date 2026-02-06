@@ -1,10 +1,12 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import '../data/models/recipe.dart';
+
 import '../data/models/ingredient.dart';
 import '../data/models/instruction.dart';
 import '../data/models/nutrition.dart';
+import '../data/models/recipe.dart';
 import 'supabase_service.dart';
 
 class RecipeService {
@@ -50,7 +52,8 @@ class RecipeService {
     String? healthGoal,
     String? mood,
     String? language,
-    String? imageBase64, // Support image-based recipe generation (matching web app)
+    String?
+    imageBase64, // Support image-based recipe generation (matching web app)
   }) async {
     try {
       // Check if Supabase is initialized
@@ -69,7 +72,7 @@ class RecipeService {
 
       // Use direct HTTP call (matching web app pattern)
       final functionUrl = '$supabaseUrl/functions/v1/generate-recipe';
-      
+
       // Match web app exactly: include imageBase64 if provided (for image-based recipe generation)
       // Strip data URI prefix if present (some APIs expect just base64, others expect data URI)
       String? imageToSend = imageBase64;
@@ -80,7 +83,7 @@ class RecipeService {
           imageToSend = imageToSend.substring(commaIndex + 1);
         }
       }
-      
+
       final httpResponse = await http.post(
         Uri.parse(functionUrl),
         headers: {
@@ -90,65 +93,82 @@ class RecipeService {
         },
         body: json.encode({
           'ingredients': ingredients,
-          if (imageToSend != null) 'imageBase64': imageToSend, // Send base64 string (without data URI prefix)
-          if (cookingTime != null) 'cookingTime': cookingTime, // Match web app: camelCase
-          if (targetCalories != null) 'targetCalories': targetCalories, // Match web app: camelCase
-          if (skillLevel != null) 'skillLevel': skillLevel, // Match web app: camelCase
+          if (imageToSend != null)
+            'imageBase64':
+                imageToSend, // Send base64 string (without data URI prefix)
+          if (cookingTime != null)
+            'cookingTime': cookingTime, // Match web app: camelCase
+          if (targetCalories != null)
+            'targetCalories': targetCalories, // Match web app: camelCase
+          if (skillLevel != null)
+            'skillLevel': skillLevel, // Match web app: camelCase
           if (servings != null) 'servings': servings,
           if (cuisine != null) 'cuisine': cuisine,
-          if (dietType != null) 'dietType': dietType, // Match web app: camelCase
-          if (healthGoal != null) 'healthGoal': healthGoal, // Match web app: camelCase
+          if (dietType != null)
+            'dietType': dietType, // Match web app: camelCase
+          if (healthGoal != null)
+            'healthGoal': healthGoal, // Match web app: camelCase
           if (mood != null) 'mood': mood,
         }),
       );
-      
+
       if (httpResponse.statusCode != 200) {
-        final errorBody = json.decode(httpResponse.body) as Map<String, dynamic>?;
-        final errorMessage = errorBody?['error']?.toString() ?? 'Request failed';
+        final errorBody =
+            json.decode(httpResponse.body) as Map<String, dynamic>?;
+        final errorMessage =
+            errorBody?['error']?.toString() ?? 'Request failed';
         throw Exception(errorMessage);
       }
 
       final data = json.decode(httpResponse.body) as Map<String, dynamic>;
-      
+
       // Check if there's an error
       if (data['error'] != null) {
         final errorMsg = data['error'].toString();
         print('Recipe generation API error: $errorMsg');
         throw Exception(errorMsg);
       }
-      
+
       // Web app returns { recipe }, so extract it
       if (data['recipe'] != null) {
         try {
-          final recipe = Recipe.fromJson(data['recipe'] as Map<String, dynamic>);
-          
+          final recipe = Recipe.fromJson(
+            data['recipe'] as Map<String, dynamic>,
+          );
+
           // If imageBase64 was provided, always use it for AI-generated recipes
           // This ensures scanned images are displayed for recipes generated from images
-          if (imageBase64 != null && imageBase64!.trim().isNotEmpty) {
+          if (imageBase64 != null && imageBase64.trim().isNotEmpty) {
             // Ensure imageBase64 is in data URI format
-            String imageDataUri = imageBase64!.trim();
+            String imageDataUri = imageBase64.trim();
             if (!imageDataUri.startsWith('data:image/')) {
               // Assume JPEG if no format specified
               imageDataUri = 'data:image/jpeg;base64,$imageDataUri';
             }
-            
+
             // Validate that it's a proper data URI with base64 content
             if (imageDataUri.contains(',') && imageDataUri.length > 50) {
               // Update recipe with the provided image
               final updatedRecipe = recipe.copyWith(image: imageDataUri);
               if (kDebugMode) {
-                print('✅ [RecipeService] Added imageBase64 to recipe: ${updatedRecipe.title}');
-                print('   Image format: ${imageDataUri.substring(0, imageDataUri.length > 50 ? 50 : imageDataUri.length)}...');
+                print(
+                  '✅ [RecipeService] Added imageBase64 to recipe: ${updatedRecipe.title}',
+                );
+                print(
+                  '   Image format: ${imageDataUri.substring(0, imageDataUri.length > 50 ? 50 : imageDataUri.length)}...',
+                );
                 print('   Image length: ${imageDataUri.length}');
               }
               return updatedRecipe;
             } else {
               if (kDebugMode) {
-                print('⚠️ [RecipeService] Invalid imageBase64 format, using recipe image or placeholder');
+                print(
+                  '⚠️ [RecipeService] Invalid imageBase64 format, using recipe image or placeholder',
+                );
               }
             }
           }
-          
+
           return recipe;
         } catch (e) {
           print('Error parsing recipe JSON: $e');
@@ -156,7 +176,7 @@ class RecipeService {
           throw Exception('Failed to parse recipe: $e');
         }
       }
-      
+
       // If no recipe in response, log the full response for debugging
       print('No recipe in API response. Response: $data');
       return null;
@@ -166,7 +186,7 @@ class RecipeService {
       rethrow; // Re-throw to allow caller to handle the error
     }
   }
-  
+
   // Get recipe by slug
   static Recipe? getRecipeBySlug(String slug, List<Recipe> recipes) {
     try {
@@ -177,14 +197,11 @@ class RecipeService {
       return null;
     }
   }
-  
+
   // Search recipes
-  static List<Recipe> searchRecipes(
-    List<Recipe> recipes,
-    String query,
-  ) {
+  static List<Recipe> searchRecipes(List<Recipe> recipes, String query) {
     if (query.isEmpty) return recipes;
-    
+
     final lowerQuery = query.toLowerCase();
     return recipes.where((recipe) {
       return recipe.title.toLowerCase().contains(lowerQuery) ||
@@ -196,20 +213,51 @@ class RecipeService {
           );
     }).toList();
   }
-  
-  // Filter recipes by category
-  static List<Recipe> filterByCategory(
-    List<Recipe> recipes,
-    String? category,
-  ) {
+
+  // Filter recipes by category (must match the same logic used for category counts in recipe_generator_screen)
+  static List<Recipe> filterByCategory(List<Recipe> recipes, String? category) {
     if (category == null || category.isEmpty) return recipes;
-    
-    return recipes.where((recipe) {
-      return recipe.cuisine.toLowerCase() == category.toLowerCase() ||
-          recipe.tags.any((tag) => tag.toLowerCase() == category.toLowerCase());
+
+    final cat = category.toLowerCase();
+    return recipes.where((Recipe r) {
+      switch (cat) {
+        case 'quick':
+          return r.tags.any((t) => t.toLowerCase().contains('quick')) ||
+              (r.prepTime + r.cookTime) <= 20;
+        case 'protein':
+          return r.tags.any((t) => t.toLowerCase().contains('high protein'));
+        case 'chicken':
+          return r.title.toLowerCase().contains('chicken') ||
+              r.ingredients.any(
+                (i) => i.name.toLowerCase().contains('chicken'),
+              );
+        case 'fish':
+          return r.title.toLowerCase().contains('fish') ||
+              r.title.toLowerCase().contains('salmon') ||
+              r.title.toLowerCase().contains('seafood');
+        case 'eggs':
+          return r.ingredients.any((i) => i.name.toLowerCase().contains('egg'));
+        case 'veggie':
+          return r.tags.any((t) {
+            final lower = t.toLowerCase();
+            return lower.contains('vegan') ||
+                lower.contains('vegetarian') ||
+                lower.contains('healthy');
+          });
+        case 'kids':
+          return r.difficulty == 'Easy' ||
+              r.tags.any((t) => t.toLowerCase().contains('kid'));
+        case 'budget':
+          return r.tags.any((t) => t.toLowerCase().contains('budget'));
+        case 'grilled':
+          return r.tags.any((t) => t.toLowerCase().contains('grill'));
+        default:
+          return r.cuisine.toLowerCase() == cat ||
+              r.tags.any((t) => t.toLowerCase() == cat);
+      }
     }).toList();
   }
-  
+
   // Fetch recipes from Supabase recipes table
   static Future<List<Recipe>> fetchRecipes() async {
     try {
@@ -222,20 +270,25 @@ class RecipeService {
       final response = await SupabaseService.client
           .from('recipes')
           .select()
-          .eq('is_ai_generated', false) // Only fetch authentic recipes, not AI-generated ones
+          .eq(
+            'is_ai_generated',
+            false,
+          ) // Only fetch authentic recipes, not AI-generated ones
           .order('created_at', ascending: false);
-      
+
       // Supabase select() returns a List<Map<String, dynamic>>
       final responseList = response as List<dynamic>;
       return responseList
-          .map((json) => _mapSupabaseRecipeToRecipe(json as Map<String, dynamic>))
+          .map(
+            (json) => _mapSupabaseRecipeToRecipe(json as Map<String, dynamic>),
+          )
           .toList();
     } catch (e) {
       print('Error fetching recipes from API: $e');
       return [];
     }
   }
-  
+
   // Map Supabase recipe format to our Recipe model
   static Recipe _mapSupabaseRecipeToRecipe(Map<String, dynamic> json) {
     // Calculate total time
@@ -243,14 +296,14 @@ class RecipeService {
     final cookTime = json['cook_time'] as int? ?? 0;
     final totalTime = prepTime + cookTime;
     final timeString = '$totalTime min';
-    
+
     // Calculate calories from nutrition if available
     int calories = 0;
     if (json['nutrition'] != null && json['nutrition'] is Map) {
       final nutrition = json['nutrition'] as Map<String, dynamic>;
       calories = nutrition['calories'] as int? ?? 0;
     }
-    
+
     // Parse ingredients
     List<Ingredient> ingredients = [];
     if (json['ingredients'] != null && json['ingredients'] is List) {
@@ -264,7 +317,7 @@ class RecipeService {
           .whereType<Ingredient>()
           .toList();
     }
-    
+
     // Parse instructions
     List<Instruction> instructions = [];
     if (json['instructions'] != null && json['instructions'] is List) {
@@ -280,17 +333,14 @@ class RecipeService {
                 timeMinutes: item['timeMinutes'] as int?,
               );
             } else if (item is String) {
-              return Instruction(
-                step: entry.key + 1,
-                text: item,
-              );
+              return Instruction(step: entry.key + 1, text: item);
             }
             return null;
           })
           .whereType<Instruction>()
           .toList();
     }
-    
+
     // Parse nutrition
     Nutrition nutrition = Nutrition(
       calories: calories,
@@ -309,13 +359,13 @@ class RecipeService {
         fiber: nutritionData['fiber'] as int? ?? 0,
       );
     }
-    
+
     // Parse tags
     List<String> tags = [];
     if (json['tags'] != null && json['tags'] is List) {
       tags = (json['tags'] as List).map((e) => e.toString()).toList();
     }
-    
+
     return Recipe(
       id: json['id'] as String,
       title: json['title'] as String,

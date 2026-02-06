@@ -1654,6 +1654,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get premiumTermsOfUse => 'Nutzungsbedingungen';
 
   @override
+  String get premiumCancelAnyTime => 'Jederzeit kündbar';
+
+  @override
   String get premiumFailedToInitiatePurchase =>
       'Kauf konnte nicht initiiert werden';
 

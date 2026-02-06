@@ -1637,6 +1637,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumTermsOfUse => 'เงื่อนไขการใช้งาน';
 
   @override
+  String get premiumCancelAnyTime => 'ยกเลิกได้ทุกเมื่อ';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'ไม่สามารถเริ่มการซื้อได้';
 
   @override

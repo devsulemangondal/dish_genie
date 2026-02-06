@@ -1626,6 +1626,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumTermsOfUse => '利用規約';
 
   @override
+  String get premiumCancelAnyTime => 'いつでもキャンセル';
+
+  @override
   String get premiumFailedToInitiatePurchase => '購入を開始できませんでした';
 
   @override

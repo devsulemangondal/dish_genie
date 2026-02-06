@@ -1658,6 +1658,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get premiumTermsOfUse => 'Ketentuan Penggunaan';
 
   @override
+  String get premiumCancelAnyTime => 'Batalkan kapan saja';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'Gagal memulai pembelian';
 
   @override

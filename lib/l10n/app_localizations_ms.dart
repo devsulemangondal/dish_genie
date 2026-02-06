@@ -1660,6 +1660,9 @@ class AppLocalizationsMs extends AppLocalizations {
   String get premiumTermsOfUse => 'Syarat Penggunaan';
 
   @override
+  String get premiumCancelAnyTime => 'Batal pada bila-bila masa';
+
+  @override
   String get premiumFailedToInitiatePurchase =>
       'Gagal untuk memulakan pembelian';
 

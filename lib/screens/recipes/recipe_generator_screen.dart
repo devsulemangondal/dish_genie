@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../core/dialogs/app_dialogs.dart';
 import '../../core/localization/l10n_extension.dart';
-import '../../core/theme/colors.dart';
 import '../../core/navigation/pro_navigation.dart';
-import '../../widgets/common/bottom_nav.dart';
-import '../../widgets/common/sticky_header.dart';
-import '../../widgets/common/floating_sparkles.dart';
-import '../../widgets/common/loading_genie.dart';
-import '../../widgets/common/genie_mascot.dart';
-import '../../widgets/recipe/recipe_card.dart';
-import '../../widgets/recipe/recipe_grid_card.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
-import '../../providers/recipe_provider.dart';
-import '../../services/voice_service.dart';
+import '../../core/theme/colors.dart';
 import '../../data/models/recipe.dart';
 import '../../providers/premium_provider.dart';
-import '../../services/card_ad_tracker.dart';
+import '../../providers/recipe_provider.dart';
 import '../../services/ad_service.dart';
+import '../../services/card_ad_tracker.dart';
 import '../../services/remote_config_service.dart';
+import '../../services/voice_service.dart';
+import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/ads/screen_native_ad_widget.dart';
+import '../../widgets/common/bottom_nav.dart';
+import '../../widgets/common/floating_sparkles.dart';
+import '../../widgets/common/genie_mascot.dart';
+import '../../widgets/common/loading_genie.dart';
+import '../../widgets/common/sticky_header.dart';
+import '../../widgets/recipe/recipe_card.dart';
+import '../../widgets/recipe/recipe_grid_card.dart';
 
 class RecipeGeneratorScreen extends StatefulWidget {
   final String? searchQuery;

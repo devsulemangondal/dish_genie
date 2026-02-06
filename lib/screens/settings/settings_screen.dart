@@ -28,7 +28,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-
   Future<void> _clearAllData() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -75,7 +74,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (confirmed == true) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
-      await Provider.of<MealPlanProvider>(context, listen: false).clearMealPlan();
+      await Provider.of<MealPlanProvider>(
+        context,
+        listen: false,
+      ).clearMealPlan();
       await Provider.of<GroceryProvider>(context, listen: false).clearList();
       Provider.of<ChatProvider>(context, listen: false).clearMessages();
 
@@ -98,9 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final emailUri = Uri(
       scheme: 'mailto',
       path: email,
-      queryParameters: <String, String>{
-        'subject': subject,
-      },
+      queryParameters: <String, String>{'subject': subject},
     );
 
     try {
@@ -256,7 +256,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           return;
         }
         // Fallback to web URL if market:// doesn't work
-        url = 'https://play.google.com/store/apps/details?id=com.dishgenie.recipeapp';
+        url =
+            'https://play.google.com/store/apps/details?id=com.dishgenie.recipeapp';
       } else if (Platform.isIOS) {
         // For iOS, we need the App Store ID
         // TODO: Replace <APP_STORE_ID> with your actual App Store ID when the app is published
@@ -358,54 +359,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Consumer<ThemeProvider>(
                         builder: (context, themeProvider, _) {
-                          // Determine if dark mode is active (considering system mode)
-                          final isDark =
-                              Theme.of(context).brightness == Brightness.dark;
-                          String themeText;
-                          if (themeProvider.isSystemMode) {
-                            themeText = context.t('settingsThemeSystem');
-                          } else if (themeProvider.isDarkMode) {
-                            themeText = context.t('settingsThemeDark');
-                          } else {
-                            themeText = context.t('settingsThemeLight');
-                          }
-
-                          return _buildSettingsItem(
-                            context,
-                            icon: isDark ? Icons.dark_mode : Icons.light_mode,
-                            title: context.t('settingsTheme'),
-                            subtitle: themeText,
-                            onTap: () async {
-                              final mode = await showDialog<ThemeMode>(
-                                context: context,
-                                builder: (ctx) => SimpleDialog(
-                                  title: Text(context.t('settingsChooseTheme')),
-                                  children: [
-                                    SimpleDialogOption(
-                                      onPressed: () =>
-                                          Navigator.pop(ctx, ThemeMode.system),
-                                      child: Text(
-                                          context.t('settingsThemeSystem')),
-                                    ),
-                                    SimpleDialogOption(
-                                      onPressed: () =>
-                                          Navigator.pop(ctx, ThemeMode.light),
-                                      child: Text(
-                                          context.t('settingsThemeLight')),
-                                    ),
-                                    SimpleDialogOption(
-                                      onPressed: () =>
-                                          Navigator.pop(ctx, ThemeMode.dark),
-                                      child: Text(
-                                          context.t('settingsThemeDark')),
-                                    ),
-                                  ],
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildThemeOptionCard(
+                                context,
+                                themeMode: ThemeMode.light,
+                                label: context.t('settingsThemeLight'),
+                                icon: Icons.light_mode,
+                                isSelected:
+                                    themeProvider.themeMode == ThemeMode.light,
+                                onTap: () =>
+                                    themeProvider.setThemeMode(ThemeMode.light),
+                              ),
+                              const SizedBox(height: 8),
+                              _buildThemeOptionCard(
+                                context,
+                                themeMode: ThemeMode.dark,
+                                label: context.t('settingsThemeDark'),
+                                icon: Icons.dark_mode,
+                                isSelected:
+                                    themeProvider.themeMode == ThemeMode.dark,
+                                onTap: () =>
+                                    themeProvider.setThemeMode(ThemeMode.dark),
+                              ),
+                              const SizedBox(height: 8),
+                              _buildThemeOptionCard(
+                                context,
+                                themeMode: ThemeMode.system,
+                                label: context.t('settingsThemeSystem'),
+                                icon: Icons.brightness_auto,
+                                isSelected:
+                                    themeProvider.themeMode == ThemeMode.system,
+                                onTap: () => themeProvider.setThemeMode(
+                                  ThemeMode.system,
                                 ),
-                              );
-                              if (mode != null) {
-                                await themeProvider.setThemeMode(mode);
-                              }
-                            },
+                              ),
+                            ],
                           );
                         },
                       ),
@@ -586,6 +576,80 @@ class _SettingsScreenState extends State<SettingsScreen> {
           fontWeight: FontWeight.w600,
           color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
           letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildThemeOptionCard(
+    BuildContext context, {
+    required ThemeMode themeMode,
+    required String label,
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: isDark
+                    ? Colors.black.withOpacity(0.3)
+                    : Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            textDirection: Directionality.of(context),
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: AppColors.muted.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  icon,
+                  size: 18,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withOpacity(0.7),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  textDirection: Directionality.of(context),
+                ),
+              ),
+              Checkbox(
+                value: isSelected,
+                onChanged: (_) => onTap(),
+                activeColor: AppColors.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

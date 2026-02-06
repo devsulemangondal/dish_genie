@@ -1657,6 +1657,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get premiumTermsOfUse => 'Условия использования';
 
   @override
+  String get premiumCancelAnyTime => 'Отменить в любое время';
+
+  @override
   String get premiumFailedToInitiatePurchase =>
       'Не удалось инициировать покупку';
 

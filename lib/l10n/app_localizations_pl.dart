@@ -1656,6 +1656,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get premiumTermsOfUse => 'Warunki użytkowania';
 
   @override
+  String get premiumCancelAnyTime => 'Anuluj w dowolnym momencie';
+
+  @override
   String get premiumFailedToInitiatePurchase =>
       'Nie udało się zainicjować zakupu';
 

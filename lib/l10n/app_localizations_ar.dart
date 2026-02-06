@@ -1646,6 +1646,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumTermsOfUse => 'شروط الاستخدام';
 
   @override
+  String get premiumCancelAnyTime => 'إلغاء في أي وقت';
+
+  @override
   String get premiumFailedToInitiatePurchase => 'فشل في بدء الشراء';
 
   @override

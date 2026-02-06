@@ -3316,6 +3316,12 @@ abstract class AppLocalizations {
   /// **'Terms of Use'**
   String get premiumTermsOfUse;
 
+  /// No description provided for @premiumCancelAnyTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel any time'**
+  String get premiumCancelAnyTime;
+
   /// No description provided for @premiumFailedToInitiatePurchase.
   ///
   /// In en, this message translates to:

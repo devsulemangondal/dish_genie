@@ -1,26 +1,28 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
+import '../../core/dialogs/app_dialogs.dart';
 import '../../core/localization/l10n_extension.dart';
-import '../../core/theme/colors.dart';
 import '../../core/navigation/pro_navigation.dart';
-import '../../widgets/common/bottom_nav.dart';
-import '../../widgets/common/sticky_header.dart';
-import '../../widgets/common/floating_sparkles.dart';
-import '../../widgets/common/genie_mascot.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../core/theme/colors.dart';
+import '../../data/models/chat_message.dart';
 import '../../providers/chat_provider.dart';
 import '../../providers/premium_provider.dart';
-import '../../data/models/chat_message.dart';
-import '../../services/voice_service.dart';
-import '../../core/dialogs/app_dialogs.dart';
-import '../../services/card_ad_tracker.dart';
 import '../../services/ad_service.dart';
+import '../../services/card_ad_tracker.dart';
 import '../../services/remote_config_service.dart';
+import '../../services/voice_service.dart';
+import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/chat/typewriter_text.dart';
+import '../../widgets/common/bottom_nav.dart';
+import '../../widgets/common/floating_sparkles.dart';
+import '../../widgets/common/genie_mascot.dart';
+import '../../widgets/common/sticky_header.dart';
 
 class ChatAssistantScreen extends StatefulWidget {
   const ChatAssistantScreen({super.key});
@@ -449,8 +451,19 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                           tooltip: context.t('chatHistory.title'),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.refresh),
+                          icon: Icon(
+                            Icons.refresh,
+                            color: canSendMessage
+                                ? null
+                                : Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface.withOpacity(0.4),
+                          ),
                           onPressed: () {
+                            if (!canSendMessage) {
+                              _showChatLimitSheet(context, aiChefLimit);
+                              return;
+                            }
                             chatProvider.startNewChat();
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -1315,6 +1328,72 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showChatLimitSheet(BuildContext context, int? limit) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Theme.of(ctx).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.workspace_premium, size: 48, color: AppColors.primary),
+              const SizedBox(height: 16),
+              Text(
+                ctx.t('chat.limit.reached'),
+                style: Theme.of(
+                  ctx,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                limit != null
+                    ? ctx.t('chat.limit.reached.message', {
+                        'limit': limit.toString(),
+                      })
+                    : ctx.t('chat.ai.chef.disabled'),
+                style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(ctx).colorScheme.onSurface.withOpacity(0.7),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                    ProNavigation.tryOpen(context, replace: false);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Theme.of(ctx).colorScheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: Text(ctx.t('common.upgrade')),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text(ctx.t('common.cancel')),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
