@@ -57,6 +57,9 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Dish Genie AI needs access to your microphone for voice input to search for recipes and interact with the AI assistant.</string>
 	<!-- Required for url_launcher mailto (feedback email); canLaunchUrl checks these -->
+	<key>NSSpeechRecognitionUsageDescription</key>
+<string>This app uses speech recognition to convert your voice into text.</string>
+
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>mailto</string>
