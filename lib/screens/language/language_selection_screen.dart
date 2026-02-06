@@ -45,49 +45,42 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   Future<void> _saveLanguage() async {
     if (_tempSelectedLanguage == null) return;
 
-    setState(() {
-      _selectedLanguage = _tempSelectedLanguage;
-    });
-
     final languageProvider = Provider.of<LanguageProvider>(
       context,
       listen: false,
     );
 
-    // Check if language was already selected (meaning user is changing from settings)
+    // Capture navigation state BEFORE any async work so we don't use context
+    // after locale change (notifyListeners can trigger rebuild and invalidate context on iOS)
     final wasLanguageAlreadySelected = languageProvider.isLanguageSelected;
+    final canPop = context.canPop();
+
+    setState(() {
+      _selectedLanguage = _tempSelectedLanguage;
+    });
 
     await languageProvider.changeLanguage(_tempSelectedLanguage!);
 
-    // Check if we can pop (meaning user came from another screen like settings)
-    final canPop = context.canPop();
-
     // Only set language as selected if this is the first launch
-    // If user is coming from settings, they already have language selected
     if (!wasLanguageAlreadySelected) {
       await languageProvider.setLanguageSelected();
-      // Mark first launch as complete when language is selected for the first time
       await StorageService.setFirstLaunchComplete();
     }
 
-    if (mounted) {
-      // If language was already selected (user is changing from settings),
-      // navigate back to settings or pop
+    // Defer navigation to next frame to avoid using context during/after rebuild (fixes iOS crash)
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       if (wasLanguageAlreadySelected) {
         if (canPop) {
           context.pop();
         } else {
-          // If we can't pop (used go() instead of push), navigate back to settings
           context.go('/settings');
         }
         return;
       }
-
-      // First time language selection: always go to home
-      // This handles both first launch flow (splash → pro → ad → language) 
-      // and direct navigation to language selection
       context.go('/');
-    }
+    });
   }
 
   @override
