@@ -65,17 +65,23 @@ class AdService {
   // Get ad unit IDs. When _forceTestAds is true we always use test IDs (no kReleaseMode check).
   static String _getAdUnitId(String productionId, {String? testAdType}) {
     if (_forceTestAds) {
-      if (testAdType == 'native' || testAdType == 'Native') return _testNativeAdUnitId;
-      if (testAdType == 'interstitial' || testAdType == 'Inter') return _testInterstitialAdUnitId;
-      if (testAdType == 'appOpen' || testAdType == 'AppOpen') return _testAppOpenAdUnitId;
+      if (testAdType == 'native' || testAdType == 'Native')
+        return _testNativeAdUnitId;
+      if (testAdType == 'interstitial' || testAdType == 'Inter')
+        return _testInterstitialAdUnitId;
+      if (testAdType == 'appOpen' || testAdType == 'AppOpen')
+        return _testAppOpenAdUnitId;
       if (productionId.contains('Native')) return _testNativeAdUnitId;
       if (productionId.contains('Inter')) return _testInterstitialAdUnitId;
       return _testAppOpenAdUnitId;
     }
     if (!kReleaseMode) {
-      if (testAdType == 'native' || testAdType == 'Native') return _testNativeAdUnitId;
-      if (testAdType == 'interstitial' || testAdType == 'Inter') return _testInterstitialAdUnitId;
-      if (testAdType == 'appOpen' || testAdType == 'AppOpen') return _testAppOpenAdUnitId;
+      if (testAdType == 'native' || testAdType == 'Native')
+        return _testNativeAdUnitId;
+      if (testAdType == 'interstitial' || testAdType == 'Inter')
+        return _testInterstitialAdUnitId;
+      if (testAdType == 'appOpen' || testAdType == 'AppOpen')
+        return _testAppOpenAdUnitId;
       if (productionId.contains('Native')) return _testNativeAdUnitId;
       if (productionId.contains('Inter')) return _testInterstitialAdUnitId;
       return _testAppOpenAdUnitId;
@@ -130,7 +136,9 @@ class AdService {
     // Don't initialize Google Mobile Ads on iOS if ads are disabled
     if (Platform.isIOS && !AdConfig.showAdsOnIos) {
       if (kDebugMode) {
-        print('🚫 [AdService] Skipping MobileAds initialization on iOS (ads disabled)');
+        print(
+          '🚫 [AdService] Skipping MobileAds initialization on iOS (ads disabled)',
+        );
       }
       _isInitialized = true;
       return;
@@ -144,10 +152,12 @@ class AdService {
   static Future<bool> _checkInternetConnectivity() async {
     try {
       final results = await Connectivity().checkConnectivity();
-      return results.any((r) =>
-          r == ConnectivityResult.wifi ||
-          r == ConnectivityResult.mobile ||
-          r == ConnectivityResult.ethernet);
+      return results.any(
+        (r) =>
+            r == ConnectivityResult.wifi ||
+            r == ConnectivityResult.mobile ||
+            r == ConnectivityResult.ethernet,
+      );
     } catch (e) {
       return false;
     }

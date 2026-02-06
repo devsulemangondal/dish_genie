@@ -148,6 +148,14 @@ class AppOpenAdManager {
 
   /// Initialize the ad manager
   Future<void> initialize() async {
+    // Don't initialize on iOS if ads are disabled
+    if (Platform.isIOS && !AdConfig.showAdsOnIos) {
+      if (kDebugMode) {
+        print('🚫 [AppOpenAdManager] Skipping initialization on iOS (ads disabled)');
+      }
+      return;
+    }
+
     // Record app start time to prevent showing ad on initial launch
     _appStartTime = DateTime.now();
 
