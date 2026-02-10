@@ -1410,6 +1410,9 @@ class AppLocalizationsPl extends AppLocalizations {
       'Potrzebujesz pomocy? Zapytaj mnie o wskazówki, zamienniki lub przewodnik krok po kroku!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Wysokobiałkowe';
 
   @override

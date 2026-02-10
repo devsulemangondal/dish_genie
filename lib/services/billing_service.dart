@@ -1,7 +1,19 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+/// In-app subscription (weekly). Product ID in code must match Play Console exactly.
+///
+/// If subscription doesn't work, check:
+/// 1. Play Console → Your app → Monetize → Subscriptions: create a subscription with
+///    product ID exactly "weekly_sub" (no extra characters).
+/// 2. Upload the app to at least Internal testing (Setup → App integrity). Products
+///    often don't load for draft-only or unsigned debug builds.
+/// 3. Activate the subscription (not Draft) and wait a few hours if just created.
+/// 4. On device: use a Google account that is a License tester (Setup → License testing)
+///    or install the app from the Internal testing track.
+/// 5. App package name must match: com.dishgenie.recipeapp
 class BillingService {
   static final InAppPurchase _iap = InAppPurchase.instance;
   static StreamSubscription<List<PurchaseDetails>>? _subscription;
@@ -9,23 +21,19 @@ class BillingService {
   static bool _isInitialized = false;
   static bool _hasPremiumEntitlement = false;
 
-  // Product IDs - Update these with your actual product IDs from Google Play Console
+  // Product ID must match EXACTLY the subscription ID in Play Console (Monetize → Subscriptions).
   static const String weeklySubscriptionId = 'weekly_sub';
 
-  // For testing, use Google Play test product IDs
-  // android.test.purchased, android.test.canceled, android.test.refunded
-
-  static final List<String> _productIds = [
-    weeklySubscriptionId,
-  ];
+  static final List<String> _productIds = [weeklySubscriptionId];
 
   static List<ProductDetails> _products = [];
-  static final StreamController<PurchaseDetails> _purchaseController = 
+  static final StreamController<PurchaseDetails> _purchaseController =
       StreamController<PurchaseDetails>.broadcast();
-  static final StreamController<String?> _errorController = 
+  static final StreamController<String?> _errorController =
       StreamController<String?>.broadcast();
 
-  static Stream<PurchaseDetails> get purchaseStream => _purchaseController.stream;
+  static Stream<PurchaseDetails> get purchaseStream =>
+      _purchaseController.stream;
   static Stream<String?> get errorStream => _errorController.stream;
   static List<ProductDetails> get products => _products;
   static bool get isAvailable => _isAvailable;
@@ -33,7 +41,7 @@ class BillingService {
   static bool get isLoadingProducts => _isLoadingProducts;
   static bool isPremiumProductId(String productId) =>
       productId == weeklySubscriptionId;
-  
+
   static bool _isLoadingProducts = false;
   static String? _lastError;
 
@@ -41,9 +49,15 @@ class BillingService {
     if (_isInitialized) return;
 
     _isAvailable = await _iap.isAvailable();
-    
-    if (!_isAvailable && kDebugMode) {
-      print('In-App Purchase is not available');
+
+    if (kDebugMode) {
+      if (!_isAvailable) {
+        print(
+          '[BillingService] In-App Purchase not available (device/Play Services). Install from Play or use Internal testing build.',
+        );
+      } else {
+        print('[BillingService] IAP available, loading products...');
+      }
     }
 
     // Listen to purchase updates
@@ -85,51 +99,75 @@ class BillingService {
     _errorController.add(null);
 
     try {
-      final productDetailsResponse = await _iap.queryProductDetails(_productIds.toSet());
-      
+      final productDetailsResponse = await _iap.queryProductDetails(
+        _productIds.toSet(),
+      );
+
+      if (kDebugMode) {
+        final notFound = productDetailsResponse.notFoundIDs;
+        if (notFound.isNotEmpty) {
+          print(
+            '[BillingService] ⚠️ Product IDs NOT FOUND in Play Console: $notFound',
+          );
+          print(
+            '[BillingService] → Create a subscription with ID exactly: $weeklySubscriptionId',
+          );
+        }
+      }
+
       if (productDetailsResponse.error != null) {
-        final errorMessage = productDetailsResponse.error!.message.isNotEmpty
-            ? productDetailsResponse.error!.message
+        final err = productDetailsResponse.error!;
+        final errorMessage = err.message.isNotEmpty
+            ? err.message
             : 'Failed to load subscription plans';
         _lastError = errorMessage;
         _errorController.add(_lastError);
-        
+
         if (kDebugMode) {
-          print('[BillingService] Error loading products: ${productDetailsResponse.error}');
+          print(
+            '[BillingService] Error: code=${err.code} message=${err.message} details=${err.details}',
+          );
         }
         _isLoadingProducts = false;
         return false;
       }
 
       _products = productDetailsResponse.productDetails;
-      
+
       if (_products.isEmpty) {
-        _lastError = 'No subscription plans found. Please check your app configuration.';
+        _lastError =
+            'No subscription found. In Play Console use product ID "$weeklySubscriptionId" and upload app to Internal testing.';
         _errorController.add(_lastError);
         if (kDebugMode) {
-          print('[BillingService] No products found for IDs: $_productIds');
+          print(
+            '[BillingService] No products for IDs: $_productIds; notFoundIDs: ${productDetailsResponse.notFoundIDs}',
+          );
         }
         _isLoadingProducts = false;
         return false;
       }
 
       if (kDebugMode) {
-        print('[BillingService] Successfully loaded ${_products.length} product(s)');
+        print(
+          '[BillingService] Successfully loaded ${_products.length} product(s)',
+        );
         for (var product in _products) {
-          print('[BillingService] Product: ${product.id} - ${product.title} - ${product.price}');
+          print(
+            '[BillingService] Product: ${product.id} - ${product.title} - ${product.price}',
+          );
         }
       }
-      
+
       // Restore previous purchases
       await _restorePurchases();
-      
+
       _isLoadingProducts = false;
       return true;
     } catch (e) {
       final errorMessage = 'Failed to load subscription plans: ${e.toString()}';
       _lastError = errorMessage;
       _errorController.add(_lastError);
-      
+
       if (kDebugMode) {
         print('[BillingService] Exception loading products: $e');
       }
@@ -158,7 +196,7 @@ class BillingService {
 
     try {
       final purchaseParam = PurchaseParam(productDetails: product);
-      
+
       // For subscriptions, the in_app_purchase package uses buyNonConsumable
       // The actual subscription type is determined by how the product is configured
       // in Google Play Console (for Android) or App Store Connect (for iOS)
@@ -179,7 +217,7 @@ class BillingService {
       final errorMessage = 'Failed to initiate purchase: ${e.toString()}';
       _lastError = errorMessage;
       _errorController.add(_lastError);
-      
+
       if (kDebugMode) {
         print('[BillingService] Purchase error: $e');
       }
@@ -254,7 +292,7 @@ class BillingService {
 
   /// Verify purchase with backend server
   /// Returns true if purchase is valid, false otherwise
-  /// 
+  ///
   /// TODO: Implement server-side verification
   /// 1. Send purchase.verificationData to your backend
   /// 2. Backend should verify with Google Play/App Store APIs
@@ -286,7 +324,7 @@ class BillingService {
 
     // For now, accept local verification for subscriptions
     // In production, this should always verify with backend
-    if (purchase.status == PurchaseStatus.purchased || 
+    if (purchase.status == PurchaseStatus.purchased ||
         purchase.status == PurchaseStatus.restored) {
       // Check if subscription is still active (for subscriptions)
       // For subscriptions, you should check expiry date from server
@@ -304,7 +342,7 @@ class BillingService {
     try {
       // Restore purchases to get latest subscription status
       await _restorePurchases();
-      
+
       // The purchase stream will automatically update _hasPremiumEntitlement
       // based on the restored purchase status
     } catch (e) {

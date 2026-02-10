@@ -1411,6 +1411,9 @@ class AppLocalizationsTr extends AppLocalizations {
       'Yardıma mı ihtiyacınız var? İpuçları, alternatifler veya adım adım rehberlik için bana sorun!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Yüksek Protein';
 
   @override

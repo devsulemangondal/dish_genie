@@ -56,10 +56,9 @@ class AdService {
       'ca-app-pub-6882687050623219/2211104985';
 
   // ========== FOR TESTING ONLY: Test ads in release APK ==========
-  // Set to true: release APK shows Google test ads (current – for testing).
+  // Set to true: release APK shows Google test ads (for testing).
   // Set to false: release APK uses production ad units (real ads).
-  // TODO: Before publishing to Play Store, set _forceTestAds = false to show real ads.
-  static const bool _forceTestAds = true;
+  static const bool _forceTestAds = false;
   // ================================================================
 
   // Get ad unit IDs. When _forceTestAds is true we always use test IDs (no kReleaseMode check).

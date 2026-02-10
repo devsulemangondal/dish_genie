@@ -2852,6 +2852,12 @@ abstract class AppLocalizations {
   /// **'Need help? Ask me for tips, substitutions, or step-by-step guidance!'**
   String get recipeDetailGenieHelp;
 
+  /// No description provided for @recipeDetailNoImage.
+  ///
+  /// In en, this message translates to:
+  /// **'No image'**
+  String get recipeDetailNoImage;
+
   /// No description provided for @tagsHighProtein.
   ///
   /// In en, this message translates to:

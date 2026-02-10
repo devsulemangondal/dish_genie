@@ -1,31 +1,19 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../config/pro_config.dart';
 import '../../core/theme/colors.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
-import '../../services/remote_config_service.dart';
 
-/// Premium upgrade card with crown icon and gradient background
+/// Premium upgrade card with crown icon and gradient background.
+/// Shown everywhere inside the app; tap opens Pro screen.
 class PremiumCard extends StatelessWidget {
   const PremiumCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS && !ProConfig.showProOnIos) {
-      return const SizedBox.shrink();
-    }
-
-    return FutureBuilder<bool>(
-      future: RemoteConfigService.initialize(),
-      builder: (context, snapshot) {
-        final enabled = RemoteConfigService.weeklySub;
-        if (!enabled) return const SizedBox.shrink();
-
-        return GestureDetector(
-          onTap: () => ProNavigation.tryOpen(context, replace: false),
-          child: Container(
+    return GestureDetector(
+      onTap: () => ProNavigation.tryOpen(context, replace: false),
+      child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
@@ -104,7 +92,5 @@ class PremiumCard extends StatelessWidget {
             ),
           ),
         );
-      },
-    );
   }
 }

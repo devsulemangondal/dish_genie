@@ -1413,6 +1413,9 @@ class AppLocalizationsUr extends AppLocalizations {
       'مدد چاہیے؟ مجھ سے ٹپس، متبادل یا قدم بہ قدم رہنمائی کے لیے پوچھیں!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'زیادہ پروٹین';
 
   @override

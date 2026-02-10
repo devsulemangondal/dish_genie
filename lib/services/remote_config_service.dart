@@ -1,5 +1,5 @@
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 
 class RemoteConfigService {
@@ -23,7 +23,7 @@ class RemoteConfigService {
     'premium_product_id_weekly': 'weekly_sub',
     // Ad configuration flags
     // Fail-safe: keep Pro/paywall hidden unless explicitly enabled remotely.
-    'weekly_sub': true,
+    'weekly_sub': false,
     'splash_inter': true,
     'app_open': true,
     // Native ad flags

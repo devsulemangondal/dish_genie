@@ -1402,6 +1402,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'تحتاج مساعدة؟ اسألني عن النصائح أو البدائل أو التوجيه خطوة بخطوة!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'عالي البروتين';
 
   @override

@@ -1411,6 +1411,9 @@ class AppLocalizationsBn extends AppLocalizations {
       'সাহায্য দরকার? টিপস, বিকল্প বা ধাপে ধাপে গাইডের জন্য আমাকে জিজ্ঞাসা করুন!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'উচ্চ প্রোটিন';
 
   @override

@@ -1412,6 +1412,9 @@ class AppLocalizationsId extends AppLocalizations {
       'Butuh bantuan? Tanyakan tips, pengganti, atau panduan langkah demi langkah!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Tinggi Protein';
 
   @override

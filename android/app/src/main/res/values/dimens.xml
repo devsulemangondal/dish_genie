@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Google policy: Ad attribution badge must be minimum 15px (use 15dp) in height and width -->
+    <dimen name="native_ad_badge_min_size">15dp</dimen>
+    <dimen name="native_ad_badge_text_size">12sp</dimen>
+
     <!-- Small Native Ad Dimensions -->
     <dimen name="small_ad_height">80dp</dimen>
     <dimen name="small_ad_padding">8dp</dimen>

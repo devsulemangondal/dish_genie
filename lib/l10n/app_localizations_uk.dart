@@ -1410,6 +1410,9 @@ class AppLocalizationsUk extends AppLocalizations {
       'Потрібна допомога? Запитайте мене про поради, заміни або покрокові інструкції!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Високобілковий';
 
   @override

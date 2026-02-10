@@ -1416,6 +1416,9 @@ class AppLocalizationsUz extends AppLocalizations {
       'Yordam kerakmi? Maslahatlar, almashtirishlar yoki bosqichma-bosqich ko\'rsatmalar so\'rang!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Yuqori Oqsil';
 
   @override

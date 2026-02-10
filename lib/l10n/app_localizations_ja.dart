@@ -1384,6 +1384,9 @@ class AppLocalizationsJa extends AppLocalizations {
       'ヘルプが必要ですか？ヒント、代用品、ステップバイステップのガイドをお聞きください！';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => '高タンパク';
 
   @override

@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../config/pro_config.dart';
 import '../../screens/splash/splash_screen.dart';
 import '../../providers/premium_provider.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
@@ -60,11 +58,6 @@ class AppRouter {
           // Check language selection
           if (!languageProvider.isLanguageSelected) {
             return '/language-selection';
-          }
-
-          // On iOS, hide Pro (IAP) screen when showProOnIos is false
-          if (path == '/pro' && Platform.isIOS && !ProConfig.showProOnIos) {
-            return '/';
           }
 
           // Check premium status for pro screen

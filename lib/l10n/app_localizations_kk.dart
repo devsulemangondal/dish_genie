@@ -1413,6 +1413,9 @@ class AppLocalizationsKk extends AppLocalizations {
       'Көмек керек пе? Кеңестер, ауыстырулар немесе қадамдық нұсқаулық сұраңыз!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Жоғары Ақуыз';
 
   @override

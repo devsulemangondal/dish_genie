@@ -1408,6 +1408,9 @@ class AppLocalizationsVi extends AppLocalizations {
       'Cần trợ giúp? Hỏi tôi về mẹo, thay thế hoặc hướng dẫn từng bước!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Giàu Protein';
 
   @override

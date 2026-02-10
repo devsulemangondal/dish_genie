@@ -1,34 +1,21 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../config/pro_config.dart';
 import '../../core/theme/colors.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
 import '../../providers/premium_provider.dart';
-import '../../services/remote_config_service.dart';
 
-/// Pro button widget styled like ummah pro - gradient badge design
+/// Pro button widget - gradient badge. Shown everywhere inside the app; tap opens Pro screen.
 class ProButton extends StatelessWidget {
   const ProButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS && !ProConfig.showProOnIos) {
-      return const SizedBox.shrink();
-    }
-
     final isPremium = context.watch<PremiumProvider>().isPremium;
 
-    return FutureBuilder<bool>(
-      future: RemoteConfigService.initialize(),
-      builder: (context, snapshot) {
-        final enabled = RemoteConfigService.weeklySub;
-        if (!enabled) return const SizedBox.shrink();
-
-        return GestureDetector(
-          onTap: () => ProNavigation.tryOpen(context, replace: true),
-          child: Container(
+    return GestureDetector(
+      onTap: () => ProNavigation.tryOpen(context, replace: true),
+      child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               gradient: isPremium
@@ -68,9 +55,7 @@ class ProButton extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        );
-      },
+      ),
     );
   }
 }

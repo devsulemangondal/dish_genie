@@ -28,6 +28,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  // Kept for when "Clear all data" section is uncommented
+  // ignore: unused_element
   Future<void> _clearAllData() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -346,7 +348,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     // Premium Card
                     const PremiumCard(),
                     const SizedBox(height: 8),
-                    // Appearance Section
+                    // Language Section (first)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildSectionHeader(
+                        context,
+                        context.t('settings.language'),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Consumer<LanguageProvider>(
+                        builder: (context, languageProvider, _) {
+                          final currentLanguageCode =
+                              languageProvider.locale.languageCode;
+                          final currentLanguage =
+                              LanguageConfig.getLanguageByCode(
+                                currentLanguageCode,
+                              );
+                          final languageName =
+                              currentLanguage?.name ?? 'English';
+
+                          return _buildSettingsItem(
+                            context,
+                            icon: Icons.language,
+                            title: context.t('settings.language'),
+                            subtitle: languageName,
+                            onTap: () => context.push('/language-picker'),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Appearance Section (second)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: _buildSectionHeader(
@@ -396,39 +431,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ),
                               ),
                             ],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Language Section
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _buildSectionHeader(
-                        context,
-                        context.t('settings.language'),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Consumer<LanguageProvider>(
-                        builder: (context, languageProvider, _) {
-                          final currentLanguageCode =
-                              languageProvider.locale.languageCode;
-                          final currentLanguage =
-                              LanguageConfig.getLanguageByCode(
-                                currentLanguageCode,
-                              );
-                          final languageName =
-                              currentLanguage?.name ?? 'English';
-
-                          return _buildSettingsItem(
-                            context,
-                            icon: Icons.language,
-                            title: context.t('settings.language'),
-                            subtitle: languageName,
-                            onTap: () => context.push('/language-picker'),
                           );
                         },
                       ),
@@ -520,27 +522,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Data Section
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _buildSectionHeader(
-                        context,
-                        context.t('settings.data'),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _buildSettingsItem(
-                        context,
-                        icon: Icons.delete_forever,
-                        title: context.t('settings.clear.all.data'),
-                        subtitle: context.t('settings.clear.data.subtitle'),
-                        onTap: _clearAllData,
-                        isDestructive: true,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                    // Clear all data section - commented out for now
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                    //   child: _buildSectionHeader(
+                    //     context,
+                    //     context.t('settings.data'),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 6),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                    //   child: _buildSettingsItem(
+                    //     context,
+                    //     icon: Icons.delete_forever,
+                    //     title: context.t('settings.clear.all.data'),
+                    //     subtitle: context.t('settings.clear.data.subtitle'),
+                    //     onTap: _clearAllData,
+                    //     isDestructive: true,
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 16),
                     // App Version
                     Center(
                       child: Padding(

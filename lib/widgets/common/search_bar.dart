@@ -553,7 +553,7 @@ class _SearchBarState extends State<SearchBar>
                   child: Container(
                     width: 36,
                     height: 36,
-                    margin: const EdgeInsets.only(right: 8),
+                    margin: RtlEdgeInsets.only(context: context, right: 8),
                     decoration: BoxDecoration(
                       color: _isListening
                           ? AppColors.destructive
@@ -569,6 +569,7 @@ class _SearchBarState extends State<SearchBar>
                     ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 // AI button: navigate to recipe generator (with or without search text)
                 Material(
                   color: Colors.transparent,

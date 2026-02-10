@@ -1413,6 +1413,9 @@ class AppLocalizationsFa extends AppLocalizations {
       'کمک می‌خواهید؟ از من نکات، جایگزین‌ها یا راهنمای قدم به قدم بخواهید!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'پروتئین بالا';
 
   @override

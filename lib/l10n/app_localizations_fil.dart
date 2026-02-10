@@ -1422,6 +1422,9 @@ class AppLocalizationsFil extends AppLocalizations {
       'Kailangan ng tulong? Tanungin ako para sa mga tip, pamalit, o step-by-step na gabay!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Mataas na Protina';
 
   @override

@@ -1,11 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../config/pro_config.dart';
 
-/// Navigation helper for Pro screen
+/// Navigation helper for Pro screen.
+/// From inside the app, user can always go to Pro (no checks).
 class ProNavigation {
-  /// Try to open the Pro screen
+  /// Opens the Pro screen.
   ///
   /// [context] - BuildContext for navigation
   /// [replace] - If true, replaces current route; if false, pushes new route
@@ -16,11 +15,6 @@ class ProNavigation {
   }) async {
     try {
       if (!context.mounted) return false;
-
-      // On iOS, do not open Pro screen when showProOnIos is false
-      if (Platform.isIOS && !ProConfig.showProOnIos) {
-        return false;
-      }
 
       if (replace) {
         context.go('/pro');

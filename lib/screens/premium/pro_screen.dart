@@ -23,12 +23,14 @@ class ProScreen extends StatefulWidget {
   State<ProScreen> createState() => _ProScreenState();
 }
 
-class _ProScreenState extends State<ProScreen> {
+class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   StreamSubscription? _purchaseSubscription;
   StreamSubscription? _billingErrorSubscription;
+  Timer? _purchaseLoadingTimeout;
   bool _isLoading = false;
   bool _isLoadingProducts = false;
   ProductDetails? _selectedProduct;
+  bool _wasInBackgroundForPurchase = false;
 
   String _getOpenSource() {
     // Prefer GoRouterState if available, otherwise parse from router location.
@@ -42,8 +44,35 @@ class _ProScreenState extends State<ProScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _initializeBilling();
     _checkFirstLaunch();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      if (_isLoading && _selectedProduct != null) {
+        _wasInBackgroundForPurchase = true;
+      }
+    } else if (state == AppLifecycleState.resumed) {
+      if (_wasInBackgroundForPurchase &&
+          _isLoading &&
+          _selectedProduct != null) {
+        _wasInBackgroundForPurchase = false;
+        // User may have closed the Play Store dialog without buying (no cancel event).
+        // Wait so a "purchased" result can arrive first, then clear loader if still loading.
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted && _isLoading && _selectedProduct != null) {
+            _clearPurchaseLoading();
+          }
+        });
+      } else {
+        _wasInBackgroundForPurchase = false;
+      }
+    }
   }
 
   Future<void> _checkFirstLaunch() async {
@@ -63,11 +92,26 @@ class _ProScreenState extends State<ProScreen> {
       _isLoadingProducts = true;
     });
 
+    // Subscribe to errors first so we clear loader when "app not configured for IAP" etc.
+    _billingErrorSubscription = BillingService.errorStream.listen((error) {
+      if (mounted) {
+        _clearPurchaseLoading();
+        setState(() {
+          _isLoadingProducts = false;
+        });
+      }
+    });
+
     try {
       await BillingService.initialize();
       await BillingService.loadProducts();
     } catch (e) {
-      // Error will be handled when user tries to purchase
+      if (mounted) {
+        setState(() {
+          _isLoadingProducts = false;
+          _isLoading = false;
+        });
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -75,11 +119,6 @@ class _ProScreenState extends State<ProScreen> {
         });
       }
     }
-
-    // Listen to billing errors (for future use if needed)
-    _billingErrorSubscription = BillingService.errorStream.listen((error) {
-      // Error will be shown via snackbar when user tries to purchase
-    });
 
     // Listen to purchase updates
     _purchaseSubscription = BillingService.purchaseStream.listen((purchase) {
@@ -101,33 +140,26 @@ class _ProScreenState extends State<ProScreen> {
         case PurchaseStatus.restored:
           // Clear loading and show success
           if (isSelectedProduct && mounted) {
-            setState(() {
-              _isLoading = false;
-              _selectedProduct = null;
-            });
+            _clearPurchaseLoading();
             context.read<PremiumProvider>().setPremium(true);
             _showSuccessDialog();
           }
           break;
         case PurchaseStatus.error:
-          // Clear loading and show error
-          if (isSelectedProduct && mounted) {
-            setState(() {
-              _isLoading = false;
-              _selectedProduct = null;
-            });
-            _showErrorDialog(
-              purchase.error?.message ?? context.t('premiumPurchaseFailed'),
-            );
+          // Always clear loading on error (e.g. "app not configured for IAP")
+          if (mounted) {
+            _clearPurchaseLoading();
+            if (isSelectedProduct) {
+              _showErrorDialog(
+                purchase.error?.message ?? context.t('premiumPurchaseFailed'),
+              );
+            }
           }
           break;
         case PurchaseStatus.canceled:
-          // Clear loading when user cancels
+          // Clear loading when user closes subscription popup / cancels
           if (isSelectedProduct && mounted) {
-            setState(() {
-              _isLoading = false;
-              _selectedProduct = null;
-            });
+            _clearPurchaseLoading();
           }
           break;
       }
@@ -139,59 +171,51 @@ class _ProScreenState extends State<ProScreen> {
   }
 
   Future<void> _exitProFlow() async {
-    // If user entered via push() (e.g., from settings), just pop back
-    if (context.canPop()) {
-      context.pop();
-      return;
-    }
-
-    // Don't mark first launch complete here - it will be marked in language selection screen
-    // This ensures the first launch flow completes: splash → pro → inter ad → language
-
-    // Only show this "after Pro" interstitial for the splash funnel (first launch).
+    final canPop = context.canPop();
     final source = _getOpenSource();
-    if (source != 'splash') {
-      // For non-splash sources (e.g., from home, settings), just go back to home
-      if (mounted) {
-        context.go('/');
-      }
-      return;
-    }
 
-    // First launch flow: splash → pro → inter ad → language
-    // Decide where to go after Pro (only for first launch)
+    // Decide where to go after closing (or after ad): pop if came via push, else go to route
     final isLanguageSelected = await StorageService.isLanguageSelected();
     if (!mounted) return;
-    final nextRoute = isLanguageSelected ? '/' : '/language-selection';
+    final String nextRoute;
+    if (canPop) {
+      nextRoute = ''; // will use pop() instead
+    } else if (source == 'splash') {
+      nextRoute = isLanguageSelected ? '/' : '/language-selection';
+    } else {
+      nextRoute = '/';
+    }
 
-    // Premium users never see ads; go directly.
-    final isPremium = context.read<PremiumProvider>().isPremium;
-    if (isPremium) {
-      if (mounted) {
+    void navigateAway() {
+      if (!mounted) return;
+      if (canPop) {
+        context.pop();
+      } else {
         context.go(nextRoute);
       }
+    }
+
+    // Premium users never see ads; navigate immediately.
+    final isPremium = context.read<PremiumProvider>().isPremium;
+    if (isPremium) {
+      navigateAway();
       return;
     }
 
-    // Show interstitial (using existing "splash" interstitial placement) then navigate.
+    // Show interstitial when closing Pro from any source (controlled by show_ads + splash_inter).
     try {
       await RemoteConfigService.initialize();
       final shouldShow =
           RemoteConfigService.showAds && RemoteConfigService.splashInter;
       if (!shouldShow) {
-        if (mounted) {
-          context.go(nextRoute);
-        }
+        navigateAway();
         return;
       }
     } catch (_) {
-      if (mounted) {
-        context.go(nextRoute);
-      }
+      navigateAway();
       return;
     }
 
-    // Show ad first, then navigate in callbacks
     bool hasNavigated = false;
     await AdService.showInterstitialAdForType(
       adType: 'splash',
@@ -200,28 +224,40 @@ class _ProScreenState extends State<ProScreen> {
       onAdDismissed: () {
         if (!hasNavigated && mounted) {
           hasNavigated = true;
-          context.go(nextRoute);
+          navigateAway();
         }
       },
       onAdFailedToShow: (ad) {
         if (!hasNavigated && mounted) {
           hasNavigated = true;
-          context.go(nextRoute);
+          navigateAway();
         }
       },
     );
 
-    // Fallback: don't get stuck if ad never shows.
     Future.delayed(const Duration(seconds: 3), () {
       if (!hasNavigated && mounted) {
         hasNavigated = true;
-        context.go(nextRoute);
+        navigateAway();
       }
     });
   }
 
+  void _clearPurchaseLoading() {
+    _purchaseLoadingTimeout?.cancel();
+    _purchaseLoadingTimeout = null;
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+        _selectedProduct = null;
+      });
+    }
+  }
+
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _purchaseLoadingTimeout?.cancel();
     _purchaseSubscription?.cancel();
     _billingErrorSubscription?.cancel();
     super.dispose();
@@ -284,30 +320,28 @@ class _ProScreenState extends State<ProScreen> {
   Future<void> _purchaseProduct(ProductDetails product) async {
     if (_isLoading) return; // Prevent multiple simultaneous purchases
 
+    _purchaseLoadingTimeout?.cancel();
     setState(() {
       _isLoading = true;
       _selectedProduct = product;
+    });
+    // If user closes the native subscription popup without buying, the store
+    // may not always send PurchaseStatus.canceled. Stop loader after 90s.
+    _purchaseLoadingTimeout = Timer(const Duration(seconds: 90), () {
+      if (mounted && _isLoading && _selectedProduct?.id == product.id) {
+        _clearPurchaseLoading();
+      }
     });
 
     try {
       final success = await BillingService.purchaseProduct(product);
       if (!success && mounted) {
-        // Only clear loading if purchase initiation failed
-        // If successful, loading will be cleared by purchase stream listener
-        setState(() {
-          _isLoading = false;
-          _selectedProduct = null;
-        });
+        _clearPurchaseLoading();
         _showErrorDialog(context.t('premium.failed.to.initiate.purchase'));
       }
-      // Don't clear loading here - wait for purchase stream to handle it
-      // The purchase flow is asynchronous and handled via purchase stream
     } catch (e) {
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _selectedProduct = null;
-        });
+        _clearPurchaseLoading();
         _showErrorDialog(context.t('premium.error', {'error': e.toString()}));
       }
     }
@@ -389,13 +423,12 @@ class _ProScreenState extends State<ProScreen> {
                         final isSmallScreen = screenHeight < 700;
                         final availableHeight = screenHeight;
 
-                        return SingleChildScrollView(
+                        return Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.05,
                             vertical: screenHeight * 0.015,
                           ),
                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
                             children: [
                               if (isPremium) ...[
                                 _buildPremiumBadge(),
@@ -403,9 +436,13 @@ class _ProScreenState extends State<ProScreen> {
                               ],
                               _buildHeroSection(screenWidth, availableHeight),
                               SizedBox(height: availableHeight * 0.015),
-                              _buildFeaturesListCompact(
-                                screenWidth,
-                                availableHeight,
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: _buildFeaturesListCompact(
+                                    screenWidth,
+                                    availableHeight,
+                                  ),
+                                ),
                               ),
                               SizedBox(height: availableHeight * 0.015),
                               if (!isPremium) ...[
@@ -662,7 +699,7 @@ class _ProScreenState extends State<ProScreen> {
     );
   }
 
-  /// One line: Cancel subscription • Terms • Privacy Policy (each tappable).
+  /// Cancel subscription • Terms • Privacy Policy (each tappable). Wraps to multiple lines when needed for long translations.
   Widget _buildCancelTermsPrivacyLine(double screenWidth) {
     final isSmallScreen = screenWidth < 360;
     final fontSize = isSmallScreen ? 10.0 : 12.0;
@@ -673,41 +710,58 @@ class _ProScreenState extends State<ProScreen> {
       decorationColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
     );
     const separator = ' • ';
+    const spacing = 8.0;
+    const runSpacing = 4.0;
+    final contentMaxWidth = screenWidth - 32;
+    // Reserve space for 2 separators and 2 gaps so first run doesn't overflow (RenderFlex)
+    const reservedForSeparatorsAndSpacing = 72.0;
+    final maxLinkWidth =
+        (contentMaxWidth - reservedForSeparatorsAndSpacing) / 3;
+    final safeMaxLinkWidth = maxLinkWidth.clamp(60.0, double.infinity);
 
-    const spacing = 12.0;
     return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: contentMaxWidth),
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          runAlignment: WrapAlignment.center,
+          spacing: spacing,
+          runSpacing: runSpacing,
           children: [
-            SizedBox(width: spacing),
-            _LinkText(
-              text: context.t('premium.terms.of.use'),
-              style: style,
-              onTap: () => _launchURL(
-                'https://sites.google.com/view/dodishgenieterms/home',
+            SizedBox(
+              width: safeMaxLinkWidth,
+              child: _LinkText(
+                text: context.t('premium.terms.of.use'),
+                style: style,
+                onTap: () => _launchURL(
+                  'https://sites.google.com/view/dodishgenieterms/home',
+                ),
+                maxLines: 2,
               ),
             ),
-            SizedBox(width: spacing),
             Text(separator, style: style),
-            SizedBox(width: spacing),
-            _LinkText(
-              text: context.t('premium.cancel.any.time'),
-              style: style,
-              onTap: () => _launchURL(
-                'https://sites.google.com/view/dodishgenieterms/home',
+            SizedBox(
+              width: safeMaxLinkWidth,
+              child: _LinkText(
+                text: context.t('premium.cancel.any.time'),
+                style: style,
+                onTap: () => _launchURL(
+                  'https://play.google.com/store/account/subscriptions',
+                ),
+                maxLines: 2,
               ),
             ),
-
             Text(separator, style: style),
-            SizedBox(width: spacing),
-            _LinkText(
-              text: context.t('premium.privacy.policy'),
-              style: style,
-              onTap: () =>
-                  _launchURL('https://sites.google.com/view/dodishgenie/home'),
+            SizedBox(
+              width: safeMaxLinkWidth,
+              child: _LinkText(
+                text: context.t('premium.privacy.policy'),
+                style: style,
+                onTap: () => _launchURL(
+                  'https://sites.google.com/view/dodishgenie/home',
+                ),
+                maxLines: 2,
+              ),
             ),
           ],
         ),
@@ -817,96 +871,106 @@ class _ProScreenState extends State<ProScreen> {
     final isLoading = _isLoading && _selectedProduct?.id == product.id;
     final isSmallScreen = screenHeight < 700;
     final buttonPadding = isSmallScreen ? 12.0 : 14.0;
+    const double minButtonHeight = 48.0;
     final iconSize = isSmallScreen ? 18.0 : 20.0;
     final fontSize = isSmallScreen ? 15.0 : 16.0;
 
+    Widget buttonChild;
+    if (isLoading) {
+      buttonChild = SizedBox(
+        height: minButtonHeight,
+        child: Center(
+          child: SizedBox(
+            width: 22,
+            height: 22,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                AppColors.primaryForeground,
+              ),
+            ),
+          ),
+        ),
+      );
+    } else if (isPopular) {
+      buttonChild = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.bolt, color: AppColors.primaryForeground, size: iconSize),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              context.t('premium.subscribe.now'),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: AppColors.primaryForeground,
+                fontWeight: FontWeight.bold,
+                fontSize: fontSize,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      );
+    } else {
+      buttonChild = Text(
+        context.t('premium.subscribe.now'),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+          fontSize: fontSize,
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    if (isPopular) {
+      return SizedBox(
+        width: double.infinity,
+        height: minButtonHeight,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: AppColors.gradientPinkToPurple,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: ElevatedButton(
+            onPressed: isLoading ? null : () => _purchaseProduct(product),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, minButtonHeight),
+              fixedSize: const Size(double.infinity, minButtonHeight),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: EdgeInsets.symmetric(vertical: buttonPadding),
+              backgroundColor: Colors.transparent,
+              foregroundColor: AppColors.primaryForeground,
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: buttonChild,
+          ),
+        ),
+      );
+    }
+
     return SizedBox(
       width: double.infinity,
+      height: minButtonHeight,
       child: ElevatedButton(
         onPressed: isLoading ? null : () => _purchaseProduct(product),
-        style:
-            ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: buttonPadding),
-                  backgroundColor: isPopular ? null : AppColors.primary,
-                  foregroundColor: AppColors.primaryForeground,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                )
-                .copyWith(
-                  backgroundColor: isPopular
-                      ? WidgetStateProperty.all<Color>(Colors.transparent)
-                      : null,
-                )
-                .copyWith(
-                  overlayColor: WidgetStateProperty.all<Color>(
-                    AppColors.primary.withOpacity(0.1),
-                  ),
-                ),
-        child: isPopular
-            ? Container(
-                decoration: BoxDecoration(
-                  gradient: AppColors.gradientPinkToPurple,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                padding: EdgeInsets.symmetric(vertical: buttonPadding),
-                child: isLoading
-                    ? SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.primaryForeground,
-                          ),
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.bolt,
-                            color: AppColors.primaryForeground,
-                            size: iconSize,
-                          ),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: Text(
-                              context.t('premium.subscribe.now'),
-                              style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(
-                                    color: AppColors.primaryForeground,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: fontSize,
-                                  ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-              )
-            : isLoading
-            ? SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    AppColors.primaryForeground,
-                  ),
-                ),
-              )
-            : Text(
-                context.t('premium.subscribe.now'),
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: fontSize,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(double.infinity, minButtonHeight),
+          fixedSize: const Size(double.infinity, minButtonHeight),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          padding: EdgeInsets.symmetric(vertical: buttonPadding),
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.primaryForeground,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        child: buttonChild,
       ),
     );
   }
@@ -930,82 +994,105 @@ class _ProScreenState extends State<ProScreen> {
   Widget _buildDummyPurchaseButton(double screenHeight) {
     final isSmallScreen = screenHeight < 700;
     final buttonPadding = isSmallScreen ? 12.0 : 14.0;
+    const double minButtonHeight = 48.0;
     final iconSize = isSmallScreen ? 18.0 : 20.0;
     final fontSize = isSmallScreen ? 15.0 : 16.0;
 
     return SizedBox(
       width: double.infinity,
+      height: minButtonHeight,
       child: Container(
         decoration: BoxDecoration(
           gradient: AppColors.gradientPinkToPurple,
           borderRadius: BorderRadius.circular(14),
         ),
         child: ElevatedButton(
-          onPressed: () async {
-            // Try to load products first
-            setState(() {
-              _isLoadingProducts = true;
-            });
+          onPressed: _isLoadingProducts
+              ? null
+              : () async {
+                  setState(() {
+                    _isLoadingProducts = true;
+                  });
 
-            final success = await BillingService.loadProducts(retry: true);
+                  try {
+                    final success = await BillingService.loadProducts(
+                      retry: true,
+                    );
 
-            if (mounted) {
-              setState(() {
-                _isLoadingProducts = false;
-              });
-
-              if (!success) {
-                // Show snackbar with error message
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      BillingService.lastError ??
-                          context.t('premium.subscription.loading'),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                    backgroundColor: Theme.of(context).cardColor,
-                    duration: const Duration(seconds: 3),
-                  ),
-                );
-              } else {
-                // Products loaded successfully, try to get the product and purchase
-                final products = BillingService.products;
-                ProductDetails? weeklyProduct;
-
-                try {
-                  weeklyProduct = products.firstWhere(
-                    (p) => p.id == BillingService.weeklySubscriptionId,
-                  );
-                } catch (e) {
-                  if (products.isNotEmpty) {
-                    weeklyProduct = products.first;
-                  }
-                }
-
-                if (weeklyProduct != null && mounted) {
-                  // Trigger purchase with the loaded product
-                  await _purchaseProduct(weeklyProduct);
-                } else if (mounted) {
-                  // Still no product available
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.t('premium.subscription.loading'),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
+                    if (!mounted) return;
+                    if (!success) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            BillingService.lastError ??
+                                context.t('premium.subscription.loading'),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                          backgroundColor: Theme.of(context).cardColor,
+                          duration: const Duration(seconds: 3),
                         ),
-                      ),
-                      backgroundColor: Theme.of(context).cardColor,
-                      duration: const Duration(seconds: 3),
-                    ),
-                  );
-                }
-              }
-            }
-          },
+                      );
+                      return;
+                    }
+
+                    final products = BillingService.products;
+                    ProductDetails? weeklyProduct;
+                    try {
+                      weeklyProduct = products.firstWhere(
+                        (p) => p.id == BillingService.weeklySubscriptionId,
+                      );
+                    } catch (e) {
+                      if (products.isNotEmpty) {
+                        weeklyProduct = products.first;
+                      }
+                    }
+
+                    if (weeklyProduct != null && mounted) {
+                      await _purchaseProduct(weeklyProduct);
+                    } else if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            context.t('premium.subscription.loading'),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                          backgroundColor: Theme.of(context).cardColor,
+                          duration: const Duration(seconds: 3),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            BillingService.lastError ??
+                                context.t('premium.subscription.loading'),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                          backgroundColor: Theme.of(context).cardColor,
+                          duration: const Duration(seconds: 3),
+                        ),
+                      );
+                    }
+                  } finally {
+                    if (mounted) {
+                      setState(() {
+                        _isLoadingProducts = false;
+                      });
+                    }
+                  }
+                },
           style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, minButtonHeight),
+            fixedSize: const Size(double.infinity, minButtonHeight),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             padding: EdgeInsets.symmetric(vertical: buttonPadding),
             backgroundColor: Colors.transparent,
             foregroundColor: AppColors.primaryForeground,
@@ -1016,12 +1103,17 @@ class _ProScreenState extends State<ProScreen> {
           ),
           child: _isLoadingProducts
               ? SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColors.primaryForeground,
+                  height: minButtonHeight,
+                  child: Center(
+                    child: SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.primaryForeground,
+                        ),
+                      ),
                     ),
                   ),
                 )
@@ -1060,11 +1152,13 @@ class _LinkText extends StatelessWidget {
   final String text;
   final TextStyle style;
   final VoidCallback onTap;
+  final int maxLines;
 
   const _LinkText({
     required this.text,
     required this.style,
     required this.onTap,
+    this.maxLines = 2,
   });
 
   @override
@@ -1072,7 +1166,13 @@ class _LinkText extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Text(text, style: style),
+      child: Text(
+        text,
+        style: style,
+        maxLines: maxLines,
+        softWrap: true,
+        overflow: TextOverflow.ellipsis,
+      ),
     );
   }
 }

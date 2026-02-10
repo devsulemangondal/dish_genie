@@ -1412,6 +1412,9 @@ class AppLocalizationsRu extends AppLocalizations {
       'Нужна помощь? Спросите меня о советах, заменах или пошаговых инструкциях!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Высокобелковый';
 
   @override

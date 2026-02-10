@@ -389,6 +389,7 @@ extension L10nExtension on BuildContext {
     'recipe.detail.fiber': (l) => l.recipeDetailFiber,
     'recipe.detail.generate.custom': (l) => l.recipeDetailGenerateCustom,
     'recipe.detail.genie.help': (l) => l.recipeDetailGenieHelp,
+    'recipe.detail.no.image': (l) => l.recipeDetailNoImage,
     'recipe.detail.ingredients': (l) => l.recipeDetailIngredients,
     'recipe.detail.instructions': (l) => l.recipeDetailInstructions,
     'recipe.detail.min': (l) => l.recipeDetailMin,

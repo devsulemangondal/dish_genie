@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../core/localization/l10n_extension.dart';
 import '../../core/localization/language_config.dart';
 import '../../core/theme/colors.dart';
 import '../../providers/language_provider.dart';
-import '../../widgets/common/sticky_header.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
 import '../../services/storage_service.dart';
+import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/ads/screen_native_ad_widget.dart';
+import '../../widgets/common/sticky_header.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
@@ -269,7 +270,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                               ? Theme.of(
                                   context,
                                 ).colorScheme.surfaceContainerHighest
-                              : Theme.of(context).colorScheme.surfaceVariant,
+                              : Theme.of(
+                                  context,
+                                ).colorScheme.surfaceContainerHighest,
                         ),
                         child: Icon(
                           Icons.flag,
@@ -298,9 +301,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                               ? FontWeight.bold
                               : FontWeight.w600,
                           color: isSelected
-                              ? (isDark
-                                    ? Colors.white
-                                    : Colors.black)
+                              ? (isDark ? Colors.white : Colors.black)
                               : Theme.of(context).colorScheme.onSurface,
                         ),
                       ),

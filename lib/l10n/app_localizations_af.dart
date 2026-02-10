@@ -1410,6 +1410,9 @@ class AppLocalizationsAf extends AppLocalizations {
       'Hulp nodig? Vra my vir wenke, vervangings of stap-vir-stap leiding!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Hoë Proteïen';
 
   @override

@@ -1384,6 +1384,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get recipeDetailGenieHelp => '도움이 필요하신가요? 팁, 대체 재료, 단계별 안내를 물어보세요!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => '고단백';
 
   @override

@@ -1394,6 +1394,9 @@ class AppLocalizationsTh extends AppLocalizations {
       'ต้องการความช่วยเหลือไหม? ถามฉันเพื่อรับเคล็ดลับ ทดแทน หรือคำแนะนำทีละขั้นตอน!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'โปรตีนสูง';
 
   @override

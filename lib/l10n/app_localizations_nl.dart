@@ -1409,6 +1409,9 @@ class AppLocalizationsNl extends AppLocalizations {
       'Hulp nodig? Vraag me om tips, vervangingen of stap-voor-stap begeleiding!';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => 'Hoog Eiwit';
 
   @override

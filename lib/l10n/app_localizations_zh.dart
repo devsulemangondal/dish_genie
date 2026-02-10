@@ -1379,6 +1379,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recipeDetailGenieHelp => '需要帮助？问我有关技巧、替代品或逐步指导！';
 
   @override
+  String get recipeDetailNoImage => 'No image';
+
+  @override
   String get tagsHighProtein => '高蛋白';
 
   @override

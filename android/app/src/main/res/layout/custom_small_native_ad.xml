@@ -39,20 +39,23 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="4dp">
 
-            <!-- Red "AD" Badge - Pill shaped -->
+            <!-- Ad attribution badge - Google policy: min 15dp x 15dp, clear "Ad" label -->
             <TextView
                 android:id="@+id/ad_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AD"
+                android:minWidth="@dimen/native_ad_badge_min_size"
+                android:minHeight="@dimen/native_ad_badge_min_size"
+                android:text="Ad"
                 android:textColor="#FFFFFF"
-                android:textSize="9sp"
+                android:textSize="@dimen/native_ad_badge_text_size"
                 android:textStyle="bold"
+                android:gravity="center"
                 android:background="@drawable/ad_badge_background"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:layout_marginEnd="6dp" />
 
             <!-- Headline - same color as body but extra bold for emphasis -->
@@ -88,11 +91,12 @@
 
     </LinearLayout>
 
-    <!-- Right Section: Call to Action Button - 3/4 of image height -->
+    <!-- Right Section: Call to Action Button - fixed height so it doesn't change on click -->
     <TextView
         android:id="@+id/ad_call_to_action"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/small_ad_cta_height"
+        android:minWidth="@dimen/small_ad_cta_min_width"
         android:text="INSTALL"
         android:textColor="#FFFFFF"
         android:textSize="13sp"
@@ -100,10 +104,8 @@
         android:background="@drawable/install_button_background"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:minHeight="@dimen/small_ad_cta_height"
-        android:minWidth="@dimen/small_ad_cta_min_width"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         android:gravity="center"
         android:layout_gravity="center_vertical"
         android:clickable="true"

@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../config/pro_config.dart';
-import '../../services/storage_service.dart';
+import '../../core/localization/l10n_extension.dart';
+import '../../core/theme/colors.dart';
 import '../../services/remote_config_service.dart';
 import '../../services/startup_service.dart';
-import '../../core/theme/colors.dart';
-import '../../core/localization/l10n_extension.dart';
-import 'dart:math' as math;
+import '../../services/storage_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -29,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _translateAnimation;
   late Animation<double> _glowAnimation;
   int _stage = 0;
-  bool _isVisible = true;
+  final bool _isVisible = true;
 
   @override
   void initState() {
@@ -109,31 +111,36 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Initialize StorageService first to ensure SharedPreferences is ready
     await StorageService.initialize();
-    
+
     // Start all async operations in parallel
-    final firstLaunchCheck = StorageService.isFirstLaunch().then(
-      (v) {
-        isFirstLaunchResult = v;
-        debugPrint('[SplashScreen] ✅ First launch check: $v');
-      },
-    ).catchError((e) {
-      debugPrint('[SplashScreen] ❌ First launch check error: $e');
-      isFirstLaunchResult = true; // Default to true on error (assume first launch)
-    });
-    
+    final firstLaunchCheck = StorageService.isFirstLaunch()
+        .then((v) {
+          isFirstLaunchResult = v;
+          debugPrint('[SplashScreen] ✅ First launch check: $v');
+        })
+        .catchError((e) {
+          debugPrint('[SplashScreen] ❌ First launch check error: $e');
+          isFirstLaunchResult =
+              true; // Default to true on error (assume first launch)
+        });
+
     final languageCheck = StorageService.isLanguageSelected().then(
       (v) => languageSelectedResult = v,
     );
-    
+
     // Wait for critical startup tasks (with timeout to avoid blocking too long)
-    final startupCheck = StartupService.start().timeout(
-      const Duration(seconds: 3),
-      onTimeout: () {
-        debugPrint('[SplashScreen] ⚠️ StartupService timeout, continuing...');
-      },
-    ).catchError((e) {
-      debugPrint('[SplashScreen] ⚠️ StartupService error: $e');
-    });
+    final startupCheck = StartupService.start()
+        .timeout(
+          const Duration(seconds: 3),
+          onTimeout: () {
+            debugPrint(
+              '[SplashScreen] ⚠️ StartupService timeout, continuing...',
+            );
+          },
+        )
+        .catchError((e) {
+          debugPrint('[SplashScreen] ⚠️ StartupService error: $e');
+        });
 
     // Wait for minimum splash duration AND critical tasks to complete
     await Future.wait([
@@ -164,7 +171,9 @@ class _SplashScreenState extends State<SplashScreen>
           const Duration(milliseconds: 500),
           onTimeout: () => true, // Default to true (first launch) if timeout
         );
-        debugPrint('[SplashScreen] ✅ First launch check after wait: $isFirstLaunchResult');
+        debugPrint(
+          '[SplashScreen] ✅ First launch check after wait: $isFirstLaunchResult',
+        );
       } catch (e) {
         debugPrint('[SplashScreen] ❌ Error getting first launch: $e');
         isFirstLaunchResult = true; // Default to true on error
@@ -174,20 +183,29 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
 
     // First launch flow: Splash → Pro → Inter Ad → Language
-    final isFirstLaunch = isFirstLaunchResult ?? true; // Default to true for first launch
-    debugPrint('[SplashScreen] 🚀 Navigation decision - isFirstLaunch: $isFirstLaunch, languageSelected: $languageSelectedResult');
-    
+    final isFirstLaunch =
+        isFirstLaunchResult ?? true; // Default to true for first launch
+    debugPrint(
+      '[SplashScreen] 🚀 Navigation decision - isFirstLaunch: $isFirstLaunch, languageSelected: $languageSelectedResult',
+    );
+
     if (!mounted) return;
-    
+
     if (isFirstLaunch) {
-      // On iOS, skip Pro screen when showProOnIos is false
-      if (Platform.isIOS && !ProConfig.showProOnIos) {
-        debugPrint('[SplashScreen] 📱 iOS: Pro hidden, going to language-selection');
+      // First launch (Android & iOS): show Pro only when weekly_sub is true
+      final openProFirstLaunch = await _shouldOpenPro();
+      if (!mounted) return;
+      if (openProFirstLaunch) {
+        debugPrint(
+          '[SplashScreen] 📱 First launch: weekly_sub true, navigating to Pro (Android & iOS)',
+        );
+        context.go('/pro?src=splash');
+      } else {
+        debugPrint(
+          '[SplashScreen] 📱 First launch: weekly_sub false, skipping Pro, going to language-selection',
+        );
         context.go('/language-selection');
-        return;
       }
-      debugPrint('[SplashScreen] 📱 Navigating to Pro screen (first launch)');
-      context.go('/pro?src=splash');
       return;
     }
 
@@ -229,24 +247,23 @@ class _SplashScreenState extends State<SplashScreen>
 
   // _navigateAfterAd removed: interstitial is now after Pro, not on splash.
 
+  /// Ensures Remote Config is initialized and fetched so weekly_sub reflects Firebase (even on first launch).
   Future<bool> _shouldOpenPro() async {
-    // Keep this fast: if Remote Config isn't ready quickly, fall back to defaults.
     try {
+      // 1. Initialize (required for first launch; Firebase is already initialized in main.dart).
       final ok = await RemoteConfigService.initialize().timeout(
-        const Duration(seconds: 2),
+        const Duration(seconds: 3),
         onTimeout: () => false,
       );
       if (!ok) return RemoteConfigService.weeklySub;
 
-      // If disabled, try one quick fetch to avoid being stuck on cached/defaults.
-      if (!RemoteConfigService.weeklySub) {
-        unawaited(
-          RemoteConfigService.fetchAndActivate().timeout(
-            const Duration(seconds: 2),
-            onTimeout: () {},
-          ),
-        );
-      }
+      // 2. Fetch and activate so we get server values on first launch (not just defaults).
+      await RemoteConfigService.fetchAndActivate().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {},
+      );
+
+      // 3. Now weeklySub reflects Firebase (or cached/default if fetch failed).
       return RemoteConfigService.weeklySub;
     } catch (_) {
       return RemoteConfigService.weeklySub;
