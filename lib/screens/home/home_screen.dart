@@ -297,6 +297,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     final crossAxisCount = screenWidth > 600
                                         ? 4
                                         : 2;
+                                    // Slightly taller cards only on very small screens (< 360px)
+                                    final childAspectRatio = screenWidth < 360 ? 1.1 : 1.4;
                                     return GridView.count(
                                       shrinkWrap: true,
                                       physics:
@@ -304,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       crossAxisCount: crossAxisCount,
                                       crossAxisSpacing: 12,
                                       mainAxisSpacing: 12,
-                                      childAspectRatio: 1.4,
+                                      childAspectRatio: childAspectRatio,
                                       children: [
                                         QuickActionCard(
                                           title: context.t(
