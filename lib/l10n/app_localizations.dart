@@ -3310,6 +3310,12 @@ abstract class AppLocalizations {
   /// **'Restore Purchases'**
   String get premiumRestorePurchases;
 
+  /// No description provided for @premiumContinueWithAd.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with ad'**
+  String get premiumContinueWithAd;
+
   /// No description provided for @premiumPrivacyPolicy.
   ///
   /// In en, this message translates to:

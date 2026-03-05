@@ -1643,6 +1643,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumRestorePurchases => 'استعادة المشتريات';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'سياسة الخصوصية';
 
   @override

@@ -1646,6 +1646,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumRestorePurchases => 'Restore Purchases';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Privacy Policy';
 
   @override

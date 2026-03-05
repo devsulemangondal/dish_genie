@@ -1656,6 +1656,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get premiumRestorePurchases => 'بازیابی خریدها';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'سیاست حفظ حریم خصوصی';
 
   @override

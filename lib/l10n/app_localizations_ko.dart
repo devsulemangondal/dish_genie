@@ -1624,6 +1624,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumRestorePurchases => '구매 복원';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => '개인 정보 보호 정책';
 
   @override

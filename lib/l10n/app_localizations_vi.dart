@@ -1651,6 +1651,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumRestorePurchases => 'Khôi phục mua hàng';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Chính sách bảo mật';
 
   @override

@@ -1623,6 +1623,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumRestorePurchases => '購入を復元する';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'プライバシーポリシー';
 
   @override

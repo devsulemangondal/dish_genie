@@ -1651,6 +1651,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get premiumRestorePurchases => 'Aankopen herstellen';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Privacybeleid';
 
   @override

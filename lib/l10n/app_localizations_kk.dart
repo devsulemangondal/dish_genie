@@ -1657,6 +1657,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get premiumRestorePurchases => 'Сатып алуларды қалпына келтіру';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Құпиялылық саясаты';
 
   @override

@@ -1655,6 +1655,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get premiumRestorePurchases => 'Pulihkan Pembelian';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Kebijakan Privasi';
 
   @override

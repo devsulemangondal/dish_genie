@@ -362,6 +362,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                           delay: 400,
                                           onTap: () => context.push('/chat'),
                                         ),
+                                        QuickActionCard(
+                                          title:
+                                              context.t('common.favorites'),
+                                          description: context.t(
+                                            'favorites.subtitle',
+                                          ),
+                                          icon: Icons.favorite,
+                                          iconGradient: [
+                                            AppColors.geniePink,
+                                            Colors.red.shade400,
+                                          ],
+                                          delay: 500,
+                                          onTap: () =>
+                                              context.push('/favorites'),
+                                        ),
                                       ],
                                     ); // GridView.count closes here
                                   }, // builder function closes

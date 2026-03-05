@@ -257,46 +257,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                       Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF1A1F35)
                       : AppColors.genieBlush,
-                  rightContent: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () => context.push('/favorites'),
-                        borderRadius: BorderRadius.circular(20),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.favorite_border,
-                                size: 16,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                context.t('common.favorites'),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                 ),
                 // Tabs
                 Container(

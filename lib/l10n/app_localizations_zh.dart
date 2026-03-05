@@ -1617,6 +1617,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumRestorePurchases => '恢复购买';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => '隐私政策';
 
   @override

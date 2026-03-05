@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../config/pro_config.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
+import '../../services/ad_service.dart';
 import '../../services/remote_config_service.dart';
 import '../../services/startup_service.dart';
 import '../../services/storage_service.dart';
@@ -202,9 +203,9 @@ class _SplashScreenState extends State<SplashScreen>
         context.go('/pro?src=splash');
       } else {
         debugPrint(
-          '[SplashScreen] 📱 First launch: weekly_sub false, skipping Pro, going to language-selection',
+          '[SplashScreen] 📱 First launch: weekly_sub false, skipping Pro, showing splash inter then language-selection',
         );
-        context.go('/language-selection');
+        await _showSplashInterstitialThenGo('/language-selection');
       }
       return;
     }
@@ -216,33 +217,64 @@ class _SplashScreenState extends State<SplashScreen>
       // On iOS, skip Pro screen when showProOnIos is false
       if (Platform.isIOS && !ProConfig.showProOnIos) {
         final isLanguageSelected = languageSelectedResult ?? false;
-        if (!isLanguageSelected) {
-          context.go('/language-selection');
-        } else {
-          context.go('/');
-        }
+        if (!mounted) return;
+        final route = !isLanguageSelected ? '/language-selection' : '/';
+        await _showSplashInterstitialThenGo(route);
         return;
       }
       context.go('/pro?src=splash');
       return;
     }
 
-    // If Pro is disabled remotely or fails, continue with the core app flow.
+    // If Pro is disabled remotely (weekly_sub false), show splash inter then continue with the core app flow.
     try {
       final isLanguageSelected = languageSelectedResult ?? false;
       if (!mounted) return;
-      if (!isLanguageSelected) {
-        context.go('/language-selection');
-      } else {
-        context.go('/');
-      }
+      final route = !isLanguageSelected ? '/language-selection' : '/';
+      await _showSplashInterstitialThenGo(route);
     } catch (e) {
       debugPrint('[SplashScreen] ❌ Error checking language: $e');
       // Default to language selection on error
       if (mounted) {
-        context.go('/language-selection');
+        await _showSplashInterstitialThenGo('/language-selection');
       }
     }
+  }
+
+  /// When IAP is disabled we skip Pro; show the same interstitial (splash inter) on splash before navigating.
+  Future<void> _showSplashInterstitialThenGo(String route) async {
+    if (!mounted) return;
+    try {
+      await RemoteConfigService.initialize();
+      final shouldShow =
+          RemoteConfigService.showAds && RemoteConfigService.splashInter;
+      if (!shouldShow) {
+        if (mounted) context.go(route);
+        return;
+      }
+    } catch (_) {
+      if (mounted) context.go(route);
+      return;
+    }
+
+    bool hasNavigated = false;
+    void navigate() {
+      if (hasNavigated || !mounted) return;
+      hasNavigated = true;
+      context.go(route);
+    }
+
+    await AdService.showInterstitialAdForType(
+      adType: 'splash',
+      context: context,
+      loadAdFunction: () => AdService.loadSplashInterstitialAd(),
+      onAdDismissed: navigate,
+      onAdFailedToShow: (_) => navigate(),
+    );
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!hasNavigated && mounted) navigate();
+    });
   }
 
   // _navigateAfterAd removed: interstitial is now after Pro, not on splash.

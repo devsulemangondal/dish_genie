@@ -1650,6 +1650,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get premiumRestorePurchases => 'खरीदारी बहाल करें';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'गोपनीयता नीति';
 
   @override

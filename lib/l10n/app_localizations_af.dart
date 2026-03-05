@@ -1652,6 +1652,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get premiumRestorePurchases => 'Herstel aankope';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Privaatheidsbeleid';
 
   @override

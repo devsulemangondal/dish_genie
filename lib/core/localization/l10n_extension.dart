@@ -638,6 +638,7 @@ extension L10nExtension on BuildContext {
     'premium.full.access': (l) => l.premiumFullAccess,
     'premium.subscribe.now': (l) => l.premiumSubscribeNow,
     'premium.restore.purchases': (l) => l.premiumRestorePurchases,
+    'premium.continue.with.ad': (l) => l.premiumContinueWithAd,
     'premium.privacy.policy': (l) => l.premiumPrivacyPolicy,
     'premium.terms.of.use': (l) => l.premiumTermsOfUse,
     'premium.failed.to.initiate.purchase': (l) =>

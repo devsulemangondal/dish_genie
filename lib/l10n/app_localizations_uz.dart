@@ -1659,6 +1659,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get premiumRestorePurchases => 'Xaridlarni tiklash';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Maxfiylik siyosati';
 
   @override

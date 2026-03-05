@@ -6,7 +6,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "ar": [
@@ -16,7 +17,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "bn": [
@@ -26,7 +28,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "de": [
@@ -36,7 +39,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "fa": [
@@ -46,7 +50,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "fil": [
@@ -56,7 +61,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "fr": [
@@ -66,7 +72,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "hi": [
@@ -76,7 +83,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "id": [
@@ -86,7 +94,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "it": [
@@ -96,7 +105,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "ja": [
@@ -106,7 +116,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "kk": [
@@ -116,7 +127,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "ko": [
@@ -126,7 +138,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "ms": [
@@ -136,7 +149,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "nl": [
@@ -146,7 +160,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "pl": [
@@ -156,7 +171,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "pt": [
@@ -166,7 +182,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "ru": [
@@ -176,7 +193,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "th": [
@@ -186,7 +204,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "tr": [
@@ -196,7 +215,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "uk": [
@@ -206,7 +226,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "ur": [
@@ -216,7 +237,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "uz": [
@@ -226,7 +248,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "vi": [
@@ -236,7 +259,8 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ],
 
   "zh": [
@@ -246,6 +270,7 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumContinueWithAd"
   ]
 }

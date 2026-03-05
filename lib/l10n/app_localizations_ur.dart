@@ -1655,6 +1655,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get premiumRestorePurchases => 'خریداری کو بحال کریں';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'رازداری کی پالیسی';
 
   @override

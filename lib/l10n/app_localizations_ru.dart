@@ -1654,6 +1654,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get premiumRestorePurchases => 'Восстановить покупки';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Политика конфиденциальности';
 
   @override

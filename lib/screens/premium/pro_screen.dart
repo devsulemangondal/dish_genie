@@ -488,6 +488,13 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                                 ] else ...[
                                   _buildDummyPurchaseButton(availableHeight),
                                 ],
+                                if (!isPremium)
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: availableHeight * 0.008,
+                                    ),
+                                    child: _buildContinueWithAdButton(),
+                                  ),
                               ],
                               SizedBox(height: availableHeight * 0.01),
                               _buildCancelTermsPrivacyLine(screenWidth),
@@ -699,7 +706,33 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     );
   }
 
-  /// Cancel subscription • Terms • Privacy Policy (each tappable). Wraps to multiple lines when needed for long translations.
+  /// Continue with ad button - same functionality as close (X) button
+  Widget _buildContinueWithAdButton() {
+    return TextButton(
+      onPressed: _isLoading ? null : () async => await _exitProFlow(),
+      style: TextButton.styleFrom(
+        foregroundColor: Theme.of(
+          context,
+        ).colorScheme.onSurface.withOpacity(0.7),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(
+        context.t('premium.continue.with.ad'),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          decoration: TextDecoration.underline,
+          decorationColor: Theme.of(
+            context,
+          ).colorScheme.onSurface.withOpacity(0.5),
+        ),
+      ),
+    );
+  }
+
+  /// Cancel subscription • Terms • Privacy Policy (each tappable).
+  /// Responsive: scales to fit one line on all devices via FittedBox.
+  /// Links are center-aligned when wrapped.
   Widget _buildCancelTermsPrivacyLine(double screenWidth) {
     final isSmallScreen = screenWidth < 360;
     final fontSize = isSmallScreen ? 10.0 : 12.0;
@@ -710,61 +743,57 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
       decorationColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
     );
     const separator = ' • ';
-    const spacing = 8.0;
-    const runSpacing = 4.0;
-    final contentMaxWidth = screenWidth - 32;
-    // Reserve space for 2 separators and 2 gaps so first run doesn't overflow (RenderFlex)
-    const reservedForSeparatorsAndSpacing = 72.0;
-    final maxLinkWidth =
-        (contentMaxWidth - reservedForSeparatorsAndSpacing) / 3;
-    final safeMaxLinkWidth = maxLinkWidth.clamp(60.0, double.infinity);
 
     return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: contentMaxWidth),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          runAlignment: WrapAlignment.center,
-          spacing: spacing,
-          runSpacing: runSpacing,
-          children: [
-            SizedBox(
-              width: safeMaxLinkWidth,
-              child: _LinkText(
-                text: context.t('premium.terms.of.use'),
-                style: style,
-                onTap: () => _launchURL(
-                  'https://sites.google.com/view/dodishgenieterms/home',
-                ),
-                maxLines: 2,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final maxWidth = constraints.maxWidth;
+          return FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _LinkText(
+                    text: context.t('premium.terms.of.use'),
+                    style: style,
+                    textAlign: TextAlign.center,
+                    onTap: () => _launchURL(
+                      'https://sites.google.com/view/dodishgenieterms/home',
+                    ),
+                    maxLines: 1,
+                  ),
+                  Text(separator, style: style),
+                  const SizedBox(width: 6),
+                  _LinkText(
+                    text: context.t('premium.cancel.any.time'),
+                    style: style,
+                    textAlign: TextAlign.center,
+                    onTap: () => _launchURL(
+                      'https://play.google.com/store/account/subscriptions',
+                    ),
+                    maxLines: 1,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(separator, style: style),
+                  const SizedBox(width: 6),
+                  _LinkText(
+                    text: context.t('premium.privacy.policy'),
+                    style: style,
+                    textAlign: TextAlign.center,
+                    onTap: () => _launchURL(
+                      'https://sites.google.com/view/dodishgenie/home',
+                    ),
+                    maxLines: 1,
+                  ),
+                ],
               ),
             ),
-            Text(separator, style: style),
-            SizedBox(
-              width: safeMaxLinkWidth,
-              child: _LinkText(
-                text: context.t('premium.cancel.any.time'),
-                style: style,
-                onTap: () => _launchURL(
-                  'https://play.google.com/store/account/subscriptions',
-                ),
-                maxLines: 2,
-              ),
-            ),
-            Text(separator, style: style),
-            SizedBox(
-              width: safeMaxLinkWidth,
-              child: _LinkText(
-                text: context.t('premium.privacy.policy'),
-                style: style,
-                onTap: () => _launchURL(
-                  'https://sites.google.com/view/dodishgenie/home',
-                ),
-                maxLines: 2,
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -1153,12 +1182,14 @@ class _LinkText extends StatelessWidget {
   final TextStyle style;
   final VoidCallback onTap;
   final int maxLines;
+  final TextAlign textAlign;
 
   const _LinkText({
     required this.text,
     required this.style,
     required this.onTap,
-    this.maxLines = 2,
+    this.maxLines = 1,
+    this.textAlign = TextAlign.center,
   });
 
   @override
@@ -1170,7 +1201,8 @@ class _LinkText extends StatelessWidget {
         text,
         style: style,
         maxLines: maxLines,
-        softWrap: true,
+        textAlign: textAlign,
+        softWrap: false,
         overflow: TextOverflow.ellipsis,
       ),
     );

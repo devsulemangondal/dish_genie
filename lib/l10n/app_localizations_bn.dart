@@ -1654,6 +1654,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get premiumRestorePurchases => 'কেনাকাটা পুনরুদ্ধার করুন';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'গোপনীয়তা নীতি';
 
   @override

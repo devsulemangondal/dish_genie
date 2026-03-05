@@ -1651,6 +1651,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get premiumRestorePurchases => 'Käufe wiederherstellen';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Datenschutzrichtlinie';
 
   @override

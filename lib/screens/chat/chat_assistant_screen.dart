@@ -82,6 +82,9 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     super.initState();
     VoiceService.initialize();
     _trackCardScreenOpen();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<ChatProvider>().ensureChatLoaded();
+    });
   }
 
   /// Track when card screen is opened
@@ -445,6 +448,37 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                     rightContent: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // Message counter for free users (e.g. 2/5)
+                        if (!premiumProvider.isPremium &&
+                            aiChefLimit != null) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surface
+                                  .withOpacity(0.9),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Theme.of(context)
+                                    .dividerColor
+                                    .withOpacity(0.3),
+                              ),
+                            ),
+                            child: Text(
+                              '$aiChefMessageCount/$aiChefLimit',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                        ],
                         IconButton(
                           icon: const Icon(Icons.history),
                           onPressed: () => context.go('/chat-history'),
@@ -870,10 +904,14 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     bool isLoading,
   ) {
     final padding = _getResponsivePadding(context);
+    // Only show separate typing row when waiting for first AI response (last msg is user)
+    // When we have an assistant message (empty or not), show typing inside that bubble only
+    final showTypingRow = isLoading &&
+        (messages.isEmpty || messages.last.isUser);
     return ListView.builder(
       controller: _scrollController,
       padding: EdgeInsets.all(padding),
-      itemCount: messages.length + (isLoading ? 1 : 0),
+      itemCount: messages.length + (showTypingRow ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == messages.length) {
           return _buildTypingIndicator(context);
@@ -972,16 +1010,40 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                         ),
                       )
                     : isStreaming
-                    ? TypewriterText(
-                        key: ValueKey('typewriter_${message.id}'),
-                        text: message.content,
-                        style: TextStyle(
-                          fontSize: messageFontSize,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        speed: const Duration(milliseconds: 15),
-                        animate: true,
-                      )
+                    ? (message.content.isEmpty
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                context.t('chat.thinking'),
+                                style: TextStyle(
+                                  fontSize: messageFontSize,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                              SizedBox(width: screenWidth < 360 ? 6 : 8),
+                              SizedBox(
+                                width: screenWidth < 360 ? 18 : 20,
+                                height: screenWidth < 360 ? 18 : 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : TypewriterText(
+                            key: ValueKey('typewriter_${message.id}'),
+                            text: message.content,
+                            style: TextStyle(
+                              fontSize: messageFontSize,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            speed: const Duration(milliseconds: 15),
+                            animate: false,
+                          ))
                     : SelectableText(
                         _getMessageContent(context, message.content),
                         style: TextStyle(

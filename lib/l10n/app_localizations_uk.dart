@@ -1653,6 +1653,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get premiumRestorePurchases => 'Відновити покупки';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Політика конфіденційності';
 
   @override

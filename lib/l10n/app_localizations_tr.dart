@@ -1655,6 +1655,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumRestorePurchases => 'Satın Alınanları Geri Yükle';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Gizlilik Politikası';
 
   @override

@@ -1657,6 +1657,9 @@ class AppLocalizationsMs extends AppLocalizations {
   String get premiumRestorePurchases => 'Pulihkan Pembelian';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Dasar Privasi';
 
   @override

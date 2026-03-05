@@ -99,10 +99,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _openFeedbackEmail() async {
     const email = 'support@dishgenie.app';
     const subject = 'DishGenie Feedback';
-    final emailUri = Uri(
-      scheme: 'mailto',
-      path: email,
-      queryParameters: <String, String>{'subject': subject},
+    // Use %20 for spaces so Gmail shows "DishGenie Feedback" instead of "DishGenie+Feedback"
+    final emailUri = Uri.parse(
+      'mailto:$email?subject=${Uri.encodeComponent(subject)}',
     );
 
     try {

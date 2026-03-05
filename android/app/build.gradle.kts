@@ -64,3 +64,8 @@ android {
 flutter {
     source = "../.."
 }
+dependencies {
+  // Use BOM so all Firebase libs (from Flutter plugins) share one version. Do not add duplicate
+  // implementation("com.google.firebase:firebase-analytics") here—Flutter firebase_analytics plugin provides it; duplicate can cause crash on launch.
+  implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+}

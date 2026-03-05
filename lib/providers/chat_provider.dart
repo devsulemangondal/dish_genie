@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+
 import '../data/models/chat_message.dart';
 import '../services/chat_service.dart';
 import '../services/storage_service.dart';
@@ -7,6 +9,8 @@ import '../services/storage_service.dart';
 class ChatProvider with ChangeNotifier {
   List<ChatMessage> _messages = [];
   bool _isLoading = false;
+  bool _isSendingMessage = false;
+  DateTime? _sendCompletedAt; // Block loads for 3s after send completes
   String? _conversationId;
   List<ChatConversation> _conversations = [];
 
@@ -16,13 +20,29 @@ class ChatProvider with ChangeNotifier {
   List<ChatConversation> get conversations => _conversations;
 
   ChatProvider() {
-    _loadLastActiveChat();
     _loadConversations();
+    // Defer load - chat screen will call ensureChatLoaded() when mounted
+    // to avoid loading overwriting during send
   }
+
+  /// Call when chat screen mounts. Loads last chat only if empty and not sending.
+  void ensureChatLoaded() {
+    if (_messages.isEmpty && !_shouldBlockLoad) {
+      _loadLastActiveChat();
+    }
+  }
+
+  bool get _shouldBlockLoad =>
+      _isLoading ||
+      _isSendingMessage ||
+      (_sendCompletedAt != null &&
+          DateTime.now().difference(_sendCompletedAt!).inSeconds < 3);
 
   // Load last active chat (matching web app behavior)
   Future<void> _loadLastActiveChat() async {
     try {
+      if (_shouldBlockLoad) return;
+
       // Try to load from chat history (last active chat)
       final chatHistoryJson = await StorageService.getChatHistory();
       if (chatHistoryJson != null) {
@@ -33,11 +53,15 @@ class ChatProvider with ChangeNotifier {
           final chatId = chatHistory['chatId'] as String?;
 
           if (messagesList != null && messagesList.isNotEmpty) {
-            _messages = messagesList.map((e) {
+            if (_shouldBlockLoad) return;
+            if (_messages.length > messagesList.length &&
+                _messages.isNotEmpty &&
+                !_messages.last.isUser &&
+                _messages.last.content.isEmpty)
+              return;
+            var loaded = messagesList.map((e) {
               final msgData = e as Map<String, dynamic>;
-              // Handle both web app format (role) and Flutter format (is_user)
               if (msgData.containsKey('role')) {
-                // Web app format: { id, role: 'user'|'assistant', content, timestamp }
                 return ChatMessage(
                   id:
                       msgData['id'] as String? ??
@@ -52,10 +76,16 @@ class ChatProvider with ChangeNotifier {
                   conversationId: chatId,
                 );
               } else {
-                // Flutter format: use fromJson
                 return ChatMessage.fromJson(msgData);
               }
             }).toList();
+            // Remove trailing empty assistant messages (from aborted/partial saves)
+            while (loaded.isNotEmpty &&
+                !loaded.last.isUser &&
+                loaded.last.content.isEmpty) {
+              loaded.removeLast();
+            }
+            _messages = loaded;
             _conversationId = chatId;
             notifyListeners();
             return;
@@ -73,41 +103,48 @@ class ChatProvider with ChangeNotifier {
   }
 
   Future<void> _loadMessages() async {
-    if (_conversationId != null) {
-      // Load messages for current conversation
-      final conversations = await StorageService.getChatConversations();
-      final conversation = conversations.firstWhere(
-        (c) => c['id'] == _conversationId,
-        orElse: () => {},
-      );
+    if (_conversationId == null || _shouldBlockLoad) return;
 
-      if (conversation.isNotEmpty && conversation['messages'] != null) {
-        final messagesList = conversation['messages'] as List<dynamic>;
-        _messages = messagesList.map((e) {
-          final msgData = e as Map<String, dynamic>;
-          // Handle both web app format (role) and Flutter format (is_user)
-          if (msgData.containsKey('role')) {
-            // Web app format: { id, role: 'user'|'assistant', content, timestamp }
-            return ChatMessage(
-              id:
-                  msgData['id'] as String? ??
-                  DateTime.now().millisecondsSinceEpoch.toString(),
-              content: msgData['content'] as String? ?? '',
-              isUser: msgData['role'] == 'user',
-              timestamp: msgData['timestamp'] != null
-                  ? DateTime.fromMillisecondsSinceEpoch(
-                      msgData['timestamp'] as int,
-                    )
-                  : DateTime.now(),
-              conversationId: _conversationId,
-            );
-          } else {
-            // Flutter format: use fromJson
-            return ChatMessage.fromJson(msgData);
-          }
-        }).toList();
-        notifyListeners();
+    final conversations = await StorageService.getChatConversations();
+    final conversation = conversations.firstWhere(
+      (c) => c['id'] == _conversationId,
+      orElse: () => <String, dynamic>{},
+    );
+
+    if (conversation.isNotEmpty && conversation['messages'] != null) {
+      final messagesList = conversation['messages'] as List<dynamic>;
+      if (_messages.length > messagesList.length &&
+          _messages.isNotEmpty &&
+          !_messages.last.isUser &&
+          _messages.last.content.isEmpty)
+        return;
+      var loaded = messagesList.map((e) {
+        final msgData = e as Map<String, dynamic>;
+        if (msgData.containsKey('role')) {
+          return ChatMessage(
+            id:
+                msgData['id'] as String? ??
+                DateTime.now().millisecondsSinceEpoch.toString(),
+            content: msgData['content'] as String? ?? '',
+            isUser: msgData['role'] == 'user',
+            timestamp: msgData['timestamp'] != null
+                ? DateTime.fromMillisecondsSinceEpoch(
+                    msgData['timestamp'] as int,
+                  )
+                : DateTime.now(),
+            conversationId: _conversationId,
+          );
+        } else {
+          return ChatMessage.fromJson(msgData);
+        }
+      }).toList();
+      while (loaded.isNotEmpty &&
+          !loaded.last.isUser &&
+          loaded.last.content.isEmpty) {
+        loaded.removeLast();
       }
+      _messages = loaded;
+      notifyListeners();
     }
   }
 
@@ -121,6 +158,18 @@ class ChatProvider with ChangeNotifier {
     } catch (e) {
       print('Error loading conversations: $e');
     }
+  }
+
+  Future<void> _saveChatHistoryOnly() async {
+    if (_conversationId == null || _messages.isEmpty) return;
+    try {
+      await StorageService.saveChatHistory(
+        json.encode({
+          'messages': _messages.map((m) => m.toJson()).toList(),
+          'chatId': _conversationId,
+        }),
+      );
+    } catch (_) {}
   }
 
   Future<void> _saveConversation() async {
@@ -197,10 +246,13 @@ class ChatProvider with ChangeNotifier {
   }
 
   Future<void> sendMessage(String content) async {
+    // Prevent double-send (e.g. rapid tap)
+    if (_isLoading || _isSendingMessage) return;
+
+    _isSendingMessage = true;
+
     // Create conversation ID if new chat
-    if (_conversationId == null) {
-      _conversationId = DateTime.now().millisecondsSinceEpoch.toString();
-    }
+    _conversationId ??= DateTime.now().millisecondsSinceEpoch.toString();
 
     final userMessage = ChatMessage(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -214,60 +266,54 @@ class ChatProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
+    // Save user message immediately so it survives any load race
+    await _saveChatHistoryOnly();
+
+    final assistantId = DateTime.now().millisecondsSinceEpoch.toString();
+
     try {
-      // Generate assistant message ID (but don't create empty message yet)
-      final assistantId = DateTime.now().millisecondsSinceEpoch.toString();
-
-      // Stream the response
       String fullResponse = '';
-      // Get all messages for streaming (including the new user message)
       final messagesForStream = List<ChatMessage>.from(_messages);
+      bool assistantAdded = false;
 
-      bool isFirstChunk = true;
-      
       try {
         await for (final chunk in ChatService.sendMessageStream(
           messages: messagesForStream,
         )) {
           fullResponse += chunk;
-          
-          // Create assistant message on first chunk only
-          if (isFirstChunk && fullResponse.isNotEmpty) {
-            isFirstChunk = false;
-            final assistantMessage = ChatMessage(
-              id: assistantId,
-              content: fullResponse,
-              isUser: false,
-              timestamp: DateTime.now(),
-              conversationId: _conversationId,
-            );
-            _messages.add(assistantMessage);
-            _isLoading = false; // Hide typing indicator once we have content
-            notifyListeners();
-          } else if (!isFirstChunk && fullResponse.isNotEmpty) {
-            // Update the assistant message with accumulated content
-            final index = _messages.indexWhere((m) => m.id == assistantId);
-            if (index >= 0) {
-              _messages[index] = ChatMessage(
+          if (fullResponse.isEmpty) continue;
+
+          if (!assistantAdded) {
+            assistantAdded = true;
+            _messages.add(
+              ChatMessage(
                 id: assistantId,
                 content: fullResponse,
                 isUser: false,
-                timestamp: _messages[index].timestamp,
+                timestamp: DateTime.now(),
+                conversationId: _conversationId,
+              ),
+            );
+            _isLoading = false;
+          } else {
+            final idx = _messages.indexWhere((m) => m.id == assistantId);
+            if (idx >= 0) {
+              _messages[idx] = ChatMessage(
+                id: assistantId,
+                content: fullResponse,
+                isUser: false,
+                timestamp: _messages[idx].timestamp,
                 conversationId: _conversationId,
               );
-              notifyListeners();
             }
           }
+          notifyListeners();
         }
 
-        // If no response was received, ensure loading is false
-        if (fullResponse.isEmpty) {
-          _isLoading = false;
-        }
+        if (fullResponse.isEmpty) _isLoading = false;
       } catch (streamError) {
-        // Ensure loading is false on error
         _isLoading = false;
-        // Re-throw to be caught by outer catch block
+        _messages.removeWhere((m) => m.id == assistantId);
         rethrow;
       }
 
@@ -278,7 +324,8 @@ class ChatProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print('Error sending message: $e');
-      // Remove the assistant message if there was an error (match web app behavior)
+      // Remove the assistant placeholder/partial response
+      _messages.removeWhere((m) => m.id == assistantId);
       _messages.removeWhere((m) => !m.isUser && m.content.isEmpty);
 
       // Check if it's a configuration error
@@ -308,6 +355,8 @@ class ChatProvider with ChangeNotifier {
       _messages.add(errorMessage);
     } finally {
       _isLoading = false;
+      _isSendingMessage = false;
+      _sendCompletedAt = DateTime.now();
       notifyListeners();
     }
   }

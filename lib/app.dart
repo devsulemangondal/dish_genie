@@ -51,6 +51,25 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  String? _getCurrentRoutePath() {
+    try {
+      final router = _router;
+      if (router == null) return null;
+      final config = router.routerDelegate.currentConfiguration;
+      // Use matches.last.matchedLocation for top route (most reliable)
+      if (config.matches.isNotEmpty) {
+        final path = config.matches.last.matchedLocation;
+        if (path.isNotEmpty) return path;
+      }
+      // Fallback: uri.path
+      final path = config.uri.path;
+      if (path.isNotEmpty) return path;
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (kDebugMode) {
@@ -67,13 +86,29 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                 _lastLifecycleState == AppLifecycleState.hidden) &&
             _wasPausedBeforeInactive;
         if (fromPaused || fromInactiveAfterPause) {
-          if (kDebugMode) {
-            print(
-              '📱 [App] App resumed from background, calling ad manager resume()',
-            );
+          // Don't show open ad when user is on IAP or Settings screen
+          final currentPath = _getCurrentRoutePath();
+          final isBlockedScreen = currentPath != null &&
+              (currentPath == '/pro' ||
+                  currentPath.contains('/pro') ||
+                  currentPath == '/settings' ||
+                  currentPath.contains('/settings'));
+          if (isBlockedScreen) {
+            if (kDebugMode) {
+              print(
+                '🛑 [App] On IAP/settings ($currentPath), skipping app-open ad',
+              );
+            }
+            _wasPausedBeforeInactive = false;
+          } else {
+            if (kDebugMode) {
+              print(
+                '📱 [App] App resumed from background, calling ad manager resume()',
+              );
+            }
+            _adManager.resume();
+            _wasPausedBeforeInactive = false;
           }
-          _adManager.resume();
-          _wasPausedBeforeInactive = false;
         } else {
           if (kDebugMode) {
             print(

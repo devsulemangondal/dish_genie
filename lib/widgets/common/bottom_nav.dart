@@ -9,6 +9,9 @@ import '../../services/remote_config_service.dart';
 import '../../providers/premium_provider.dart';
 import '../../core/router/app_router.dart';
 
+/// Shared lock to prevent double interstitial when tapping bottom nav rapidly
+bool _bottomNavProcessing = false;
+
 class BottomNav extends StatelessWidget {
   final String activeTab;
   final bool hideWhenKeyboardVisible;
@@ -146,11 +149,12 @@ class _NavItemState extends State<_NavItem> {
   bool _isProcessing = false;
 
   Future<void> _handleTap() async {
-    // Prevent double taps - debounce mechanism
-    if (_isProcessing) {
+    // Prevent double taps - global lock for all nav items (rapid switching)
+    if (_isProcessing || _bottomNavProcessing) {
       return;
     }
 
+    _bottomNavProcessing = true;
     setState(() {
       _isProcessing = true;
     });
@@ -236,8 +240,9 @@ class _NavItemState extends State<_NavItem> {
         );
       }
     } finally {
-      // Reset processing flag after a delay to prevent rapid taps
-      Future.delayed(const Duration(milliseconds: 500), () {
+      // Reset both flags after a delay to prevent rapid taps
+      Future.delayed(const Duration(milliseconds: 600), () {
+        _bottomNavProcessing = false;
         if (mounted) {
           setState(() {
             _isProcessing = false;

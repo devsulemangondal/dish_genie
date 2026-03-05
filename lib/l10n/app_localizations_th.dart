@@ -1634,6 +1634,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumRestorePurchases => 'คืนค่าการซื้อ';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'นโยบายความเป็นส่วนตัว';
 
   @override

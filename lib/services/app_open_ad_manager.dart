@@ -77,6 +77,27 @@ class AppOpenAdManager {
     }
   }
 
+  /// Get current route path using matches.last.matchedLocation (most reliable)
+  String? _getCurrentRoutePath() {
+    return _getRoutePathFromRouter(_router);
+  }
+
+  String? _getRoutePathFromRouter(GoRouter? router) {
+    try {
+      if (router == null) return null;
+      final config = router.routerDelegate.currentConfiguration;
+      if (config.matches.isNotEmpty) {
+        final path = config.matches.last.matchedLocation;
+        if (path.isNotEmpty) return path;
+      }
+      final path = config.uri.path;
+      if (path.isNotEmpty) return path;
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Reset resuming flag (used by loader screen after ad is dismissed)
   void resetResuming() {
     _isResuming = false;
@@ -361,10 +382,15 @@ class AppOpenAdManager {
       return false;
     }
 
-    // Don't show on pro screen
-    if (currentRoute != null &&
-        (currentRoute.contains('/pro') || currentRoute == '/pro')) {
-      return false;
+    // Don't show on IAP (pro) or settings screen
+    if (currentRoute != null) {
+      final normalized = currentRoute.split('?').first;
+      if (normalized == '/pro' ||
+          normalized.contains('/pro') ||
+          normalized == '/settings' ||
+          normalized.contains('/settings')) {
+        return false;
+      }
     }
 
     // Note: Removed time-based check as requested
@@ -446,39 +472,26 @@ class AppOpenAdManager {
       return;
     }
 
-    // Early check: Try to get current route immediately to block pro screen
-    // This prevents setting _isResuming if we're on pro screen
-    String? earlyRouteCheck;
-    try {
-      if (_router != null) {
-        earlyRouteCheck = _router!.routerDelegate.currentConfiguration.uri
-            .toString();
-        // Normalize route (remove query params, trailing slashes)
-        earlyRouteCheck = earlyRouteCheck.split('?').first;
-        if (earlyRouteCheck.endsWith('/') && earlyRouteCheck.length > 1) {
-          earlyRouteCheck = earlyRouteCheck.substring(
-            0,
-            earlyRouteCheck.length - 1,
+    // Early check: Try to get current route immediately to block IAP/settings
+    String? earlyRouteCheck = _getCurrentRoutePath();
+    if (earlyRouteCheck != null && earlyRouteCheck.isNotEmpty) {
+      // Normalize (remove query params, trailing slashes)
+      earlyRouteCheck = earlyRouteCheck.split('?').first;
+      if (earlyRouteCheck.endsWith('/') && earlyRouteCheck.length > 1) {
+        earlyRouteCheck =
+            earlyRouteCheck.substring(0, earlyRouteCheck.length - 1);
+      }
+      final isBlockedRoute = earlyRouteCheck == '/pro' ||
+          earlyRouteCheck.contains('/pro') ||
+          earlyRouteCheck == '/settings' ||
+          earlyRouteCheck.contains('/settings');
+      if (isBlockedRoute) {
+        if (kDebugMode) {
+          print(
+            '⚠️ [AppOpenAdManager] Early check: On IAP/settings ($earlyRouteCheck), skipping app open ad',
           );
         }
-
-        // Block if on pro screen - check multiple patterns
-        if (earlyRouteCheck == '/pro' ||
-            earlyRouteCheck.contains('/pro') ||
-            earlyRouteCheck.startsWith('/pro') ||
-            earlyRouteCheck.endsWith('/pro')) {
-          if (kDebugMode) {
-            print(
-              '⚠️ [AppOpenAdManager] Early check: On pro screen ($earlyRouteCheck), skipping app open ad',
-            );
-          }
-          return;
-        }
-      }
-    } catch (e) {
-      // If we can't get route early, continue - will check again later
-      if (kDebugMode) {
-        print('⚠️ [AppOpenAdManager] Could not get route for early check: $e');
+        return;
       }
     }
 
@@ -553,19 +566,10 @@ class AppOpenAdManager {
         // Method 1: Use stored router (most reliable)
         if (_router != null) {
           router = _router;
-          try {
-            currentRoute = router!.routerDelegate.currentConfiguration.uri
-                .toString();
-            if (kDebugMode) {
-              print('✅ [AppOpenAdManager] Using stored router');
-              print('📊 [AppOpenAdManager] Current route: $currentRoute');
-            }
-          } catch (e) {
-            if (kDebugMode) {
-              print(
-                '⚠️ [AppOpenAdManager] Failed to get route from stored router: $e',
-              );
-            }
+          currentRoute = _getCurrentRoutePath();
+          if (kDebugMode && currentRoute != null) {
+            print('✅ [AppOpenAdManager] Using stored router');
+            print('📊 [AppOpenAdManager] Current route: $currentRoute');
           }
         }
 
@@ -579,8 +583,7 @@ class AppOpenAdManager {
           if (context != null && context.mounted) {
             try {
               router = GoRouter.of(context);
-              currentRoute = router.routerDelegate.currentConfiguration.uri
-                  .toString();
+              currentRoute = _getRoutePathFromRouter(router);
               if (kDebugMode) {
                 print(
                   '✅ [AppOpenAdManager] Got router from GoRouter.of(context)',
@@ -602,8 +605,7 @@ class AppOpenAdManager {
             final navContext = routerNavKey?.currentContext;
             if (navContext != null && navContext.mounted) {
               router = GoRouter.of(navContext);
-              currentRoute = router.routerDelegate.currentConfiguration.uri
-                  .toString();
+              currentRoute = _getRoutePathFromRouter(router);
               if (kDebugMode) {
                 print(
                   '✅ [AppOpenAdManager] Got router from router navigatorKey',
@@ -661,24 +663,21 @@ class AppOpenAdManager {
           return;
         }
 
-        // Don't show app open ad on pro screen
-        // Normalize route for comparison (remove query params, trailing slashes)
-        String? normalizedRoute = currentRoute;
-        if (normalizedRoute != null) {
-          normalizedRoute = normalizedRoute.split('?').first;
-          if (normalizedRoute.endsWith('/') && normalizedRoute.length > 1) {
-            normalizedRoute = normalizedRoute.substring(
-              0,
-              normalizedRoute.length - 1,
-            );
+        // Don't show app open ad on IAP or settings screen
+        String? path = currentRoute ?? _getCurrentRoutePath();
+        if (path != null && path.isNotEmpty) {
+          path = path.split('?').first;
+          if (path.endsWith('/') && path.length > 1) {
+            path = path.substring(0, path.length - 1);
           }
-
-          if (normalizedRoute == '/pro' ||
-              normalizedRoute.contains('/pro') ||
-              normalizedRoute.startsWith('/pro')) {
+          final isBlockedRoute = path == '/pro' ||
+              path.contains('/pro') ||
+              path == '/settings' ||
+              path.contains('/settings');
+          if (isBlockedRoute) {
             if (kDebugMode) {
               print(
-                '⚠️ [AppOpenAdManager] On pro screen (normalized: $normalizedRoute, original: $currentRoute), skipping app open ad',
+                '⚠️ [AppOpenAdManager] On IAP/settings ($path), skipping app open ad',
               );
             }
             _isResuming = false;
@@ -858,35 +857,24 @@ class AppOpenAdManager {
         }
       }
 
-      // Try to check current route to avoid showing on pro screen
-      // This is a best-effort check - main check happens in _attemptNavigateToLoader
-      try {
-        if (_router != null) {
-          String currentRoute = _router!.routerDelegate.currentConfiguration.uri
-              .toString();
-          // Normalize route (remove query params, trailing slashes)
-          currentRoute = currentRoute.split('?').first;
-          if (currentRoute.endsWith('/') && currentRoute.length > 1) {
-            currentRoute = currentRoute.substring(0, currentRoute.length - 1);
+      // Check current route - block IAP and settings screens
+      final path = _getCurrentRoutePath();
+      if (path != null && path.isNotEmpty) {
+        final normalized = path.split('?').first;
+        final trimmed = normalized.endsWith('/') && normalized.length > 1
+            ? normalized.substring(0, normalized.length - 1)
+            : normalized;
+        final isBlockedRoute = trimmed == '/pro' ||
+            trimmed.contains('/pro') ||
+            trimmed == '/settings' ||
+            trimmed.contains('/settings');
+        if (isBlockedRoute) {
+          if (kDebugMode) {
+            print(
+              '⚠️ [AppOpenAdManager] On IAP/settings ($trimmed), skipping loader',
+            );
           }
-
-          if (currentRoute == '/pro' ||
-              currentRoute.contains('/pro') ||
-              currentRoute.startsWith('/pro')) {
-            if (kDebugMode) {
-              print(
-                '⚠️ [AppOpenAdManager] On pro screen (normalized: $currentRoute), skipping loader',
-              );
-            }
-            return false;
-          }
-        }
-      } catch (e) {
-        // If we can't get route, continue - main check will happen in navigation
-        if (kDebugMode) {
-          print(
-            '⚠️ [AppOpenAdManager] Could not check route in _shouldShowLoader, will check during navigation: $e',
-          );
+          return false;
         }
       }
 

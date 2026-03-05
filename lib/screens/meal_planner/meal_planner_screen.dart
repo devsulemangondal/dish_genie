@@ -16,6 +16,10 @@ import '../../services/card_ad_tracker.dart';
 import '../../services/ad_service.dart';
 import '../../services/remote_config_service.dart';
 import '../../data/models/meal_plan.dart';
+import '../../data/models/recipe.dart';
+import '../../data/models/ingredient.dart';
+import '../../data/models/instruction.dart';
+import '../../data/models/nutrition.dart';
 
 class MealPlannerScreen extends StatefulWidget {
   const MealPlannerScreen({super.key});
@@ -1379,9 +1383,8 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
               final calories = snack.calories ?? 0;
               return InkWell(
                 onTap: () {
-                  // Navigate to recipe detail screen
-                  final slug = _createSlug(snack.recipeTitle);
-                  context.push('/recipe/$slug');
+                  // Use /ai-recipe with meal data - AI meal plan items are not in the recipe DB
+                  context.push('/ai-recipe', extra: _mealToRecipe(snack));
                 },
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
@@ -1542,6 +1545,45 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
     return title.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '-');
   }
 
+  /// Converts a MealPlanMeal to a minimal Recipe for display in RecipeDetailScreen.
+  /// AI-generated meal plan items are not in the recipe database, so we build a
+  /// displayable Recipe from the meal's title, description, nutrition, etc.
+  Recipe _mealToRecipe(MealPlanMeal meal) {
+    final slug = _createSlug(meal.recipeTitle);
+    final desc = meal.description ?? '';
+    final total = meal.prepTime ?? 30;
+    final prep = total ~/ 2;
+    final cook = total - prep;
+    return Recipe(
+      id: meal.id,
+      title: meal.recipeTitle,
+      image: meal.recipeImage ?? '',
+      time: '${prep + cook} min',
+      prepTime: prep,
+      cookTime: cook,
+      servings: meal.servings ?? 2,
+      calories: meal.calories ?? 400,
+      tags: const [],
+      cuisine: 'International',
+      difficulty: 'Medium',
+      description: desc,
+      ingredients: desc.isEmpty
+          ? [Ingredient(name: meal.recipeTitle, quantity: '1', unit: 'serving')]
+          : [Ingredient(name: 'See recipe description', quantity: '', unit: '')],
+      instructions: desc.isEmpty
+          ? [Instruction(step: 1, text: meal.recipeTitle)]
+          : [Instruction(step: 1, text: desc)],
+      nutrition: Nutrition(
+        calories: meal.calories ?? 400,
+        protein: meal.protein ?? 20,
+        carbs: meal.carbs ?? 40,
+        fat: meal.fat ?? 15,
+        fiber: 5,
+      ),
+      slug: slug,
+    );
+  }
+
   Widget _buildMealCard(
     BuildContext context,
     String mealType,
@@ -1552,9 +1594,8 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
   ) {
     return InkWell(
       onTap: () {
-        // Navigate to recipe detail screen
-        final slug = _createSlug(meal.recipeTitle);
-        context.push('/recipe/$slug');
+        // Use /ai-recipe with meal data - AI meal plan items are not in the recipe DB
+        context.push('/ai-recipe', extra: _mealToRecipe(meal));
       },
       borderRadius: BorderRadius.circular(20),
       child: Container(

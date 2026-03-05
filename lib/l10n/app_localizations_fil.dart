@@ -1666,6 +1666,9 @@ class AppLocalizationsFil extends AppLocalizations {
   String get premiumRestorePurchases => 'Ibalik ang Mga Pagbili';
 
   @override
+  String get premiumContinueWithAd => 'Continue with ad';
+
+  @override
   String get premiumPrivacyPolicy => 'Patakaran sa Privacy';
 
   @override

@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../services/analytics_service.dart';
 import '../../screens/splash/splash_screen.dart';
 import '../../providers/premium_provider.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
@@ -39,6 +41,9 @@ class AppRouter {
     return GoRouter(
       navigatorKey: _rootNavigatorKey,
       initialLocation: '/splash',
+      observers: [
+        _SafeAnalyticsRouteObserver(),
+      ],
       errorBuilder: (context, state) => const NotFoundScreen(),
       redirect: (context, state) {
         try {
@@ -227,5 +232,43 @@ class AppRouter {
         ),
       ],
     );
+  }
+}
+
+/// Logs screen views to Firebase Analytics without using Firebase's observer,
+/// so analytics works even if the native observer would crash (e.g. with GoRouter).
+class _SafeAnalyticsRouteObserver extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPush(route, previousRoute);
+    _logRoute(route);
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    if (newRoute != null) _logRoute(newRoute);
+  }
+
+  void _logRoute(Route<dynamic> route) {
+    try {
+      final name = route.settings.name ?? route.settings.toString();
+      if (name.isNotEmpty) {
+        final screenName = name.startsWith('/') ? name : '/$name';
+        if (kDebugMode) {
+          print('📊 [Analytics] triggering screen_view for route: $screenName');
+        }
+        AnalyticsService.logScreenView(
+          screenName: screenName,
+          screenClass: route.runtimeType.toString(),
+        );
+      }
+    } catch (e, st) {
+      // Never let analytics crash the app
+      if (kDebugMode) {
+        print('📊 [Analytics] _logRoute error (ignored): $e');
+        print('   $st');
+      }
+    }
   }
 }

@@ -388,6 +388,8 @@ class AdService {
   static final Map<String, InterstitialAd?> _interstitialAds = {};
   static final Map<String, bool> _isLoadingInterstitial = {};
   static final Map<String, bool> _isShowingInterstitial = {};
+  /// Tracks show attempt from entry - blocks overlapping calls (e.g. rapid bottom nav taps)
+  static final Map<String, bool> _isShowInterstitialInProgress = {};
 
   // Track when interstitial ad was dismissed to prevent app open ad from showing immediately
   static DateTime? _lastInterstitialDismissedTime;
@@ -455,8 +457,21 @@ class AdService {
       onAdFailedToShow?.call(null);
       return;
     }
+    // Block overlapping show attempts (e.g. rapid bottom nav taps)
+    if (_isShowInterstitialInProgress[adType] == true) {
+      if (kDebugMode) {
+        print(
+          '⚠️ [AdService] Interstitial show already in progress for "$adType", skipping duplicate',
+        );
+      }
+      onAdFailedToShow?.call(null);
+      return;
+    }
+    _isShowInterstitialInProgress[adType] = true;
+
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
+      _isShowInterstitialInProgress[adType] = false;
       onAdFailedToShow?.call(null);
       return;
     }
@@ -473,6 +488,7 @@ class AdService {
             '⚠️ [AdService] Cooldown active after app open ad dismissal: ${timeSinceAppOpenAd.inSeconds}s / ${_cooldownAfterAppOpenAd.inSeconds}s, skipping interstitial ad',
           );
         }
+        _isShowInterstitialInProgress[adType] = false;
         onAdFailedToShow?.call(null);
         return;
       }
@@ -624,6 +640,7 @@ class AdService {
           '⚠️ [AdService] Interstitial ad for type "$adType" is already being shown, skipping duplicate',
         );
       }
+      _isShowInterstitialInProgress[adType] = false;
       dismissLoader();
       onAdFailedToShow?.call(null);
       return;
@@ -652,8 +669,9 @@ class AdService {
           dismissLoader();
           // Track dismissal time to prevent app open ad from showing immediately
           _lastInterstitialDismissedTime = DateTime.now();
-          // Reset showing flag
+          // Reset showing and in-progress flags
           _isShowingInterstitial[adType] = false;
+          _isShowInterstitialInProgress[adType] = false;
           ad.dispose();
           _interstitialAds[adType] = null;
           onAdDismissed?.call();
@@ -664,8 +682,9 @@ class AdService {
               '❌ [AdService] Ad failed to show for type: $adType, error: $error',
             );
           }
-          // Reset showing flag
+          // Reset showing and in-progress flags
           _isShowingInterstitial[adType] = false;
+          _isShowInterstitialInProgress[adType] = false;
           ad.dispose();
           _interstitialAds[adType] = null;
           // Dismiss loader if ad failed to show
@@ -696,8 +715,9 @@ class AdService {
           '⚠️ [AdService] Interstitial ad for type "$adType" not available, skipping',
         );
       }
-      // Reset showing flag if ad is not available
+      // Reset showing and in-progress flags if ad is not available
       _isShowingInterstitial[adType] = false;
+      _isShowInterstitialInProgress[adType] = false;
       onAdFailedToShow?.call(null);
     }
   }
@@ -890,6 +910,7 @@ class AdService {
     _interstitialAds.clear();
     _isLoadingInterstitial.clear();
     _isShowingInterstitial.clear();
+    _isShowInterstitialInProgress.clear();
 
     // Dispose app open ad
     _appOpenAd?.dispose();
