@@ -375,6 +375,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get recipesGenerating => 'Gerando...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'Nova Receita';
 
   @override
@@ -604,10 +611,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mealPlannerToday => 'Hoje';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'Cancelar geração?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'Um plano de refeições está a ser criado. Tem a certeza de que deseja cancelar e voltar?';
+
+  @override
   String get groceryTitle => 'Compras Inteligentes';
 
   @override
   String get grocerySubtitle => 'Sua lista de compras';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'Ações Rápidas';
@@ -943,6 +964,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get chatNewChat => 'Nova conversa';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'Copiar';
 
   @override
@@ -1247,6 +1275,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get scannerAnalyzing => 'Analisando seus ingredientes...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'Ingredientes Detectados';
 
   @override
@@ -1483,6 +1518,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get weeklyPlanTitle => 'Sua Semana em um Olhar';
 
   @override
+  String get mealPlanDefaultName => 'Plano semanal equilibrado';
+
+  @override
   String get weeklyPlanNoPlans => 'Sem planos de refeições ainda';
 
   @override
@@ -1654,7 +1692,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get premiumRestorePurchases => 'Restaurar Compras';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'Continuar com anúncio';
 
   @override
   String get premiumPrivacyPolicy => 'Política de Privacidade';

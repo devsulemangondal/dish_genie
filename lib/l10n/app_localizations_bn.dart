@@ -376,6 +376,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get recipesGenerating => 'তৈরি হচ্ছে...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'নতুন রেসিপি';
 
   @override
@@ -606,10 +613,24 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mealPlannerToday => 'আজ';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'উৎপাদন বাতিল করবেন?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'একটি খাবার পরিকল্পনা তৈরি হচ্ছে। আপনি কি নিশ্চিত যে বাতিল করে পিছনে যেতে চান?';
+
+  @override
   String get groceryTitle => 'স্মার্ট মুদি';
 
   @override
   String get grocerySubtitle => 'আপনার শপিং তালিকা';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'দ্রুত অ্যাকশন';
@@ -943,6 +964,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get chatNewChat => 'নতুন চ্যাট';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'অনুলিপি করুন';
 
   @override
@@ -1247,6 +1275,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get scannerAnalyzing => 'আপনার উপকরণ বিশ্লেষণ করা হচ্ছে...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'শনাক্তকৃত উপকরণ';
 
   @override
@@ -1483,6 +1518,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get weeklyPlanTitle => 'এক নজরে আপনার সপ্তাহ';
 
   @override
+  String get mealPlanDefaultName => 'সাপ্তাহিক সুষম পরিকল্পনা';
+
+  @override
   String get weeklyPlanNoPlans => 'এখনও কোন মিল প্ল্যান নেই';
 
   @override
@@ -1654,7 +1692,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get premiumRestorePurchases => 'কেনাকাটা পুনরুদ্ধার করুন';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'বিজ্ঞাপন সহ চালিয়ে যান';
 
   @override
   String get premiumPrivacyPolicy => 'গোপনীয়তা নীতি';

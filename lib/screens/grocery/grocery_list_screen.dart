@@ -15,8 +15,8 @@ import '../../services/ad_service.dart';
 import '../../services/card_ad_tracker.dart';
 import '../../services/grocery_service.dart';
 import '../../services/remote_config_service.dart';
-import '../../services/voice_service.dart';
 import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/voice/voice_input_dialog.dart';
 import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
@@ -41,7 +41,6 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
   String _searchQuery = '';
   bool _isBudgetMode = false;
   bool _isShoppingMode = false;
-  bool _isVoiceListening = false;
   String? _selectedCategory;
   int _selectedTab = 0; // 0: Home, 1: List, 2: Add
   final TextEditingController _quickAddController = TextEditingController();
@@ -72,7 +71,6 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
       // Voice service and ad tracking can happen after UI is shown
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
-          VoiceService.initialize();
           _trackCardScreenOpen();
         }
       });
@@ -141,11 +139,36 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     _quantityController.dispose();
     _budgetController.dispose();
     _quickAddController.dispose();
-    VoiceService.stop();
     super.dispose();
   }
 
   Future<void> _handleBack() async {
+    // If generating grocery list (e.g. from Weekly List), show confirmation before going back.
+    final groceryProvider = Provider.of<GroceryProvider>(context, listen: false);
+    if (groceryProvider.isLoading) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(ctx.t('grocery.cancel.generation.title')),
+          content: Text(ctx.t('grocery.cancel.generation.message')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(ctx.t('common.cancel')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(ctx.t('common.confirm')),
+            ),
+          ],
+        ),
+      );
+      if (confirmed == true && mounted) {
+        groceryProvider.cancelGroceryGeneration();
+      }
+      return;
+    }
+
     // Check if user is premium (premium users don't see ads)
     final premiumProvider = Provider.of<PremiumProvider>(
       context,
@@ -344,56 +367,6 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     // Switch to list tab after generating (matching web app)
     if (mounted) {
       setState(() => _selectedTab = 1);
-    }
-  }
-
-  Future<void> _toggleVoiceInput() async {
-    if (_isVoiceListening) {
-      await VoiceService.stop();
-      setState(() {
-        _isVoiceListening = false;
-      });
-    } else {
-      setState(() {
-        _isVoiceListening = true;
-      });
-
-      await VoiceService.listen(
-        onResult: (text) {
-          final items = text
-              .split(',')
-              .map((e) => e.trim())
-              .where((e) => e.isNotEmpty)
-              .toList();
-          final provider = context.read<GroceryProvider>();
-          provider.addItemsByName(items);
-          setState(() {
-            _isVoiceListening = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${items.length} ${context.t('grocery.added')}'),
-              backgroundColor: AppColors.primary,
-            ),
-          );
-        },
-        onDone: () {
-          setState(() {
-            _isVoiceListening = false;
-          });
-        },
-        onError: (error) {
-          setState(() {
-            _isVoiceListening = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${context.t('common.error')}: $error'),
-              backgroundColor: AppColors.destructive,
-            ),
-          );
-        },
-      );
     }
   }
 
@@ -2088,7 +2061,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
 
   Widget _buildVoiceAssistantCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8), // More horizontal padding
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -2104,15 +2077,6 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Icon(Icons.mic, color: AppColors.primary, size: 28),
-          ),
-          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -2143,7 +2107,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: _toggleVoiceInput,
+              onTap: _showVoiceInputDialog,
               borderRadius: BorderRadius.circular(50),
               child: Container(
                 padding: const EdgeInsets.all(12),
@@ -2159,7 +2123,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   ],
                 ),
                 child: Icon(
-                  _isVoiceListening ? Icons.stop : Icons.mic,
+                  Icons.mic,
                   color: Colors.white,
                   size: 24,
                 ),
@@ -2169,6 +2133,28 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _showVoiceInputDialog() async {
+    final text = await showVoiceInputDialog(context);
+    if (text == null || text.trim().isEmpty || !mounted) return;
+
+    final items = text
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+    if (items.isEmpty) return;
+
+    context.read<GroceryProvider>().addItemsByName(items);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${items.length} ${context.t('grocery.added')}'),
+          backgroundColor: AppColors.primary,
+        ),
+      );
+    }
   }
 
   Widget _buildViewToggleOption(
@@ -2872,19 +2858,16 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        gradient: _isVoiceListening
-                            ? null
-                            : AppColors.gradientPrimary,
-                        color: _isVoiceListening ? AppColors.destructive : null,
+                        gradient: AppColors.gradientPrimary,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          onTap: _toggleVoiceInput,
+                          onTap: _showVoiceInputDialog,
                           borderRadius: BorderRadius.circular(12),
                           child: Icon(
-                            _isVoiceListening ? Icons.mic_off : Icons.mic,
+                            Icons.mic,
                             color: Theme.of(context).colorScheme.onPrimary,
                             size: 24,
                           ),

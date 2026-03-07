@@ -15,7 +15,6 @@ import '../../providers/grocery_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/meal_plan_provider.dart';
 import '../../providers/theme_provider.dart';
-import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/premium_card.dart';
 import '../../widgets/common/rtl_icon.dart';
 import '../../widgets/common/sticky_header.dart';
@@ -311,7 +310,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const BottomNav(activeTab: 'settings'),
       body: Stack(
         children: [
           Container(

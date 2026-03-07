@@ -298,7 +298,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ? 4
                                         : 2;
                                     // Slightly taller cards only on very small screens (< 360px)
-                                    final childAspectRatio = screenWidth < 360 ? 1.1 : 1.4;
+                                    final childAspectRatio = screenWidth < 360
+                                        ? 1.1
+                                        : 1.4;
                                     return GridView.count(
                                       shrinkWrap: true,
                                       physics:
@@ -365,8 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           onTap: () => context.push('/chat'),
                                         ),
                                         QuickActionCard(
-                                          title:
-                                              context.t('common.favorites'),
+                                          title: context.t('common.favorites'),
                                           description: context.t(
                                             'favorites.subtitle',
                                           ),

@@ -15,8 +15,8 @@ import '../../providers/premium_provider.dart';
 import '../../services/ad_service.dart';
 import '../../services/card_ad_tracker.dart';
 import '../../services/remote_config_service.dart';
-import '../../services/voice_service.dart';
 import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/voice/voice_input_dialog.dart';
 import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/chat/typewriter_text.dart';
 import '../../widgets/common/bottom_nav.dart';
@@ -43,8 +43,6 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
 
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  bool _isVoiceListening = false;
-  String _voiceTranscript = '';
   int _previousMessageCount = 0;
 
   // Responsive helper methods
@@ -80,7 +78,6 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
   @override
   void initState() {
     super.initState();
-    VoiceService.initialize();
     _trackCardScreenOpen();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) context.read<ChatProvider>().ensureChatLoaded();
@@ -146,7 +143,6 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
-    VoiceService.stop();
     super.dispose();
   }
 
@@ -334,47 +330,12 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     }
   }
 
-  Future<void> _toggleVoiceInput() async {
-    if (_isVoiceListening) {
-      await VoiceService.stop();
+  Future<void> _showVoiceInputDialog() async {
+    final text = await showVoiceInputDialog(context);
+    if (text != null && text.trim().isNotEmpty && mounted) {
       setState(() {
-        _isVoiceListening = false;
-        _voiceTranscript = '';
+        _messageController.text = text.trim();
       });
-    } else {
-      setState(() {
-        _isVoiceListening = true;
-        _voiceTranscript = context.t('chat.listening');
-      });
-
-      await VoiceService.listen(
-        onResult: (text) {
-          _messageController.text = text;
-          setState(() {
-            _isVoiceListening = false;
-            _voiceTranscript = '';
-          });
-        },
-        onPartialResult: (text) {
-          setState(() => _voiceTranscript = text);
-        },
-        onDone: () {
-          setState(() {
-            _isVoiceListening = false;
-            _voiceTranscript = '';
-          });
-        },
-        onError: (error) {
-          setState(() {
-            _isVoiceListening = false;
-            _voiceTranscript = '';
-          });
-          if (mounted &&
-              error.toString().toLowerCase().contains('permission')) {
-            showPermissionDeniedDialog(context);
-          }
-        },
-      );
     }
   }
 
@@ -493,18 +454,43 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                                     context,
                                   ).colorScheme.onSurface.withOpacity(0.4),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             if (!canSendMessage) {
                               _showChatLimitSheet(context, aiChefLimit);
                               return;
                             }
-                            chatProvider.startNewChat();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(context.t('chat.new.chat')),
-                                backgroundColor: AppColors.primary,
+                            final confirmed = await showDialog<bool>(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: Text(
+                                  ctx.t('chat.new.chat.confirm.title'),
+                                ),
+                                content: Text(
+                                  ctx.t('chat.new.chat.confirm.message'),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(ctx).pop(false),
+                                    child: Text(ctx.t('common.cancel')),
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(ctx).pop(true),
+                                    child: Text(ctx.t('common.confirm')),
+                                  ),
+                                ],
                               ),
                             );
+                            if (confirmed == true && mounted) {
+                              chatProvider.startNewChat();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(context.t('chat.new.chat')),
+                                  backgroundColor: AppColors.primary,
+                                ),
+                              );
+                            }
                           },
                           tooltip: context.t('chat.new.chat'),
                         ),
@@ -516,49 +502,6 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                         ? _buildEmptyState(context)
                         : _buildMessagesList(context, messages, isLoading),
                   ),
-                  // Voice Transcript
-                  if (_isVoiceListening && _voiceTranscript.isNotEmpty)
-                    Builder(
-                      builder: (context) {
-                        final screenWidth = MediaQuery.of(context).size.width;
-                        final margin = screenWidth < 360 ? 12.0 : 16.0;
-                        final padding = screenWidth < 360 ? 10.0 : 12.0;
-
-                        return Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: margin,
-                            vertical: 8,
-                          ),
-                          padding: EdgeInsets.all(padding),
-                          decoration: BoxDecoration(
-                            color: AppColors.geniePurple.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.mic,
-                                color: AppColors.geniePurple,
-                                size: _getResponsiveIconSize(context, 20),
-                              ),
-                              SizedBox(width: screenWidth < 360 ? 6 : 8),
-                              Expanded(
-                                child: Text(
-                                  _voiceTranscript,
-                                  style: TextStyle(
-                                    color: AppColors.geniePurple,
-                                    fontSize: _getResponsiveFontSize(
-                                      context,
-                                      14,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
                   // Limit Reached Message
                   if (shouldShowLimitBanner)
                     _buildLimitReachedBanner(
@@ -606,7 +549,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                                   // Camera Button
                                   GestureDetector(
                                     onTap: canSendMessage
-                                        ? () => context.go('/scan')
+                                        ? () => context.push('/scan')
                                         : null,
                                     child: Opacity(
                                       opacity: canSendMessage ? 1.0 : 0.4,
@@ -627,7 +570,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                                   // Microphone Button
                                   GestureDetector(
                                     onTap: canSendMessage
-                                        ? _toggleVoiceInput
+                                        ? _showVoiceInputDialog
                                         : null,
                                     child: Opacity(
                                       opacity: canSendMessage ? 1.0 : 0.4,
@@ -638,9 +581,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                                           buttonSize * 0.1,
                                         ),
                                         child: Icon(
-                                          _isVoiceListening
-                                              ? Icons.mic_off
-                                              : Icons.mic,
+                                          Icons.mic,
                                           color: AppColors.primary,
                                           size: iconSize,
                                         ),

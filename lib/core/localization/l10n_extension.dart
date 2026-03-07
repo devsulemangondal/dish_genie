@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../l10n/app_localizations.dart';
 import '../../l10n/app_localizations_en.dart';
 
@@ -70,6 +71,21 @@ extension L10nExtension on BuildContext {
       debugPrint('❌ [L10n] Error getting translation for key "$key": $e');
       return key;
     }
+  }
+
+  /// Returns localized plan name for known default names like "Weekly balanced plan"
+  /// or "My Meal Plan", otherwise returns the name as-is.
+  String getDisplayPlanName(String? name) {
+    if (name == null || name.isEmpty) {
+      return t('weekly.plan.title');
+    }
+    final lower = name.toLowerCase();
+    if (lower == 'weekly balanced plan' ||
+        lower == 'my meal plan' ||
+        (lower.contains('weekly') && lower.contains('balanced'))) {
+      return t('meal.plan.default.name');
+    }
+    return name;
   }
 
   /// Map of old dot-notation keys (e.g., 'common.home') to getter functions
@@ -236,6 +252,9 @@ extension L10nExtension on BuildContext {
     'grocery.voice.assistant': (l) => l.groceryVoiceAssistant,
     'grocery.voice.hint': (l) => l.groceryVoiceHint,
     'grocery.weekly.list': (l) => l.groceryWeeklyList,
+    'grocery.cancel.generation.title': (l) => l.groceryCancelGenerationTitle,
+    'grocery.cancel.generation.message': (l) =>
+        l.groceryCancelGenerationMessage,
     'grocery.your.items': (l) => l.groceryYourItems,
     'home.ai.chef.chat': (l) => l.homeAiChefChat,
     'home.ai.creates': (l) => l.homeAiCreates,
@@ -265,6 +284,8 @@ extension L10nExtension on BuildContext {
     'chat.suggestion4': (l) => l.chatSuggestion4,
     'chat.newChat': (l) => l.chatNewChat,
     'chat.new.chat': (l) => l.chatNewChat,
+    'chat.new.chat.confirm.title': (l) => l.chatNewChatConfirmTitle,
+    'chat.new.chat.confirm.message': (l) => l.chatNewChatConfirmMessage,
     'chat.copy': (l) => l.chatCopy,
     'chat.messageCopied': (l) => l.chatMessageCopied,
     'chat.message.copied': (l) => l.chatMessageCopied,
@@ -348,6 +369,10 @@ extension L10nExtension on BuildContext {
     'meal.planner.title': (l) => l.mealPlannerTitle,
     'meal.planner.vegan': (l) => l.mealPlannerVegan,
     'meal.planner.your.profile': (l) => l.mealPlannerYourProfile,
+    'meal.planner.cancel.generation.title': (l) =>
+        l.mealPlannerCancelGenerationTitle,
+    'meal.planner.cancel.generation.message': (l) =>
+        l.mealPlannerCancelGenerationMessage,
     // CamelCase variants for meal planner
     'mealPlanner.title': (l) => l.mealPlannerTitle,
     'mealPlanner.subtitle': (l) => l.mealPlannerSubtitle,
@@ -434,6 +459,9 @@ extension L10nExtension on BuildContext {
     'recipes.enterIngredients': (l) => l.recipesEnterIngredients,
     'recipes.generate.recipe': (l) => l.recipesGenerateRecipe,
     'recipes.generating': (l) => l.recipesGenerating,
+    'recipes.cancel.generation.title': (l) => l.recipesCancelGenerationTitle,
+    'recipes.cancel.generation.message': (l) =>
+        l.recipesCancelGenerationMessage,
     'recipes.goals.energy': (l) => l.recipesGoalsEnergy,
     'recipes.goals.maintain': (l) => l.recipesGoalsMaintain,
     'recipes.goals.muscle': (l) => l.recipesGoalsMuscle,
@@ -510,6 +538,8 @@ extension L10nExtension on BuildContext {
     'scanner.analyzing': (l) => l.scannerAnalyzing,
     'scanner.calories': (l) => l.scannerCalories,
     'scanner.detected': (l) => l.scannerDetected,
+    'scanner.cancel.analysis.title': (l) => l.scannerCancelAnalysisTitle,
+    'scanner.cancel.analysis.message': (l) => l.scannerCancelAnalysisMessage,
     'scanner.diet.type': (l) => l.scannerDietType,
     'scanner.fats': (l) => l.scannerFats,
     'scanner.generate.recipes': (l) => l.scannerGenerateRecipes,
@@ -613,6 +643,7 @@ extension L10nExtension on BuildContext {
     'weekly.plan.sun': (l) => l.weeklyPlanSun,
     'weekly.plan.thu': (l) => l.weeklyPlanThu,
     'weekly.plan.title': (l) => l.weeklyPlanTitle,
+    'meal.plan.default.name': (l) => l.mealPlanDefaultName,
     'weekly.plan.todays.meals': (l) => l.weeklyPlanTodaysMeals,
     'weekly.plan.tue': (l) => l.weeklyPlanTue,
     'weekly.plan.wed': (l) => l.weeklyPlanWed,

@@ -375,6 +375,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recipesGenerating => 'Генерация...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'Новый рецепт';
 
   @override
@@ -604,10 +611,24 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mealPlannerToday => 'Сегодня';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'Отменить создание?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'План питания создаётся. Вы уверены, что хотите отменить и вернуться назад?';
+
+  @override
   String get groceryTitle => 'Умные покупки';
 
   @override
   String get grocerySubtitle => 'Ваш список покупок';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'Быстрые действия';
@@ -944,6 +965,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get chatNewChat => 'Новый чат';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'Копировать';
 
   @override
@@ -1247,6 +1275,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get scannerAnalyzing => 'Анализ ингредиентов...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'Обнаруженные ингредиенты';
 
   @override
@@ -1484,6 +1519,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get weeklyPlanTitle => 'Ваша неделя на один взгляд';
 
   @override
+  String get mealPlanDefaultName => 'Еженедельный сбалансированный план';
+
+  @override
   String get weeklyPlanNoPlans => 'Пока нет планов питания';
 
   @override
@@ -1654,7 +1692,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get premiumRestorePurchases => 'Восстановить покупки';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'Продолжить с рекламой';
 
   @override
   String get premiumPrivacyPolicy => 'Политика конфиденциальности';

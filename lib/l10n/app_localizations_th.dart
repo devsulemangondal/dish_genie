@@ -374,6 +374,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get recipesGenerating => 'กำลังสร้าง...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'สูตรใหม่';
 
   @override
@@ -602,10 +609,24 @@ class AppLocalizationsTh extends AppLocalizations {
   String get mealPlannerToday => 'วันนี้';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'ยกเลิกการสร้าง?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'กำลังสร้างแผนมื้ออาหาร คุณแน่ใจหรือไม่ว่าต้องการยกเลิกและกลับไป?';
+
+  @override
   String get groceryTitle => 'ซื้อของอัจฉริยะ';
 
   @override
   String get grocerySubtitle => 'รายการซื้อของของคุณ';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'การดำเนินการด่วน';
@@ -935,6 +956,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get chatNewChat => 'แชทใหม่';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'คัดลอก';
 
   @override
@@ -1232,6 +1260,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get scannerAnalyzing => 'กำลังวิเคราะห์วัตถุดิบ...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'วัตถุดิบที่ตรวจพบ';
 
   @override
@@ -1466,6 +1501,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get weeklyPlanTitle => 'สัปดาห์ของคุณในมุมมองเดียว';
 
   @override
+  String get mealPlanDefaultName => 'แผนรายสัปดาห์ที่สมดุล';
+
+  @override
   String get weeklyPlanNoPlans => 'ยังไม่มีแผนอาหาร';
 
   @override
@@ -1634,7 +1672,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumRestorePurchases => 'คืนค่าการซื้อ';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'ดำเนินการต่อด้วยโฆษณา';
 
   @override
   String get premiumPrivacyPolicy => 'นโยบายความเป็นส่วนตัว';

@@ -156,8 +156,7 @@ class _WeeklyPlanPreviewState extends State<WeeklyPlanPreview>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        mealPlan?.name ??
-                                            context.t('weekly.plan.title'),
+                                        context.getDisplayPlanName(mealPlan?.name),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         softWrap: true,

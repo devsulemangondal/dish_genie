@@ -88,6 +88,7 @@ class _QuickActionCardState extends State<QuickActionCard>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             // Icon
                             Container(
@@ -116,41 +117,29 @@ class _QuickActionCardState extends State<QuickActionCard>
                             ),
                             const SizedBox(height: 8),
                             // Title
-                            Expanded(
-                              flex: 2,
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  widget.title,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.start,
-                                ),
+                            Text(
+                              widget.title,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.start,
                             ),
                             const SizedBox(height: 4),
                             // Description
-                            Expanded(
-                              flex: 2,
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  widget.description,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.start,
-                                ),
+                            Text(
+                              widget.description,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                fontWeight: FontWeight.w500,
                               ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.start,
                             ),
                           ],
                         ),

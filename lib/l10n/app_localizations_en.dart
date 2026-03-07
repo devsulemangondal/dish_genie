@@ -375,6 +375,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recipesGenerating => 'Generating...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'New Recipe';
 
   @override
@@ -604,10 +611,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealPlannerToday => 'Today';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'A meal plan is being created. Are you sure you want to cancel and go back?';
+
+  @override
   String get groceryTitle => 'Smart Grocery';
 
   @override
   String get grocerySubtitle => 'AI-powered shopping';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'Quick Actions';
@@ -937,6 +958,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatNewChat => 'New Chat';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'Copy';
 
   @override
@@ -1240,6 +1268,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scannerAnalyzing => 'Analyzing your ingredients...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'Detected Ingredients';
 
   @override
@@ -1474,6 +1509,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weeklyPlanTitle => 'Your Week at a Glance';
+
+  @override
+  String get mealPlanDefaultName => 'Weekly balanced plan';
 
   @override
   String get weeklyPlanNoPlans => 'No meal plans yet';

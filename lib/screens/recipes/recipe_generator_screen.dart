@@ -12,8 +12,8 @@ import '../../providers/recipe_provider.dart';
 import '../../services/ad_service.dart';
 import '../../services/card_ad_tracker.dart';
 import '../../services/remote_config_service.dart';
-import '../../services/voice_service.dart';
 import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/voice/voice_input_dialog.dart';
 import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
@@ -44,9 +44,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
   String? _selectedCategory;
   int _cookingTime = 30;
   int _targetCalories = 500;
-  bool _isVoiceListening = false;
-  String _voiceTranscript = '';
-
   @override
   void initState() {
     super.initState();
@@ -61,7 +58,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
         }
       });
     }
-    VoiceService.initialize();
     _trackCardScreenOpen();
   }
 
@@ -124,51 +120,61 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
   void dispose() {
     _tabController.dispose();
     _ingredientsController.dispose();
-    VoiceService.stop();
     super.dispose();
   }
 
-  Future<void> _toggleVoiceInput() async {
-    if (_isVoiceListening) {
-      await VoiceService.stop();
+  Future<void> _showVoiceInputDialog() async {
+    final text = await showVoiceInputDialog(context);
+    if (text != null && text.trim().isNotEmpty && mounted) {
       setState(() {
-        _isVoiceListening = false;
-        _voiceTranscript = '';
+        _ingredientsController.text = _ingredientsController.text.isEmpty
+            ? text.trim()
+            : '${_ingredientsController.text}, ${text.trim()}';
       });
-    } else {
-      setState(() {
-        _isVoiceListening = true;
-        _voiceTranscript = context.t('grocery.listening.hint');
-      });
+    }
+  }
 
-      await VoiceService.listen(
-        onResult: (text) {
-          setState(() {
-            _ingredientsController.text = _ingredientsController.text.isEmpty
-                ? text
-                : '${_ingredientsController.text}, $text';
-            _isVoiceListening = false;
-            _voiceTranscript = '';
-          });
-        },
-        onPartialResult: (text) {
-          setState(() {
-            _voiceTranscript = text;
-          });
-        },
-        onDone: () {
-          setState(() {
-            _isVoiceListening = false;
-            _voiceTranscript = '';
-          });
-        },
-        onError: (error) {
-          setState(() {
-            _isVoiceListening = false;
-            _voiceTranscript = '';
-          });
-        },
+  Future<void> _handleBack(
+    BuildContext context,
+    RecipeProvider recipeProvider,
+    bool isLoading,
+  ) async {
+    if (isLoading) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(ctx.t('recipes.cancel.generation.title')),
+          content: Text(ctx.t('recipes.cancel.generation.message')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(ctx.t('common.cancel')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(ctx.t('common.confirm')),
+            ),
+          ],
+        ),
       );
+      if (confirmed == true && mounted) {
+        recipeProvider.cancelGeneration();
+        if (_tabController.index > 0) {
+          _tabController.animateTo(0);
+        } else if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/');
+        }
+      }
+      return;
+    }
+    if (context.canPop()) {
+      context.pop();
+    } else if (_tabController.index > 0) {
+      _tabController.animateTo(0);
+    } else {
+      context.go('/');
     }
   }
 
@@ -224,10 +230,54 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
     final aiRecipeLimit = premiumProvider.getAiRecipeLimit();
     final aiRecipeCount = premiumProvider.aiRecipeCount;
 
-    return Scaffold(
-      bottomNavigationBar: const BottomNav(activeTab: 'recipes'),
-      body: Stack(
-        children: [
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        // If generating, show confirmation before going back.
+        if (isLoading) {
+          final confirmed = await showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text(ctx.t('recipes.cancel.generation.title')),
+              content: Text(ctx.t('recipes.cancel.generation.message')),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                  child: Text(ctx.t('common.cancel')),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  child: Text(ctx.t('common.confirm')),
+                ),
+              ],
+            ),
+          );
+          if (confirmed == true && mounted) {
+            recipeProvider.cancelGeneration();
+            if (_tabController.index > 0) {
+              _tabController.animateTo(0);
+            } else {
+              context.go('/');
+            }
+          }
+          return;
+        }
+
+        // If user is on the AI Generated tab, go back to Browse tab first.
+        if (_tabController.index > 0) {
+          _tabController.animateTo(0);
+          return;
+        }
+
+        // Otherwise, go to Home (bottom nav index 0).
+        context.go('/');
+      },
+      child: Scaffold(
+        bottomNavigationBar: const BottomNav(activeTab: 'recipes'),
+        body: Stack(
+          children: [
           // Background
           Container(
             decoration: BoxDecoration(
@@ -245,20 +295,15 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                 // Sticky Header
                 StickyHeader(
                   title: context.t('recipes.title'),
-                  onBack: () {
-                    if (context.canPop()) {
-                      context.pop();
-                    } else {
-                      context.go('/');
-                    }
-                  },
+                  onBack: () => _handleBack(context, recipeProvider, isLoading),
                   backgroundColor: Colors.transparent,
                   statusBarColor:
                       Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF1A1F35)
                       : AppColors.genieBlush,
                 ),
-                // Tabs
+                // Tabs (hidden while generating)
+                if (!isLoading)
                 Container(
                   margin: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -306,6 +351,9 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
+                    physics: isLoading
+                        ? const NeverScrollableScrollPhysics()
+                        : null,
                     children: [
                       // Browse Tab
                       _buildBrowseTab(context, recipeProvider),
@@ -326,7 +374,8 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
               ],
             ),
           ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -879,7 +928,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  onTap: () => context.go('/scan'),
+                                  onTap: () => context.push('/scan'),
                                   borderRadius: BorderRadius.circular(12),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -932,7 +981,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  onTap: _toggleVoiceInput,
+                                  onTap: _showVoiceInputDialog,
                                   borderRadius: BorderRadius.circular(12),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -943,14 +992,10 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Icon(
-                                          _isVoiceListening
-                                              ? Icons.mic_off
-                                              : Icons.mic,
+                                        const Icon(
+                                          Icons.mic,
                                           size: 18,
-                                          color: _isVoiceListening
-                                              ? AppColors.destructive
-                                              : AppColors.geniePurple,
+                                          color: AppColors.geniePurple,
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
@@ -969,21 +1014,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                           ),
                         ],
                       ),
-                      // Voice transcript
-                      if (_isVoiceListening && _voiceTranscript.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 12),
-                          child: Text(
-                            _voiceTranscript,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withOpacity(0.6),
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ),
                     ],
                   ),
                 ),

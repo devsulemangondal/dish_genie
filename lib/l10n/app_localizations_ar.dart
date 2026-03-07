@@ -373,6 +373,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get recipesGenerating => 'جاري الإنشاء...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'وصفة جديدة';
 
   @override
@@ -602,10 +609,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mealPlannerToday => 'اليوم';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'إلغاء الإنشاء؟';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'يتم إنشاء خطة وجبات. هل أنت متأكد أنك تريد الإلغاء والرجوع؟';
+
+  @override
   String get groceryTitle => 'مشتريات ذكية';
 
   @override
   String get grocerySubtitle => 'تسوق مدعوم بالذكاء الاصطناعي';
+
+  @override
+  String get groceryCancelGenerationTitle => 'إلغاء الإنشاء؟';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'يتم إنشاء قائمة مشتريات. هل أنت متأكد أنك تريد الإلغاء والرجوع؟';
 
   @override
   String get groceryQuickActions => 'إجراءات سريعة';
@@ -937,6 +958,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatNewChat => 'محادثة جديدة';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'نسخ';
 
   @override
@@ -1239,6 +1267,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get scannerAnalyzing => 'جاري تحليل مكوناتك...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'المكونات المكتشفة';
 
   @override
@@ -1474,6 +1509,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get weeklyPlanTitle => 'نظرة على أسبوعك';
 
   @override
+  String get mealPlanDefaultName => 'خطة وجبات أسبوعية متوازنة';
+
+  @override
   String get weeklyPlanNoPlans => 'لا توجد خطط وجبات بعد';
 
   @override
@@ -1643,7 +1681,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumRestorePurchases => 'استعادة المشتريات';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'المتابعة مع الإعلان';
 
   @override
   String get premiumPrivacyPolicy => 'سياسة الخصوصية';

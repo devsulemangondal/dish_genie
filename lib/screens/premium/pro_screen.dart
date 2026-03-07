@@ -23,6 +23,9 @@ class ProScreen extends StatefulWidget {
   State<ProScreen> createState() => _ProScreenState();
 }
 
+/// Minimum time to show Pro screen on first launch before allowing navigation away
+const Duration _kFirstLaunchMinDisplayDuration = Duration(seconds: 3);
+
 class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   StreamSubscription? _purchaseSubscription;
   StreamSubscription? _billingErrorSubscription;
@@ -31,6 +34,8 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   bool _isLoadingProducts = false;
   ProductDetails? _selectedProduct;
   bool _wasInBackgroundForPurchase = false;
+  /// On first launch, user must see Pro screen for minimum duration before exiting
+  bool _canExitProScreen = true;
 
   String _getOpenSource() {
     // Prefer GoRouterState if available, otherwise parse from router location.
@@ -84,6 +89,17 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     );
     if (premiumProvider.isPremium) {
       await StorageService.setFirstLaunchComplete();
+      return;
+    }
+    // On first launch, enforce minimum display time before user can exit
+    final isFirstLaunch = await StorageService.isFirstLaunch();
+    if (isFirstLaunch && mounted) {
+      setState(() => _canExitProScreen = false);
+      Future.delayed(_kFirstLaunchMinDisplayDuration, () {
+        if (mounted) {
+          setState(() => _canExitProScreen = true);
+        }
+      });
     }
   }
 
@@ -171,6 +187,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _exitProFlow() async {
+    if (!_canExitProScreen) return;
     final canPop = context.canPop();
     final source = _getOpenSource();
 
@@ -394,17 +411,23 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                           shape: const CircleBorder(),
                           elevation: 2,
                           shadowColor: Colors.black26,
-                          child: InkWell(
-                            onTap: () async {
-                              await _exitProFlow();
-                            },
-                            customBorder: const CircleBorder(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.close,
-                                size: 22,
-                                color: Theme.of(context).colorScheme.onSurface,
+                          child: Opacity(
+                            opacity: _canExitProScreen ? 1.0 : 0.4,
+                            child: InkWell(
+                              onTap: _canExitProScreen
+                                  ? () async {
+                                      await _exitProFlow();
+                                    }
+                                  : null,
+                              customBorder: const CircleBorder(),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Icon(
+                                  Icons.close,
+                                  size: 22,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
                               ),
                             ),
                           ),
@@ -709,7 +732,9 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   /// Continue with ad button - same functionality as close (X) button
   Widget _buildContinueWithAdButton() {
     return TextButton(
-      onPressed: _isLoading ? null : () async => await _exitProFlow(),
+      onPressed: (_isLoading || !_canExitProScreen)
+          ? null
+          : () async => await _exitProFlow(),
       style: TextButton.styleFrom(
         foregroundColor: Theme.of(
           context,

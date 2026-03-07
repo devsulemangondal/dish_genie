@@ -376,6 +376,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get recipesGenerating => 'Жасалуда...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'Жаңа Рецепт';
 
   @override
@@ -605,10 +612,24 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mealPlannerToday => 'Бүгін';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'Құруды болдырмау керек пе?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'Тамақ жоспары құрылуда. Болдырмап, артқа оралғыңыз келетініне сенімдісіз бе?';
+
+  @override
   String get groceryTitle => 'Ақылды Сауда';
 
   @override
   String get grocerySubtitle => 'Сауда тізіміңіз';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'Жылдам Әрекеттер';
@@ -944,6 +965,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get chatNewChat => 'Жаңа чат';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'Көшіру';
 
   @override
@@ -1250,6 +1278,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get scannerAnalyzing => 'Ингредиенттеріңіз талдануда...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'Табылған Ингредиенттер';
 
   @override
@@ -1485,6 +1520,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get weeklyPlanTitle => 'Аптаңызға Шолу';
 
   @override
+  String get mealPlanDefaultName => 'Апталық теңдестірілген жоспар';
+
+  @override
   String get weeklyPlanNoPlans => 'Тамақ жоспарлары жоқ';
 
   @override
@@ -1657,7 +1695,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get premiumRestorePurchases => 'Сатып алуларды қалпына келтіру';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'Жарнамамен жалғастыру';
 
   @override
   String get premiumPrivacyPolicy => 'Құпиялылық саясаты';

@@ -376,6 +376,13 @@ class AppLocalizationsFil extends AppLocalizations {
   String get recipesGenerating => 'Gumagawa...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'Bagong Resipe';
 
   @override
@@ -607,10 +614,24 @@ class AppLocalizationsFil extends AppLocalizations {
   String get mealPlannerToday => 'Ngayon';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'Kanselahin ang paggawa?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'May ginagawang meal plan. Sigurado ka bang gusto mong kanselahin at bumalik?';
+
+  @override
   String get groceryTitle => 'Matalinong Grocery';
 
   @override
   String get grocerySubtitle => 'Ang iyong listahan ng pamimili';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'Mabilis na Aksyon';
@@ -952,6 +973,13 @@ class AppLocalizationsFil extends AppLocalizations {
   String get chatNewChat => 'Bagong chat';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'Kopyahin';
 
   @override
@@ -1258,6 +1286,13 @@ class AppLocalizationsFil extends AppLocalizations {
   String get scannerAnalyzing => 'Sinusuri ang iyong mga sangkap...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'Mga Natuklasang Sangkap';
 
   @override
@@ -1494,6 +1529,9 @@ class AppLocalizationsFil extends AppLocalizations {
   String get weeklyPlanTitle => 'Ang Iyong Linggo sa Isang Tingin';
 
   @override
+  String get mealPlanDefaultName => 'Balansadong plano sa linggo';
+
+  @override
   String get weeklyPlanNoPlans => 'Wala pang mga plano ng pagkain';
 
   @override
@@ -1666,7 +1704,7 @@ class AppLocalizationsFil extends AppLocalizations {
   String get premiumRestorePurchases => 'Ibalik ang Mga Pagbili';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'Magpatuloy kasama ang ad';
 
   @override
   String get premiumPrivacyPolicy => 'Patakaran sa Privacy';

@@ -860,6 +860,18 @@ abstract class AppLocalizations {
   /// **'Generating...'**
   String get recipesGenerating;
 
+  /// No description provided for @recipesCancelGenerationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Generation?'**
+  String get recipesCancelGenerationTitle;
+
+  /// No description provided for @recipesCancelGenerationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A recipe is being generated. Are you sure you want to cancel and go back?'**
+  String get recipesCancelGenerationMessage;
+
   /// No description provided for @recipesNewRecipe.
   ///
   /// In en, this message translates to:
@@ -1316,6 +1328,18 @@ abstract class AppLocalizations {
   /// **'Today'**
   String get mealPlannerToday;
 
+  /// No description provided for @mealPlannerCancelGenerationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Generation?'**
+  String get mealPlannerCancelGenerationTitle;
+
+  /// No description provided for @mealPlannerCancelGenerationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A meal plan is being created. Are you sure you want to cancel and go back?'**
+  String get mealPlannerCancelGenerationMessage;
+
   /// No description provided for @groceryTitle.
   ///
   /// In en, this message translates to:
@@ -1327,6 +1351,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI-powered shopping'**
   String get grocerySubtitle;
+
+  /// No description provided for @groceryCancelGenerationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Generation?'**
+  String get groceryCancelGenerationTitle;
+
+  /// No description provided for @groceryCancelGenerationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A grocery list is being created. Are you sure you want to cancel and go back?'**
+  String get groceryCancelGenerationMessage;
 
   /// No description provided for @groceryQuickActions.
   ///
@@ -1976,6 +2012,18 @@ abstract class AppLocalizations {
   /// **'New Chat'**
   String get chatNewChat;
 
+  /// No description provided for @chatNewChatConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Conversation?'**
+  String get chatNewChatConfirmTitle;
+
+  /// No description provided for @chatNewChatConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new conversation? Your current chat will be saved.'**
+  String get chatNewChatConfirmMessage;
+
   /// No description provided for @chatCopy.
   ///
   /// In en, this message translates to:
@@ -2558,6 +2606,18 @@ abstract class AppLocalizations {
   /// **'Analyzing your ingredients...'**
   String get scannerAnalyzing;
 
+  /// No description provided for @scannerCancelAnalysisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Analysis?'**
+  String get scannerCancelAnalysisTitle;
+
+  /// No description provided for @scannerCancelAnalysisMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredients are being analyzed. Are you sure you want to cancel and go back?'**
+  String get scannerCancelAnalysisMessage;
+
   /// No description provided for @scannerDetected.
   ///
   /// In en, this message translates to:
@@ -2995,6 +3055,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Week at a Glance'**
   String get weeklyPlanTitle;
+
+  /// No description provided for @mealPlanDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly balanced plan'**
+  String get mealPlanDefaultName;
 
   /// No description provided for @weeklyPlanNoPlans.
   ///

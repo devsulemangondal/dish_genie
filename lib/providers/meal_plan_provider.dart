@@ -16,6 +16,12 @@ class MealPlanProvider with ChangeNotifier {
   String? get swappingMealType => _swappingMealType;
   DateTime? get selectedDay => _selectedDay;
 
+  /// Call to cancel an in-progress meal plan generation.
+  void cancelPlanGeneration() {
+    _isLoading = false;
+    notifyListeners();
+  }
+
   MealPlanProvider() {
     _loadFromStorage();
   }

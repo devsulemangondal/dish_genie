@@ -447,12 +447,20 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
       } else if (_viewMode == ScannerViewMode.recipes) {
         // From recipes list, go back to ingredients
         setState(() => _viewMode = ScannerViewMode.ingredients);
+      } else if (_viewMode == ScannerViewMode.ingredients) {
+        // From detected ingredients, go back to camera (previous screen)
+        setState(() {
+          _viewMode = ScannerViewMode.camera;
+          _capturedImage = null;
+          _imageBase64 = null;
+          _scanResult = null;
+          _editableIngredients = [];
+        });
       } else {
-        // From camera or ingredients view, exit the screen
+        // From camera view, exit the screen (pop or go home)
         if (mounted && context.canPop()) {
           context.pop();
         } else if (mounted) {
-          // If we can't pop, try to navigate to home
           context.go('/');
         }
       }
@@ -479,9 +487,27 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
     if (_isAnalyzing) {
       return PopScope(
         canPop: false,
-        onPopInvoked: (didPop) {
-          if (!didPop) {
-            // Allow going back even during analysis
+        onPopInvoked: (didPop) async {
+          if (didPop) return;
+          // Show confirmation before going back during analysis
+          final confirmed = await showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text(ctx.t('scanner.cancel.analysis.title')),
+              content: Text(ctx.t('scanner.cancel.analysis.message')),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                  child: Text(ctx.t('common.cancel')),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  child: Text(ctx.t('common.confirm')),
+                ),
+              ],
+            ),
+          );
+          if (confirmed == true && mounted) {
             setState(() {
               _isAnalyzing = false;
               _viewMode = ScannerViewMode.camera;
@@ -1133,7 +1159,12 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: 16 + MediaQuery.of(context).padding.bottom,
+          ),
           child: ElevatedButton(
             onPressed: () {
               if (_scanResult != null && _scanResult!.recipes.isNotEmpty) {
@@ -1607,7 +1638,12 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
     final recipe = _selectedRecipe!;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 16 + MediaQuery.of(context).padding.bottom,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

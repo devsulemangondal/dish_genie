@@ -376,6 +376,13 @@ class AppLocalizationsMs extends AppLocalizations {
   String get recipesGenerating => 'Menjana...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'Resipi Baru';
 
   @override
@@ -605,10 +612,24 @@ class AppLocalizationsMs extends AppLocalizations {
   String get mealPlannerToday => 'Hari ini';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'Batal penjanaan?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'Pelan makan sedang dibuat. Adakah anda pasti mahu membatalkan dan kembali?';
+
+  @override
   String get groceryTitle => 'Runcit Pintar';
 
   @override
   String get grocerySubtitle => 'Senarai beli-belah anda';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'Tindakan Pantas';
@@ -945,6 +966,13 @@ class AppLocalizationsMs extends AppLocalizations {
   String get chatNewChat => 'Sembang baru';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'Salin';
 
   @override
@@ -1251,6 +1279,13 @@ class AppLocalizationsMs extends AppLocalizations {
   String get scannerAnalyzing => 'Menganalisis bahan-bahan anda...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'Bahan Dikesan';
 
   @override
@@ -1487,6 +1522,9 @@ class AppLocalizationsMs extends AppLocalizations {
   String get weeklyPlanTitle => 'Minggu Anda Sekilas Pandang';
 
   @override
+  String get mealPlanDefaultName => 'Pelan mingguan seimbang';
+
+  @override
   String get weeklyPlanNoPlans => 'Belum ada pelan makanan';
 
   @override
@@ -1657,7 +1695,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get premiumRestorePurchases => 'Pulihkan Pembelian';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'Teruskan dengan iklan';
 
   @override
   String get premiumPrivacyPolicy => 'Dasar Privasi';

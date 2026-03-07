@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../core/localization/l10n_extension.dart';
+import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
 import '../../services/storage_service.dart';
-import '../../core/navigation/pro_navigation.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/common/rtl_icon.dart';
@@ -68,9 +69,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _scaleController, curve: Curves.easeOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _scaleController, curve: Curves.easeOut));
 
     _slideController = AnimationController(
       duration: const Duration(milliseconds: 500),
@@ -172,7 +174,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                               builder: (context, child) {
                                 return Transform.translate(
                                   offset: Offset(0, _floatAnimation.value),
-                                  child: const GenieMascot(size: GenieMascotSize.xl),
+                                  child: const GenieMascot(
+                                    size: GenieMascotSize.xl,
+                                  ),
                                 );
                               },
                             ),
@@ -195,8 +199,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                       borderRadius: BorderRadius.circular(24),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: (step['gradient'] as List<Color>)[0]
-                                              .withOpacity(0.3),
+                                          color:
+                                              (step['gradient']
+                                                      as List<Color>)[0]
+                                                  .withOpacity(0.3),
                                           blurRadius: 20,
                                           spreadRadius: 2,
                                         ),
@@ -226,8 +232,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                           .textTheme
                                           .headlineMedium
                                           ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -244,16 +250,20 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                   child: FadeTransition(
                                     opacity: _slideController,
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
                                       child: Text(
-                                        context.t(step['descriptionKey'] as String),
+                                        context.t(
+                                          step['descriptionKey'] as String,
+                                        ),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge
                                             ?.copyWith(
-                                          color: Colors.grey[600],
-                                          height: 1.6,
-                                        ),
+                                              color: Colors.grey[600],
+                                              height: 1.6,
+                                            ),
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -279,32 +289,29 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       // Progress Dots
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          _steps.length,
-                          (index) {
-                            final isActive = index == _currentStep;
-                            final isPast = index < _currentStep;
-                            return AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              width: isActive ? 32 : 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                gradient: isActive
-                                    ? LinearGradient(
-                                        colors: AppColors.gradientPrimary.colors,
-                                      )
-                                    : null,
-                                color: isActive
-                                    ? null
-                                    : isPast
-                                        ? AppColors.primary.withOpacity(0.6)
-                                        : Colors.grey[300],
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            );
-                          },
-                        ),
+                        children: List.generate(_steps.length, (index) {
+                          final isActive = index == _currentStep;
+                          final isPast = index < _currentStep;
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            width: isActive ? 32 : 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              gradient: isActive
+                                  ? LinearGradient(
+                                      colors: AppColors.gradientPrimary.colors,
+                                    )
+                                  : null,
+                              color: isActive
+                                  ? null
+                                  : isPast
+                                  ? AppColors.primary.withOpacity(0.6)
+                                  : Colors.grey[300],
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          );
+                        }),
                       ),
                       const SizedBox(height: 24),
                       // Next Button
@@ -364,7 +371,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     onTap: _handleSkip,
                     borderRadius: BorderRadius.circular(8),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                       child: Text(
                         context.t('onboarding.skip'),
                         style: TextStyle(

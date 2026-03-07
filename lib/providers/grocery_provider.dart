@@ -16,7 +16,13 @@ class GroceryProvider with ChangeNotifier {
   GroceryList? get groceryList => _groceryList;
   bool get isLoading => _isLoading;
   bool get isLoadingFromStorage => _isLoadingFromStorage;
-  
+
+  /// Call to cancel an in-progress grocery list generation.
+  void cancelGroceryGeneration() {
+    _isLoading = false;
+    notifyListeners();
+  }
+
   GroceryProvider() {
     // Load from storage asynchronously without blocking UI
     // Use microtask to ensure it runs after the current frame

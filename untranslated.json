@@ -1,276 +1,449 @@
 {
   "af": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "ar": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "bn": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "de": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "fa": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "fil": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "fr": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "hi": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "id": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "it": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "ja": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "kk": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "ko": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "ms": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "nl": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "pl": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "pt": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "ru": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "th": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "tr": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "uk": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "ur": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "uz": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "vi": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ],
 
   "zh": [
     "commonRetry",
+    "recipesCancelGenerationTitle",
+    "recipesCancelGenerationMessage",
+    "groceryCancelGenerationTitle",
+    "groceryCancelGenerationMessage",
+    "chatNewChatConfirmTitle",
+    "chatNewChatConfirmMessage",
+    "scannerCancelAnalysisTitle",
+    "scannerCancelAnalysisMessage",
     "recipeDetailNoImage",
     "noInternetTitle",
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings",
-    "premiumContinueWithAd"
+    "permissionOpenSettings"
   ]
 }

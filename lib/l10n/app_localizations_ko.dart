@@ -372,6 +372,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get recipesGenerating => '생성 중...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => '새 레시피';
 
   @override
@@ -600,10 +607,24 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mealPlannerToday => '오늘';
 
   @override
+  String get mealPlannerCancelGenerationTitle => '생성 취소할까요?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      '식단 계획을 만들고 있습니다. 취소하고 돌아가시겠습니까?';
+
+  @override
   String get groceryTitle => '스마트 장보기';
 
   @override
   String get grocerySubtitle => '쇼핑 목록';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => '빠른 작업';
@@ -931,6 +952,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chatNewChat => '새 채팅';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => '복사';
 
   @override
@@ -1225,6 +1253,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get scannerAnalyzing => '재료 분석 중...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => '감지된 재료';
 
   @override
@@ -1456,6 +1491,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get weeklyPlanTitle => '주간 계획 한눈에 보기';
 
   @override
+  String get mealPlanDefaultName => '주간 균형 플랜';
+
+  @override
   String get weeklyPlanNoPlans => '아직 식사 계획이 없습니다';
 
   @override
@@ -1624,7 +1662,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumRestorePurchases => '구매 복원';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => '광고와 함께 계속';
 
   @override
   String get premiumPrivacyPolicy => '개인 정보 보호 정책';

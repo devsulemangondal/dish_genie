@@ -372,6 +372,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get recipesGenerating => '生成中...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => '新しいレシピ';
 
   @override
@@ -600,10 +607,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mealPlannerToday => '今日';
 
   @override
+  String get mealPlannerCancelGenerationTitle => '作成をキャンセルしますか？';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      '食事プランを作成しています。キャンセルして戻ってもよろしいですか？';
+
+  @override
   String get groceryTitle => 'スマート買い物';
 
   @override
   String get grocerySubtitle => 'あなたの買い物リスト';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'クイックアクション';
@@ -931,6 +952,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get chatNewChat => '新しいチャット';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'コピー';
 
   @override
@@ -1224,6 +1252,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get scannerAnalyzing => '食材を分析中...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => '検出された食材';
 
   @override
@@ -1456,6 +1491,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get weeklyPlanTitle => '週間プラン一覧';
 
   @override
+  String get mealPlanDefaultName => '週間バランスプラン';
+
+  @override
   String get weeklyPlanNoPlans => 'まだ食事プランはありません';
 
   @override
@@ -1623,7 +1661,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumRestorePurchases => '購入を復元する';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => '広告付きで続ける';
 
   @override
   String get premiumPrivacyPolicy => 'プライバシーポリシー';

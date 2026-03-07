@@ -803,7 +803,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      plan.name,
+                      context.getDisplayPlanName(plan.name),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

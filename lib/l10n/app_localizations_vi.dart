@@ -374,6 +374,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get recipesGenerating => 'Đang tạo...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'Công Thức Mới';
 
   @override
@@ -603,10 +610,24 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mealPlannerToday => 'Hôm nay';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'Hủy tạo?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'Đang tạo kế hoạch bữa ăn. Bạn có chắc chắn muốn hủy và quay lại không?';
+
+  @override
   String get groceryTitle => 'Mua Sắm Thông Minh';
 
   @override
   String get grocerySubtitle => 'Danh sách mua sắm của bạn';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'Thao Tác Nhanh';
@@ -938,6 +959,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get chatNewChat => 'Cuộc trò chuyện mới';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'Sao chép';
 
   @override
@@ -1243,6 +1271,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get scannerAnalyzing => 'Đang phân tích nguyên liệu...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'Nguyên Liệu Phát Hiện';
 
   @override
@@ -1480,6 +1515,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get weeklyPlanTitle => 'Tuần Của Bạn Tổng Quan';
 
   @override
+  String get mealPlanDefaultName => 'Kế hoạch cân bằng hàng tuần';
+
+  @override
   String get weeklyPlanNoPlans => 'Chưa có kế hoạch bữa ăn';
 
   @override
@@ -1651,7 +1689,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumRestorePurchases => 'Khôi phục mua hàng';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'Tiếp tục với quảng cáo';
 
   @override
   String get premiumPrivacyPolicy => 'Chính sách bảo mật';

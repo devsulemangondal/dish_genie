@@ -103,7 +103,7 @@ class _SavedMealPlanCardState extends State<SavedMealPlanCard>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  mealPlan.name,
+                                  context.getDisplayPlanName(mealPlan.name),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: true,

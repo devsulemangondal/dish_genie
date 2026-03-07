@@ -375,6 +375,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get recipesGenerating => 'Yaratilmoqda...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'Yangi Retsept';
 
   @override
@@ -604,10 +611,24 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mealPlannerToday => 'Bugun';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'Yaratishni bekor qilish?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'Ovqat rejasi yaratilmoqda. Bekor qilib orqaga qaytishga ishonchingiz komilmi?';
+
+  @override
   String get groceryTitle => 'Aqlli xarid';
 
   @override
   String get grocerySubtitle => 'Xarid ro\'yxatingiz';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'Tezkor harakatlar';
@@ -946,6 +967,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get chatNewChat => 'Yangi chat';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'Nusxalash';
 
   @override
@@ -1249,6 +1277,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get scannerAnalyzing => 'Mahsulotlar tahlil qilinmoqda...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'Aniqlangan mahsulotlar';
 
   @override
@@ -1488,6 +1523,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get weeklyPlanTitle => 'Haftangiz bir qarashda';
 
   @override
+  String get mealPlanDefaultName => 'Haftalik muvozanatli reja';
+
+  @override
   String get weeklyPlanNoPlans => 'Hali ovqatlanish rejasi yo\'q';
 
   @override
@@ -1659,7 +1697,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get premiumRestorePurchases => 'Xaridlarni tiklash';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'Reklama bilan davom etish';
 
   @override
   String get premiumPrivacyPolicy => 'Maxfiylik siyosati';

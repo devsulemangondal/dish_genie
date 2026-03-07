@@ -371,6 +371,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recipesGenerating => '生成中...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => '新食谱';
 
   @override
@@ -599,10 +606,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mealPlannerToday => '今天';
 
   @override
+  String get mealPlannerCancelGenerationTitle => '取消生成？';
+
+  @override
+  String get mealPlannerCancelGenerationMessage => '正在创建膳食计划。您确定要取消并返回吗？';
+
+  @override
   String get groceryTitle => '智能购物';
 
   @override
   String get grocerySubtitle => '您的购物清单';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => '快捷操作';
@@ -929,6 +949,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chatNewChat => '新对话';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => '复制';
 
   @override
@@ -1220,6 +1247,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get scannerAnalyzing => '正在分析您的食材...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => '检测到的食材';
 
   @override
@@ -1451,6 +1485,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get weeklyPlanTitle => '一览您的一周';
 
   @override
+  String get mealPlanDefaultName => '每周均衡计划';
+
+  @override
   String get weeklyPlanNoPlans => '暂无膳食计划';
 
   @override
@@ -1617,7 +1654,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumRestorePurchases => '恢复购买';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => '继续观看广告';
 
   @override
   String get premiumPrivacyPolicy => '隐私政策';

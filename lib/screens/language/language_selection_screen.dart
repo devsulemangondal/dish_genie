@@ -70,7 +70,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
     // Defer navigation to next frame to avoid using context during/after rebuild (fixes iOS crash)
     if (!mounted) return;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
       if (wasLanguageAlreadySelected) {
         if (canPop) {
@@ -80,7 +80,11 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         }
         return;
       }
-      context.go('/');
+      // First-time: show onboarding if not yet complete, else go to home
+      final onboardingComplete = await StorageService.isOnboardingComplete();
+      if (mounted) {
+        context.go(onboardingComplete ? '/' : '/onboarding');
+      }
     });
   }
 

@@ -129,6 +129,33 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
   }
 
   Future<void> _handleBack() async {
+    // If generating plan with AI, show confirmation before going back.
+    final mealPlanProvider = Provider.of<MealPlanProvider>(context, listen: false);
+    if (mealPlanProvider.isLoading) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(ctx.t('meal.planner.cancel.generation.title')),
+          content: Text(ctx.t('meal.planner.cancel.generation.message')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(ctx.t('common.cancel')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(ctx.t('common.confirm')),
+            ),
+          ],
+        ),
+      );
+      if (confirmed == true && mounted) {
+        mealPlanProvider.cancelPlanGeneration();
+        setState(() => _showForm = true);
+      }
+      return;
+    }
+
     // Check if user is premium (premium users don't see ads)
     final premiumProvider = Provider.of<PremiumProvider>(context, listen: false);
     
@@ -969,7 +996,7 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  plan.name,
+                  context.getDisplayPlanName(plan.name),
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

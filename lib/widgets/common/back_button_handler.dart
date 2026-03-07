@@ -8,8 +8,9 @@ import '../../core/theme/colors.dart';
 /// Global back button handler.
 ///
 /// Rules:
-/// - If current route is NOT Home (`/`), navigate to Home.
 /// - If current route IS Home (`/`), show an exit confirmation bottom sheet.
+/// - If current route is a main bottom nav tab (recipes, plan, shop, chat), go to Home.
+/// - Otherwise: pop if possible, else go to parent route or Home.
 class BackButtonHandler extends StatefulWidget {
   final Widget child;
   final List<String> homeRoutes;
@@ -117,6 +118,9 @@ class _BackButtonHandlerState extends State<BackButtonHandler> {
     }
   }
 
+  /// Main bottom nav tabs: back should always go to home, never close app.
+  static const _bottomNavRoutes = ['/recipes', '/planner', '/grocery', '/chat'];
+
   /// When on a "child" route (e.g. /grocery/:id), back should go to parent (e.g. /grocery).
   /// Returns the parent path or null if we should use default behavior (go to home).
   String? _parentRoute(String path) {
@@ -195,17 +199,32 @@ class _BackButtonHandlerState extends State<BackButtonHandler> {
       }
 
       final isHome = widget.homeRoutes.contains(routePath);
+      final isBottomNavTab = _bottomNavRoutes.contains(routePath);
 
-      // Global rule: Home => confirm exit; else pop to previous screen if possible, else go home
+      // Home => confirm exit
       if (isHome) {
         _showExitConfirmation(context);
+        return;
+      }
+
+      // Bottom nav tabs (recipes, plan, shop, chat) => always go to home first
+      if (isBottomNavTab) {
+        router.go('/');
+        return;
+      }
+
+      // Child routes (e.g. /grocery/:id) => go to parent
+      final parent = _parentRoute(routePath);
+      if (parent != null) {
+        router.go(parent);
+        return;
+      }
+
+      // Other routes => pop if possible, else go home
+      if (context.canPop()) {
+        context.pop();
       } else {
-        if (context.canPop()) {
-          context.pop();
-        } else {
-          final parent = _parentRoute(routePath);
-          router.go(parent ?? '/');
-        }
+        router.go('/');
       }
     });
   }

@@ -376,6 +376,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get recipesGenerating => 'Oluşturuluyor...';
 
   @override
+  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get recipesCancelGenerationMessage =>
+      'A recipe is being generated. Are you sure you want to cancel and go back?';
+
+  @override
   String get recipesNewRecipe => 'Yeni Tarif';
 
   @override
@@ -606,10 +613,24 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mealPlannerToday => 'Bugün';
 
   @override
+  String get mealPlannerCancelGenerationTitle => 'Oluşturmayı iptal et?';
+
+  @override
+  String get mealPlannerCancelGenerationMessage =>
+      'Yemek planı oluşturuluyor. İptal edip geri dönmek istediğinizden emin misiniz?';
+
+  @override
   String get groceryTitle => 'Akıllı Market';
 
   @override
   String get grocerySubtitle => 'Alışveriş listeniz';
+
+  @override
+  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+
+  @override
+  String get groceryCancelGenerationMessage =>
+      'A grocery list is being created. Are you sure you want to cancel and go back?';
 
   @override
   String get groceryQuickActions => 'Hızlı İşlemler';
@@ -945,6 +966,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get chatNewChat => 'Yeni sohbet';
 
   @override
+  String get chatNewChatConfirmTitle => 'New Conversation?';
+
+  @override
+  String get chatNewChatConfirmMessage =>
+      'Start a new conversation? Your current chat will be saved.';
+
+  @override
   String get chatCopy => 'Kopyala';
 
   @override
@@ -1248,6 +1276,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get scannerAnalyzing => 'Malzemeleriniz analiz ediliyor...';
 
   @override
+  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+
+  @override
+  String get scannerCancelAnalysisMessage =>
+      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+
+  @override
   String get scannerDetected => 'Tespit Edilen Malzemeler';
 
   @override
@@ -1483,6 +1518,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get weeklyPlanTitle => 'Haftanız Bir Bakışta';
 
   @override
+  String get mealPlanDefaultName => 'Haftalık dengeli plan';
+
+  @override
   String get weeklyPlanNoPlans => 'Henüz öğün planı yok';
 
   @override
@@ -1655,7 +1693,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumRestorePurchases => 'Satın Alınanları Geri Yükle';
 
   @override
-  String get premiumContinueWithAd => 'Continue with ad';
+  String get premiumContinueWithAd => 'Reklamla devam et';
 
   @override
   String get premiumPrivacyPolicy => 'Gizlilik Politikası';

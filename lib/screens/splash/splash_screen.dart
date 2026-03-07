@@ -193,24 +193,13 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
 
     if (isFirstLaunch) {
-      // First launch (Android & iOS): show Pro only when weekly_sub is true
-      final openProFirstLaunch = await _shouldOpenPro();
-      if (!mounted) return;
-      if (openProFirstLaunch) {
-        debugPrint(
-          '[SplashScreen] 📱 First launch: weekly_sub true, navigating to Pro (Android & iOS)',
-        );
-        context.go('/pro?src=splash');
-      } else {
-        debugPrint(
-          '[SplashScreen] 📱 First launch: weekly_sub false, skipping Pro, showing splash inter then language-selection',
-        );
-        await _showSplashInterstitialThenGo('/language-selection');
-      }
+      // First launch: Splash → Onboarding → Pro → Home
+      debugPrint('[SplashScreen] 📱 First launch: navigating to Onboarding');
+      await _showSplashInterstitialThenGo('/onboarding');
       return;
     }
 
-    // Subsequent launches: check if pro should be shown (feature-flagged)
+    // After first launch: Splash → Pro → Home
     final openPro = await _shouldOpenPro();
     if (!mounted) return;
     if (openPro) {

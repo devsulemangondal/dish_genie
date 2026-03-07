@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
 import '../../providers/grocery_provider.dart';
-import '../../services/voice_service.dart';
+import '../voice/voice_input_dialog.dart';
 import 'rtl_helper.dart';
 
 class SearchBar extends StatefulWidget {
@@ -25,7 +25,6 @@ class _SearchBarState extends State<SearchBar>
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final LayerLink _layerLink = LayerLink();
-  bool _isListening = false;
   bool _showSuggestions = false;
   int _selectedIndex = -1;
   OverlayEntry? _overlayEntry;
@@ -152,7 +151,6 @@ class _SearchBarState extends State<SearchBar>
   @override
   void initState() {
     super.initState();
-    VoiceService.initialize();
     _placeholderController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -346,86 +344,59 @@ class _SearchBarState extends State<SearchBar>
     _handleSubmit(suggestion);
   }
 
-  Future<void> _toggleListening() async {
-    if (_isListening) {
-      await VoiceService.stop();
-      setState(() {
-        _isListening = false;
-      });
-    } else {
-      setState(() {
-        _isListening = true;
-      });
+  Future<void> _showVoiceInputDialog() async {
+    final text = await showVoiceInputDialog(context);
+    if (text == null || text.trim().isEmpty || !mounted) return;
 
-      await VoiceService.listen(
-        onResult: (text) {
-          setState(() {
-            _controller.text = text;
-            _isListening = false;
-          });
+    setState(() {
+      _controller.text = text.trim();
+    });
 
-          // Check if this is a grocery command
-          final groceryItems = _extractGroceryItems(text);
-          if (groceryItems != null && groceryItems.isNotEmpty) {
-            final groceryProvider = Provider.of<GroceryProvider>(
-              context,
-              listen: false,
-            );
-            groceryProvider.addItemsByName(groceryItems);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    Icon(
-                      Icons.shopping_cart,
-                      size: 20,
+    // Check if this is a grocery command
+    final groceryItems = _extractGroceryItems(text.trim());
+    if (groceryItems != null && groceryItems.isNotEmpty) {
+      final groceryProvider = Provider.of<GroceryProvider>(
+        context,
+        listen: false,
+      );
+      groceryProvider.addItemsByName(groceryItems);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(
+                  Icons.shopping_cart,
+                  size: 20,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    context.t('grocery.added.items', {
+                      'count': '${groceryItems.length}',
+                    }),
+                    style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        context.t('grocery.added.items', {
-                          'count': '${groceryItems.length}',
-                        }),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                backgroundColor: AppColors.primary,
-                duration: const Duration(seconds: 2),
-              ),
-            );
-            Future.delayed(const Duration(milliseconds: 1500), () {
-              if (mounted) {
-                setState(() {
-                  _controller.text = '';
-                });
-              }
-            });
-          } else {
-            _handleSubmit(text);
-          }
-        },
-        onPartialResult: (text) {
-          // Partial results can be used for live transcription if needed
-        },
-        onDone: () {
+              ],
+            ),
+            backgroundColor: AppColors.primary,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        if (mounted) {
           setState(() {
-            _isListening = false;
+            _controller.text = '';
           });
-        },
-        onError: (error) {
-          setState(() {
-            _isListening = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${context.t('common.error')}: $error')),
-          );
-        },
-      );
+        }
+      });
+    } else {
+      _handleSubmit(text.trim());
     }
   }
 
@@ -449,7 +420,6 @@ class _SearchBarState extends State<SearchBar>
     _placeholderController.dispose();
     _controller.dispose();
     _focusNode.dispose();
-    VoiceService.stop();
     super.dispose();
   }
 
@@ -549,22 +519,18 @@ class _SearchBarState extends State<SearchBar>
                 ),
                 // Mic button
                 GestureDetector(
-                  onTap: _toggleListening,
+                  onTap: _showVoiceInputDialog,
                   child: Container(
                     width: 36,
                     height: 36,
                     margin: RtlEdgeInsets.only(context: context, right: 8),
-                    decoration: BoxDecoration(
-                      color: _isListening
-                          ? AppColors.destructive
-                          : Colors.white,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      _isListening ? Icons.mic_off : Icons.mic,
-                      color: _isListening
-                          ? Theme.of(context).colorScheme.onError
-                          : AppColors.genieLavender, // Light blue
+                    child: const Icon(
+                      Icons.mic,
+                      color: AppColors.genieLavender,
                       size: 18,
                     ),
                   ),
