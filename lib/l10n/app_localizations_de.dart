@@ -658,6 +658,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Sage \"Füge Hähnchen, Tomaten, Milch hinzu...\"';
 
   @override
+  String get voiceTapToStart => 'Tippen zum Starten';
+
+  @override
   String get groceryCategories => 'Kategorien';
 
   @override

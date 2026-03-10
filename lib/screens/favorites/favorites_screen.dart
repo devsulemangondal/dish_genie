@@ -25,8 +25,8 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  List<String> _favorites = [];
-  List<String> _saved = [];
+  List<Recipe> _favoritesRecipes = [];
+  List<Recipe> _savedRecipes = [];
   List<MealPlan> _mealPlans = [];
   bool _isLoading = true;
 
@@ -48,6 +48,48 @@ class _FavoritesScreenState extends State<FavoritesScreen>
     final favorites = await StorageService.getFavorites();
     final saved = await StorageService.getSavedRecipes();
 
+    // Resolve slugs to recipes (RecipeProvider + persisted AI recipe data)
+    final recipeProvider = context.read<RecipeProvider>();
+    final favRecipes = <Recipe>[];
+    final validFavSlugs = <String>[];
+    for (final slug in favorites) {
+      var recipe = recipeProvider.getRecipeBySlug(slug);
+      recipe ??= await StorageService.getRecipeDataBySlug(slug);
+      if (recipe != null) {
+        favRecipes.add(recipe);
+        validFavSlugs.add(slug);
+      }
+    }
+    final savedRecipesList = <Recipe>[];
+    final validSavedSlugs = <String>[];
+    for (final slug in saved) {
+      var recipe = recipeProvider.getRecipeBySlug(slug);
+      recipe ??= await StorageService.getRecipeDataBySlug(slug);
+      if (recipe != null) {
+        savedRecipesList.add(recipe);
+        validSavedSlugs.add(slug);
+      }
+    }
+    // Clean orphan slugs that no longer resolve (e.g. from old installs)
+    final orphanFav = favorites.where((s) => !validFavSlugs.contains(s));
+    final orphanSaved = saved.where((s) => !validSavedSlugs.contains(s));
+    for (final slug in orphanFav) {
+      if (!validSavedSlugs.contains(slug)) {
+        await StorageService.removeRecipeDataForSlug(slug);
+      }
+    }
+    for (final slug in orphanSaved) {
+      if (!validFavSlugs.contains(slug)) {
+        await StorageService.removeRecipeDataForSlug(slug);
+      }
+    }
+    if (validFavSlugs.length != favorites.length) {
+      await StorageService.saveFavorites(validFavSlugs);
+    }
+    if (validSavedSlugs.length != saved.length) {
+      await StorageService.saveSavedRecipes(validSavedSlugs);
+    }
+
     // Load meal plans
     final mealPlanProvider = context.read<MealPlanProvider>();
     final currentPlan = mealPlanProvider.currentMealPlan;
@@ -55,11 +97,13 @@ class _FavoritesScreenState extends State<FavoritesScreen>
       _mealPlans = [currentPlan];
     }
 
-    setState(() {
-      _favorites = favorites;
-      _saved = saved;
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _favoritesRecipes = favRecipes;
+        _savedRecipes = savedRecipesList;
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -180,7 +224,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                   if (showText) ...[
                                     SizedBox(width: isVerySmallScreen ? 2 : 4),
                                     Text(
-                                      '${_favorites.length}',
+                                      '${_favoritesRecipes.length}',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
@@ -214,7 +258,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                   if (showText) ...[
                                     SizedBox(width: isVerySmallScreen ? 2 : 4),
                                     Text(
-                                      '${_saved.length}',
+                                      '${_savedRecipes.length}',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
@@ -328,6 +372,10 @@ class _FavoritesScreenState extends State<FavoritesScreen>
     final favorites = await StorageService.getFavorites();
     favorites.remove(slug);
     await StorageService.saveFavorites(favorites);
+    // Only remove recipe data if not still in saved list
+    if (!(await StorageService.getSavedRecipes()).contains(slug)) {
+      await StorageService.removeRecipeDataForSlug(slug);
+    }
     await _loadData();
   }
 
@@ -335,11 +383,15 @@ class _FavoritesScreenState extends State<FavoritesScreen>
     final saved = await StorageService.getSavedRecipes();
     saved.remove(slug);
     await StorageService.saveSavedRecipes(saved);
+    // Only remove recipe data if not still in favorites list
+    if (!(await StorageService.getFavorites()).contains(slug)) {
+      await StorageService.removeRecipeDataForSlug(slug);
+    }
     await _loadData();
   }
 
   Widget _buildFavoritesTab(BuildContext context) {
-    if (_favorites.isEmpty) {
+    if (_favoritesRecipes.isEmpty) {
       return _buildEmptyState(
         context,
         context.t('favorites.no.favorites'),
@@ -350,18 +402,11 @@ class _FavoritesScreenState extends State<FavoritesScreen>
       );
     }
 
-    final recipeProvider = context.read<RecipeProvider>();
-    final recipes = _favorites
-        .map((slug) => recipeProvider.getRecipeBySlug(slug))
-        .where((recipe) => recipe != null)
-        .cast<Recipe>()
-        .toList();
-
-    return _buildRecipesList(context, recipes, _removeFromFavorites);
+    return _buildRecipesList(context, _favoritesRecipes, _removeFromFavorites);
   }
 
   Widget _buildSavedTab(BuildContext context) {
-    if (_saved.isEmpty) {
+    if (_savedRecipes.isEmpty) {
       return _buildEmptyState(
         context,
         context.t('favorites.no.saved'),
@@ -372,14 +417,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
       );
     }
 
-    final recipeProvider = context.read<RecipeProvider>();
-    final recipes = _saved
-        .map((slug) => recipeProvider.getRecipeBySlug(slug))
-        .where((recipe) => recipe != null)
-        .cast<Recipe>()
-        .toList();
-
-    return _buildRecipesList(context, recipes, _removeFromSaved);
+    return _buildRecipesList(context, _savedRecipes, _removeFromSaved);
   }
 
   Widget _buildMealPlansTab(BuildContext context) {

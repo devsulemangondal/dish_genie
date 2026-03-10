@@ -214,6 +214,7 @@
   "groceryVoiceAssistant": "المساعد الصوتي",
   "groceryListeningHint": "جاري الاستماع...",
   "groceryVoiceHint": "قل \"أضف دجاج، طماطم، حليب...\"",
+  "voiceTapToStart": "انقر للبدء",
   "groceryCategories": "الفئات",
   "groceryProduce": "الخضروات والفواكه",
   "groceryProtein": "البروتين",

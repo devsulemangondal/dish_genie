@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+
 import '../data/models/chat_message.dart';
 import 'supabase_service.dart';
 

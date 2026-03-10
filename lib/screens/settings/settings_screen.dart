@@ -337,9 +337,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 0,
-                    vertical: 12,
+                  padding: EdgeInsets.only(
+                    left: 0,
+                    right: 0,
+                    top: 12,
+                    bottom: 12 + MediaQuery.of(context).padding.bottom,
                   ),
                   children: [
                     // Premium Card

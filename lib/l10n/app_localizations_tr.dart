@@ -660,6 +660,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get groceryVoiceHint => '\"Tavuk, domates, süt ekle...\" deyin';
 
   @override
+  String get voiceTapToStart => 'Başlamak için dokunun';
+
+  @override
   String get groceryCategories => 'Kategoriler';
 
   @override

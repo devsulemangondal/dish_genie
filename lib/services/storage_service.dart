@@ -1,6 +1,9 @@
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../data/models/recipe.dart';
 
 class StorageService {
   /// Premium entitlement (local-only).
@@ -131,6 +134,50 @@ class StorageService {
 
   // Saved Recipes
   static const String _savedRecipesKey = 'dishgenie_saved_recipes';
+
+  /// Persisted recipe data for favorites/saved (AI-generated recipes not in RecipeProvider).
+  static const String _savedRecipeDataKey = 'dishgenie_saved_recipe_data';
+
+  static Future<void> saveRecipeDataForSlug(String slugOrId, Recipe recipe) async {
+    try {
+      final prefs = await _prefs;
+      final json = prefs.getString(_savedRecipeDataKey);
+      final map = json != null
+          ? Map<String, dynamic>.from(jsonDecode(json) as Map)
+          : <String, dynamic>{};
+      map[slugOrId] = recipe.toJson();
+      await prefs.setString(_savedRecipeDataKey, jsonEncode(map));
+    } catch (e) {
+      debugPrint('StorageService.saveRecipeDataForSlug error: $e');
+    }
+  }
+
+  static Future<Recipe?> getRecipeDataBySlug(String slugOrId) async {
+    try {
+      final prefs = await _prefs;
+      final json = prefs.getString(_savedRecipeDataKey);
+      if (json == null) return null;
+      final map = jsonDecode(json) as Map<String, dynamic>?;
+      final recipeJson = map?[slugOrId];
+      if (recipeJson is! Map) return null;
+      return Recipe.fromJson(Map<String, dynamic>.from(recipeJson));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<void> removeRecipeDataForSlug(String slugOrId) async {
+    try {
+      final prefs = await _prefs;
+      final json = prefs.getString(_savedRecipeDataKey);
+      if (json == null) return;
+      final map = Map<String, dynamic>.from(jsonDecode(json) as Map);
+      map.remove(slugOrId);
+      await prefs.setString(_savedRecipeDataKey, jsonEncode(map));
+    } catch (e) {
+      debugPrint('StorageService.removeRecipeDataForSlug error: $e');
+    }
+  }
 
   static Future<void> saveSavedRecipes(List<String> recipeIds) async {
     final prefs = await _prefs;

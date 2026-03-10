@@ -659,6 +659,9 @@ class AppLocalizationsPl extends AppLocalizations {
       'Powiedz \"Dodaj kurczaka, pomidory, mleko...\"';
 
   @override
+  String get voiceTapToStart => 'Dotknij, aby zacząć';
+
+  @override
   String get groceryCategories => 'Kategorie';
 
   @override

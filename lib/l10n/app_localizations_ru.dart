@@ -659,6 +659,9 @@ class AppLocalizationsRu extends AppLocalizations {
       'Скажите \"Добавить курицу, помидоры, молоко...\"';
 
   @override
+  String get voiceTapToStart => 'Нажмите, чтобы начать';
+
+  @override
   String get groceryCategories => 'Категории';
 
   @override

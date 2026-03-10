@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
@@ -390,6 +391,9 @@ class AdService {
   static final Map<String, bool> _isShowingInterstitial = {};
   /// Tracks show attempt from entry - blocks overlapping calls (e.g. rapid bottom nav taps)
   static final Map<String, bool> _isShowInterstitialInProgress = {};
+  /// Global lock: only one interstitial (any type) can load/show at a time.
+  /// Prevents double ads when user navigates quickly on slow internet.
+  static bool _isAnyInterstitialInProgress = false;
 
   // Track when interstitial ad was dismissed to prevent app open ad from showing immediately
   static DateTime? _lastInterstitialDismissedTime;
@@ -399,6 +403,7 @@ class AdService {
 
   // Cooldown period to prevent ads from chaining
   static const Duration _cooldownAfterAppOpenAd = Duration(seconds: 2);
+  static const Duration _cooldownAfterInterstitialAd = Duration(seconds: 1);
 
   static Future<void> loadInterstitialAdForType({
     required String adType,
@@ -467,11 +472,23 @@ class AdService {
       onAdFailedToShow?.call(null);
       return;
     }
+    // Global lock: only one interstitial of any type at a time (prevents double ads on fast navigation)
+    if (_isAnyInterstitialInProgress) {
+      if (kDebugMode) {
+        print(
+          '⚠️ [AdService] Another interstitial already loading or showing, skipping "$adType"',
+        );
+      }
+      onAdFailedToShow?.call(null);
+      return;
+    }
     _isShowInterstitialInProgress[adType] = true;
+    _isAnyInterstitialInProgress = true;
 
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
       _isShowInterstitialInProgress[adType] = false;
+      _isAnyInterstitialInProgress = false;
       onAdFailedToShow?.call(null);
       return;
     }
@@ -489,6 +506,22 @@ class AdService {
           );
         }
         _isShowInterstitialInProgress[adType] = false;
+        _isAnyInterstitialInProgress = false;
+        onAdFailedToShow?.call(null);
+        return;
+      }
+    }
+    // Short cooldown after last interstitial to avoid rapid chaining on fast navigation
+    if (_lastInterstitialDismissedTime != null) {
+      final timeSince = DateTime.now().difference(_lastInterstitialDismissedTime!);
+      if (timeSince < _cooldownAfterInterstitialAd) {
+        if (kDebugMode) {
+          print(
+            '⚠️ [AdService] Cooldown active after interstitial: ${timeSince.inMilliseconds}ms, skipping "$adType"',
+          );
+        }
+        _isShowInterstitialInProgress[adType] = false;
+        _isAnyInterstitialInProgress = false;
         onAdFailedToShow?.call(null);
         return;
       }
@@ -641,6 +674,7 @@ class AdService {
         );
       }
       _isShowInterstitialInProgress[adType] = false;
+      _isAnyInterstitialInProgress = false;
       dismissLoader();
       onAdFailedToShow?.call(null);
       return;
@@ -672,6 +706,7 @@ class AdService {
           // Reset showing and in-progress flags
           _isShowingInterstitial[adType] = false;
           _isShowInterstitialInProgress[adType] = false;
+          _isAnyInterstitialInProgress = false;
           ad.dispose();
           _interstitialAds[adType] = null;
           onAdDismissed?.call();
@@ -685,6 +720,7 @@ class AdService {
           // Reset showing and in-progress flags
           _isShowingInterstitial[adType] = false;
           _isShowInterstitialInProgress[adType] = false;
+          _isAnyInterstitialInProgress = false;
           ad.dispose();
           _interstitialAds[adType] = null;
           // Dismiss loader if ad failed to show
@@ -701,6 +737,8 @@ class AdService {
           );
         }
         _isShowingInterstitial[adType] = false;
+        _isShowInterstitialInProgress[adType] = false;
+        _isAnyInterstitialInProgress = false;
         _interstitialAds[adType] = null;
         dismissLoader();
         onAdFailedToShow?.call(ad);
@@ -718,6 +756,7 @@ class AdService {
       // Reset showing and in-progress flags if ad is not available
       _isShowingInterstitial[adType] = false;
       _isShowInterstitialInProgress[adType] = false;
+      _isAnyInterstitialInProgress = false;
       onAdFailedToShow?.call(null);
     }
   }
@@ -933,8 +972,16 @@ class _AdLoadingDialogState extends State<_AdLoadingDialog> {
   @override
   void initState() {
     super.initState();
+    // Hide status bar and nav bar for true full-screen loader
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     // Animate loading dots (matching web app)
     _animateDots();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    super.dispose();
   }
 
   void _animateDots() {
@@ -956,14 +1003,23 @@ class _AdLoadingDialogState extends State<_AdLoadingDialog> {
     final theme = Theme.of(context);
     // Use solid background color matching the theme (no transparency)
     final backgroundColor = theme.colorScheme.surface;
+    final isDark = theme.brightness == Brightness.dark;
+    final overlayStyle = SystemUiOverlayStyle(
+      statusBarColor: backgroundColor,
+      systemNavigationBarColor: backgroundColor,
+      statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+    );
 
     return PopScope(
       canPop: false, // Prevent dismissing while loading
-      child: Dialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        insetPadding: EdgeInsets.zero,
-        child: MediaQuery.removePadding(
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: overlayStyle,
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          insetPadding: EdgeInsets.zero,
+          child: MediaQuery.removePadding(
           context: context,
           removeTop: true,
           removeBottom: true,
@@ -1028,6 +1084,7 @@ class _AdLoadingDialogState extends State<_AdLoadingDialog> {
           ),
         ),
       ),
+        ),
     );
   }
 }

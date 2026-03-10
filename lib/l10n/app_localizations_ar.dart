@@ -656,6 +656,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get groceryVoiceHint => 'قل \"أضف دجاج، طماطم، حليب...\"';
 
   @override
+  String get voiceTapToStart => 'انقر للبدء';
+
+  @override
   String get groceryCategories => 'الفئات';
 
   @override

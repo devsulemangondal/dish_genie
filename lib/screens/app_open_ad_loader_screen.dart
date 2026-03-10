@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -28,6 +29,8 @@ class _AppOpenAdLoaderScreenState extends State<AppOpenAdLoaderScreen> {
   @override
   void initState() {
     super.initState();
+    // Hide status bar and nav bar for true full-screen loader
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     _screenStartTime = DateTime.now();
     if (kDebugMode) {
       print('🚀 [LoaderScreen] initState() called');
@@ -45,6 +48,12 @@ class _AppOpenAdLoaderScreenState extends State<AppOpenAdLoaderScreen> {
         _loadAndShowAd();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    super.dispose();
   }
 
   void _animateDots() {
@@ -367,15 +376,33 @@ class _AppOpenAdLoaderScreenState extends State<AppOpenAdLoaderScreen> {
       WidgetsBinding.instance.ensureVisualUpdate();
     });
 
+    final isDark = theme.brightness == Brightness.dark;
+    final overlayStyle = SystemUiOverlayStyle(
+      statusBarColor: backgroundColor,
+      systemNavigationBarColor: backgroundColor,
+      statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+    );
+
     return PopScope(
       canPop: false, // Prevent back button while loading
-      child: Scaffold(
-        backgroundColor: backgroundColor,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: overlayStyle,
+        child: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          removeBottom: true,
+          removeLeft: true,
+          removeRight: true,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: backgroundColor,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
               // Loader icon - matching web app Loader2 icon size (w-12 h-12 = 48px)
               SizedBox(
                 width: 48,
@@ -414,7 +441,9 @@ class _AppOpenAdLoaderScreenState extends State<AppOpenAdLoaderScreen> {
                   );
                 },
               ),
-            ],
+                ],
+              ),
+            ),
           ),
         ),
       ),

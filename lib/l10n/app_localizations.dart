@@ -1418,6 +1418,12 @@ abstract class AppLocalizations {
   /// **'Say \"Add chicken, tomatoes, milk...\"'**
   String get groceryVoiceHint;
 
+  /// No description provided for @voiceTapToStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to start'**
+  String get voiceTapToStart;
+
   /// No description provided for @groceryCategories.
   ///
   /// In en, this message translates to:

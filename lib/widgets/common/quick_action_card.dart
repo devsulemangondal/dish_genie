@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../core/theme/colors.dart';
 import 'rtl_icon.dart';
 
@@ -37,12 +38,10 @@ class _QuickActionCardState extends State<QuickActionCard>
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeOut,
-      ),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
     Future.delayed(Duration(milliseconds: widget.delay), () {
       if (mounted) _controller.forward();
     });
@@ -70,11 +69,7 @@ class _QuickActionCardState extends State<QuickActionCard>
               onTapCancel: () => setState(() => _isHovered = false),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                transform: Matrix4.translationValues(
-                  0,
-                  _isHovered ? -4 : 0,
-                  0,
-                ),
+                transform: Matrix4.translationValues(0, _isHovered ? -4 : 0, 0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
@@ -86,33 +81,37 @@ class _QuickActionCardState extends State<QuickActionCard>
                       Padding(
                         padding: const EdgeInsets.all(12),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             // Icon
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: widget.iconGradient,
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primary.withOpacity(0.2),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
+                            Center(
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: widget.iconGradient,
                                   ),
-                                ],
-                              ),
-                              child: Icon(
-                                widget.icon,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                size: 20,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppColors.primary.withOpacity(0.2),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Icon(
+                                  widget.icon,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                  size: 20,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -126,7 +125,7 @@ class _QuickActionCardState extends State<QuickActionCard>
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.start,
+                              textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 4),
                             // Description
@@ -134,12 +133,14 @@ class _QuickActionCardState extends State<QuickActionCard>
                               widget.description,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withOpacity(0.6),
                                 fontWeight: FontWeight.w500,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.start,
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -147,22 +148,26 @@ class _QuickActionCardState extends State<QuickActionCard>
                       // Arrow indicator - positioned at end for RTL support
                       Positioned(
                         bottom: 12,
-                        right: 12, // Will be mirrored automatically by Directionality
+                        right:
+                            12, // Will be mirrored automatically by Directionality
                         child: AnimatedOpacity(
                           opacity: _isHovered ? 1.0 : 0.0,
                           duration: const Duration(milliseconds: 300),
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const RtlForwardIcon(
-                                size: 12,
-                                color: AppColors.primary,
-                              ),
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest
+                                  .withOpacity(0.5),
+                              shape: BoxShape.circle,
                             ),
+                            child: const RtlForwardIcon(
+                              size: 12,
+                              color: AppColors.primary,
+                            ),
+                          ),
                         ),
                       ),
                     ],

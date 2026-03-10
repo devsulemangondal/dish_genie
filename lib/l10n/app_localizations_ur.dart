@@ -660,6 +660,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get groceryVoiceHint => 'کہیں \"مرغی، ٹماٹر، دودھ شامل کریں...\"';
 
   @override
+  String get voiceTapToStart => 'شروع کرنے کے لیے ٹیپ کریں';
+
+  @override
   String get groceryCategories => 'اقسام';
 
   @override

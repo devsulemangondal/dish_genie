@@ -245,6 +245,7 @@ class _ExitConfirmationBottomSheet extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(24),
       child: SafeArea(
+        bottom: false,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -334,7 +335,6 @@ class _ExitConfirmationBottomSheet extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: MediaQuery.of(context).padding.bottom),
           ],
         ),
       ),

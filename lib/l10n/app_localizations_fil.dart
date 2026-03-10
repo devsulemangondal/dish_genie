@@ -662,6 +662,9 @@ class AppLocalizationsFil extends AppLocalizations {
       'Sabihin \"Magdagdag ng manok, kamatis, gatas...\"';
 
   @override
+  String get voiceTapToStart => 'I-tap para magsimula';
+
+  @override
   String get groceryCategories => 'Mga Kategorya';
 
   @override

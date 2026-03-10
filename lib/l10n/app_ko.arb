@@ -297,6 +297,7 @@
   "groceryViewList": "목록 보기",
   "groceryVoiceAssistant": "음성 어시스턴트",
   "groceryVoiceHint": "\"치킨, 토마토, 우유 추가\"라고 말하세요",
+  "voiceTapToStart": "탭하여 시작",
   "groceryVoiceHintExample": "\"치킨, 토마토 추가...\"라고 말하세요.",
   "groceryWeeklyList": "주간 목록",
   "groceryYourItems": "귀하의 항목",

@@ -659,6 +659,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get groceryVoiceHint => '\"Тауық, қызанақ, сүт қосу...\" деп айтыңыз';
 
   @override
+  String get voiceTapToStart => 'Бастау үшін басыңыз';
+
+  @override
   String get groceryCategories => 'Санаттар';
 
   @override

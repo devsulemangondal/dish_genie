@@ -658,6 +658,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get groceryVoiceHint => '\"Tovuq, pomidor, sut qo\'sh...\" deng';
 
   @override
+  String get voiceTapToStart => 'Boshlash uchun bosing';
+
+  @override
   String get groceryCategories => 'Kategoriyalar';
 
   @override

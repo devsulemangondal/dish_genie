@@ -658,6 +658,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get groceryVoiceHint => 'Sê \"Voeg hoender, tamaties, melk by...\"';
 
   @override
+  String get voiceTapToStart => 'Tik om te begin';
+
+  @override
   String get groceryCategories => 'Kategorieë';
 
   @override

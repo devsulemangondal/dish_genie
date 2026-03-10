@@ -658,6 +658,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get groceryVoiceHint => 'بگویید \"اضافه کن مرغ، گوجه، شیر...\"';
 
   @override
+  String get voiceTapToStart => 'برای شروع ضربه بزنید';
+
+  @override
   String get groceryCategories => 'دسته‌بندی‌ها';
 
   @override

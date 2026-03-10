@@ -657,6 +657,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get groceryVoiceHint => 'Nói \"Thêm gà, cà chua, sữa...\"';
 
   @override
+  String get voiceTapToStart => 'Chạm để bắt đầu';
+
+  @override
   String get groceryCategories => 'Danh Mục';
 
   @override

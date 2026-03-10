@@ -658,6 +658,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get groceryVoiceHint => 'कहें \"चिकन, टमाटर, दूध जोड़ें...\"';
 
   @override
+  String get voiceTapToStart => 'शुरू करने के लिए टैप करें';
+
+  @override
   String get groceryCategories => 'श्रेणियां';
 
   @override

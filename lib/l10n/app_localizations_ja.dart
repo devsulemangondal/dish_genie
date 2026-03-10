@@ -654,6 +654,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get groceryVoiceHint => '「チキン、トマト、牛乳を追加」と言ってください';
 
   @override
+  String get voiceTapToStart => 'タップして開始';
+
+  @override
   String get groceryCategories => 'カテゴリー';
 
   @override

@@ -652,6 +652,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get groceryVoiceHint => '说\"添加鸡肉、番茄、牛奶...\"';
 
   @override
+  String get voiceTapToStart => '点击开始';
+
+  @override
   String get groceryCategories => '分类';
 
   @override

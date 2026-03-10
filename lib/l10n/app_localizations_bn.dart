@@ -660,6 +660,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get groceryVoiceHint => 'বলুন \"মুরগি, টমেটো, দুধ যোগ করুন...\"';
 
   @override
+  String get voiceTapToStart => 'শুরু করতে আলতো চাপুন';
+
+  @override
   String get groceryCategories => 'বিভাগ';
 
   @override

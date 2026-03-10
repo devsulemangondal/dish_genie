@@ -88,7 +88,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         if (fromPaused || fromInactiveAfterPause) {
           // Don't show open ad when user is on IAP or Settings screen
           final currentPath = _getCurrentRoutePath();
-          final isBlockedScreen = currentPath != null &&
+          final isBlockedScreen =
+              currentPath != null &&
               (currentPath == '/pro' ||
                   currentPath.contains('/pro') ||
                   currentPath == '/settings' ||

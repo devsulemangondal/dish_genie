@@ -656,6 +656,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get groceryVoiceHint => 'พูดว่า \"เพิ่มไก่ มะเขือเทศ นม...\"';
 
   @override
+  String get voiceTapToStart => 'แตะเพื่อเริ่มต้น';
+
+  @override
   String get groceryCategories => 'หมวดหมู่';
 
   @override

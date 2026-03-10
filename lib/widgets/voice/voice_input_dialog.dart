@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../core/dialogs/app_dialogs.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
-import '../../core/localization/language_config.dart';
-import '../../providers/language_provider.dart';
 import '../../services/voice_service.dart';
 
 /// Shows a Google-style voice input dialog. Returns the transcribed text when
@@ -31,14 +28,6 @@ Future<String?> showVoiceInputDialog(BuildContext context) async {
   bool isListening = false;
   String? resultText;
   final scaffoldContext = context;
-  final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
-  final lang = LanguageConfig.getLanguageByCode(locale.languageCode);
-  final countryPart = (locale.countryCode ?? '').isNotEmpty
-      ? ' (${locale.countryCode})'
-      : (locale.languageCode == 'en' ? ' (United States)' : '');
-  final languageLabel = lang != null
-      ? '${lang.name}$countryPart'
-      : 'English (United States)';
 
   if (!context.mounted) return null;
   await showDialog<void>(
@@ -164,15 +153,14 @@ Future<String?> showVoiceInputDialog(BuildContext context) async {
                 else if (isListening)
                   const _GoogleVoiceAnimatedDots()
                 else
-                  const SizedBox(height: 24),
-                const SizedBox(height: 24),
-                Text(
-                  languageLabel,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[600],
+                  Text(
+                    context.t('voice.tap.to.start'),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
                   ),
-                ),
+                const SizedBox(height: 16),
               ],
             ),
           ),

@@ -219,6 +219,7 @@
   "groceryVoiceAssistant": "Voice Assistant",
   "groceryListeningHint": "Listening...",
   "groceryVoiceHint": "Say \"Add chicken, tomatoes, milk...\"",
+  "voiceTapToStart": "Tap to start",
   "groceryCategories": "Categories",
   "groceryProduce": "Produce",
   "groceryProtein": "Protein",

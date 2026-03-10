@@ -251,6 +251,7 @@ extension L10nExtension on BuildContext {
     'grocery.viewList': (l) => l.groceryViewList,
     'grocery.voice.assistant': (l) => l.groceryVoiceAssistant,
     'grocery.voice.hint': (l) => l.groceryVoiceHint,
+    'voice.tap.to.start': (l) => l.voiceTapToStart,
     'grocery.weekly.list': (l) => l.groceryWeeklyList,
     'grocery.cancel.generation.title': (l) => l.groceryCancelGenerationTitle,
     'grocery.cancel.generation.message': (l) =>

@@ -654,6 +654,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get groceryVoiceHint => '\"치킨, 토마토, 우유 추가\"라고 말하세요';
 
   @override
+  String get voiceTapToStart => '탭하여 시작';
+
+  @override
   String get groceryCategories => '카테고리';
 
   @override

@@ -251,9 +251,11 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   }
 
   Future<void> _toggleLike() async {
+    if (_recipe == null) return;
     final favorites = await StorageService.getFavorites();
     if (_isLiked) {
       favorites.remove(widget.slug);
+      await StorageService.removeRecipeDataForSlug(widget.slug);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.t('common.remove')),
@@ -262,6 +264,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
       );
     } else {
       favorites.add(widget.slug);
+      await StorageService.saveRecipeDataForSlug(widget.slug, _recipe!);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -276,9 +279,11 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   }
 
   Future<void> _toggleSave() async {
+    if (_recipe == null) return;
     final saved = await StorageService.getSavedRecipes();
     if (_isSaved) {
       saved.remove(widget.slug);
+      await StorageService.removeRecipeDataForSlug(widget.slug);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -289,6 +294,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
       );
     } else {
       saved.add(widget.slug);
+      await StorageService.saveRecipeDataForSlug(widget.slug, _recipe!);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${context.t('common.save')}! 📌'),

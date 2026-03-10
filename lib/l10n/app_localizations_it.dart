@@ -659,6 +659,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get groceryVoiceHint => 'Di\' \"Aggiungi pollo, pomodori, latte...\"';
 
   @override
+  String get voiceTapToStart => 'Tocca per iniziare';
+
+  @override
   String get groceryCategories => 'Categorie';
 
   @override
