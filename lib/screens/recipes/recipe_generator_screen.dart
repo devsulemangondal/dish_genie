@@ -9,12 +9,7 @@ import '../../core/theme/colors.dart';
 import '../../data/models/recipe.dart';
 import '../../providers/premium_provider.dart';
 import '../../providers/recipe_provider.dart';
-import '../../services/ad_service.dart';
-import '../../services/card_ad_tracker.dart';
-import '../../services/remote_config_service.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
 import '../../widgets/voice/voice_input_dialog.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
@@ -48,6 +43,9 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (mounted) setState(() {});
+    });
     if (widget.searchQuery != null) {
       _ingredientsController.text = widget.searchQuery!;
       _tabController.animateTo(1);
@@ -62,59 +60,8 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
   }
 
   /// Track when card screen is opened
-  Future<void> _trackCardScreenOpen() async {
-    // Check if user is premium (premium users don't see ads)
-    final premiumProvider = Provider.of<PremiumProvider>(
-      context,
-      listen: false,
-    );
-    if (premiumProvider.isPremium) return;
-
-    // Track the open action
-    final openCount = await CardAdTracker.trackCardOpen();
-
-    // Get the card_inter configuration (single value like "open5" or "back5" or "off")
-    final cardInterConfig = RemoteConfigService.cardInter.trim().toLowerCase();
-
-    // Check if card_inter is "off" - if so, don't show ad
-    if (cardInterConfig != 'off' && cardInterConfig.isNotEmpty) {
-      // Check if config starts with "open"
-      if (cardInterConfig.startsWith('open')) {
-        try {
-          // Extract number after "open"
-          final numStr = cardInterConfig.substring(4); // "open" is 4 characters
-          final threshold = int.parse(numStr);
-          if (threshold > 0) {
-            // Show ad when counter >= threshold
-            final shouldShowAd = openCount >= threshold;
-
-            if (shouldShowAd) {
-              // Show after a small delay to ensure screen is loaded
-              Future.delayed(const Duration(milliseconds: 500), () async {
-                if (mounted) {
-                  await AdService.showInterstitialAdForType(
-                    adType: 'card',
-                    context: context,
-                    loadAdFunction: () => AdService.loadCardInterstitialAd(),
-                    onAdDismissed: () {
-                      // Reset counter after ad is shown
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                    onAdFailedToShow: (ad) {
-                      // Reset counter even if ad fails to show
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                  );
-                }
-              });
-            }
-          }
-        } catch (e) {
-          // If parsing fails, don't show ad
-        }
-      }
-    }
-  }
+  /// Track card screen open (ads removed - reserved for future ad plan)
+  Future<void> _trackCardScreenOpen() async {}
 
   @override
   void dispose() {
@@ -299,8 +246,38 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                   backgroundColor: Colors.transparent,
                   statusBarColor:
                       Theme.of(context).brightness == Brightness.dark
-                      ? const Color(0xFF1A1F35)
-                      : AppColors.genieBlush,
+                          ? const Color(0xFF1A1F35)
+                          : AppColors.genieBlush,
+                  rightContent: _tabController.index == 1 &&
+                          !premiumProvider.isPremium &&
+                          aiRecipeLimit != null
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surface
+                                .withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Theme.of(context)
+                                  .dividerColor
+                                  .withOpacity(0.3),
+                            ),
+                          ),
+                          child: Text(
+                            '$aiRecipeCount/$aiRecipeLimit',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        )
+                      : null,
                 ),
                 // Tabs (hidden while generating)
                 if (!isLoading)
@@ -669,22 +646,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
               ),
             ),
           if (widget.searchQuery == null) const SizedBox(height: 8),
-          // Recipe Native Ad (Small) - Full width extending beyond padding
-          if (widget.searchQuery == null)
-            LayoutBuilder(
-              builder: (context, constraints) {
-                // Calculate full screen width and extend beyond padding
-                final fullWidth = MediaQuery.of(context).size.width;
-                return SizedBox(
-                  width: fullWidth,
-                  child: const ScreenNativeAdWidget(
-                    screenKey: 'recipe',
-                    size: CustomNativeAdSize.small,
-                  ),
-                );
-              },
-            ),
-          if (widget.searchQuery == null) const SizedBox(height: 8),
           // Recipes Grid
           if (displayRecipes.isNotEmpty)
             LayoutBuilder(
@@ -928,7 +889,22 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  onTap: () => context.push('/scan'),
+                                  onTap: () async {
+                                    final premiumProvider =
+                                        context.read<PremiumProvider>();
+                                    final canUse =
+                                        await premiumProvider.canUseScanner();
+                                    if (!mounted) return;
+                                    if (canUse) {
+                                      premiumProvider.incrementScanCount();
+                                      if (mounted) context.push('/scan');
+                                    } else {
+                                      ProNavigation.tryOpen(
+                                        context,
+                                        replace: false,
+                                      );
+                                    }
+                                  },
                                   borderRadius: BorderRadius.circular(12),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -1648,7 +1624,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                ProNavigation.tryOpen(context, replace: true);
+                ProNavigation.tryOpen(context, replace: false);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,

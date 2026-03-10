@@ -11,13 +11,8 @@ import '../../data/models/grocery_list.dart';
 import '../../providers/grocery_provider.dart';
 import '../../providers/meal_plan_provider.dart';
 import '../../providers/premium_provider.dart';
-import '../../services/ad_service.dart';
-import '../../services/card_ad_tracker.dart';
 import '../../services/grocery_service.dart';
-import '../../services/remote_config_service.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
 import '../../widgets/voice/voice_input_dialog.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/loading_genie.dart';
@@ -77,60 +72,8 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     });
   }
 
-  /// Track when card screen is opened
-  Future<void> _trackCardScreenOpen() async {
-    // Check if user is premium (premium users don't see ads)
-    final premiumProvider = Provider.of<PremiumProvider>(
-      context,
-      listen: false,
-    );
-    if (premiumProvider.isPremium) return;
-
-    // Track the open action
-    final openCount = await CardAdTracker.trackCardOpen();
-
-    // Get the card_inter configuration (single value like "open5" or "back5" or "off")
-    final cardInterConfig = RemoteConfigService.cardInter.trim().toLowerCase();
-
-    // Check if card_inter is "off" - if so, don't show ad
-    if (cardInterConfig != 'off' && cardInterConfig.isNotEmpty) {
-      // Check if config starts with "open"
-      if (cardInterConfig.startsWith('open')) {
-        try {
-          // Extract number after "open"
-          final numStr = cardInterConfig.substring(4); // "open" is 4 characters
-          final threshold = int.parse(numStr);
-          if (threshold > 0) {
-            // Show ad when counter >= threshold
-            final shouldShowAd = openCount >= threshold;
-
-            if (shouldShowAd) {
-              // Show after a small delay to ensure screen is loaded
-              Future.delayed(const Duration(milliseconds: 500), () async {
-                if (mounted) {
-                  await AdService.showInterstitialAdForType(
-                    adType: 'card',
-                    context: context,
-                    loadAdFunction: () => AdService.loadCardInterstitialAd(),
-                    onAdDismissed: () {
-                      // Reset counter after ad is shown
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                    onAdFailedToShow: (ad) {
-                      // Reset counter even if ad fails to show
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                  );
-                }
-              });
-            }
-          }
-        } catch (e) {
-          // If parsing fails, don't show ad
-        }
-      }
-    }
-  }
+  /// Track when card screen is opened (ads removed - reserved for future ad plan)
+  Future<void> _trackCardScreenOpen() async {}
 
   @override
   void dispose() {
@@ -169,82 +112,10 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
       return;
     }
 
-    // Check if user is premium (premium users don't see ads)
-    final premiumProvider = Provider.of<PremiumProvider>(
-      context,
-      listen: false,
-    );
-
-    if (!premiumProvider.isPremium) {
-      // Track the back action
-      final backCount = await CardAdTracker.trackCardBack();
-
-      // Get the card_inter configuration (single value like "open5" or "back5" or "off")
-      final cardInterConfig = RemoteConfigService.cardInter
-          .trim()
-          .toLowerCase();
-
-      // Check if card_inter is "off" - if so, don't show ad
-      if (cardInterConfig != 'off' && cardInterConfig.isNotEmpty) {
-        // Check if config starts with "back"
-        if (cardInterConfig.startsWith('back')) {
-          try {
-            // Extract number after "back"
-            final numStr = cardInterConfig.substring(
-              4,
-            ); // "back" is 4 characters
-            final threshold = int.parse(numStr);
-            if (threshold > 0) {
-              // Show ad when counter >= threshold
-              final shouldShowAd = backCount >= threshold;
-
-              if (shouldShowAd) {
-                // Show ad with loader (loader is handled in AdService)
-                await AdService.showInterstitialAdForType(
-                  adType: 'card',
-                  context: context,
-                  loadAdFunction: () => AdService.loadCardInterstitialAd(),
-                  onAdDismissed: () {
-                    // Reset counter after ad is shown
-                    CardAdTracker.resetCardBackCount();
-                    if (mounted) {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/');
-                      }
-                    }
-                  },
-                  onAdFailedToShow: (ad) {
-                    // Reset counter even if ad fails to show
-                    CardAdTracker.resetCardBackCount();
-                    if (mounted) {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/');
-                      }
-                    }
-                  },
-                );
-                // Don't pop immediately, wait for ad callback
-                return;
-              }
-            }
-          } catch (e) {
-            // If parsing fails, just pop
-          }
-        }
-      }
-    }
-
-    // If no ad should be shown, pop normally
-    // Use pop() if possible to properly remove from stack and let BackButtonHandler work
     if (mounted) {
       if (context.canPop()) {
         context.pop();
       } else {
-        // Navigate to home - BackButtonHandler will handle exit confirmation on next back press
         context.go('/');
       }
     }
@@ -1208,11 +1079,6 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                 ),
               ],
             ),
-          ),
-          // Shop Native Ad (Small)
-          const ScreenNativeAdWidget(
-            screenKey: 'shop',
-            size: CustomNativeAdSize.small,
           ),
           const SizedBox(height: 16),
           // Empty state for shop mode when all items are checked

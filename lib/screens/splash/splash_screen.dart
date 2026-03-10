@@ -183,6 +183,10 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (!mounted) return;
 
+    // Increment app session count (for sub_splash logic)
+    final sessionCount = await StorageService.incrementAppSessionCount();
+    if (!mounted) return;
+
     // First launch flow: Splash → Pro → Inter Ad → Language
     final isFirstLaunch =
         isFirstLaunchResult ?? true; // Default to true for first launch
@@ -193,14 +197,14 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
 
     if (isFirstLaunch) {
-      // First launch: Splash → Onboarding → Pro → Home
-      debugPrint('[SplashScreen] 📱 First launch: navigating to Onboarding');
-      await _showSplashInterstitialThenGo('/onboarding');
+      // First launch: Splash → (App Open Ad if RC) → Onboarding
+      debugPrint('[SplashScreen] 📱 First launch: checking splash app open ad');
+      await _showSplashFirstTimeAppOpenThenGo('/onboarding');
       return;
     }
 
-    // After first launch: Splash → Pro → Home
-    final openPro = await _shouldOpenPro();
+    // After first launch: Splash → (App Open) → Pro or Home (sub_splash controls when to show Pro)
+    final openPro = await _shouldOpenProAfterSplash(sessionCount);
     if (!mounted) return;
     if (openPro) {
       // On iOS, skip Pro screen when showProOnIos is false
@@ -208,84 +212,122 @@ class _SplashScreenState extends State<SplashScreen>
         final isLanguageSelected = languageSelectedResult ?? false;
         if (!mounted) return;
         final route = !isLanguageSelected ? '/language-selection' : '/';
-        await _showSplashInterstitialThenGo(route);
+        await _showSplashReturningUserAppOpenThenGo(route);
         return;
       }
-      context.go('/pro?src=splash');
+      await _showSplashReturningUserAppOpenThenGo('/pro?src=splash');
       return;
     }
 
-    // If Pro is disabled remotely (weekly_sub false), show splash inter then continue with the core app flow.
+    // If Pro is disabled remotely (weekly_sub false), show returning user ad then continue.
     try {
       final isLanguageSelected = languageSelectedResult ?? false;
       if (!mounted) return;
       final route = !isLanguageSelected ? '/language-selection' : '/';
-      await _showSplashInterstitialThenGo(route);
+      await _showSplashReturningUserAppOpenThenGo(route);
     } catch (e) {
       debugPrint('[SplashScreen] ❌ Error checking language: $e');
-      // Default to language selection on error
       if (mounted) {
-        await _showSplashInterstitialThenGo('/language-selection');
+        await _showSplashReturningUserAppOpenThenGo('/language-selection');
       }
     }
   }
 
-  /// When IAP is disabled we skip Pro; show the same interstitial (splash inter) on splash before navigating.
-  Future<void> _showSplashInterstitialThenGo(String route) async {
+  /// First launch: show splash app open ad if RC allows, then navigate.
+  /// RC keys: splash_appopen_1sttime (Android), splash_appopen_1sttime_ios (iOS)
+  Future<void> _showSplashFirstTimeAppOpenThenGo(String route) async {
     if (!mounted) return;
     try {
-      await RemoteConfigService.initialize();
-      final shouldShow =
-          RemoteConfigService.showAds && RemoteConfigService.splashInter;
-      if (!shouldShow) {
-        if (mounted) context.go(route);
-        return;
-      }
-    } catch (_) {
+      await RemoteConfigService.initialize().timeout(
+        const Duration(seconds: 3),
+        onTimeout: () => false,
+      );
+      await RemoteConfigService.fetchAndActivate().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {},
+      );
+    } catch (_) {}
+    if (!mounted) return;
+
+    final shouldShow = Platform.isIOS
+        ? RemoteConfigService.splashAppOpen1stTimeIos
+        : RemoteConfigService.splashAppOpen1stTime;
+
+    if (!shouldShow) {
       if (mounted) context.go(route);
       return;
     }
 
-    bool hasNavigated = false;
-    void navigate() {
-      if (hasNavigated || !mounted) return;
-      hasNavigated = true;
-      context.go(route);
+    await AdService.loadAndShowSplashFirstTimeAppOpenAd(
+      context: context,
+      onComplete: () {
+        if (mounted) context.go(route);
+      },
+    );
+  }
+
+  /// Returning user: show splash app open ad if RC allows, then navigate.
+  /// RC keys: splash_appopen_2ndtime (Android), splash_appopen_2ndtime_ios (iOS)
+  Future<void> _showSplashReturningUserAppOpenThenGo(String route) async {
+    if (!mounted) return;
+    try {
+      await RemoteConfigService.initialize().timeout(
+        const Duration(seconds: 3),
+        onTimeout: () => false,
+      );
+      await RemoteConfigService.fetchAndActivate().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {},
+      );
+    } catch (_) {}
+    if (!mounted) return;
+
+    final shouldShow = Platform.isIOS
+        ? RemoteConfigService.splashAppOpen2ndTimeIos
+        : RemoteConfigService.splashAppOpen2ndTime;
+
+    if (!shouldShow) {
+      if (mounted) context.go(route);
+      return;
     }
 
-    await AdService.showInterstitialAdForType(
-      adType: 'splash',
+    await AdService.loadAndShowSplashReturningUserAppOpenAd(
       context: context,
-      loadAdFunction: () => AdService.loadSplashInterstitialAd(),
-      onAdDismissed: navigate,
-      onAdFailedToShow: (_) => navigate(),
+      onComplete: () {
+        if (mounted) context.go(route);
+      },
     );
-
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!hasNavigated && mounted) navigate();
-    });
   }
 
   // _navigateAfterAd removed: interstitial is now after Pro, not on splash.
 
-  /// Ensures Remote Config is initialized and fetched so weekly_sub reflects Firebase (even on first launch).
-  Future<bool> _shouldOpenPro() async {
+  /// Show Pro after splash app open based on sub_splash: 0/off=always, N=every Nth session (3,6,9...).
+  Future<bool> _shouldOpenProAfterSplash(int sessionCount) async {
     try {
-      // 1. Initialize (required for first launch; Firebase is already initialized in main.dart).
       final ok = await RemoteConfigService.initialize().timeout(
         const Duration(seconds: 3),
         onTimeout: () => false,
       );
       if (!ok) return RemoteConfigService.weeklySub;
 
-      // 2. Fetch and activate so we get server values on first launch (not just defaults).
       await RemoteConfigService.fetchAndActivate().timeout(
         const Duration(seconds: 5),
         onTimeout: () {},
       );
 
-      // 3. Now weeklySub reflects Firebase (or cached/default if fetch failed).
-      return RemoteConfigService.weeklySub;
+      if (!RemoteConfigService.weeklySub) return false;
+
+      final config = (Platform.isIOS
+          ? RemoteConfigService.subSplashIos
+          : RemoteConfigService.subSplash)
+          .trim()
+          .toLowerCase();
+      if (config == 'off' || config.isEmpty) return true;
+      if (config == '0') return true;
+
+      final n = int.tryParse(config);
+      if (n == null || n < 1) return true;
+      return sessionCount >= n && sessionCount % n == 0;
     } catch (_) {
       return RemoteConfigService.weeklySub;
     }

@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
+import '../../services/ad_service.dart';
+import '../../services/remote_config_service.dart';
 
 /// Global back button handler.
 ///
@@ -312,9 +316,45 @@ class _ExitConfirmationBottomSheet extends StatelessWidget {
                 // Exit button
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      // Close the app
+                    onPressed: () async {
+                      try {
+                        await RemoteConfigService.initialize();
+                        await RemoteConfigService.fetchAndActivate();
+                      } catch (_) {}
+                      final shouldShowExitAd = Platform.isIOS
+                          ? RemoteConfigService.exitInterIos
+                          : RemoteConfigService.exitInter;
+
+                      if (shouldShowExitAd) {
+                        try {
+                          if (context.mounted) {
+                            await AdService.showInterstitialAdForType(
+                              adType: 'exit',
+                              context: context,
+                              loadAdFunction: () =>
+                                  AdService.loadExitInterstitialAd(),
+                              onAdDismissed: () {
+                                // App closes ONLY after user dismisses the ad
+                                if (context.mounted) {
+                                  Navigator.of(context).pop();
+                                }
+                                SystemNavigator.pop();
+                              },
+                              onAdFailedToShow: (_) {
+                                // Ad failed to load/show - exit without waiting
+                                if (context.mounted) {
+                                  Navigator.of(context).pop();
+                                }
+                                SystemNavigator.pop();
+                              },
+                            );
+                            return; // Do NOT fall through - exit happens in callbacks only
+                          }
+                        } catch (_) {}
+                      }
+
+                      // No ad shown - close sheet and exit
+                      if (context.mounted) Navigator.of(context).pop();
                       SystemNavigator.pop();
                     },
                     style: ElevatedButton.styleFrom(

@@ -5,6 +5,8 @@ import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
 import '../../services/storage_service.dart';
+import '../../widgets/ads/custom_native_ad_widget.dart';
+import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/common/rtl_icon.dart';
@@ -277,6 +279,15 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     },
                   ),
                 ),
+                // Onboarding Native Ad (Medium)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: const ScreenNativeAdWidget(
+                    screenKey: 'onboarding',
+                    size: CustomNativeAdSize.medium,
+                  ),
+                ),
+                const SizedBox(height: 16),
                 // Progress Dots & Button
                 Padding(
                   padding: EdgeInsets.only(

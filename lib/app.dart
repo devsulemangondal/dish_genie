@@ -86,30 +86,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                 _lastLifecycleState == AppLifecycleState.hidden) &&
             _wasPausedBeforeInactive;
         if (fromPaused || fromInactiveAfterPause) {
-          // Don't show open ad when user is on IAP or Settings screen
-          final currentPath = _getCurrentRoutePath();
-          final isBlockedScreen =
-              currentPath != null &&
-              (currentPath == '/pro' ||
-                  currentPath.contains('/pro') ||
-                  currentPath == '/settings' ||
-                  currentPath.contains('/settings'));
-          if (isBlockedScreen) {
-            if (kDebugMode) {
-              print(
-                '🛑 [App] On IAP/settings ($currentPath), skipping app-open ad',
-              );
-            }
-            _wasPausedBeforeInactive = false;
-          } else {
-            if (kDebugMode) {
-              print(
-                '📱 [App] App resumed from background, calling ad manager resume()',
-              );
-            }
-            _adManager.resume();
-            _wasPausedBeforeInactive = false;
-          }
+          // App open ads removed - reserved for future ad plan
+          _wasPausedBeforeInactive = false;
         } else {
           if (kDebugMode) {
             print(

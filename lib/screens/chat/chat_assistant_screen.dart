@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,17 +8,14 @@ import 'package:provider/provider.dart';
 
 import '../../core/dialogs/app_dialogs.dart';
 import '../../core/localization/l10n_extension.dart';
+import '../../services/ad_service.dart';
+import '../../services/remote_config_service.dart';
 import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
 import '../../data/models/chat_message.dart';
 import '../../providers/chat_provider.dart';
 import '../../providers/premium_provider.dart';
-import '../../services/ad_service.dart';
-import '../../services/card_ad_tracker.dart';
-import '../../services/remote_config_service.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
 import '../../widgets/voice/voice_input_dialog.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/chat/typewriter_text.dart';
 import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
@@ -84,60 +82,8 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     });
   }
 
-  /// Track when card screen is opened
-  Future<void> _trackCardScreenOpen() async {
-    // Check if user is premium (premium users don't see ads)
-    final premiumProvider = Provider.of<PremiumProvider>(
-      context,
-      listen: false,
-    );
-    if (premiumProvider.isPremium) return;
-
-    // Track the open action
-    final openCount = await CardAdTracker.trackCardOpen();
-
-    // Get the card_inter configuration (single value like "open5" or "back5" or "off")
-    final cardInterConfig = RemoteConfigService.cardInter.trim().toLowerCase();
-
-    // Check if card_inter is "off" - if so, don't show ad
-    if (cardInterConfig != 'off' && cardInterConfig.isNotEmpty) {
-      // Check if config starts with "open"
-      if (cardInterConfig.startsWith('open')) {
-        try {
-          // Extract number after "open"
-          final numStr = cardInterConfig.substring(4); // "open" is 4 characters
-          final threshold = int.parse(numStr);
-          if (threshold > 0) {
-            // Show ad when counter >= threshold
-            final shouldShowAd = openCount >= threshold;
-
-            if (shouldShowAd) {
-              // Show after a small delay to ensure screen is loaded
-              Future.delayed(const Duration(milliseconds: 500), () async {
-                if (mounted) {
-                  await AdService.showInterstitialAdForType(
-                    adType: 'card',
-                    context: context,
-                    loadAdFunction: () => AdService.loadCardInterstitialAd(),
-                    onAdDismissed: () {
-                      // Reset counter after ad is shown
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                    onAdFailedToShow: (ad) {
-                      // Reset counter even if ad fails to show
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                  );
-                }
-              });
-            }
-          }
-        } catch (e) {
-          // If parsing fails, don't show ad
-        }
-      }
-    }
-  }
+  /// Track when card screen is opened (ads removed - reserved for future ad plan)
+  Future<void> _trackCardScreenOpen() async {}
 
   @override
   void dispose() {
@@ -176,58 +122,6 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
       }
     }
 
-    final shouldShowAd = !premiumProvider.isPremium;
-
-    if (shouldShowAd) {
-      // Track the cooking AI start (first message)
-      final messages = context.read<ChatProvider>().messages;
-      if (messages.isEmpty) {
-        // This is the first message - check for cooking AI interstitial
-        final cookingAiCount = await CardAdTracker.trackCookingAiStart();
-
-        // Get the cookingai_inter configuration (single integer string or "off")
-        final cookingAiConfig = RemoteConfigService.cookingAiInter
-            .trim()
-            .toLowerCase();
-
-        // Check if cookingai_inter is "off" - if so, don't show ad
-        if (cookingAiConfig != 'off' && cookingAiConfig.isNotEmpty) {
-          // Parse the threshold value (single integer string)
-          bool meetsThreshold = false;
-          try {
-            final threshold = int.parse(cookingAiConfig);
-            if (threshold > 0) {
-              // Show ad when counter >= threshold
-              meetsThreshold = cookingAiCount >= threshold;
-            }
-          } catch (e) {
-            // If parsing fails, don't show ad
-            meetsThreshold = false;
-          }
-
-          if (meetsThreshold) {
-            // Show ad with loader (loader is handled in AdService)
-            await AdService.showInterstitialAdForType(
-              adType: 'cookingAi',
-              context: context,
-              loadAdFunction: () => AdService.loadCookingAiInterstitialAd(),
-              onAdDismissed: () {
-                // Reset counter after ad is shown
-                CardAdTracker.resetCookingAiCount();
-                _proceedWithMessage(text);
-              },
-              onAdFailedToShow: (ad) {
-                // Reset counter even if ad fails to show
-                CardAdTracker.resetCookingAiCount();
-                _proceedWithMessage(text);
-              },
-            );
-            return; // Don't proceed until ad is shown
-          }
-        }
-      }
-    }
-
     _proceedWithMessage(text);
   }
 
@@ -251,76 +145,6 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
   }
 
   Future<void> _handleBack() async {
-    // Check if user is premium (premium users don't see ads)
-    final premiumProvider = Provider.of<PremiumProvider>(
-      context,
-      listen: false,
-    );
-
-    if (!premiumProvider.isPremium) {
-      // Track the back action
-      final backCount = await CardAdTracker.trackCardBack();
-
-      // Get the card_inter configuration (single value like "open5" or "back5" or "off")
-      final cardInterConfig = RemoteConfigService.cardInter
-          .trim()
-          .toLowerCase();
-
-      // Check if card_inter is "off" - if so, don't show ad
-      if (cardInterConfig != 'off' && cardInterConfig.isNotEmpty) {
-        // Check if config starts with "back"
-        if (cardInterConfig.startsWith('back')) {
-          try {
-            // Extract number after "back"
-            final numStr = cardInterConfig.substring(
-              4,
-            ); // "back" is 4 characters
-            final threshold = int.parse(numStr);
-            if (threshold > 0) {
-              // Show ad when counter >= threshold
-              final shouldShowAd = backCount >= threshold;
-
-              if (shouldShowAd) {
-                // Show ad with loader (loader is handled in AdService)
-                await AdService.showInterstitialAdForType(
-                  adType: 'card',
-                  context: context,
-                  loadAdFunction: () => AdService.loadCardInterstitialAd(),
-                  onAdDismissed: () {
-                    // Reset counter after ad is shown
-                    CardAdTracker.resetCardBackCount();
-                    if (mounted) {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/');
-                      }
-                    }
-                  },
-                  onAdFailedToShow: (ad) {
-                    // Reset counter even if ad fails to show
-                    CardAdTracker.resetCardBackCount();
-                    if (mounted) {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/');
-                      }
-                    }
-                  },
-                );
-                // Don't pop immediately, wait for ad callback
-                return;
-              }
-            }
-          } catch (e) {
-            // If parsing fails, just pop
-          }
-        }
-      }
-    }
-
-    // If no ad should be shown, pop normally
     if (mounted) {
       if (context.canPop()) {
         context.pop();
@@ -328,6 +152,46 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
         context.go('/');
       }
     }
+  }
+
+  Future<void> _showChatResetInterThenStartNewChat(
+    BuildContext context,
+    ChatProvider chatProvider,
+  ) async {
+    void doStartNewChat() {
+      if (!context.mounted) return;
+      chatProvider.startNewChat();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.t('chat.new.chat')),
+          backgroundColor: AppColors.primary,
+        ),
+      );
+    }
+
+    try {
+      await RemoteConfigService.initialize();
+      await RemoteConfigService.fetchAndActivate();
+    } catch (_) {}
+
+    final shouldShowAd = Platform.isIOS
+        ? RemoteConfigService.chatResetInterIos
+        : RemoteConfigService.chatResetInter;
+
+    if (shouldShowAd && context.mounted) {
+      try {
+        await AdService.showInterstitialAdForType(
+          adType: 'chatReset',
+          context: context,
+          loadAdFunction: () => AdService.loadChatResetInterstitialAd(),
+          onAdDismissed: doStartNewChat,
+          onAdFailedToShow: (_) => doStartNewChat(),
+        );
+        return;
+      } catch (_) {}
+    }
+
+    doStartNewChat();
   }
 
   Future<void> _showVoiceInputDialog() async {
@@ -357,13 +221,12 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     final aiChefLimit = premiumProvider.getAiChefMessageLimit();
     final aiChefMessageCount = premiumProvider.aiChefMessageCount;
 
-    // Determine if limit banner should be shown
-    // Show banner if:
-    // 1. User is not premium AND
-    // 2. Either ai_chef is "off" (feature disabled) OR message count >= limit
+    // Determine if limit banner should be shown (sub_aichat: off/0=unlimited)
+    // Show banner only when there is a limit AND user has reached it
     final shouldShowLimitBanner =
         !premiumProvider.isPremium &&
-        (aiChefLimit == null || aiChefMessageCount >= aiChefLimit);
+        aiChefLimit != null &&
+        aiChefMessageCount >= aiChefLimit;
 
     // Scroll to bottom when new messages arrive (especially during streaming)
     if (messages.length != _previousMessageCount || isLoading) {
@@ -483,12 +346,9 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                               ),
                             );
                             if (confirmed == true && mounted) {
-                              chatProvider.startNewChat();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(context.t('chat.new.chat')),
-                                  backgroundColor: AppColors.primary,
-                                ),
+                              await _showChatResetInterThenStartNewChat(
+                                context,
+                                chatProvider,
                               );
                             }
                           },
@@ -771,11 +631,6 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
             () => _handleSuggestion(context.t('chat.suggestion4')),
           ),
           SizedBox(height: padding),
-          // Chat Native Ad (Small)
-          const ScreenNativeAdWidget(
-            screenKey: 'chat',
-            size: CustomNativeAdSize.small,
-          ),
         ],
       ),
     );

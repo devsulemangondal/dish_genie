@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/colors.dart';
 import '../../core/localization/l10n_extension.dart';
-import '../../services/card_ad_tracker.dart';
-import '../../services/ad_service.dart';
-import '../../services/remote_config_service.dart';
-import '../../providers/premium_provider.dart';
-import '../../core/router/app_router.dart';
+import '../ads/bottom_banner_ad_widget.dart';
 
 /// Shared lock to prevent double interstitial when tapping bottom nav rapidly
 bool _bottomNavProcessing = false;
@@ -58,66 +53,73 @@ class BottomNav extends StatelessWidget {
         ],
       ),
       child: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: horizontalPadding,
-            vertical: verticalPadding,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: _NavItem(
-                  icon: Icons.home_outlined,
-                  label: context.t('common.home'),
-                  isActive: activeTab == 'home',
-                  onTap: () => context.go('/'),
-                  screenWidth: screenWidth,
-                  textScaleFactor: textScaleFactor,
-                ),
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
               ),
-              Expanded(
-                child: _NavItem(
-                  icon: Icons.restaurant_menu_outlined,
-                  label: context.t('common.recipes'),
-                  isActive: activeTab == 'recipes',
-                  onTap: () => context.go('/recipes'),
-                  screenWidth: screenWidth,
-                  textScaleFactor: textScaleFactor,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: _NavItem(
+                          icon: Icons.home_outlined,
+                      label: context.t('common.home'),
+                      isActive: activeTab == 'home',
+                      onTap: () => context.go('/'),
+                      screenWidth: screenWidth,
+                      textScaleFactor: textScaleFactor,
+                    ),
+                  ),
+                  Expanded(
+                    child: _NavItem(
+                          icon: Icons.restaurant_menu_outlined,
+                      label: context.t('common.recipes'),
+                      isActive: activeTab == 'recipes',
+                      onTap: () => context.go('/recipes'),
+                      screenWidth: screenWidth,
+                      textScaleFactor: textScaleFactor,
+                    ),
+                  ),
+                  Expanded(
+                    child: _NavItem(
+                          icon: Icons.calendar_month_outlined,
+                      label: context.t('common.plan'),
+                      isActive: activeTab == 'planner',
+                      onTap: () => context.go('/planner'),
+                      screenWidth: screenWidth,
+                      textScaleFactor: textScaleFactor,
+                    ),
+                  ),
+                  Expanded(
+                    child: _NavItem(
+                          icon: Icons.shopping_cart_outlined,
+                      label: context.t('common.shop'),
+                      isActive: activeTab == 'grocery',
+                      onTap: () => context.go('/grocery'),
+                      screenWidth: screenWidth,
+                      textScaleFactor: textScaleFactor,
+                    ),
+                  ),
+                  Expanded(
+                    child: _NavItem(
+                          icon: Icons.chat_bubble_outline,
+                      label: context.t('common.chat'),
+                      isActive: activeTab == 'chat',
+                      onTap: () => context.go('/chat'),
+                      screenWidth: screenWidth,
+                      textScaleFactor: textScaleFactor,
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: _NavItem(
-                  icon: Icons.calendar_month_outlined,
-                  label: context.t('common.plan'),
-                  isActive: activeTab == 'planner',
-                  onTap: () => context.go('/planner'),
-                  screenWidth: screenWidth,
-                  textScaleFactor: textScaleFactor,
-                ),
-              ),
-              Expanded(
-                child: _NavItem(
-                  icon: Icons.shopping_cart_outlined,
-                  label: context.t('common.shop'),
-                  isActive: activeTab == 'grocery',
-                  onTap: () => context.go('/grocery'),
-                  screenWidth: screenWidth,
-                  textScaleFactor: textScaleFactor,
-                ),
-              ),
-              Expanded(
-                child: _NavItem(
-                  icon: Icons.chat_bubble_outline,
-                  label: context.t('common.chat'),
-                  isActive: activeTab == 'chat',
-                  onTap: () => context.go('/chat'),
-                  screenWidth: screenWidth,
-                  textScaleFactor: textScaleFactor,
-                ),
-              ),
-            ],
-          ),
+            ),
+            const BottomBannerAdWidget(),
+          ],
         ),
       ),
     );
@@ -160,85 +162,8 @@ class _NavItemState extends State<_NavItem> {
     });
 
     try {
-      // Navigate immediately first (user tap > navigate)
+      // Navigate immediately
       widget.onTap();
-
-      // Check if user is premium (premium users don't see ads)
-      final premiumProvider = Provider.of<PremiumProvider>(
-        context,
-        listen: false,
-      );
-      if (premiumProvider.isPremium) {
-        return;
-      }
-
-      // Get the bottom_inter configuration (single integer string or "off")
-      final bottomInterConfig = RemoteConfigService.bottomInter
-          .trim()
-          .toLowerCase();
-
-      // Check if bottom_inter is "off" - if so, don't show ad
-      if (bottomInterConfig == 'off' || bottomInterConfig.isEmpty) {
-        return;
-      }
-
-      // Get current count BEFORE incrementing
-      final currentCount = await CardAdTracker.getBottomNavCount();
-
-      // Parse the threshold value (single integer string)
-      int threshold = 0;
-      try {
-        threshold = int.parse(bottomInterConfig);
-      } catch (e) {
-        // If parsing fails, don't show ad
-        return;
-      }
-
-      if (threshold <= 0) {
-        return;
-      }
-
-      // Check if we should show ad BEFORE incrementing
-      // We want to show ad when the NEXT tap will reach the threshold
-      // So if currentCount + 1 == threshold, show ad
-      final shouldShowAd = (currentCount + 1) == threshold;
-
-      // Always increment the counter
-      await CardAdTracker.trackBottomNavTap();
-
-      if (shouldShowAd) {
-        // Wait a brief moment for navigation to complete, then show loader and ad
-        // This ensures the new screen is ready before showing the loader
-        await Future.delayed(const Duration(milliseconds: 150));
-
-        // Get the root navigator context from the router to ensure we have a valid context
-        // after navigation (AdService uses rootNavigator: true anyway)
-        final navigatorKey = AppRouter.getNavigatorKey();
-        final navigatorContext = navigatorKey?.currentContext;
-
-        // Check if context is still mounted after navigation
-        if (!mounted || navigatorContext == null || !navigatorContext.mounted) {
-          return;
-        }
-
-        // Show ad with loader (loader is handled in AdService)
-        // Loader will show instantly, then ad will show
-        await AdService.showInterstitialAdForType(
-          adType: 'bottom',
-          context: navigatorContext,
-          loadAdFunction: () => AdService.loadBottomInterstitialAd(),
-          onAdDismissed: () {
-            // Reset counter after ad is shown
-            CardAdTracker.resetBottomNavCount();
-            // Don't navigate again - we already navigated before showing ad
-          },
-          onAdFailedToShow: (ad) {
-            // Reset counter even if ad fails to show
-            CardAdTracker.resetBottomNavCount();
-            // Don't navigate again - we already navigated before showing ad
-          },
-        );
-      }
     } finally {
       // Reset both flags after a delay to prevent rapid taps
       Future.delayed(const Duration(milliseconds: 600), () {

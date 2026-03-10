@@ -175,14 +175,13 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                         (language) =>
                             _buildLanguageOption(context, language, isDark),
                       ),
-
-                      // Bottom padding to account for the fixed ad
+                      // Bottom padding for fixed ad
                       const SizedBox(height: 20),
                     ],
                   ),
                 ),
               ),
-              // Fixed ad at the bottom (non-scrollable) with safe area
+              // Fixed native ad at bottom (medium)
               SafeArea(
                 top: false,
                 child: const ScreenNativeAdWidget(

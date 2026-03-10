@@ -15,11 +15,8 @@ import '../../core/theme/colors.dart';
 import '../../data/models/recipe.dart';
 import '../../providers/premium_provider.dart';
 import '../../providers/recipe_provider.dart';
-import '../../services/app_open_ad_manager.dart';
 import '../../services/recipe_service.dart';
 import '../../services/scanner_service.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/common/loading_genie.dart';
@@ -65,18 +62,15 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
   }
 
   Future<void> _pickImageFromGallery() async {
-    // Check if user can generate AI recipes before allowing scan
+    // Check if user can use scanner (sub_scancamera limit)
     final premiumProvider = context.read<PremiumProvider>();
-    if (!premiumProvider.isPremium && !premiumProvider.canGenerateAiRecipe()) {
-      // Limit reached - don't allow scan
+    if (!premiumProvider.canUseScannerSync()) {
+      // Limit reached - show Pro screen
+      if (mounted) ProNavigation.tryOpen(context, replace: false);
       return;
     }
 
     try {
-      // Launching the image picker can background the app; suppress app-open ads on return.
-      AppOpenAdManager.instance.suppressNextResume(
-        reason: 'image_picker_gallery',
-      );
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 85,
@@ -100,18 +94,15 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
   }
 
   Future<void> _captureImageFromCamera() async {
-    // Check if user can generate AI recipes before allowing scan
+    // Check if user can use scanner (sub_scancamera limit)
     final premiumProvider = context.read<PremiumProvider>();
-    if (!premiumProvider.isPremium && !premiumProvider.canGenerateAiRecipe()) {
-      // Limit reached - don't allow scan
+    if (!premiumProvider.canUseScannerSync()) {
+      // Limit reached - show Pro screen
+      if (mounted) ProNavigation.tryOpen(context, replace: false);
       return;
     }
 
     try {
-      // Launching the camera can background the app; suppress app-open ads on return.
-      AppOpenAdManager.instance.suppressNextResume(
-        reason: 'image_picker_camera',
-      );
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.camera,
         imageQuality: 85,
@@ -140,10 +131,10 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
   }
 
   Future<void> _processImage(XFile image) async {
-    // Check if user can generate AI recipes before processing
+    // Check if user can use scanner (sub_scancamera limit)
     final premiumProvider = context.read<PremiumProvider>();
-    if (!premiumProvider.isPremium && !premiumProvider.canGenerateAiRecipe()) {
-      // Limit reached - don't process image
+    if (!premiumProvider.canUseScannerSync()) {
+      if (mounted) ProNavigation.tryOpen(context, replace: false);
       return;
     }
 
@@ -172,13 +163,6 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
       );
 
       if (mounted) {
-        // If recipes were generated directly from the scan, increment limit
-        if (result != null &&
-            result.recipes.isNotEmpty &&
-            !premiumProvider.isPremium) {
-          premiumProvider.incrementAiRecipeCount();
-        }
-
         setState(() {
           _isAnalyzing = false;
           if (result != null && result.ingredients.isNotEmpty) {
@@ -235,36 +219,33 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
       return;
     }
 
-    // Check if user can generate AI recipes based on remote config
+    // Check if user can use scanner (sub_scancamera limit)
     final premiumProvider = context.read<PremiumProvider>();
-    if (!premiumProvider.isPremium) {
-      if (!premiumProvider.canGenerateAiRecipe()) {
-        // Show limit reached message and prompt to upgrade
-        if (mounted) {
-          final limit = premiumProvider.getAiRecipeLimit();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                limit != null
-                    ? context.t('scanner.limit.reached', {
-                        'limit': limit.toString(),
-                      })
-                    : context.t('scanner.ai.disabled'),
-              ),
-              backgroundColor: AppColors.destructive,
-              duration: const Duration(seconds: 4),
-              action: SnackBarAction(
-                label: context.t('premium.upgrade'),
-                textColor: Colors.white,
-                onPressed: () {
-                  ProNavigation.tryOpen(context, replace: false);
-                },
-              ),
+    if (!premiumProvider.canUseScannerSync()) {
+      if (mounted) {
+        final limit = premiumProvider.getScannerLimit();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              limit != null
+                  ? context.t('scanner.limit.reached', {
+                      'limit': limit.toString(),
+                    })
+                  : context.t('scanner.ai.disabled'),
             ),
-          );
-        }
-        return;
+            backgroundColor: AppColors.destructive,
+            duration: const Duration(seconds: 4),
+            action: SnackBarAction(
+              label: context.t('premium.upgrade'),
+              textColor: Colors.white,
+              onPressed: () {
+                ProNavigation.tryOpen(context, replace: false);
+              },
+            ),
+          ),
+        );
       }
+      return;
     }
 
     setState(() {
@@ -282,10 +263,6 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
         );
 
         if (mounted && result != null && result.recipes.isNotEmpty) {
-          // Increment AI recipe count for free users after successful generation
-          if (!premiumProvider.isPremium) {
-            premiumProvider.incrementAiRecipeCount();
-          }
           setState(() {
             _scanResult = result;
             _isAnalyzing = false;
@@ -322,10 +299,6 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
 
       if (mounted) {
         if (generatedRecipe != null) {
-          // Increment AI recipe count for free users after successful generation
-          if (!premiumProvider.isPremium) {
-            premiumProvider.incrementAiRecipeCount();
-          }
           // Create a ScanResult with the generated recipe
           final newScanResult = ScanResult(
             ingredients: _editableIngredients,
@@ -479,10 +452,10 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
   @override
   Widget build(BuildContext context) {
     final premiumProvider = context.watch<PremiumProvider>();
-    final canGenerateRecipe =
-        premiumProvider.isPremium || premiumProvider.canGenerateAiRecipe();
-    final aiRecipeLimit = premiumProvider.getAiRecipeLimit();
-    final aiRecipeCount = premiumProvider.aiRecipeCount;
+    // Use sub_scancamera only - no other remote keys inside scan screen
+    final canUseScanner = premiumProvider.canUseScannerSync();
+    final scanLimit = premiumProvider.getScannerLimit();
+    final scanCount = premiumProvider.scanCount;
 
     if (_isAnalyzing) {
       return PopScope(
@@ -576,9 +549,9 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                 ),
                 Expanded(
                   child: _buildCurrentView(
-                    canGenerateRecipe: canGenerateRecipe,
-                    aiRecipeLimit: aiRecipeLimit,
-                    aiRecipeCount: aiRecipeCount,
+                    canUseScanner: canUseScanner,
+                    scanLimit: scanLimit,
+                    scanCount: scanCount,
                   ),
                 ),
               ],
@@ -729,16 +702,16 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
   }
 
   Widget _buildCurrentView({
-    required bool canGenerateRecipe,
-    required int? aiRecipeLimit,
-    required int aiRecipeCount,
+    required bool canUseScanner,
+    required int? scanLimit,
+    required int scanCount,
   }) {
     switch (_viewMode) {
       case ScannerViewMode.camera:
         return _buildCameraView(
-          canGenerateRecipe: canGenerateRecipe,
-          aiRecipeLimit: aiRecipeLimit,
-          aiRecipeCount: aiRecipeCount,
+          canUseScanner: canUseScanner,
+          scanLimit: scanLimit,
+          scanCount: scanCount,
         );
       case ScannerViewMode.ingredients:
         return _buildIngredientsView();
@@ -750,9 +723,9 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
   }
 
   Widget _buildCameraView({
-    required bool canGenerateRecipe,
-    required int? aiRecipeLimit,
-    required int aiRecipeCount,
+    required bool canUseScanner,
+    required int? scanLimit,
+    required int scanCount,
   }) {
     final premiumProvider = context.read<PremiumProvider>();
 
@@ -791,10 +764,10 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
             ],
           ),
           const SizedBox(height: 32),
-          // Limit Reached Banner (if limit reached)
-          if (!canGenerateRecipe && !premiumProvider.isPremium)
-            _buildLimitReachedBanner(context, aiRecipeLimit, aiRecipeCount),
-          if (!canGenerateRecipe && !premiumProvider.isPremium)
+          // Limit Reached Banner (if scan limit reached - sub_scancamera)
+          if (!canUseScanner && !premiumProvider.isPremium)
+            _buildLimitReachedBanner(context, scanLimit, scanCount),
+          if (!canUseScanner && !premiumProvider.isPremium)
             const SizedBox(height: 16),
           // Preferences Card (before camera section)
           _buildPreferencesCard(context),
@@ -833,7 +806,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                   width: double.infinity,
                   child: Container(
                     decoration: BoxDecoration(
-                      gradient: canGenerateRecipe
+                      gradient: canUseScanner
                           ? const LinearGradient(
                               colors: [
                                 AppColors.geniePurple,
@@ -843,18 +816,18 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                               end: Alignment.centerRight,
                             )
                           : null,
-                      color: canGenerateRecipe
+                      color: canUseScanner
                           ? null
                           : Theme.of(context).cardColor.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ElevatedButton.icon(
-                      onPressed: canGenerateRecipe
+                      onPressed: canUseScanner
                           ? _captureImageFromCamera
                           : null,
                       icon: Icon(
                         Icons.camera_alt,
-                        color: canGenerateRecipe
+                        color: canUseScanner
                             ? Colors.white
                             : Theme.of(
                                 context,
@@ -863,7 +836,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                       label: Text(
                         context.t('scanner.open.camera'),
                         style: TextStyle(
-                          color: canGenerateRecipe
+                          color: canUseScanner
                               ? Colors.white
                               : Theme.of(
                                   context,
@@ -886,10 +859,10 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
-                    onPressed: canGenerateRecipe ? _pickImageFromGallery : null,
+                    onPressed: canUseScanner ? _pickImageFromGallery : null,
                     icon: Icon(
                       Icons.photo_library,
-                      color: canGenerateRecipe
+                      color: canUseScanner
                           ? Theme.of(context).colorScheme.onSurface
                           : Theme.of(
                               context,
@@ -898,7 +871,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                     label: Text(
                       context.t('scanner.upload.photo'),
                       style: TextStyle(
-                        color: canGenerateRecipe
+                        color: canUseScanner
                             ? Theme.of(context).colorScheme.onSurface
                             : Theme.of(
                                 context,
@@ -911,7 +884,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       side: BorderSide(
                         color: Theme.of(context).colorScheme.onSurface
-                            .withOpacity(canGenerateRecipe ? 0.2 : 0.1),
+                            .withOpacity(canUseScanner ? 0.2 : 0.1),
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -921,12 +894,6 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 32),
-          // Camera Native Ad (Small)
-          const ScreenNativeAdWidget(
-            screenKey: 'camera',
-            size: CustomNativeAdSize.small,
           ),
           const SizedBox(height: 32),
           // Show captured image if available
@@ -1914,7 +1881,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
   Widget _buildLimitReachedBanner(
     BuildContext context,
     int? limit,
-    int recipeCount,
+    int scanCount,
   ) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
@@ -1978,7 +1945,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                     if (limit != null) ...[
                       const SizedBox(height: 4),
                       Text(
-                        context.t('recipes.limit.reached.message', {
+                        context.t('scanner.limit.reached', {
                           'limit': limit.toString(),
                         }),
                         style: TextStyle(
@@ -1991,7 +1958,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                     ] else ...[
                       const SizedBox(height: 4),
                       Text(
-                        context.t('recipes.ai.recipe.disabled'),
+                        context.t('scanner.ai.disabled'),
                         style: TextStyle(
                           fontSize: 14,
                           color: Theme.of(

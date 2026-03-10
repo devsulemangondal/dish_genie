@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -6,14 +7,8 @@ import 'package:share_plus/share_plus.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
 import '../../data/models/recipe.dart';
-import '../../providers/premium_provider.dart';
 import '../../providers/recipe_provider.dart';
-import '../../services/ad_service.dart';
-import '../../services/card_ad_tracker.dart';
-import '../../services/remote_config_service.dart';
 import '../../services/storage_service.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
 import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/common/standard_back_button.dart';
 import '../../widgets/recipe/recipe_image_widget.dart';
@@ -51,45 +46,98 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     }
   }
 
-  /// Beautiful fallback when recipe image is loading or unavailable (no harsh error icon).
-  Widget _buildRecipeImagePlaceholder(BuildContext context) {
+  /// Default placeholder: appetizing food variety that fits all cuisines.
+  static const String _defaultFoodPlaceholderUrl =
+      'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800';
+
+  /// Keyword -> placeholder URL. Picks a relevant image when recipe has no image.
+  static const Map<String, String> _keywordPlaceholderUrls = {
+    'pasta': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800',
+    'spaghetti': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800',
+    'noodle': 'https://images.unsplash.com/photo-1569718212165-3a285ed4c94f?auto=format&fit=crop&w=800',
+    'pizza': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800',
+    'burger': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800',
+    'sandwich': 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800',
+    'salad': 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800',
+    'soup': 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800',
+    'curry': 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800',
+    'rice': 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800',
+    'chicken': 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=800',
+    'fish': 'https://images.unsplash.com/photo-1519708227418-8e0c04ed96d6?auto=format&fit=crop&w=800',
+    'meat': 'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=800',
+    'steak': 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800',
+    'bread': 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800',
+    'cake': 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800',
+    'dessert': 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=800',
+    'breakfast': 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=800',
+    'egg': 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800',
+    'vegetable': 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800',
+    'vegan': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800',
+    'smoothie': 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800',
+  };
+
+  static String _getPlaceholderUrlForRecipe(Recipe recipe) {
+    final text = '${recipe.title} ${recipe.tags.join(' ')} ${recipe.cuisine} ${recipe.description}'
+        .toLowerCase();
+    for (final entry in _keywordPlaceholderUrls.entries) {
+      if (text.contains(entry.key)) return entry.value;
+    }
+    return _defaultFoodPlaceholderUrl;
+  }
+
+  Widget _buildRecipeImagePlaceholder(BuildContext context, Recipe? recipe) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    return Container(
+    final imageUrl = recipe != null
+        ? _getPlaceholderUrlForRecipe(recipe)
+        : _defaultFoodPlaceholderUrl;
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            colorScheme.surfaceContainerHighest,
-            colorScheme.surfaceContainerHighest.withOpacity(0.85),
-            (theme.brightness == Brightness.dark
-                    ? AppColors.geniePurple
-                    : AppColors.genieLavender)
-                .withOpacity(0.15),
-          ],
+      placeholder: (context, url) => Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              colorScheme.surfaceContainerHighest,
+              (theme.brightness == Brightness.dark
+                      ? AppColors.geniePurple
+                      : AppColors.genieLavender)
+                  .withOpacity(0.2),
+            ],
+          ),
+        ),
+        child: Center(
+          child: CircularProgressIndicator(color: AppColors.primary),
         ),
       ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.restaurant_menu_rounded,
-              size: 80,
-              color: colorScheme.onSurface.withOpacity(0.12),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              context.t('recipe.detail.no.image'),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurface.withOpacity(0.35),
-                letterSpacing: 0.3,
-              ),
-            ),
-          ],
+      errorWidget: (context, url, error) => Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              colorScheme.surfaceContainerHighest,
+              (theme.brightness == Brightness.dark
+                      ? AppColors.geniePurple
+                      : AppColors.genieLavender)
+                  .withOpacity(0.15),
+            ],
+          ),
+        ),
+        child: Center(
+          child: Icon(
+            Icons.restaurant_menu_rounded,
+            size: 80,
+            color: colorScheme.onSurface.withOpacity(0.3),
+          ),
         ),
       ),
     );
@@ -108,127 +156,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     _trackCardOpen();
   }
 
-  /// Track card open and show ad if configured
-  Future<void> _trackCardOpen() async {
-    // Check if user is premium (premium users don't see ads)
-    final premiumProvider = Provider.of<PremiumProvider>(
-      context,
-      listen: false,
-    );
-    if (premiumProvider.isPremium) return;
+  /// Track card open (ads removed - reserved for future ad plan)
+  Future<void> _trackCardOpen() async {}
 
-    // Track the open action
-    final openCount = await CardAdTracker.trackCardOpen();
-
-    // Get the card_inter configuration (single value like "open5" or "back5" or "off")
-    final cardInterConfig = RemoteConfigService.cardInter.trim().toLowerCase();
-
-    // Check if card_inter is "off" - if so, don't show ad
-    if (cardInterConfig != 'off' && cardInterConfig.isNotEmpty) {
-      // Check if config starts with "open"
-      if (cardInterConfig.startsWith('open')) {
-        try {
-          // Extract number after "open"
-          final numStr = cardInterConfig.substring(4); // "open" is 4 characters
-          final threshold = int.parse(numStr);
-          if (threshold > 0) {
-            // Show ad when counter >= threshold
-            final shouldShowAd = openCount >= threshold;
-
-            if (shouldShowAd) {
-              // Show after a small delay to ensure screen is loaded
-              Future.delayed(const Duration(milliseconds: 500), () async {
-                if (mounted) {
-                  await AdService.showInterstitialAdForType(
-                    adType: 'card',
-                    context: context,
-                    loadAdFunction: () => AdService.loadCardInterstitialAd(),
-                    onAdDismissed: () {
-                      // Reset counter after ad is shown
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                    onAdFailedToShow: (ad) {
-                      // Reset counter even if ad fails to show
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                  );
-                }
-              });
-            }
-          }
-        } catch (e) {
-          // If parsing fails, don't show ad
-        }
-      }
-    }
-  }
-
-  /// Handle back button press and track card back
+  /// Handle back button press
   Future<void> _handleBack() async {
-    try {
-      // Check if user is premium (premium users don't see ads)
-      final premiumProvider = Provider.of<PremiumProvider>(
-        context,
-        listen: false,
-      );
-
-      if (!premiumProvider.isPremium) {
-        // Track the back action
-        final backCount = await CardAdTracker.trackCardBack();
-
-        // Get the card_inter configuration (single value like "open5" or "back5" or "off")
-        final cardInterConfig = RemoteConfigService.cardInter
-            .trim()
-            .toLowerCase();
-
-        // Check if card_inter is "off" - if so, don't show ad
-        if (cardInterConfig != 'off' && cardInterConfig.isNotEmpty) {
-          // Check if config starts with "back"
-          if (cardInterConfig.startsWith('back')) {
-            try {
-              // Extract number after "back"
-              final numStr = cardInterConfig.substring(
-                4,
-              ); // "back" is 4 characters
-              final threshold = int.parse(numStr);
-              if (threshold > 0) {
-                // Show ad when counter >= threshold
-                final shouldShowAd = backCount >= threshold;
-
-                if (shouldShowAd) {
-                  // Show ad with loader (loader is handled in AdService)
-                  await AdService.showInterstitialAdForType(
-                    adType: 'card',
-                    context: context,
-                    loadAdFunction: () => AdService.loadCardInterstitialAd(),
-                    onAdDismissed: () {
-                      // Reset counter after ad is shown
-                      CardAdTracker.resetCardBackCount();
-                      _popOrGoRecipes();
-                    },
-                    onAdFailedToShow: (ad) {
-                      // Reset counter even if ad fails to show
-                      CardAdTracker.resetCardBackCount();
-                      _popOrGoRecipes();
-                    },
-                  );
-                  // Don't pop immediately, wait for ad callback
-                  return;
-                }
-              }
-            } catch (e) {
-              // If parsing fails, continue to pop normally
-            }
-          }
-        }
-      }
-
-      // If no ad should be shown, pop normally
-      _popOrGoRecipes();
-    } catch (e) {
-      // Ensure we always pop even if there's an error
-      _popOrGoRecipes();
-    }
+    _popOrGoRecipes();
   }
 
   void _loadRecipe() {
@@ -436,8 +369,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                   RecipeImageWidget(
                     image: recipe.image,
                     fit: BoxFit.cover,
-                    placeholder: _buildRecipeImagePlaceholder(context),
-                    errorWidget: _buildRecipeImagePlaceholder(context),
+                    placeholder: _buildRecipeImagePlaceholder(context, recipe),
+                    errorWidget: _buildRecipeImagePlaceholder(context, recipe),
                   ),
                   // Gradient overlay for better text visibility if needed
                   Container(
@@ -618,22 +551,6 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                 ),
                               ],
                             ),
-                          ),
-
-                          // Ad – first impression (visible without scrolling)
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              final fullWidth = MediaQuery.of(
-                                context,
-                              ).size.width;
-                              return SizedBox(
-                                width: fullWidth,
-                                child: const ScreenNativeAdWidget(
-                                  screenKey: 'recipeDetail',
-                                  size: CustomNativeAdSize.medium,
-                                ),
-                              );
-                            },
                           ),
 
                           const Divider(height: 1),

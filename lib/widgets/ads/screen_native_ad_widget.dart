@@ -86,7 +86,9 @@ class _ScreenNativeAdWidgetState extends State<ScreenNativeAdWidget> {
   bool _getConfigValue() {
     switch (widget.screenKey) {
       case 'language':
-        return RemoteConfigService.languageNative;
+        return Platform.isIOS
+            ? RemoteConfigService.languageNativeIos
+            : RemoteConfigService.languageNative;
       case 'home':
         return RemoteConfigService.homeNative;
       case 'recipe':
@@ -101,6 +103,10 @@ class _ScreenNativeAdWidgetState extends State<ScreenNativeAdWidget> {
         return RemoteConfigService.recipeDetailNative;
       case 'camera':
         return RemoteConfigService.cameraNative;
+      case 'onboarding':
+        return Platform.isIOS
+            ? RemoteConfigService.onboardingNativeIos
+            : RemoteConfigService.onboardingNative;
       default:
         return RemoteConfigService.showAds;
     }
@@ -303,6 +309,32 @@ class _ScreenNativeAdWidgetState extends State<ScreenNativeAdWidget> {
           break;
         case 'camera':
           ad = await AdService.loadCameraNativeAd(
+            onAdLoaded: (ad) {
+              if (mounted) {
+                setState(() {
+                  _nativeAd = ad;
+                  _isAdLoaded = true;
+                  _isLoading = false;
+                });
+              }
+            },
+            onAdFailedToLoad: (error) {
+              if (kDebugMode) {
+                debugPrint(
+                  '❌ [NativeAd:${widget.screenKey}] failed to load: ${error.code} ${error.message}',
+                );
+              }
+              if (mounted) {
+                setState(() {
+                  _isLoading = false;
+                  _isAdLoaded = false;
+                });
+              }
+            },
+          );
+          break;
+        case 'onboarding':
+          ad = await AdService.loadOnboardingNativeAd(
             onAdLoaded: (ad) {
               if (mounted) {
                 setState(() {

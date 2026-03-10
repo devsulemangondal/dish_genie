@@ -3,18 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../core/localization/l10n_extension.dart';
+import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
 import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/sticky_header.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/loading_genie.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
 import '../../providers/meal_plan_provider.dart';
 import '../../providers/premium_provider.dart';
-import '../../services/card_ad_tracker.dart';
-import '../../services/ad_service.dart';
-import '../../services/remote_config_service.dart';
 import '../../data/models/meal_plan.dart';
 import '../../data/models/recipe.dart';
 import '../../data/models/ingredient.dart';
@@ -69,57 +65,8 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
     _trackCardScreenOpen();
   }
 
-  /// Track when card screen is opened
-  Future<void> _trackCardScreenOpen() async {
-    // Check if user is premium (premium users don't see ads)
-    final premiumProvider = Provider.of<PremiumProvider>(context, listen: false);
-    if (premiumProvider.isPremium) return;
-
-    // Track the open action
-    final openCount = await CardAdTracker.trackCardOpen();
-    
-    // Get the card_inter configuration (single value like "open5" or "back5" or "off")
-    final cardInterConfig = RemoteConfigService.cardInter.trim().toLowerCase();
-    
-    // Check if card_inter is "off" - if so, don't show ad
-    if (cardInterConfig != 'off' && cardInterConfig.isNotEmpty) {
-      // Check if config starts with "open"
-      if (cardInterConfig.startsWith('open')) {
-        try {
-          // Extract number after "open"
-          final numStr = cardInterConfig.substring(4); // "open" is 4 characters
-          final threshold = int.parse(numStr);
-          if (threshold > 0) {
-            // Show ad when counter >= threshold
-            final shouldShowAd = openCount >= threshold;
-            
-            if (shouldShowAd) {
-              // Show after a small delay to ensure screen is loaded
-              Future.delayed(const Duration(milliseconds: 500), () async {
-                if (mounted) {
-                  await AdService.showInterstitialAdForType(
-                    adType: 'card',
-                    context: context,
-                    loadAdFunction: () => AdService.loadCardInterstitialAd(),
-                    onAdDismissed: () {
-                      // Reset counter after ad is shown
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                    onAdFailedToShow: (ad) {
-                      // Reset counter even if ad fails to show
-                      CardAdTracker.resetCardOpenCount();
-                    },
-                  );
-                }
-              });
-            }
-          }
-        } catch (e) {
-          // If parsing fails, don't show ad
-        }
-      }
-    }
-  }
+  /// Track when card screen is opened (ads removed - reserved for future ad plan)
+  Future<void> _trackCardScreenOpen() async {}
 
   @override
   void dispose() {
@@ -156,69 +103,6 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
       return;
     }
 
-    // Check if user is premium (premium users don't see ads)
-    final premiumProvider = Provider.of<PremiumProvider>(context, listen: false);
-    
-    if (!premiumProvider.isPremium) {
-      // Track the back action
-      final backCount = await CardAdTracker.trackCardBack();
-      
-      // Get the card_inter configuration (single value like "open5" or "back5" or "off")
-      final cardInterConfig = RemoteConfigService.cardInter.trim().toLowerCase();
-      
-      // Check if card_inter is "off" - if so, don't show ad
-      if (cardInterConfig != 'off' && cardInterConfig.isNotEmpty) {
-        // Check if config starts with "back"
-        if (cardInterConfig.startsWith('back')) {
-          try {
-            // Extract number after "back"
-            final numStr = cardInterConfig.substring(4); // "back" is 4 characters
-            final threshold = int.parse(numStr);
-            if (threshold > 0) {
-              // Show ad when counter >= threshold
-              final shouldShowAd = backCount >= threshold;
-              
-              if (shouldShowAd) {
-                // Show ad with loader (loader is handled in AdService)
-                await AdService.showInterstitialAdForType(
-                  adType: 'card',
-                  context: context,
-                  loadAdFunction: () => AdService.loadCardInterstitialAd(),
-                  onAdDismissed: () {
-                    // Reset counter after ad is shown
-                    CardAdTracker.resetCardBackCount();
-                    if (mounted) {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/');
-                      }
-                    }
-                  },
-                  onAdFailedToShow: (ad) {
-                    // Reset counter even if ad fails to show
-                    CardAdTracker.resetCardBackCount();
-                    if (mounted) {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/');
-                      }
-                    }
-                  },
-                );
-                // Don't pop immediately, wait for ad callback
-                return;
-              }
-            }
-          } catch (e) {
-            // If parsing fails, just pop
-          }
-        }
-      }
-    }
-    
-    // If no ad should be shown, pop normally
     if (mounted) {
       if (context.canPop()) {
         context.pop();
@@ -230,70 +114,21 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
 
   Future<void> _generatePlan() async {
     if (!_formKey.currentState!.validate()) return;
-
-    // Check if user is premium (premium users don't see ads)
-    final premiumProvider = Provider.of<PremiumProvider>(context, listen: false);
-    final shouldShowAd = !premiumProvider.isPremium;
-    
-    bool shouldProceed = true;
-
-    if (shouldShowAd) {
-      // Track the generate plan tap
-      final generateCount = await CardAdTracker.trackGeneratePlan();
-      
-      // Get the generateplan_inter configuration (single integer string or "off")
-      final generatePlanConfig = RemoteConfigService.generatePlanInter.trim().toLowerCase();
-      
-      // Check if generateplan_inter is "off" - if so, don't show ad
-      if (generatePlanConfig != 'off' && generatePlanConfig.isNotEmpty) {
-        // Parse the threshold value (single integer string)
-        bool meetsThreshold = false;
-        try {
-          final threshold = int.parse(generatePlanConfig);
-          if (threshold > 0) {
-            // Show ad when counter >= threshold
-            meetsThreshold = generateCount >= threshold;
-          }
-        } catch (e) {
-          // If parsing fails, don't show ad
-          meetsThreshold = false;
-        }
-        
-        if (meetsThreshold) {
-          shouldProceed = false;
-          
-          // Show ad with loader (loader is handled in AdService)
-          await AdService.showInterstitialAdForType(
-            adType: 'generatePlan',
-            context: context,
-            loadAdFunction: () => AdService.loadGeneratePlanInterstitialAd(),
-            onAdDismissed: () {
-              // Reset counter after ad is shown
-              CardAdTracker.resetGeneratePlanCount();
-              // Proceed with plan generation after ad is dismissed
-              _executePlanGeneration();
-            },
-            onAdFailedToShow: (ad) {
-              // Reset counter even if ad fails to show
-              CardAdTracker.resetGeneratePlanCount();
-              // Proceed even if ad fails
-              _executePlanGeneration();
-            },
-          );
-        }
-      }
-    }
-
-    if (shouldProceed) {
-      _executePlanGeneration();
-    }
+    _executePlanGeneration();
   }
 
   Future<void> _executePlanGeneration() async {
     if (!mounted) return;
-    
+
+    // Check meal plan limit (sub_mealplan remote config)
+    final premiumProvider = context.read<PremiumProvider>();
+    if (!premiumProvider.canCreateMealPlan()) {
+      ProNavigation.tryOpen(context, replace: false);
+      return;
+    }
+
     final provider = context.read<MealPlanProvider>();
-    
+
     try {
       final plan = await provider.generateMealPlan(
         days: _days,
@@ -307,6 +142,7 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
       );
 
       if (plan != null && mounted) {
+        premiumProvider.incrementMealPlanCount();
         setState(() {
           _showForm = false;
           _selectedDayIndex = 0;
@@ -1239,12 +1075,6 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          // Plan Native Ad (Medium)
-          const ScreenNativeAdWidget(
-            screenKey: 'plan',
-            size: CustomNativeAdSize.medium,
-          ),
-          const SizedBox(height: 16),
           // Breakfast Card
           if (selectedDayMeals['breakfast'] != null)
             _buildMealCard(
@@ -1296,6 +1126,12 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
+                // Check meal plan limit before allowing new plan form (sub_mealplan)
+                final premiumProvider = context.read<PremiumProvider>();
+                if (!premiumProvider.canCreateMealPlan()) {
+                  ProNavigation.tryOpen(context, replace: false);
+                  return;
+                }
                 try {
                   await provider.clearMealPlan();
                   if (!mounted) return;

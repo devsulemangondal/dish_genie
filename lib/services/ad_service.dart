@@ -25,14 +25,21 @@ class AdService {
   // Source: https://developers.google.com/admob/android/test-ads
   static const String _testAppOpenAdUnitId =
       'ca-app-pub-3940256099942544/9257395921';
+  static const String _testBannerAdUnitIdAndroid =
+      'ca-app-pub-3940256099942544/6300978111';
+  static const String _testBannerAdUnitIdIos =
+      'ca-app-pub-3940256099942544/2934735716';
 
   // Production Ad Unit IDs (from the plan)
   static const String _productionAppOpenAdUnitId =
       'ca-app-pub-6882687050623219/2543111627';
   static const String _productionSplashInterAdUnitId =
       'ca-app-pub-6882687050623219/3856193297';
-  static const String _productionLanguageNativeAdUnitId =
+  // Language native ad (Android / iOS)
+  static const String _productionLanguageNativeAndroid =
       'ca-app-pub-6882687050623219/7841887375';
+  static const String _productionLanguageNativeIos =
+      'ca-app-pub-6882687050623219/3376170317';
   static const String _productionHomeNativeAdUnitId =
       'ca-app-pub-6882687050623219/1276479023';
   static const String _productionRecipeNativeAdUnitId =
@@ -47,6 +54,11 @@ class AdService {
       'ca-app-pub-6882687050623219/2543111627';
   static const String _productionCameraNativeAdUnitId =
       'ca-app-pub-6882687050623219/1812677406';
+  // Onboarding native ad (Android / iOS)
+  static const String _productionOnboardingNativeAndroid =
+      'ca-app-pub-6882687050623219/8025861761';
+  static const String _productionOnboardingNativeIos =
+      'ca-app-pub-6882687050623219/6329636711';
   static const String _productionBottomInterAdUnitId =
       'ca-app-pub-6882687050623219/8916948280';
   static const String _productionCardInterAdUnitId =
@@ -55,6 +67,36 @@ class AdService {
       'ca-app-pub-6882687050623219/1276479023';
   static const String _productionCookingAiInterAdUnitId =
       'ca-app-pub-6882687050623219/2211104985';
+  // Exit interstitial (when user confirms exit)
+  static const String _productionExitInterAndroid =
+      'ca-app-pub-6882687050623219/8775507081';
+  static const String _productionExitInterIos =
+      'ca-app-pub-6882687050623219/9924937221';
+  // Chat reset interstitial (when user starts new chat)
+  static const String _productionChatResetInterAndroid =
+      'ca-app-pub-6882687050623219/7462425415';
+  static const String _productionChatResetInterIos =
+      'ca-app-pub-6882687050623219/2063088649';
+  // View Plan / Continue Plan interstitial (returning user on home)
+  static const String _productionViewPlanContinueInterAndroid =
+      'ca-app-pub-6882687050623219/2773535082';
+  static const String _productionViewPlanContinueInterIos =
+      'ca-app-pub-6882687050623219/9422703914';
+  // Splash app open ad on first install (Android / iOS)
+  static const String _productionSplashAppOpen1stTimeAndroid =
+      'ca-app-pub-6882687050623219/1308080602';
+  static const String _productionSplashAppOpen1stTimeIos =
+      'ca-app-pub-6882687050623219/1540344462';
+  // Splash app open ad for returning user (2nd+ open) (Android / iOS)
+  static const String _productionSplashAppOpen2ndTimeAndroid =
+      'ca-app-pub-6882687050623219/7371255644';
+  static const String _productionSplashAppOpen2ndTimeIos =
+      'ca-app-pub-6882687050623219/9227262791';
+  // Bottom banner on bottom nav screens (Android / iOS)
+  static const String _productionBottomBannerAndroid =
+      'ca-app-pub-6882687050623219/9130584518';
+  static const String _productionBottomBannerIos =
+      'ca-app-pub-6882687050623219/9541648057';
 
   // ========== FOR TESTING ONLY: Test ads in release APK ==========
   // Set to true: release APK shows Google test ads (for testing).
@@ -64,6 +106,8 @@ class AdService {
 
   // Get ad unit IDs. When _forceTestAds is true we always use test IDs (no kReleaseMode check).
   static String _getAdUnitId(String productionId, {String? testAdType}) {
+    final testBannerId =
+        Platform.isIOS ? _testBannerAdUnitIdIos : _testBannerAdUnitIdAndroid;
     if (_forceTestAds) {
       if (testAdType == 'native' || testAdType == 'Native')
         return _testNativeAdUnitId;
@@ -71,6 +115,7 @@ class AdService {
         return _testInterstitialAdUnitId;
       if (testAdType == 'appOpen' || testAdType == 'AppOpen')
         return _testAppOpenAdUnitId;
+      if (testAdType == 'banner' || testAdType == 'Banner') return testBannerId;
       if (productionId.contains('Native')) return _testNativeAdUnitId;
       if (productionId.contains('Inter')) return _testInterstitialAdUnitId;
       return _testAppOpenAdUnitId;
@@ -82,6 +127,7 @@ class AdService {
         return _testInterstitialAdUnitId;
       if (testAdType == 'appOpen' || testAdType == 'AppOpen')
         return _testAppOpenAdUnitId;
+      if (testAdType == 'banner' || testAdType == 'Banner') return testBannerId;
       if (productionId.contains('Native')) return _testNativeAdUnitId;
       if (productionId.contains('Inter')) return _testInterstitialAdUnitId;
       return _testAppOpenAdUnitId;
@@ -91,10 +137,29 @@ class AdService {
 
   static String get appOpenAdUnitId =>
       _getAdUnitId(_productionAppOpenAdUnitId, testAdType: 'appOpen');
+  static String get splashAppOpen1stTimeAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(_productionSplashAppOpen1stTimeIos, testAdType: 'appOpen')
+          : _getAdUnitId(
+              _productionSplashAppOpen1stTimeAndroid,
+              testAdType: 'appOpen',
+            );
+  static String get splashAppOpen2ndTimeAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(_productionSplashAppOpen2ndTimeIos, testAdType: 'appOpen')
+          : _getAdUnitId(
+              _productionSplashAppOpen2ndTimeAndroid,
+              testAdType: 'appOpen',
+            );
   static String get splashInterAdUnitId =>
       _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial');
   static String get languageNativeAdUnitId =>
-      _getAdUnitId(_productionLanguageNativeAdUnitId, testAdType: 'native');
+      Platform.isIOS
+          ? _getAdUnitId(_productionLanguageNativeIos, testAdType: 'native')
+          : _getAdUnitId(
+              _productionLanguageNativeAndroid,
+              testAdType: 'native',
+            );
   static String get homeNativeAdUnitId =>
       _getAdUnitId(_productionHomeNativeAdUnitId, testAdType: 'native');
   static String get recipeNativeAdUnitId =>
@@ -109,6 +174,13 @@ class AdService {
       _getAdUnitId(_productionRecipeDetailNativeAdUnitId, testAdType: 'native');
   static String get cameraNativeAdUnitId =>
       _getAdUnitId(_productionCameraNativeAdUnitId, testAdType: 'native');
+  static String get onboardingNativeAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(_productionOnboardingNativeIos, testAdType: 'native')
+          : _getAdUnitId(
+              _productionOnboardingNativeAndroid,
+              testAdType: 'native',
+            );
   static String get bottomInterAdUnitId =>
       _getAdUnitId(_productionBottomInterAdUnitId, testAdType: 'interstitial');
   static String get cardInterAdUnitId =>
@@ -121,6 +193,37 @@ class AdService {
     _productionCookingAiInterAdUnitId,
     testAdType: 'interstitial',
   );
+  static String get exitInterAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(_productionExitInterIos, testAdType: 'interstitial')
+          : _getAdUnitId(
+              _productionExitInterAndroid,
+              testAdType: 'interstitial',
+            );
+  static String get chatResetInterAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(
+              _productionChatResetInterIos,
+              testAdType: 'interstitial',
+            )
+          : _getAdUnitId(
+              _productionChatResetInterAndroid,
+              testAdType: 'interstitial',
+            );
+  static String get viewPlanContinueInterAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(
+              _productionViewPlanContinueInterIos,
+              testAdType: 'interstitial',
+            )
+          : _getAdUnitId(
+              _productionViewPlanContinueInterAndroid,
+              testAdType: 'interstitial',
+            );
+  static String get bottomBannerAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(_productionBottomBannerIos, testAdType: 'banner')
+          : _getAdUnitId(_productionBottomBannerAndroid, testAdType: 'banner');
 
   static bool _isInitialized = false;
 
@@ -205,12 +308,13 @@ class AdService {
     _isLoadingNative[screenKey] = true;
 
     // Determine factory ID based on screen key
-    // Use medium layout for: plan, recipeDetail, language
+    // Use medium layout for: plan, recipeDetail, language, onboarding
     // Use small layout for: home, recipe, shop, chat, camera
     final factoryId =
         (screenKey == 'plan' ||
             screenKey == 'recipeDetail' ||
-            screenKey == 'language')
+            screenKey == 'language' ||
+            screenKey == 'onboarding')
         ? 'mediumAd'
         : 'smallAd';
 
@@ -258,7 +362,9 @@ class AdService {
 
       switch (screenKey) {
         case 'language':
-          return RemoteConfigService.languageNative;
+          return Platform.isIOS
+              ? RemoteConfigService.languageNativeIos
+              : RemoteConfigService.languageNative;
         case 'home':
           return RemoteConfigService.homeNative;
         case 'recipe':
@@ -273,6 +379,10 @@ class AdService {
           return RemoteConfigService.recipeDetailNative;
         case 'camera':
           return RemoteConfigService.cameraNative;
+        case 'onboarding':
+          return Platform.isIOS
+              ? RemoteConfigService.onboardingNativeIos
+              : RemoteConfigService.onboardingNative;
         default:
           return RemoteConfigService.showAds;
       }
@@ -373,6 +483,18 @@ class AdService {
     return loadNativeAdForScreen(
       screenKey: 'camera',
       adUnitId: cameraNativeAdUnitId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+    );
+  }
+
+  static Future<NativeAd?> loadOnboardingNativeAd({
+    Function(NativeAd)? onAdLoaded,
+    Function(LoadAdError)? onAdFailedToLoad,
+  }) {
+    return loadNativeAdForScreen(
+      screenKey: 'onboarding',
+      adUnitId: onboardingNativeAdUnitId,
       onAdLoaded: onAdLoaded,
       onAdFailedToLoad: onAdFailedToLoad,
     );
@@ -827,6 +949,42 @@ class AdService {
     );
   }
 
+  static Future<void> loadExitInterstitialAd({
+    Function(InterstitialAd)? onAdLoaded,
+    Function(LoadAdError)? onAdFailedToLoad,
+  }) {
+    return loadInterstitialAdForType(
+      adType: 'exit',
+      adUnitId: exitInterAdUnitId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+    );
+  }
+
+  static Future<void> loadChatResetInterstitialAd({
+    Function(InterstitialAd)? onAdLoaded,
+    Function(LoadAdError)? onAdFailedToLoad,
+  }) {
+    return loadInterstitialAdForType(
+      adType: 'chatReset',
+      adUnitId: chatResetInterAdUnitId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+    );
+  }
+
+  static Future<void> loadViewPlanContinueInterstitialAd({
+    Function(InterstitialAd)? onAdLoaded,
+    Function(LoadAdError)? onAdFailedToLoad,
+  }) {
+    return loadInterstitialAdForType(
+      adType: 'viewPlanContinue',
+      adUnitId: viewPlanContinueInterAdUnitId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+    );
+  }
+
   // App Open Ad
   static AppOpenAd? _appOpenAd;
   static bool _isLoadingAppOpen = false;
@@ -877,6 +1035,281 @@ class AdService {
         },
       ),
     );
+  }
+
+  /// Load and show splash app open ad on first install.
+  /// Controlled by RC: splash_appopen_1sttime (Android) / splash_appopen_1sttime_ios (iOS).
+  /// Calls [onComplete] when ad is dismissed, failed to load/show, or times out.
+  static Future<void> loadAndShowSplashFirstTimeAppOpenAd({
+    required BuildContext context,
+    required VoidCallback onComplete,
+  }) async {
+    // Ensure Mobile Ads is initialized (bypass platform check for this first-install ad)
+    await MobileAds.instance.initialize();
+    _isInitialized = true;
+
+    if (!await _checkInternetConnectivity()) {
+      onComplete();
+      return;
+    }
+
+    // Show full-screen loader while ad loads
+    bool loaderShown = false;
+    bool loaderDismissed = false;
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
+
+    void dismissLoader() {
+      if (loaderDismissed || !loaderShown) return;
+      try {
+        if (rootNavigator.mounted && rootNavigator.canPop()) {
+          rootNavigator.pop();
+          loaderDismissed = true;
+          if (kDebugMode) {
+            print('✅ [AdService] Splash first-time app open loader dismissed');
+          }
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('⚠️ [AdService] Error dismissing loader: $e');
+        }
+      }
+    }
+
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black.withValues(alpha: 0.7),
+        useRootNavigator: true,
+        builder: (dialogContext) => const _AdLoadingDialog(),
+      );
+      loaderShown = true;
+      if (kDebugMode) {
+        print('📥 [AdService] Loader shown for splash first-time app open ad');
+      }
+    }
+
+    const loadTimeout = Duration(seconds: 5);
+    final completer = Completer<void>();
+    AppOpenAd? ad;
+    bool didComplete = false;
+
+    void complete() {
+      if (didComplete) return;
+      didComplete = true;
+      dismissLoader();
+      ad?.dispose();
+      if (!completer.isCompleted) completer.complete();
+      onComplete();
+    }
+
+    AppOpenAd.load(
+      adUnitId: splashAppOpen1stTimeAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: AppOpenAdLoadCallback(
+        onAdLoaded: (loadedAd) {
+          if (didComplete) {
+            loadedAd.dispose();
+            return;
+          }
+          ad = loadedAd;
+          ad!.fullScreenContentCallback = FullScreenContentCallback(
+            onAdShowedFullScreenContent: (_) {
+              dismissLoader(); // Dismiss loader when ad appears
+              if (kDebugMode) {
+                print('✅ [AdService] Splash first-time app open ad showed');
+              }
+            },
+            onAdDismissedFullScreenContent: (_) {
+              if (kDebugMode) {
+                print('✅ [AdService] Splash first-time app open ad dismissed');
+              }
+              ad?.dispose();
+              ad = null;
+              complete();
+            },
+            onAdFailedToShowFullScreenContent: (_, error) {
+              if (kDebugMode) {
+                print(
+                  '❌ [AdService] Splash first-time app open ad failed to show: $error',
+                );
+              }
+              ad?.dispose();
+              ad = null;
+              complete();
+            },
+          );
+          if (context.mounted) {
+            ad!.show();
+          } else {
+            ad?.dispose();
+            complete();
+          }
+        },
+        onAdFailedToLoad: (error) {
+          if (kDebugMode) {
+            print(
+              '❌ [AdService] Splash first-time app open ad failed to load: ${error.code} ${error.message}',
+            );
+          }
+          complete();
+        },
+      ),
+    );
+
+    // Timeout: proceed if ad doesn't load in time
+    Future.delayed(loadTimeout, () {
+      if (!didComplete) {
+        if (kDebugMode) {
+          print(
+            '⚠️ [AdService] Splash first-time app open ad load timeout, proceeding',
+          );
+        }
+        complete();
+      }
+    });
+
+    await completer.future;
+  }
+
+  /// Load and show splash app open ad for returning user (2nd+ app open).
+  /// Controlled by RC: splash_appopen_2ndtime (Android) / splash_appopen_2ndtime_ios (iOS).
+  /// Calls [onComplete] when ad is dismissed, failed to load/show, or times out.
+  static Future<void> loadAndShowSplashReturningUserAppOpenAd({
+    required BuildContext context,
+    required VoidCallback onComplete,
+  }) async {
+    await MobileAds.instance.initialize();
+    _isInitialized = true;
+
+    if (!await _checkInternetConnectivity()) {
+      onComplete();
+      return;
+    }
+
+    bool loaderShown = false;
+    bool loaderDismissed = false;
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
+
+    void dismissLoader() {
+      if (loaderDismissed || !loaderShown) return;
+      try {
+        if (rootNavigator.mounted && rootNavigator.canPop()) {
+          rootNavigator.pop();
+          loaderDismissed = true;
+          if (kDebugMode) {
+            print(
+              '✅ [AdService] Splash returning user app open loader dismissed',
+            );
+          }
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('⚠️ [AdService] Error dismissing loader: $e');
+        }
+      }
+    }
+
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black.withValues(alpha: 0.7),
+        useRootNavigator: true,
+        builder: (dialogContext) => const _AdLoadingDialog(),
+      );
+      loaderShown = true;
+      if (kDebugMode) {
+        print(
+          '📥 [AdService] Loader shown for splash returning user app open ad',
+        );
+      }
+    }
+
+    const loadTimeout = Duration(seconds: 5);
+    final completer = Completer<void>();
+    AppOpenAd? ad;
+    bool didComplete = false;
+
+    void complete() {
+      if (didComplete) return;
+      didComplete = true;
+      dismissLoader();
+      ad?.dispose();
+      if (!completer.isCompleted) completer.complete();
+      onComplete();
+    }
+
+    AppOpenAd.load(
+      adUnitId: splashAppOpen2ndTimeAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: AppOpenAdLoadCallback(
+        onAdLoaded: (loadedAd) {
+          if (didComplete) {
+            loadedAd.dispose();
+            return;
+          }
+          ad = loadedAd;
+          ad!.fullScreenContentCallback = FullScreenContentCallback(
+            onAdShowedFullScreenContent: (_) {
+              dismissLoader();
+              if (kDebugMode) {
+                print(
+                  '✅ [AdService] Splash returning user app open ad showed',
+                );
+              }
+            },
+            onAdDismissedFullScreenContent: (_) {
+              if (kDebugMode) {
+                print(
+                  '✅ [AdService] Splash returning user app open ad dismissed',
+                );
+              }
+              ad?.dispose();
+              ad = null;
+              complete();
+            },
+            onAdFailedToShowFullScreenContent: (_, error) {
+              if (kDebugMode) {
+                print(
+                  '❌ [AdService] Splash returning user app open ad failed to show: $error',
+                );
+              }
+              ad?.dispose();
+              ad = null;
+              complete();
+            },
+          );
+          if (context.mounted) {
+            ad!.show();
+          } else {
+            ad?.dispose();
+            complete();
+          }
+        },
+        onAdFailedToLoad: (error) {
+          if (kDebugMode) {
+            print(
+              '❌ [AdService] Splash returning user app open ad failed to load: ${error.code} ${error.message}',
+            );
+          }
+          complete();
+        },
+      ),
+    );
+
+    Future.delayed(loadTimeout, () {
+      if (!didComplete) {
+        if (kDebugMode) {
+          print(
+            '⚠️ [AdService] Splash returning user app open ad load timeout, proceeding',
+          );
+        }
+        complete();
+      }
+    });
+
+    await completer.future;
   }
 
   static void showAppOpenAd({

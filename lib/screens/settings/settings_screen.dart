@@ -15,6 +15,7 @@ import '../../providers/grocery_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/meal_plan_provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../services/remote_config_service.dart';
 import '../../widgets/common/premium_card.dart';
 import '../../widgets/common/rtl_icon.dart';
 import '../../widgets/common/sticky_header.dart';
@@ -344,9 +345,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     bottom: 12 + MediaQuery.of(context).padding.bottom,
                   ),
                   children: [
-                    // Premium Card
-                    const PremiumCard(),
-                    const SizedBox(height: 8),
+                    // Premium Card (only if remote config enables it)
+                    if (Platform.isIOS
+                        ? RemoteConfigService.subCardIos
+                        : RemoteConfigService.subCard) ...[
+                      const PremiumCard(),
+                      const SizedBox(height: 8),
+                    ],
                     // Language Section (first)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),

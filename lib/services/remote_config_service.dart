@@ -26,8 +26,15 @@ class RemoteConfigService {
     'weekly_sub': false,
     'splash_inter': true,
     'app_open': true,
+    // Splash app open ad on first install (Android / iOS separate keys)
+    'splash_appopen_1sttime': false,
+    'splash_appopen_1sttime_ios': false,
+    // Splash app open ad for returning user (2nd+ open) (Android / iOS separate keys)
+    'splash_appopen_2ndtime': false,
+    'splash_appopen_2ndtime_ios': false,
     // Native ad flags
     'language_native': true,
+    'language_native_ios': true,
     'home_native': true,
     'recipe_native': true,
     'plan_native': true,
@@ -35,11 +42,50 @@ class RemoteConfigService {
     'chat_native': true,
     'reciepedetaile_native': true,
     'camera_native': true,
+    // Onboarding native ad (Android / iOS separate keys)
+    'onboarding_native': false,
+    'onboarding_native_ios': false,
     // Interstitial ad configuration
     'bottom_inter': '5',
     'card_inter': 'open5',
     'generateplan_inter': '5',
     'cookingai_inter': 'off',
+    // Exit interstitial (when user confirms exit from bottom sheet)
+    'exit_inter': false,
+    'exit_inter_ios': false,
+    // Chat reset / new chat interstitial (Android / iOS)
+    'chatreset_inter': false,
+    'chatreset_inter_ios': false,
+    // View Plan / Continue Plan interstitial - returning user on home (Android / iOS)
+    'viewplancontinue_inter': false,
+    'viewplancontinue_inter_ios': false,
+    // Pro button on home screen - show subscription entry (Android / iOS)
+    'sub_probutton': false,
+    'sub_probutton_ios': false,
+    // Premium card in settings screen (Android / iOS)
+    'sub_card': false,
+    'sub_card_ios': false,
+    // Scan/Camera limit for returning non-premium users: 'off'/'0'=unlimited, '1'/'2'/'3'=limit (Android / iOS)
+    'sub_scancamera': 'off',
+    'sub_scancamera_ios': 'off',
+    // AI Meal Planner limit: 'off'/'0'=unlimited, '1'/'2'/etc=plan limit (Android / iOS)
+    'sub_mealplan': 'off',
+    'sub_mealplan_ios': 'off',
+    // AI Chat (Meal Generator) limit: 'off'/'0'=unlimited, '1'/'2'/etc=message limit (Android / iOS)
+    'sub_aichat': 'off',
+    'sub_aichat_ios': 'off',
+    // Start Cooking with AI Chef / Generate Recipe btn (AI generate screen): 'off'/'0'=unlimited (separate from scan)
+    'sub_aichef': 'off',
+    'sub_aichef_ios': 'off',
+    // Show subscription screen after splash app open: 'off'/'0'=always, N=every Nth session (3,6,9...)
+    'sub_splash': 'off',
+    'sub_splash_ios': 'off',
+    // Show discount dialog on Pro screen close: once per 24 hours (Android / iOS)
+    'discount_popup': false,
+    'discount_popup_ios': false,
+    // Bottom banner on bottom nav screens only (Android / iOS)
+    'bottom_banner': false,
+    'bottom_banner_ios': false,
     'ai_chef': '5',
     // Supabase configuration (matching web app: VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY)
     'supabase_url': '',
@@ -158,9 +204,34 @@ class RemoteConfigService {
   static bool get appOpen =>
       _remoteConfig?.getBool('app_open') ?? _defaults['app_open'];
 
+  /// Splash app open ad on first install - Android (show only when true)
+  static bool get splashAppOpen1stTime =>
+      _remoteConfig?.getBool('splash_appopen_1sttime') ??
+      _defaults['splash_appopen_1sttime'];
+
+  /// Splash app open ad on first install - iOS (show only when true)
+  static bool get splashAppOpen1stTimeIos =>
+      _remoteConfig?.getBool('splash_appopen_1sttime_ios') ??
+      _defaults['splash_appopen_1sttime_ios'];
+
+  /// Splash app open ad for returning user - Android (show only when true)
+  static bool get splashAppOpen2ndTime =>
+      _remoteConfig?.getBool('splash_appopen_2ndtime') ??
+      _defaults['splash_appopen_2ndtime'];
+
+  /// Splash app open ad for returning user - iOS (show only when true)
+  static bool get splashAppOpen2ndTimeIos =>
+      _remoteConfig?.getBool('splash_appopen_2ndtime_ios') ??
+      _defaults['splash_appopen_2ndtime_ios'];
+
   // Native ad flags
   static bool get languageNative =>
       _remoteConfig?.getBool('language_native') ?? _defaults['language_native'];
+
+  /// Language native ad - iOS (show only when true)
+  static bool get languageNativeIos =>
+      _remoteConfig?.getBool('language_native_ios') ??
+      _defaults['language_native_ios'];
 
   static bool get homeNative =>
       _remoteConfig?.getBool('home_native') ?? _defaults['home_native'];
@@ -183,6 +254,116 @@ class RemoteConfigService {
 
   static bool get cameraNative =>
       _remoteConfig?.getBool('camera_native') ?? _defaults['camera_native'];
+
+  /// Onboarding native ad - Android (show only when true)
+  static bool get onboardingNative =>
+      _remoteConfig?.getBool('onboarding_native') ??
+      _defaults['onboarding_native'];
+
+  /// Onboarding native ad - iOS (show only when true)
+  static bool get onboardingNativeIos =>
+      _remoteConfig?.getBool('onboarding_native_ios') ??
+      _defaults['onboarding_native_ios'];
+
+  /// Exit interstitial ad - Android (show when user confirms exit)
+  static bool get exitInter =>
+      _remoteConfig?.getBool('exit_inter') ?? _defaults['exit_inter'];
+
+  /// Exit interstitial ad - iOS (show when user confirms exit)
+  static bool get exitInterIos =>
+      _remoteConfig?.getBool('exit_inter_ios') ?? _defaults['exit_inter_ios'];
+
+  /// Chat reset interstitial - Android (show when user starts new chat)
+  static bool get chatResetInter =>
+      _remoteConfig?.getBool('chatreset_inter') ?? _defaults['chatreset_inter'];
+
+  /// Chat reset interstitial - iOS (show when user starts new chat)
+  static bool get chatResetInterIos =>
+      _remoteConfig?.getBool('chatreset_inter_ios') ??
+      _defaults['chatreset_inter_ios'];
+
+  /// View Plan / Continue Plan interstitial - Android (returning user on home)
+  static bool get viewPlanContinueInter =>
+      _remoteConfig?.getBool('viewplancontinue_inter') ??
+      _defaults['viewplancontinue_inter'];
+
+  /// View Plan / Continue Plan interstitial - iOS (returning user on home)
+  static bool get viewPlanContinueInterIos =>
+      _remoteConfig?.getBool('viewplancontinue_inter_ios') ??
+      _defaults['viewplancontinue_inter_ios'];
+
+  /// Pro button on home screen - Android (show subscription entry)
+  static bool get subProButton =>
+      _remoteConfig?.getBool('sub_probutton') ?? _defaults['sub_probutton'];
+
+  /// Pro button on home screen - iOS (show subscription entry)
+  static bool get subProButtonIos =>
+      _remoteConfig?.getBool('sub_probutton_ios') ??
+      _defaults['sub_probutton_ios'];
+
+  /// Premium card in settings - Android
+  static bool get subCard =>
+      _remoteConfig?.getBool('sub_card') ?? _defaults['sub_card'];
+
+  /// Premium card in settings - iOS
+  static bool get subCardIos =>
+      _remoteConfig?.getBool('sub_card_ios') ?? _defaults['sub_card_ios'];
+
+  /// Scan/Camera limit - Android ('off'/'0'=unlimited, '1'/'2'/'3'=scan limit)
+  static String get subScanCamera =>
+      (_remoteConfig?.getString('sub_scancamera') ?? _defaults['sub_scancamera'] as String).trim();
+
+  /// Scan/Camera limit - iOS
+  static String get subScanCameraIos =>
+      (_remoteConfig?.getString('sub_scancamera_ios') ?? _defaults['sub_scancamera_ios'] as String).trim();
+
+  /// AI Meal Planner limit - Android ('off'/'0'=unlimited, '1'/'2'/etc=plan limit)
+  static String get subMealPlan =>
+      (_remoteConfig?.getString('sub_mealplan') ?? _defaults['sub_mealplan'] as String).trim();
+
+  /// AI Meal Planner limit - iOS
+  static String get subMealPlanIos =>
+      (_remoteConfig?.getString('sub_mealplan_ios') ?? _defaults['sub_mealplan_ios'] as String).trim();
+
+  /// AI Chat (Meal Generator) limit - Android ('off'/'0'=unlimited, '1'/'2'/etc=message limit)
+  static String get subAiChat =>
+      (_remoteConfig?.getString('sub_aichat') ?? _defaults['sub_aichat'] as String).trim();
+
+  /// AI Chat limit - iOS
+  static String get subAiChatIos =>
+      (_remoteConfig?.getString('sub_aichat_ios') ?? _defaults['sub_aichat_ios'] as String).trim();
+
+  /// Start Cooking with AI Chef / Generate Recipe btn limit - Android (separate count from scan)
+  static String get subAiChef =>
+      (_remoteConfig?.getString('sub_aichef') ?? _defaults['sub_aichef'] as String).trim();
+
+  /// Start Cooking with AI Chef / Generate Recipe btn limit - iOS
+  static String get subAiChefIos =>
+      (_remoteConfig?.getString('sub_aichef_ios') ?? _defaults['sub_aichef_ios'] as String).trim();
+
+  /// Show subscription after splash app open - Android ('off'/'0'=always, N=every Nth session)
+  static String get subSplash =>
+      (_remoteConfig?.getString('sub_splash') ?? _defaults['sub_splash'] as String).trim();
+
+  /// Show subscription after splash app open - iOS
+  static String get subSplashIos =>
+      (_remoteConfig?.getString('sub_splash_ios') ?? _defaults['sub_splash_ios'] as String).trim();
+
+  /// Discount popup on Pro close - Android (once per 24h)
+  static bool get discountPopup =>
+      _remoteConfig?.getBool('discount_popup') ?? _defaults['discount_popup'];
+
+  /// Discount popup on Pro close - iOS
+  static bool get discountPopupIos =>
+      _remoteConfig?.getBool('discount_popup_ios') ?? _defaults['discount_popup_ios'];
+
+  /// Bottom banner on bottom nav screens - Android (show only when true)
+  static bool get bottomBanner =>
+      _remoteConfig?.getBool('bottom_banner') ?? _defaults['bottom_banner'];
+
+  /// Bottom banner on bottom nav screens - iOS (show only when true)
+  static bool get bottomBannerIos =>
+      _remoteConfig?.getBool('bottom_banner_ios') ?? _defaults['bottom_banner_ios'];
 
   // Interstitial ad configuration strings
   static String get bottomInter {
@@ -399,7 +580,12 @@ class RemoteConfigService {
       'weekly_sub',
       'splash_inter',
       'app_open',
+      'splash_appopen_1sttime',
+      'splash_appopen_1sttime_ios',
+      'splash_appopen_2ndtime',
+      'splash_appopen_2ndtime_ios',
       'language_native',
+      'language_native_ios',
       'home_native',
       'recipe_native',
       'plan_native',
@@ -407,11 +593,27 @@ class RemoteConfigService {
       'chat_native',
       'reciepedetaile_native',
       'camera_native',
+      'onboarding_native',
+      'onboarding_native_ios',
+      'exit_inter',
+      'exit_inter_ios',
+      'chatreset_inter',
+      'chatreset_inter_ios',
+      'viewplancontinue_inter',
+      'viewplancontinue_inter_ios',
+      'sub_probutton',
+      'sub_probutton_ios',
+      'sub_card',
+      'sub_card_ios',
       'show_ads',
       'show_premium_features',
       'enable_voice_feature',
       'enable_scanner_feature',
       'maintenance_mode',
+      'discount_popup',
+      'discount_popup_ios',
+      'bottom_banner',
+      'bottom_banner_ios',
     ];
 
     print('\n📌 Boolean Values:');
@@ -438,6 +640,16 @@ class RemoteConfigService {
       'generateplan_inter',
       'cookingai_inter',
       'ai_chef',
+      'sub_scancamera',
+      'sub_scancamera_ios',
+      'sub_mealplan',
+      'sub_mealplan_ios',
+      'sub_aichat',
+      'sub_aichat_ios',
+      'sub_aichef',
+      'sub_aichef_ios',
+      'sub_splash',
+      'sub_splash_ios',
       'premium_product_id_weekly',
       'app_version_required',
     ];

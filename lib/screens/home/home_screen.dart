@@ -1,11 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
-import '../../widgets/ads/custom_native_ad_widget.dart';
-import '../../widgets/ads/screen_native_ad_widget.dart';
+import '../../services/ad_service.dart';
+import '../../services/remote_config_service.dart';
 import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
@@ -24,6 +26,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _isExitSheetOpen = false;
+
+  bool get _shouldShowProButton =>
+      Platform.isIOS
+          ? RemoteConfigService.subProButtonIos
+          : RemoteConfigService.subProButton;
 
   Future<void> _showExitConfirmation() async {
     if (!mounted) return;
@@ -110,8 +117,45 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(ctx).pop();
+                          onPressed: () async {
+                            try {
+                              await RemoteConfigService.initialize();
+                              await RemoteConfigService.fetchAndActivate();
+                            } catch (_) {}
+                            final shouldShowExitAd = Platform.isIOS
+                                ? RemoteConfigService.exitInterIos
+                                : RemoteConfigService.exitInter;
+
+                            if (shouldShowExitAd) {
+                              try {
+                                if (ctx.mounted) {
+                                  await AdService.showInterstitialAdForType(
+                                    adType: 'exit',
+                                    context: ctx,
+                                    loadAdFunction: () =>
+                                        AdService.loadExitInterstitialAd(),
+                                    onAdDismissed: () {
+                                      // App closes ONLY after user dismisses the ad
+                                      if (ctx.mounted) {
+                                        Navigator.of(ctx).pop();
+                                      }
+                                      SystemNavigator.pop();
+                                    },
+                                    onAdFailedToShow: (_) {
+                                      // Ad failed to load/show - exit without waiting
+                                      if (ctx.mounted) {
+                                        Navigator.of(ctx).pop();
+                                      }
+                                      SystemNavigator.pop();
+                                    },
+                                  );
+                                  return; // Do NOT fall through - exit happens in callbacks only
+                                }
+                              } catch (_) {}
+                            }
+
+                            // No ad shown - close sheet and exit
+                            if (ctx.mounted) Navigator.of(ctx).pop();
                             SystemNavigator.pop();
                           },
                           style: ElevatedButton.styleFrom(
@@ -179,8 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Pro button on the left
-                        const ProButton(),
+                        // Pro button on the left (only if remote config enables it)
+                        if (_shouldShowProButton) const ProButton(),
                         // Settings button on the right
                         IconButton(
                           icon: const Icon(Icons.settings),
@@ -388,15 +432,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          // Home Native Ad (Small)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: const ScreenNativeAdWidget(
-                              screenKey: 'home',
-                              size: CustomNativeAdSize.small,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
                           // Saved Meal Plan Card
                           const SavedMealPlanCard(),
 

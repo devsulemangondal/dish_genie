@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,7 +11,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
 import '../../providers/premium_provider.dart';
-import '../../services/ad_service.dart';
 import '../../services/billing_service.dart';
 import '../../services/remote_config_service.dart';
 import '../../services/storage_service.dart';
@@ -212,52 +212,64 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
       }
     }
 
-    // Premium users never see ads; navigate immediately.
-    final isPremium = context.read<PremiumProvider>().isPremium;
-    if (isPremium) {
-      navigateAway();
-      return;
-    }
-
-    // Show interstitial when closing Pro from any source (controlled by show_ads + splash_inter).
-    try {
-      await RemoteConfigService.initialize();
-      final shouldShow =
-          RemoteConfigService.showAds && RemoteConfigService.splashInter;
-      if (!shouldShow) {
-        navigateAway();
-        return;
+    // Show discount dialog once per 24h if RC allows
+    final shouldShowDiscount = Platform.isIOS
+        ? RemoteConfigService.discountPopupIos
+        : RemoteConfigService.discountPopup;
+    if (shouldShowDiscount) {
+      try {
+        await RemoteConfigService.initialize();
+        await RemoteConfigService.fetchAndActivate();
+      } catch (_) {}
+      if (!mounted) return;
+      final showDiscount = Platform.isIOS
+          ? RemoteConfigService.discountPopupIos
+          : RemoteConfigService.discountPopup;
+      if (showDiscount) {
+        final lastShown = await StorageService.getDiscountPopupShownAt();
+        final now = DateTime.now();
+        final canShow = lastShown == null ||
+            now.difference(lastShown) >= const Duration(hours: 24);
+        if (canShow && mounted) {
+          await _showDiscountDialog(() async {
+            await StorageService.setDiscountPopupShownNow();
+            navigateAway();
+          });
+          return;
+        }
       }
-    } catch (_) {
-      navigateAway();
-      return;
     }
 
-    bool hasNavigated = false;
-    await AdService.showInterstitialAdForType(
-      adType: 'splash',
+    navigateAway();
+  }
+
+  Future<void> _showDiscountDialog(Future<void> Function() onDismiss) async {
+    await showDialog<void>(
       context: context,
-      loadAdFunction: () => AdService.loadSplashInterstitialAd(),
-      onAdDismissed: () {
-        if (!hasNavigated && mounted) {
-          hasNavigated = true;
-          navigateAway();
-        }
-      },
-      onAdFailedToShow: (ad) {
-        if (!hasNavigated && mounted) {
-          hasNavigated = true;
-          navigateAway();
-        }
-      },
+      barrierDismissible: true,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(ctx).cardColor,
+        title: Text(
+          'Special Offer',
+          style: TextStyle(color: Theme.of(ctx).colorScheme.onSurface),
+        ),
+        content: Text(
+          'Get an exclusive discount on your subscription! Upgrade now to unlock all features.',
+          style: TextStyle(color: Theme.of(ctx).colorScheme.onSurface),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(context.t('common.close')),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(context.t('common.continue')),
+          ),
+        ],
+      ),
     );
-
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!hasNavigated && mounted) {
-        hasNavigated = true;
-        navigateAway();
-      }
-    });
+    if (mounted) await onDismiss();
   }
 
   void _clearPurchaseLoading() {

@@ -18,6 +18,8 @@ class StorageService {
   static const String _groceryListKey = 'dishgenie_grocery_list';
   static const String _favoritesKey = 'dishgenie_favorites';
   static const String _firstLaunchKey = 'dishgenie_first_launch';
+  static const String _appSessionCountKey = 'dishgenie_app_session_count';
+  static const String _discountPopupShownAtKey = 'dishgenie_discount_popup_shown_at';
 
   // Cache SharedPreferences instance to avoid repeated getInstance() calls
   static SharedPreferences? _cachedPrefs;
@@ -73,6 +75,29 @@ class StorageService {
   static Future<void> setFirstLaunchComplete() async {
     final prefs = await _prefs;
     await prefs.setBool(_firstLaunchKey, false);
+  }
+
+  // App session count (for sub_splash: show Pro every Nth session)
+  static Future<int> getAppSessionCount() async {
+    final v = await getValue<int>(_appSessionCountKey, 0);
+    return v ?? 0;
+  }
+
+  static Future<int> incrementAppSessionCount() async {
+    final count = await getAppSessionCount();
+    final next = count + 1;
+    await setValue(_appSessionCountKey, next);
+    return next;
+  }
+
+  // Discount popup (show once per 24h when closing Pro screen)
+  static Future<DateTime?> getDiscountPopupShownAt() async {
+    final ms = await getValue<int>(_discountPopupShownAtKey, null);
+    return ms != null ? DateTime.fromMillisecondsSinceEpoch(ms) : null;
+  }
+
+  static Future<void> setDiscountPopupShownNow() async {
+    await setValue(_discountPopupShownAtKey, DateTime.now().millisecondsSinceEpoch);
   }
 
   // Onboarding

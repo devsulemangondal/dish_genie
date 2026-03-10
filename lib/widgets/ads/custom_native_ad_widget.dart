@@ -73,7 +73,9 @@ class _CustomNativeAdWidgetState extends State<CustomNativeAdWidget> {
       
       switch (widget.screenKey) {
         case 'language':
-          shouldShow = RemoteConfigService.languageNative;
+          shouldShow = Platform.isIOS
+              ? RemoteConfigService.languageNativeIos
+              : RemoteConfigService.languageNative;
           break;
         case 'home':
           shouldShow = RemoteConfigService.homeNative;

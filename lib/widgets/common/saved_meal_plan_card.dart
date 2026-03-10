@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
 import '../../providers/meal_plan_provider.dart';
 import '../../providers/grocery_provider.dart';
-import 'package:intl/intl.dart';
+import '../../services/ad_service.dart';
+import '../../services/remote_config_service.dart';
 import 'rtl_icon.dart';
 
 class SavedMealPlanCard extends StatefulWidget {
@@ -37,6 +42,37 @@ class _SavedMealPlanCardState extends State<SavedMealPlanCard>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _onViewPlanOrContinuePlan(BuildContext context) async {
+    void goToPlanner() {
+      if (context.mounted) context.go('/planner');
+    }
+
+    try {
+      await RemoteConfigService.initialize();
+      await RemoteConfigService.fetchAndActivate();
+    } catch (_) {}
+
+    final shouldShowAd = Platform.isIOS
+        ? RemoteConfigService.viewPlanContinueInterIos
+        : RemoteConfigService.viewPlanContinueInter;
+
+    if (shouldShowAd && context.mounted) {
+      try {
+        await AdService.showInterstitialAdForType(
+          adType: 'viewPlanContinue',
+          context: context,
+          loadAdFunction: () =>
+              AdService.loadViewPlanContinueInterstitialAd(),
+          onAdDismissed: goToPlanner,
+          onAdFailedToShow: (_) => goToPlanner(),
+        );
+        return;
+      } catch (_) {}
+    }
+
+    goToPlanner();
   }
 
   @override
@@ -182,7 +218,7 @@ class _SavedMealPlanCardState extends State<SavedMealPlanCard>
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: () => context.go('/planner'),
+                            onTap: () => _onViewPlanOrContinuePlan(context),
                             borderRadius: BorderRadius.circular(12),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -213,7 +249,8 @@ class _SavedMealPlanCardState extends State<SavedMealPlanCard>
                     const SizedBox(width: 8),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () => context.go('/planner'),
+                        onPressed: () =>
+                            _onViewPlanOrContinuePlan(context),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(

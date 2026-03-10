@@ -14,7 +14,7 @@ class ProButton extends StatelessWidget {
     final isPremium = context.watch<PremiumProvider>().isPremium;
 
     return GestureDetector(
-      onTap: () => ProNavigation.tryOpen(context, replace: true),
+      onTap: () => ProNavigation.tryOpen(context, replace: false),
       child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(

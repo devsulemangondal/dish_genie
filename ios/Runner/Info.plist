@@ -64,8 +64,8 @@
 	<array>
 		<string>mailto</string>
 	</array>
-	<!-- Google Mobile Ads App ID (test ID - required to prevent crash even when ads are disabled) -->
+	<!-- Google Mobile Ads App ID -->
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-6882687050623219~4480893062</string>
 </dict>
 </plist>
