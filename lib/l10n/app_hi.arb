@@ -429,6 +429,8 @@
   "premiumBasic": "बेसिक",
   "premiumCardDishGeniePro": "डिशजीनी प्रो",
   "premiumCardSubtitle": "विज्ञापन मुक्त अनुभव, और असीमित AI सुविधाएं",
+  "premiumCardTryPlus": "Dish Genie Plus आज़माएं",
+  "premiumCardGetPlus": "Plus प्राप्त करें",
   "premiumCardUnlock": "अनलॉक ",
   "premiumError": "त्रुटि: {error}",
   "premiumFailedToInitiatePurchase": "खरीदारी शुरू करने में विफल",

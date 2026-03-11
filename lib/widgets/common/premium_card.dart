@@ -1,96 +1,138 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import '../../core/theme/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
+import '../../core/theme/colors.dart';
 
-/// Premium upgrade card with crown icon and gradient background.
-/// Shown everywhere inside the app; tap opens Pro screen.
+/// Premium card for settings screen. Uses asset image as background with
+/// overlaid "Try Dish Genie Plus" text and "Get Plus" button.
 class PremiumCard extends StatelessWidget {
   const PremiumCard({super.key});
 
+  static const double _designWidth = 375;
+
+  static double _r(BuildContext context, double value) {
+    final w = MediaQuery.sizeOf(context).width;
+    final scale = (w / _designWidth).clamp(0.75, 1.15);
+    return value * scale;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
     return GestureDetector(
       onTap: () => ProNavigation.tryOpen(context, replace: false),
       child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              gradient: AppColors.gradientPrimary,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: AppColors.getCardShadow(context),
+        // margin: EdgeInsets.symmetric(
+        //   horizontal: _r(context, 24),
+        //   vertical: _r(context, 12),
+        // ),
+        height: _r(context, 120),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(_r(context, 20)),
+          boxShadow: AppColors.getCardShadow(context),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Background image (robot, food bowls, purple gradient)
+            // Mirror in RTL
+            Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()..scale(isRtl ? -1.0 : 1.0, 1.0),
+              child: Image.asset(
+                'assets/premium.png',
+                fit: BoxFit.contain,
+                alignment: Alignment.center,
+              ),
             ),
-            child: Row(
-              children: [
-                // Crown icon in white circle
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.grey.withOpacity(0.2),
-                      width: 1,
-                    ),
+            // Content: left in LTR, right in RTL
+            Align(
+              alignment: isRtl ? Alignment.centerRight : Alignment.centerLeft,
+              child: SizedBox(
+                width: _r(context, 220),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(
+                    _r(context, 20),
+                    _r(context, 20),
+                    _r(context, 20),
+                    _r(context, 20),
                   ),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      'assets/icons/material-symbols_crown-rounded.svg',
-                      width: 28,
-                      height: 28,
-                      colorFilter: const ColorFilter.mode(
-                        AppColors.genieGold,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                // Text content
-                Expanded(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Main title
-                      RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            height: 1.2,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: context.t('premium.card.unlock'),
-                              style: const TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                            TextSpan(
-                              text: context.t('premium.card.dishgenie.pro'),
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      // Subtitle
                       Text(
-                        context.t('premium.card.subtitle'),
-                        style: TextStyle(
-                          fontSize: 12,
+                        context.t('premium.card.try.plus'),
+                        style: GoogleFonts.poetsenOne(
+                          fontSize: _r(context, 16),
                           fontWeight: FontWeight.w400,
-                          color: Colors.white.withOpacity(0.9),
-                          height: 1.2,
+                          color: Colors.black87,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: isRtl ? TextAlign.right : TextAlign.left,
+                      ),
+                      SizedBox(height: _r(context, 12)),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () =>
+                              ProNavigation.tryOpen(context, replace: false),
+                          borderRadius: BorderRadius.circular(_r(context, 28)),
+                          child: Container(
+                            constraints: BoxConstraints(
+                              minWidth: _r(context, 100),
+                              maxWidth: _r(context, 140),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: _r(context, 20),
+                              vertical: _r(context, 7),
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: const [
+                                  Color(0xFF691CE4),
+                                  Color(0xFFAF50E0),
+                                ],
+                                begin: isRtl
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                end: isRtl
+                                    ? Alignment.centerLeft
+                                    : Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                _r(context, 28),
+                              ),
+                            ),
+                            child: Text(
+                              context.t('premium.card.get.plus'),
+                              style: GoogleFonts.poppins(
+                                fontSize: _r(context, 14),
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: isRtl
+                                  ? TextAlign.right
+                                  : TextAlign.center,
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        );
+          ],
+        ),
+      ),
+    );
   }
 }

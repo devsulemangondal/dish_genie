@@ -1894,6 +1894,12 @@ class AppLocalizationsTr extends AppLocalizations {
       'Reklamsız Deneyim ve Sınırsız AI Özellikleri';
 
   @override
+  String get premiumCardTryPlus => 'Dish Genie Plus\'ı Deneyin';
+
+  @override
+  String get premiumCardGetPlus => 'Plus Al';
+
+  @override
   String get scannerCookingTimeLabel => 'Pişirme Süresi';
 
   @override

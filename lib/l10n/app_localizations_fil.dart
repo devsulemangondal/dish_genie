@@ -1906,6 +1906,12 @@ class AppLocalizationsFil extends AppLocalizations {
       'Ad-free na karanasan at walang limitasyong AI features';
 
   @override
+  String get premiumCardTryPlus => 'Subukan ang Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'Kunin ang Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'Oras ng Pagluluto';
 
   @override

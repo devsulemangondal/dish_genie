@@ -1896,6 +1896,12 @@ class AppLocalizationsKk extends AppLocalizations {
       'Жарнамасыз тәжірибе және шексіз AI мүмкіндіктері';
 
   @override
+  String get premiumCardTryPlus => 'Dish Genie Plus қолданып көріңіз';
+
+  @override
+  String get premiumCardGetPlus => 'Plus алу';
+
+  @override
   String get scannerCookingTimeLabel => 'Пісіру уақыты';
 
   @override

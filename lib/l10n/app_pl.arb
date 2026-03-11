@@ -429,6 +429,8 @@
   "premiumBasic": "Podstawowy",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Doświadczenie bez reklam i nieograniczone funkcje AI",
+  "premiumCardTryPlus": "Wypróbuj Dish Genie Plus",
+  "premiumCardGetPlus": "Uzyskaj Plus",
   "premiumCardUnlock": "Odblokuj ",
   "premiumError": "Błąd: {error}",
   "premiumFailedToInitiatePurchase": "Nie udało się zainicjować zakupu",

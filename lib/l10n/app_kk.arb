@@ -429,6 +429,8 @@
   "premiumBasic": "Негізгі",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Жарнамасыз тәжірибе және шексіз AI мүмкіндіктері",
+  "premiumCardTryPlus": "Dish Genie Plus қолданып көріңіз",
+  "premiumCardGetPlus": "Plus алу",
   "premiumCardUnlock": "Бұғаттауды ашу ",
   "premiumError": "Қате: {error}",
   "premiumFailedToInitiatePurchase": "Сатып алуды бастау мүмкін болмады",

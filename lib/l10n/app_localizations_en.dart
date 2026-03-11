@@ -1884,6 +1884,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Ad Free Experience, & Unlimited AI Features';
 
   @override
+  String get premiumCardTryPlus => 'Try Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'Get Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'Cooking Time';
 
   @override

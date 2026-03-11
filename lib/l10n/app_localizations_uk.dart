@@ -1892,6 +1892,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get premiumCardSubtitle => 'Без реклами та необмежені функції ШІ';
 
   @override
+  String get premiumCardTryPlus => 'Спробуйте Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'Отримати Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'Час приготування';
 
   @override

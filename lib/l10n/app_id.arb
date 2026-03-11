@@ -429,6 +429,8 @@
   "premiumBasic": "Dasar",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Pengalaman Bebas Iklan & Fitur AI Tanpa Batas",
+  "premiumCardTryPlus": "Coba Dish Genie Plus",
+  "premiumCardGetPlus": "Dapatkan Plus",
   "premiumCardUnlock": "Buka Kunci ",
   "premiumError": "Kesalahan: {kesalahan}",
   "premiumFailedToInitiatePurchase": "Gagal memulai pembelian",

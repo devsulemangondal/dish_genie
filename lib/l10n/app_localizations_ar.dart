@@ -1880,6 +1880,12 @@ class AppLocalizationsAr extends AppLocalizations {
       'تجربة خالية من الإعلانات، وميزات ذكاء اصطناعي غير محدودة';
 
   @override
+  String get premiumCardTryPlus => 'جرّب Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'احصل على Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'وقت الطبخ';
 
   @override

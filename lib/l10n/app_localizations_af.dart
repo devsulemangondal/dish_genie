@@ -1891,6 +1891,12 @@ class AppLocalizationsAf extends AppLocalizations {
       'Advertensie-vrye ervaring en onbeperkte AI funksies';
 
   @override
+  String get premiumCardTryPlus => 'Probeer Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'Kry Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'Kooktyd';
 
   @override

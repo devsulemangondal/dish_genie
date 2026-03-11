@@ -3743,6 +3743,18 @@ abstract class AppLocalizations {
   /// **'Ad Free Experience, & Unlimited AI Features'**
   String get premiumCardSubtitle;
 
+  /// No description provided for @premiumCardTryPlus.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Dish Genie Plus'**
+  String get premiumCardTryPlus;
+
+  /// No description provided for @premiumCardGetPlus.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Plus'**
+  String get premiumCardGetPlus;
+
   /// No description provided for @scannerCookingTimeLabel.
   ///
   /// In en, this message translates to:

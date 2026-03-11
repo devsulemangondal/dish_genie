@@ -429,6 +429,8 @@
   "premiumBasic": "基本",
   "premiumCardDishGeniePro": "ディッシュジーニー プロ",
   "premiumCardSubtitle": "広告なしの体験と無制限のAI機能",
+  "premiumCardTryPlus": "Dish Genie Plusを試す",
+  "premiumCardGetPlus": "Plusを取得",
   "premiumCardUnlock": "ロック解除 ",
   "premiumError": "エラー: {error}",
   "premiumFailedToInitiatePurchase": "購入を開始できませんでした",

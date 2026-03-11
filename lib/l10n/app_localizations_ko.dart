@@ -1858,6 +1858,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumCardSubtitle => '광고 없는 경험 및 무제한 AI 기능';
 
   @override
+  String get premiumCardTryPlus => 'Dish Genie Plus 체험하기';
+
+  @override
+  String get premiumCardGetPlus => 'Plus 받기';
+
+  @override
   String get scannerCookingTimeLabel => '요리 시간';
 
   @override

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/localization/l10n_extension.dart';
+import '../../core/router/app_router.dart';
 import '../../core/theme/colors.dart';
 import '../../data/models/meal_plan.dart';
 import '../../data/models/recipe.dart';
@@ -23,7 +24,7 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, RouteAware {
   late TabController _tabController;
   List<Recipe> _favoritesRecipes = [];
   List<Recipe> _savedRecipes = [];
@@ -38,9 +39,25 @@ class _FavoritesScreenState extends State<FavoritesScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      AppRouter.routeObserver.subscribe(this, route);
+    }
+  }
+
+  @override
   void dispose() {
+    AppRouter.routeObserver.unsubscribe(this);
     _tabController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // User returned to this screen (e.g. from recipe detail after saving)
+    if (mounted) _loadData();
   }
 
   Future<void> _loadData() async {
@@ -48,13 +65,14 @@ class _FavoritesScreenState extends State<FavoritesScreen>
     final favorites = await StorageService.getFavorites();
     final saved = await StorageService.getSavedRecipes();
 
-    // Resolve slugs to recipes (RecipeProvider + persisted AI recipe data)
+    // Resolve slugs to recipes. Prefer StorageService (persisted with fallback
+    // images) for favorites/saved so images show without restart.
     final recipeProvider = context.read<RecipeProvider>();
     final favRecipes = <Recipe>[];
     final validFavSlugs = <String>[];
     for (final slug in favorites) {
-      var recipe = recipeProvider.getRecipeBySlug(slug);
-      recipe ??= await StorageService.getRecipeDataBySlug(slug);
+      var recipe = await StorageService.getRecipeDataBySlug(slug);
+      recipe ??= recipeProvider.getRecipeBySlug(slug);
       if (recipe != null) {
         favRecipes.add(recipe);
         validFavSlugs.add(slug);
@@ -63,8 +81,8 @@ class _FavoritesScreenState extends State<FavoritesScreen>
     final savedRecipesList = <Recipe>[];
     final validSavedSlugs = <String>[];
     for (final slug in saved) {
-      var recipe = recipeProvider.getRecipeBySlug(slug);
-      recipe ??= await StorageService.getRecipeDataBySlug(slug);
+      var recipe = await StorageService.getRecipeDataBySlug(slug);
+      recipe ??= recipeProvider.getRecipeBySlug(slug);
       if (recipe != null) {
         savedRecipesList.add(recipe);
         validSavedSlugs.add(slug);

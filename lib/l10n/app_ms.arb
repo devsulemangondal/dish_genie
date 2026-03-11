@@ -429,6 +429,8 @@
   "premiumBasic": "asas",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Pengalaman Tanpa Iklan & Ciri AI Tanpa Had",
+  "premiumCardTryPlus": "Cuba Dish Genie Plus",
+  "premiumCardGetPlus": "Dapatkan Plus",
   "premiumCardUnlock": "Buka Kunci ",
   "premiumError": "Ralat: {error}",
   "premiumFailedToInitiatePurchase": "Gagal untuk memulakan pembelian",

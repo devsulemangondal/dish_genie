@@ -429,6 +429,8 @@
   "premiumBasic": "Basies",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Advertensie-vrye ervaring en onbeperkte AI funksies",
+  "premiumCardTryPlus": "Probeer Dish Genie Plus",
+  "premiumCardGetPlus": "Kry Plus",
   "premiumCardUnlock": "Ontsluit ",
   "premiumError": "Fout: {fout}",
   "premiumFailedToInitiatePurchase": "Kon nie aankoop begin nie",

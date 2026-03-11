@@ -429,6 +429,8 @@
   "premiumBasic": "Nền tảng",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Trải nghiệm không quảng cáo và tính năng AI không giới hạn",
+  "premiumCardTryPlus": "Dùng thử Dish Genie Plus",
+  "premiumCardGetPlus": "Nhận Plus",
   "premiumCardUnlock": "Mở khóa ",
   "premiumError": "Lỗi: {error}",
   "premiumFailedToInitiatePurchase": "Không thể bắt đầu mua hàng",

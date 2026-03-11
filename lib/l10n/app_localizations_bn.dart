@@ -1894,6 +1894,12 @@ class AppLocalizationsBn extends AppLocalizations {
       'বিজ্ঞাপন-মুক্ত অভিজ্ঞতা এবং সীমাহীন AI বৈশিষ্ট্য';
 
   @override
+  String get premiumCardTryPlus => 'Dish Genie Plus ব্যবহার করুন';
+
+  @override
+  String get premiumCardGetPlus => 'Plus পান';
+
+  @override
   String get scannerCookingTimeLabel => 'রান্নার সময়';
 
   @override

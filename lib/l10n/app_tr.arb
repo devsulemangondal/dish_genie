@@ -429,6 +429,8 @@
   "premiumBasic": "Temel",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Reklamsız Deneyim ve Sınırsız AI Özellikleri",
+  "premiumCardTryPlus": "Dish Genie Plus'ı Deneyin",
+  "premiumCardGetPlus": "Plus Al",
   "premiumCardUnlock": "Kilidi Aç ",
   "premiumError": "Hata: {hata}",
   "premiumFailedToInitiatePurchase": "Satın alma işlemi başlatılamadı",

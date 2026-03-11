@@ -730,6 +730,8 @@ extension L10nExtension on BuildContext {
     'premium.card.unlock': (l) => l.premiumCardUnlock,
     'premium.card.dishgenie.pro': (l) => l.premiumCardDishGeniePro,
     'premium.card.subtitle': (l) => l.premiumCardSubtitle,
+    'premium.card.try.plus': (l) => l.premiumCardTryPlus,
+    'premium.card.get.plus': (l) => l.premiumCardGetPlus,
     'grocery.demo.recipe.chicken.biryani': (l) =>
         l.groceryDemoRecipeChickenBiryani,
     'grocery.demo.recipe.dal.makhani': (l) => l.groceryDemoRecipeDalMakhani,

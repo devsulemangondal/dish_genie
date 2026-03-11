@@ -1847,6 +1847,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumCardSubtitle => '无广告体验，和无限AI功能';
 
   @override
+  String get premiumCardTryPlus => '体验 Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => '获取 Plus';
+
+  @override
   String get scannerCookingTimeLabel => '烹饪时间';
 
   @override

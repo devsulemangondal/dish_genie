@@ -32,6 +32,11 @@ import '../../data/models/recipe.dart';
 class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
+  /// Route observer for screens that need to react when becoming visible again
+  /// (e.g. FavoritesScreen to reload data after user returns from recipe detail)
+  static final RouteObserver<ModalRoute<void>> routeObserver =
+      RouteObserver<ModalRoute<void>>();
+
   /// Get the root navigator key for accessing navigator context
   static GlobalKey<NavigatorState>? getNavigatorKey() {
     return _rootNavigatorKey;
@@ -43,6 +48,7 @@ class AppRouter {
       initialLocation: '/splash',
       observers: [
         _SafeAnalyticsRouteObserver(),
+        routeObserver,
       ],
       errorBuilder: (context, state) => const NotFoundScreen(),
       redirect: (context, state) {

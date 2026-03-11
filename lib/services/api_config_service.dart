@@ -1,5 +1,5 @@
-import 'remote_config_service.dart';
 import '../config/supabase_config.dart';
+import 'remote_config_service.dart';
 
 /// Simple API configuration service for chat and other API endpoints
 /// No Supabase client initialization required - just stores URL and key
@@ -17,10 +17,7 @@ class ApiConfigService {
   /// Matches web app: VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY
   /// Can be called with direct values or will try to get from Remote Config
   /// Falls back to default values (same as web app) if not configured
-  static Future<void> initialize({
-    String? url,
-    String? key,
-  }) async {
+  static Future<void> initialize({String? url, String? key}) async {
     // If provided directly, use those (from environment variables)
     if (url != null && key != null && url.isNotEmpty && key.isNotEmpty) {
       _apiUrl = url;
@@ -36,10 +33,10 @@ class ApiConfigService {
       if (RemoteConfigService.isInitialized) {
         // Fetch and activate to ensure we have latest values
         await RemoteConfigService.fetchAndActivate();
-        
+
         final remoteUrl = RemoteConfigService.getString('supabase_url');
         final remoteKey = RemoteConfigService.getString('supabase_anon_key');
-        
+
         if (remoteUrl.isNotEmpty && remoteKey.isNotEmpty) {
           _apiUrl = remoteUrl;
           _apiKey = remoteKey;
@@ -62,12 +59,14 @@ class ApiConfigService {
     // Web app uses: VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY from .env
     if (_apiUrl == null || _apiUrl!.isEmpty) {
       // Try config file first, then fallback to web app's project URL
-      _apiUrl = SupabaseConfig.supabaseUrl.isNotEmpty 
-          ? SupabaseConfig.supabaseUrl 
+      _apiUrl = SupabaseConfig.supabaseUrl.isNotEmpty
+          ? SupabaseConfig.supabaseUrl
           : 'https://kqhufomrgvpagbziwwok.supabase.co';
-      print('[ApiConfig] ✅ Using web app Supabase URL (matches web app project)');
+      print(
+        '[ApiConfig] ✅ Using web app Supabase URL (matches web app project)',
+      );
     }
-    
+
     // The anon key must match the web app's VITE_SUPABASE_PUBLISHABLE_KEY
     // Priority: Environment > Remote Config > Config File
     if (_apiKey == null || _apiKey!.isEmpty) {
@@ -78,16 +77,24 @@ class ApiConfigService {
       } else {
         print('[ApiConfig] ❌ Supabase anon key not configured!');
         print('[ApiConfig]    Options:');
-        print('[ApiConfig]    1. Set VITE_SUPABASE_PUBLISHABLE_KEY environment variable');
-        print('[ApiConfig]    2. Configure supabase_anon_key in Firebase Remote Config');
+        print(
+          '[ApiConfig]    1. Set VITE_SUPABASE_PUBLISHABLE_KEY environment variable',
+        );
+        print(
+          '[ApiConfig]    2. Configure supabase_anon_key in Firebase Remote Config',
+        );
         print('[ApiConfig]    3. Update lib/config/supabase_config.dart');
-        print('[ApiConfig]    Get the key from web app .env file or Supabase Dashboard');
+        print(
+          '[ApiConfig]    Get the key from web app .env file or Supabase Dashboard',
+        );
       }
     }
   }
 
   /// Check if API is configured
-  static bool get isConfigured => 
-      _apiUrl != null && _apiKey != null && 
-      _apiUrl!.isNotEmpty && _apiKey!.isNotEmpty;
+  static bool get isConfigured =>
+      _apiUrl != null &&
+      _apiKey != null &&
+      _apiUrl!.isNotEmpty &&
+      _apiKey!.isNotEmpty;
 }

@@ -21,10 +21,14 @@ class BillingService {
   static bool _isInitialized = false;
   static bool _hasPremiumEntitlement = false;
 
-  // Product ID must match EXACTLY the subscription ID in Play Console (Monetize → Subscriptions).
+  // Product IDs must match EXACTLY the subscription IDs in Play Console (Monetize → Subscriptions).
   static const String weeklySubscriptionId = 'weekly_sub';
+  static const String yearlySubscriptionId = 'yearly_sub';
 
-  static final List<String> _productIds = [weeklySubscriptionId];
+  static final List<String> _productIds = [
+    weeklySubscriptionId,
+    yearlySubscriptionId,
+  ];
 
   static List<ProductDetails> _products = [];
   static final StreamController<PurchaseDetails> _purchaseController =
@@ -40,7 +44,7 @@ class BillingService {
   static bool get hasPremiumEntitlement => _hasPremiumEntitlement;
   static bool get isLoadingProducts => _isLoadingProducts;
   static bool isPremiumProductId(String productId) =>
-      productId == weeklySubscriptionId;
+      productId == weeklySubscriptionId || productId == yearlySubscriptionId;
 
   static bool _isLoadingProducts = false;
   static String? _lastError;
@@ -201,9 +205,8 @@ class BillingService {
       // The actual subscription type is determined by how the product is configured
       // in Google Play Console (for Android) or App Store Connect (for iOS)
       // Subscriptions must be configured as subscription products in the store
-      if (product.id == weeklySubscriptionId) {
-        // This is a subscription product - use buyNonConsumable
-        // The store will handle it as a subscription based on product configuration
+      if (product.id == weeklySubscriptionId ||
+          product.id == yearlySubscriptionId) {
         await _iap.buyNonConsumable(purchaseParam: purchaseParam);
       } else {
         await _iap.buyConsumable(purchaseParam: purchaseParam);

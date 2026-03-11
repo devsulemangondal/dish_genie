@@ -429,6 +429,8 @@
   "premiumBasic": "Asosiy",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Reklamasiz tajriba va cheksiz AI funksiyalari",
+  "premiumCardTryPlus": "Dish Genie Plus ni sinab ko'ring",
+  "premiumCardGetPlus": "Plus oling",
   "premiumCardUnlock": "Qulfni ochish ",
   "premiumError": "Xato: {error}",
   "premiumFailedToInitiatePurchase": "Xaridni boshlash amalga oshmadi",

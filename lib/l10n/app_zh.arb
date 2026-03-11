@@ -429,6 +429,8 @@
   "premiumBasic": "基础版",
   "premiumCardDishGeniePro": "DishGenie 专业版",
   "premiumCardSubtitle": "无广告体验，和无限AI功能",
+  "premiumCardTryPlus": "体验 Dish Genie Plus",
+  "premiumCardGetPlus": "获取 Plus",
   "premiumCardUnlock": "解锁 ",
   "premiumError": "错误：{error}",
   "premiumFailedToInitiatePurchase": "启动购买失败",

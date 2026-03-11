@@ -1896,6 +1896,12 @@ class AppLocalizationsMs extends AppLocalizations {
       'Pengalaman Tanpa Iklan & Ciri AI Tanpa Had';
 
   @override
+  String get premiumCardTryPlus => 'Cuba Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'Dapatkan Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'Masa Memasak';
 
   @override

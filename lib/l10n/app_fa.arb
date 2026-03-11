@@ -429,6 +429,8 @@
   "premiumBasic": "اساسی",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "تجربه بدون تبلیغات و ویژگی‌های نامحدود هوش مصنوعی",
+  "premiumCardTryPlus": "Dish Genie Plus را امتحان کنید",
+  "premiumCardGetPlus": "دریافت Plus",
   "premiumCardUnlock": "باز کردن قفل ",
   "premiumError": "خطا: {error}",
   "premiumFailedToInitiatePurchase": "شروع خرید انجام نشد",

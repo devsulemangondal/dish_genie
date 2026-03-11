@@ -1899,6 +1899,12 @@ class AppLocalizationsUz extends AppLocalizations {
       'Reklamasiz tajriba va cheksiz AI funksiyalari';
 
   @override
+  String get premiumCardTryPlus => 'Dish Genie Plus ni sinab ko\'ring';
+
+  @override
+  String get premiumCardGetPlus => 'Plus oling';
+
+  @override
   String get scannerCookingTimeLabel => 'Pishirish vaqti';
 
   @override

@@ -429,6 +429,8 @@
   "premiumBasic": "Basis",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Advertentievrije ervaring en onbeperkte AI-functies",
+  "premiumCardTryPlus": "Probeer Dish Genie Plus",
+  "premiumCardGetPlus": "Krijg Plus",
   "premiumCardUnlock": "Ontgrendel ",
   "premiumError": "Fout: {fout}",
   "premiumFailedToInitiatePurchase": "Kan de aankoop niet starten",

@@ -429,6 +429,8 @@
   "premiumBasic": "Базовий",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Без реклами та необмежені функції ШІ",
+  "premiumCardTryPlus": "Спробуйте Dish Genie Plus",
+  "premiumCardGetPlus": "Отримати Plus",
   "premiumCardUnlock": "Розблокувати ",
   "premiumError": "Помилка: {error}",
   "premiumFailedToInitiatePurchase": "Не вдалося розпочати покупку",

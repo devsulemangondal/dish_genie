@@ -1893,6 +1893,12 @@ class AppLocalizationsPt extends AppLocalizations {
       'Experiência sem anúncios e recursos de IA ilimitados';
 
   @override
+  String get premiumCardTryPlus => 'Experimente Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'Obter Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'Tempo de cozimento';
 
   @override

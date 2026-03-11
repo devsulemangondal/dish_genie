@@ -429,6 +429,8 @@
   "premiumBasic": "Basic",
   "premiumCardDishGeniePro": "DishGenie Pro",
   "premiumCardSubtitle": "Ad-free na karanasan at walang limitasyong AI features",
+  "premiumCardTryPlus": "Subukan ang Dish Genie Plus",
+  "premiumCardGetPlus": "Kunin ang Plus",
   "premiumCardUnlock": "I-unlock ",
   "premiumError": "Error: {error}",
   "premiumFailedToInitiatePurchase": "Nabigong simulan ang pagbili",

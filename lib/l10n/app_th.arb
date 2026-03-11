@@ -429,6 +429,8 @@
   "premiumBasic": "ขั้นพื้นฐาน",
   "premiumCardDishGeniePro": "ดิชจีนี่โปร",
   "premiumCardSubtitle": "ประสบการณ์ปลอดโฆษณา และฟีเจอร์ AI ไม่จำกัด",
+  "premiumCardTryPlus": "ลอง Dish Genie Plus",
+  "premiumCardGetPlus": "รับ Plus",
   "premiumCardUnlock": "ปลดล็อก ",
   "premiumError": "ข้อผิดพลาด: {error}",
   "premiumFailedToInitiatePurchase": "ไม่สามารถเริ่มการซื้อได้",

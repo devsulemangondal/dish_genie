@@ -1894,6 +1894,12 @@ class AppLocalizationsFa extends AppLocalizations {
       'تجربه بدون تبلیغات و ویژگی‌های نامحدود هوش مصنوعی';
 
   @override
+  String get premiumCardTryPlus => 'Dish Genie Plus را امتحان کنید';
+
+  @override
+  String get premiumCardGetPlus => 'دریافت Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'زمان پخت و پز';
 
   @override

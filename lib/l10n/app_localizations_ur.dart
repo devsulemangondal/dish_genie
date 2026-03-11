@@ -1893,6 +1893,12 @@ class AppLocalizationsUr extends AppLocalizations {
       'اشتہار سے پاک تجربہ، اور لامحدود AI خصوصیات';
 
   @override
+  String get premiumCardTryPlus => 'Dish Genie Plus آزمائیں';
+
+  @override
+  String get premiumCardGetPlus => 'Plus حاصل کریں';
+
+  @override
   String get scannerCookingTimeLabel => 'کھانا پکانے کا وقت';
 
   @override

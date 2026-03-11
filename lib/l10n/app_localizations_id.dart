@@ -1893,6 +1893,12 @@ class AppLocalizationsId extends AppLocalizations {
       'Pengalaman Bebas Iklan & Fitur AI Tanpa Batas';
 
   @override
+  String get premiumCardTryPlus => 'Coba Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'Dapatkan Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'Waktu Memasak';
 
   @override

@@ -49,8 +49,6 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   /// Default placeholder: appetizing food variety that fits all cuisines.
   static const String _defaultFoodPlaceholderUrl =
       'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800';
-
-  /// Keyword -> placeholder URL. Picks a relevant image when recipe has no image.
   static const Map<String, String> _keywordPlaceholderUrls = {
     'pasta': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800',
     'spaghetti': 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800',
@@ -183,6 +181,14 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     });
   }
 
+  /// Returns recipe with fallback image URL if original is empty (for storage).
+  Recipe _recipeWithFallbackImageIfNeeded(Recipe recipe) {
+    if (recipe.image.trim().isEmpty) {
+      return recipe.copyWith(image: _getPlaceholderUrlForRecipe(recipe));
+    }
+    return recipe;
+  }
+
   Future<void> _toggleLike() async {
     if (_recipe == null) return;
     final favorites = await StorageService.getFavorites();
@@ -197,7 +203,10 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
       );
     } else {
       favorites.add(widget.slug);
-      await StorageService.saveRecipeDataForSlug(widget.slug, _recipe!);
+      await StorageService.saveRecipeDataForSlug(
+        widget.slug,
+        _recipeWithFallbackImageIfNeeded(_recipe!),
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -227,7 +236,10 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
       );
     } else {
       saved.add(widget.slug);
-      await StorageService.saveRecipeDataForSlug(widget.slug, _recipe!);
+      await StorageService.saveRecipeDataForSlug(
+        widget.slug,
+        _recipeWithFallbackImageIfNeeded(_recipe!),
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${context.t('common.save')}! 📌'),

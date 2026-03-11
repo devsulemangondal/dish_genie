@@ -1889,6 +1889,12 @@ class AppLocalizationsVi extends AppLocalizations {
       'Trải nghiệm không quảng cáo và tính năng AI không giới hạn';
 
   @override
+  String get premiumCardTryPlus => 'Dùng thử Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'Nhận Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'Thời gian nấu';
 
   @override

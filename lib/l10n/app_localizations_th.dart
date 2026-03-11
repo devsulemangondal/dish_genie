@@ -1871,6 +1871,12 @@ class AppLocalizationsTh extends AppLocalizations {
       'ประสบการณ์ปลอดโฆษณา และฟีเจอร์ AI ไม่จำกัด';
 
   @override
+  String get premiumCardTryPlus => 'ลอง Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'รับ Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'เวลาทำอาหาร';
 
   @override

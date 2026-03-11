@@ -1889,6 +1889,12 @@ class AppLocalizationsNl extends AppLocalizations {
       'Advertentievrije ervaring en onbeperkte AI-functies';
 
   @override
+  String get premiumCardTryPlus => 'Probeer Dish Genie Plus';
+
+  @override
+  String get premiumCardGetPlus => 'Krijg Plus';
+
+  @override
   String get scannerCookingTimeLabel => 'Kooktijd';
 
   @override
