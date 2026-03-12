@@ -2083,4 +2083,75 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Week';
+
+  @override
+  String get premiumTitleLine1 => 'Cook Smarter with';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'See more plans';
+
+  @override
+  String get premiumSeeLessPlans => 'See less plans';
+
+  @override
+  String get premiumMostPopular => 'Most Popular';
+
+  @override
+  String get premiumAnnualPlan => 'Annual Plan';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/year';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/year';
+
+  @override
+  String get premiumWeeklyPlan => 'Weekly Plan';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 Days Free Trial';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Why Go Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Trusted by Food\nLovers';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Home Cook in weeks';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'I stopped wasting time searching recipes online. DishGenie instantly creates meals from what I have in my fridge.';
+
+  @override
+  String get premiumSocialStats => '📊 Social Stats';
+
+  @override
+  String get premiumAverageRating => '⭐ 4.8 Average Rating';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ Home Cooks';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ Recipes Generated';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Payment will be charged to your Google Account at purchase. Subscription renews automatically unless canceled before the billing period ends.';
+
+  @override
+  String get discountPopupTitle => '🔥 Unlock Your\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'Per Month';
 }

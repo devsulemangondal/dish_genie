@@ -2091,4 +2091,75 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Week';
+
+  @override
+  String get premiumTitleLine1 => 'Kook slimmer met';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Bekijk meer abonnementen';
+
+  @override
+  String get premiumSeeLessPlans => 'Bekijk minder abonnementen';
+
+  @override
+  String get premiumMostPopular => 'Meest populair';
+
+  @override
+  String get premiumAnnualPlan => 'Jaarabonnement';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140,99/jaar';
+
+  @override
+  String get premiumAnnualPrice => '\$124,99';
+
+  @override
+  String get premiumPerYear => '/jaar';
+
+  @override
+  String get premiumWeeklyPlan => 'Weekabonnement';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 dagen gratis proberen';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Waarom Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Vertrouwd door\nvoedingsliefhebbers';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Thuiskok in weken';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Ik verspil geen tijd meer met online zoeken naar recepten. DishGenie maakt direct maaltijden van wat ik in mijn koelkast heb.';
+
+  @override
+  String get premiumSocialStats => '📊 Sociale statistieken';
+
+  @override
+  String get premiumAverageRating => '⭐ Gemiddelde beoordeling 4,8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ thuiskoks';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ recepten gegenereerd';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Betaling wordt bij aankoop in rekening gebracht op uw Google-account. Het abonnement wordt automatisch verlengd tenzij geannuleerd vóór het einde van de factureringsperiode.';
+
+  @override
+  String get discountPopupTitle => '🔥 Ontgrendel uw\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'Per maand';
 }

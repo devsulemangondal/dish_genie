@@ -2094,4 +2094,75 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Неделя';
+
+  @override
+  String get premiumTitleLine1 => 'Готовьте умнее с';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Смотреть больше планов';
+
+  @override
+  String get premiumSeeLessPlans => 'Скрыть планы';
+
+  @override
+  String get premiumMostPopular => 'Самый популярный';
+
+  @override
+  String get premiumAnnualPlan => 'Годовой план';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/год';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/год';
+
+  @override
+  String get premiumWeeklyPlan => 'Недельный план';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 дня бесплатного пробного периода';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Зачем Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Доверяют любители\nготовки';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Домашний повар за недели';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Я больше не трачу время на поиск рецептов в интернете. DishGenie мгновенно создаёт блюда из того, что есть в моём холодильнике.';
+
+  @override
+  String get premiumSocialStats => '📊 Социальная статистика';
+
+  @override
+  String get premiumAverageRating => '⭐ Средний рейтинг 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ домашних поваров';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ рецептов создано';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Оплата будет списана с вашей учётной записи Google при покупке. Подписка продлевается автоматически, если не отменена до окончания платёжного периода.';
+
+  @override
+  String get discountPopupTitle => '🔥 Разблокируйте свой\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'В месяц';
 }

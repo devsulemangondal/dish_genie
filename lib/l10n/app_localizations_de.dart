@@ -2095,4 +2095,75 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Woche';
+
+  @override
+  String get premiumTitleLine1 => 'Kochen Sie cleverer mit';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Weitere Pläne anzeigen';
+
+  @override
+  String get premiumSeeLessPlans => 'Weniger Pläne anzeigen';
+
+  @override
+  String get premiumMostPopular => 'Am beliebtesten';
+
+  @override
+  String get premiumAnnualPlan => 'Jahresplan';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140,99/Jahr';
+
+  @override
+  String get premiumAnnualPrice => '\$124,99';
+
+  @override
+  String get premiumPerYear => '/Jahr';
+
+  @override
+  String get premiumWeeklyPlan => 'Wochenplan';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 Tage kostenlos testen';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Warum Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Vertraut von\nFood-Liebhabern';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Hobbykoch in wenigen Wochen';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Ich verschwende keine Zeit mehr mit der Rezeptsuche. DishGenie erstellt sofort Gerichte aus dem, was ich im Kühlschrank habe.';
+
+  @override
+  String get premiumSocialStats => '📊 Social-Statistiken';
+
+  @override
+  String get premiumAverageRating => '⭐ Durchschnittsbewertung 4,8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ Hobbyköche';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ generierte Rezepte';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Die Zahlung wird bei Kauf Ihrem Google-Konto belastet. Das Abonnement verlängert sich automatisch, es sei denn, es wird vor Ende des Abrechnungszeitraums gekündigt.';
+
+  @override
+  String get discountPopupTitle => '🔥 Schalten Sie Ihren\nDish Genie PRO frei';
+
+  @override
+  String get discountPopupPerMonth => 'Pro Monat';
 }

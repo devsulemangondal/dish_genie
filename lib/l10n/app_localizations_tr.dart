@@ -2094,5 +2094,76 @@ class AppLocalizationsTr extends AppLocalizations {
       'AI tarifi oluşturma şu anda devre dışı. Sınırsız erişim için premium\'a yükseltin!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/Hafta';
+
+  @override
+  String get premiumTitleLine1 => 'Daha akıllı pişirin';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium ile.';
+
+  @override
+  String get premiumSeeMorePlans => 'Daha fazla plan gör';
+
+  @override
+  String get premiumSeeLessPlans => 'Daha az plan göster';
+
+  @override
+  String get premiumMostPopular => 'En popüler';
+
+  @override
+  String get premiumAnnualPlan => 'Yıllık Plan';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/yıl';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/yıl';
+
+  @override
+  String get premiumWeeklyPlan => 'Haftalık Plan';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 Gün Ücretsiz Deneme';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Neden Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Yemek severler\ntarafından güvenilir';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Haftalar içinde ev aşçısı';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Artık çevrimiçi tarif aramakla zaman harcamıyorum. DishGenie buzdolabımdakilerden anında yemek oluşturuyor.';
+
+  @override
+  String get premiumSocialStats => '📊 Sosyal istatistikler';
+
+  @override
+  String get premiumAverageRating => '⭐ Ortalama puan 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ ev aşçısı';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ tarif oluşturuldu';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Satın alma sırasında ödeme Google hesabınızdan çekilecektir. Faturalama dönemi bitmeden iptal edilmediği sürece abonelik otomatik olarak yenilenir.';
+
+  @override
+  String get discountPopupTitle => '🔥 Dish Genie PRO\'nuzu\nAçın';
+
+  @override
+  String get discountPopupPerMonth => 'Aylık';
 }

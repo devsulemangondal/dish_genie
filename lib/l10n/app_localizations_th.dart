@@ -2068,5 +2068,76 @@ class AppLocalizationsTh extends AppLocalizations {
       'การสร้างสูตร AI ถูกปิดใช้งานอยู่ในขณะนี้ อัพเกรดเป็นพรีเมี่ยมเพื่อการเข้าถึงไม่จำกัด!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/สัปดาห์';
+
+  @override
+  String get premiumTitleLine1 => 'ทำอาหารอย่างชาญฉลาดกับ';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium';
+
+  @override
+  String get premiumSeeMorePlans => 'ดูแพ็คเกจเพิ่มเติม';
+
+  @override
+  String get premiumSeeLessPlans => 'ซ่อนแพ็คเกจ';
+
+  @override
+  String get premiumMostPopular => 'ยอดนิยมที่สุด';
+
+  @override
+  String get premiumAnnualPlan => 'แผนรายปี';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/ปี';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/ปี';
+
+  @override
+  String get premiumWeeklyPlan => 'แผนรายสัปดาห์';
+
+  @override
+  String get premiumThreeDaysFreeTrial => 'ทดลองใช้ฟรี 3 วัน';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 ทำไมต้อง Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ ได้รับความไว้วางใจจาก\nคนรักอาหาร';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'เชฟมือสมัครเล่นในไม่กี่สัปดาห์';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'ฉันไม่ต้องเสียเวลาเสิร์ชสูตรอาหารออนไลน์อีกต่อไป DishGenie สร้างมื้ออาหารจากของในตู้เย็นได้ทันที';
+
+  @override
+  String get premiumSocialStats => '📊 สถิติโซเชียล';
+
+  @override
+  String get premiumAverageRating => '⭐ คะแนนเฉลี่ย 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ เชฟมือสมัครเล่น';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 สร้าง 1000+ รูปแบบ';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'จะเรียกเก็บเงินจากบัญชี Google ของคุณเมื่อซื้อ การสมัครสมาชิกจะต่ออายุอัตโนมัติ เว้นแต่จะยกเลิกก่อนสิ้นช่วงการเรียกเก็บเงิน';
+
+  @override
+  String get discountPopupTitle => '🔥 ปลดล็อก Dish Genie PRO\nของคุณ';
+
+  @override
+  String get discountPopupPerMonth => 'ต่อเดือน';
 }

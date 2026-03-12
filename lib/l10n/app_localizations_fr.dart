@@ -2090,4 +2090,76 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Semaine';
+
+  @override
+  String get premiumTitleLine1 => 'Cuisinez plus malin avec';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Voir plus de forfaits';
+
+  @override
+  String get premiumSeeLessPlans => 'Voir moins de forfaits';
+
+  @override
+  String get premiumMostPopular => 'Le plus populaire';
+
+  @override
+  String get premiumAnnualPlan => 'Forfait annuel';
+
+  @override
+  String get premiumAnnualPriceOriginal => '140,99 \$/an';
+
+  @override
+  String get premiumAnnualPrice => '124,99 \$';
+
+  @override
+  String get premiumPerYear => '/an';
+
+  @override
+  String get premiumWeeklyPlan => 'Forfait hebdomadaire';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 jours d\'essai gratuit';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Pourquoi passer en Premium ?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Approuvé par les\namateurs de cuisine';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole =>
+      'Cuisinier à domicile en quelques semaines';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Je ne perds plus de temps à chercher des recettes en ligne. DishGenie crée instantanément des repas avec ce que j\'ai dans mon frigo.';
+
+  @override
+  String get premiumSocialStats => '📊 Statistiques';
+
+  @override
+  String get premiumAverageRating => '⭐ Note moyenne 4,8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ cuisiniers à domicile';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ recettes générées';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Le paiement sera débité de votre compte Google à l\'achat. L\'abonnement se renouvelle automatiquement sauf annulation avant la fin de la période de facturation.';
+
+  @override
+  String get discountPopupTitle => '🔥 Débloquez votre\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'Par mois';
 }

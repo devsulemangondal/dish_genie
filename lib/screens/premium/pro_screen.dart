@@ -322,13 +322,19 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
       }
       if (weeklyProduct == null) {
         if (context.mounted) {
-          _showPurchaseErrorDialog(context, context.t('premium.failed.to.initiate.purchase'));
+          _showPurchaseErrorDialog(
+            context,
+            context.t('premium.failed.to.initiate.purchase'),
+          );
         }
         return;
       }
       final ok = await BillingService.purchaseProduct(weeklyProduct);
       if (!ok && context.mounted) {
-        _showPurchaseErrorDialog(context, context.t('premium.failed.to.initiate.purchase'));
+        _showPurchaseErrorDialog(
+          context,
+          context.t('premium.failed.to.initiate.purchase'),
+        );
         return;
       }
       sub = BillingService.purchaseStream.listen((purchase) {
@@ -357,7 +363,10 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     } catch (e) {
       sub?.cancel();
       if (context.mounted) {
-        _showPurchaseErrorDialog(context, context.t('premium.error', {'error': e.toString()}));
+        _showPurchaseErrorDialog(
+          context,
+          context.t('premium.error', {'error': e.toString()}),
+        );
       }
     }
   }
@@ -542,10 +551,13 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
       annualProduct = null;
     }
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: isDark
+            ? AppColors.backgroundDark
+            : AppColors.background,
         body: Stack(
           children: [
             // Main scrollable content
@@ -604,7 +616,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                 },
               ),
             ),
-            // Close button - circle bg #726B7D, cross #43233A, 24x24
+            // Close button - circle bg, respects dark mode
             Positioned(
               top: MediaQuery.of(context).padding.top + 8,
               right: 16,
@@ -612,7 +624,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                 width: 30,
                 height: 30,
                 child: Material(
-                  color: const Color(0xFFDDDEE7),
+                  color: isDark ? AppColors.mutedDark : const Color(0xFFDDDEE7),
                   shape: const CircleBorder(),
                   elevation: 0,
                   child: Opacity(
@@ -622,11 +634,13 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                           ? () async => _exitProFlow()
                           : null,
                       customBorder: const CircleBorder(),
-                      child: const Center(
+                      child: Center(
                         child: Icon(
                           Icons.close,
                           size: 16,
-                          color: Color(0xFF43233A),
+                          color: isDark
+                              ? AppColors.foregroundDark
+                              : const Color(0xFF43233A),
                         ),
                       ),
                     ),
@@ -699,18 +713,19 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   Widget _buildTitleSection(double screenWidth) {
     final scaleFactor = (screenWidth / 360).clamp(0.8, 1.2);
     final titleSize = _titleBaseSize * scaleFactor;
+    final textColor = Theme.of(context).colorScheme.onSurface;
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
         style: GoogleFonts.poetsenOne(
           fontSize: titleSize,
           fontWeight: FontWeight.w400,
-          color: Colors.black,
+          color: textColor,
         ),
         children: [
-          const TextSpan(text: 'Cook Smarter with\n'),
+          TextSpan(text: '${context.t('premium.title.line1')}\n'),
           TextSpan(
-            text: 'Dish Genie Premium.',
+            text: context.t('premium.title.line2'),
             style: GoogleFonts.poetsenOne(
               fontSize: titleSize,
               fontWeight: FontWeight.w400,
@@ -723,9 +738,11 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   static const double _planCardHeight = 116;
-  static const Color _selectedBg = Color(0xFFF4F0FF);
+  static const Color _selectedBgLight = Color(0xFFF4F0FF);
+  static const Color _selectedBgDark = Color(0xFF2A1F4A);
   static const Color _selectedBorder = Color(0xFF6F3FF5);
-  static const Color _unselectedBorder = Color(0xFFC0BEBE);
+  static const Color _unselectedBorderLight = Color(0xFFC0BEBE);
+  static const Color _unselectedBorderDark = Color(0xFF3F4654);
 
   Widget _buildPlanCards(
     double contentWidth,
@@ -761,12 +778,12 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                 children: [
                   Text(
                     _showMorePlansExpanded
-                        ? 'See less plans'
-                        : 'See more plans',
+                        ? context.t('premium.see.less.plans')
+                        : context.t('premium.see.more.plans'),
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -779,7 +796,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                       child: Icon(
                         Icons.keyboard_arrow_down,
                         size: 16,
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -794,15 +811,23 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
 
   Widget _buildAnnualPlanCard(ProductDetails? annualProduct) {
     final isSelected = _selectedPlanId == 'annual';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isSelected
+        ? (isDark ? _selectedBgDark : _selectedBgLight)
+        : (isDark ? AppColors.cardDark : AppColors.card);
+    final unselectedBorder = isDark
+        ? _unselectedBorderDark
+        : _unselectedBorderLight;
+    final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
       width: double.infinity,
       height: _planCardHeight,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isSelected ? _selectedBg : Colors.white,
+        color: cardBg,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isSelected ? _selectedBorder : _unselectedBorder,
+          color: isSelected ? _selectedBorder : unselectedBorder,
           width: 1.5,
         ),
       ),
@@ -814,8 +839,12 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             top: -6,
             left: 0,
             child: Container(
-              width: 116,
-              height: 28,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              // constraints: const BoxConstraints(
+              //   minWidth: 70,
+              //   maxWidth: 100,
+              //   minHeight: 28,
+              // ),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment.topCenter,
@@ -826,12 +855,14 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
               ),
               alignment: Alignment.center,
               child: Text(
-                'Most Popular',
+                context.t('premium.most.popular'),
                 style: GoogleFonts.poppins(
                   fontSize: 12,
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
@@ -845,20 +876,20 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Annual Plan',
+                        context.t('premium.annual.plan'),
                         style: GoogleFonts.poppins(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                          color: onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '\$140.99/year',
+                        context.t('premium.annual.price.original'),
                         style: GoogleFonts.poppins(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: const Color(0xFF6B1EE4),
+                          color: premiumPurple,
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
@@ -872,18 +903,18 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '\$124.99',
+                    context.t('premium.annual.price'),
                     style: GoogleFonts.poppins(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: onSurface,
                     ),
                   ),
                   Text(
-                    '/year',
+                    context.t('premium.per.year'),
                     style: GoogleFonts.poppins(
                       fontSize: 14,
-                      color: Colors.black87,
+                      color: onSurface.withOpacity(0.87),
                     ),
                   ),
                 ],
@@ -897,15 +928,23 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
 
   Widget _buildWeeklyPlanCard(ProductDetails weeklyProduct) {
     final isSelected = _selectedPlanId == 'weekly';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isSelected
+        ? (isDark ? _selectedBgDark : _selectedBgLight)
+        : (isDark ? AppColors.cardDark : AppColors.card);
+    final unselectedBorder = isDark
+        ? _unselectedBorderDark
+        : _unselectedBorderLight;
+    final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
       width: double.infinity,
       height: _planCardHeight,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isSelected ? _selectedBg : Colors.white,
+        color: cardBg,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isSelected ? _selectedBorder : _unselectedBorder,
+          color: isSelected ? _selectedBorder : unselectedBorder,
           width: 1.5,
         ),
       ),
@@ -917,20 +956,20 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Weekly Plan',
+                  context.t('premium.weekly.plan'),
                   style: GoogleFonts.poppins(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '3 Days Free Trial',
+                  context.t('premium.three.days.free.trial'),
                   style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF6B1EE4),
+                    color: premiumPurple,
                   ),
                 ),
               ],
@@ -946,12 +985,15 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                 style: GoogleFonts.poppins(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: onSurface,
                 ),
               ),
               Text(
                 context.t('premium.per.week'),
-                style: GoogleFonts.poppins(fontSize: 14, color: Colors.black87),
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  color: onSurface.withOpacity(0.87),
+                ),
               ),
             ],
           ),
@@ -969,11 +1011,11 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
           Row(
             children: [
               Text(
-                '🔥 Why Go Premium?',
+                context.t('premium.why.go.premium'),
                 style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ],
@@ -986,6 +1028,9 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildTrustedBySection(double contentWidth) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final borderColor = isDark ? AppColors.borderDark : const Color(0xFFC0BEBE);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -996,11 +1041,11 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '⭐ Trusted by Food\nLovers',
+                context.t('premium.trusted.by.title'),
                 style: GoogleFonts.poetsenOne(
                   fontSize: 26.4,
                   fontWeight: FontWeight.w400,
-                  color: Colors.black,
+                  color: onSurface,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -1012,14 +1057,16 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             decoration: BoxDecoration(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFC0BEBE)),
+              border: Border.all(color: borderColor),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
                   radius: 28,
-                  backgroundColor: Colors.grey.shade300,
+                  backgroundColor: isDark
+                      ? AppColors.mutedDark
+                      : Colors.grey.shade300,
                   child: ClipOval(
                     child: Image.asset(
                       "assets/profile.png",
@@ -1035,28 +1082,28 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Imogen Davies',
+                        context.t('premium.testimonial.name'),
                         style: GoogleFonts.poppins(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: onSurface,
                         ),
                       ),
                       Text(
-                        'Home Cook in weeks',
+                        context.t('premium.testimonial.role'),
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Colors.black,
+                          color: onSurface,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '"I stopped wasting time searching recipes online. DishGenie instantly creates meals from what I have in my fridge."',
+                        '"${context.t('premium.testimonial.quote')}"',
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Colors.black,
+                          color: onSurface,
                         ),
                       ),
                     ],
@@ -1071,55 +1118,49 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildSocialStats(double contentWidth) {
+    final onSurface = Theme.of(context).colorScheme.onSurface;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text(
-                '📊 Social Stats',
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ],
+          Text(
+            context.t('premium.social.stats'),
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: onSurface,
+            ),
           ),
           const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
+            spacing: 12,
+            runSpacing: 8,
+            alignment: WrapAlignment.spaceBetween,
+            runAlignment: WrapAlignment.center,
             children: [
               Text(
-                '⭐ 4.8 Average Rating',
+                context.t('premium.average.rating'),
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: Colors.black,
+                  color: onSurface,
                 ),
               ),
               Text(
-                '🌎 200K+ Home Cooks',
+                context.t('premium.home.cooks'),
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: Colors.black,
+                  color: onSurface,
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
               Text(
-                '👨‍🍳 1000+ Recipes Generated',
+                context.t('premium.recipes.generated'),
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: Colors.black,
+                  color: onSurface,
                 ),
               ),
             ],
@@ -1204,14 +1245,17 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildPaymentDisclaimer() {
+    final mutedColor = Theme.of(context).brightness == Brightness.dark
+        ? AppColors.mutedForegroundDark
+        : AppColors.mutedForeground;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Text(
-        'Payment will be charged to your Google Account at purchase. Subscription renews automatically unless canceled before the billing period ends.',
+        context.t('premium.payment.disclaimer'),
         style: GoogleFonts.poppins(
           fontSize: 12,
           fontWeight: FontWeight.w400,
-          color: const Color(0xFF726B7D),
+          color: mutedColor,
         ),
         textAlign: TextAlign.center,
       ),
@@ -1221,7 +1265,8 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   static const double _checkSize = 18.75;
   static const double _proCheckSize =
       20.0; // slightly larger, bolder appearance
-  static const Color _basicCheckColor = Color(0xFF43233A);
+  static const Color _basicCheckColorLight = Color(0xFF43233A);
+  static const Color _basicCheckColorDark = Color(0xFFE8E6E9);
 
   static const double _rowHeight = 42;
   static const double _headerHeight = 40;
@@ -1232,6 +1277,20 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   ) {
     final features = _FeatureComparison._getFeatures(context);
     final columnWidth = (contentWidth * 0.18).clamp(55.0, 75.0);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final basicCheckColor = isDark
+        ? _basicCheckColorDark
+        : _basicCheckColorLight;
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final proInnerBg = isDark
+        ? const Color(0xFF2A1F4A)
+        : const Color(0xFFF9EEFF);
+    final greyColor = isDark
+        ? AppColors.mutedForegroundDark
+        : Colors.grey.shade600;
+    final greyPro = isDark
+        ? AppColors.mutedForegroundDark
+        : Colors.grey.shade400;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1262,7 +1321,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                           style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: _basicCheckColor,
+                            color: basicCheckColor,
                           ),
                         ),
                       ),
@@ -1289,7 +1348,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: onSurface,
                     ),
                   ),
                 ),
@@ -1301,12 +1360,12 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                     child: f.availableInBasic
                         ? Icon(
                             Icons.check,
-                            color: _basicCheckColor,
+                            color: basicCheckColor,
                             size: _checkSize,
                           )
                         : Icon(
                             Icons.remove,
-                            color: Colors.grey.shade600,
+                            color: greyColor,
                             size: _checkSize,
                           ),
                   ),
@@ -1337,7 +1396,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                 height: _headerHeight,
                 child: Center(
                   child: Text(
-                    'PRO',
+                    context.t('premium.pro'),
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 14,
@@ -1355,7 +1414,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF9EEFF),
+                    color: proInnerBg,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -1373,7 +1432,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                                   )
                                 : Icon(
                                     Icons.remove,
-                                    color: Colors.grey.shade400,
+                                    color: greyPro,
                                     size: _checkSize,
                                   ),
                           ),
@@ -1417,49 +1476,63 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   /// Privacy Policy • Cancel Anytime • Terms of Use (each tappable).
-  /// Responsive: uses Wrap so links flow to multiple lines in long languages.
+  /// Uses Wrap so links flow to multiple lines when text is long (e.g. RTL/long translations).
   Widget _buildCancelTermsPrivacyLine(double screenWidth) {
+    final linkColor = Theme.of(context).colorScheme.onSurface;
     final style = GoogleFonts.poppins(
       fontSize: 10,
       fontWeight: FontWeight.w400,
-      color: Colors.black,
+      color: linkColor,
       decoration: TextDecoration.underline,
-      decorationColor: Colors.black,
+      decorationColor: linkColor,
     );
 
+    final maxLinkWidth = screenWidth - 40;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        runAlignment: WrapAlignment.center,
+        spacing: 12,
+        runSpacing: 8,
         children: [
-          _LinkText(
-            text: context.t('premium.privacy.policy'),
-            style: style,
-            textAlign: TextAlign.start,
-            onTap: () =>
-                _launchURL('https://sites.google.com/view/dodishgenie/home'),
-            maxLines: 2,
-            softWrap: true,
-          ),
-          _LinkText(
-            text: context.t('premium.cancel.any.time'),
-            style: style,
-            textAlign: TextAlign.center,
-            onTap: () => _launchURL(
-              'https://play.google.com/store/account/subscriptions',
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxLinkWidth),
+            child: _LinkText(
+              text: context.t('premium.privacy.policy'),
+              style: style,
+              textAlign: TextAlign.center,
+              onTap: () =>
+                  _launchURL('https://sites.google.com/view/dodishgenie/home'),
+              maxLines: 3,
+              softWrap: true,
             ),
-            maxLines: 2,
-            softWrap: true,
           ),
-          _LinkText(
-            text: context.t('premium.terms.of.use'),
-            style: style,
-            textAlign: TextAlign.end,
-            onTap: () => _launchURL(
-              'https://sites.google.com/view/dodishgenieterms/home',
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxLinkWidth),
+            child: _LinkText(
+              text: context.t('premium.cancel.any.time'),
+              style: style,
+              textAlign: TextAlign.center,
+              onTap: () => _launchURL(
+                'https://play.google.com/store/account/subscriptions',
+              ),
+              maxLines: 3,
+              softWrap: true,
             ),
-            maxLines: 2,
-            softWrap: true,
+          ),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxLinkWidth),
+            child: _LinkText(
+              text: context.t('premium.terms.of.use'),
+              style: style,
+              textAlign: TextAlign.center,
+              onTap: () => _launchURL(
+                'https://sites.google.com/view/dodishgenieterms/home',
+              ),
+              maxLines: 3,
+              softWrap: true,
+            ),
           ),
         ],
       ),

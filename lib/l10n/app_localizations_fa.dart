@@ -2095,4 +2095,75 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Week';
+
+  @override
+  String get premiumTitleLine1 => 'هوشمندانه‌تر آشپزی کنید';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'مشاهده طرح‌های بیشتر';
+
+  @override
+  String get premiumSeeLessPlans => 'مشاهده طرح‌های کمتر';
+
+  @override
+  String get premiumMostPopular => 'محبوب‌ترین';
+
+  @override
+  String get premiumAnnualPlan => 'طرح سالانه';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/سال';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/سال';
+
+  @override
+  String get premiumWeeklyPlan => 'طرح هفتگی';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '۳ روز آزمایش رایگان';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 چرا Premium؟';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ مورد اعتماد\nعاشقان غذا';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'آشپز خانگی در چند هفته';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'دیگر وقت خود را برای جستجوی آنلاین دستور پخت هدر نمی‌دهم. DishGenie فوراً وعده‌های غذایی را از آنچه در یخچال دارم ایجاد می‌کند.';
+
+  @override
+  String get premiumSocialStats => '📊 آمار اجتماعی';
+
+  @override
+  String get premiumAverageRating => '⭐ میانگین امتیاز ۴.۸';
+
+  @override
+  String get premiumHomeCooks => '🌎 بیش از ۲۰۰ هزار آشپز خانگی';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 بیش از ۱۰۰۰ دستور پخت تولید شده';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'در زمان خرید به حساب Google شما شارژ می‌شود. اشتراک به‌طور خودکار تمدید می‌شود مگر قبل از پایان دوره صورتحساب لغو شود.';
+
+  @override
+  String get discountPopupTitle => '🔥 قفل Dish Genie PRO خود را\nباز کنید';
+
+  @override
+  String get discountPopupPerMonth => 'ماهانه';
 }

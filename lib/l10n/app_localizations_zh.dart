@@ -2035,4 +2035,75 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/周';
+
+  @override
+  String get premiumTitleLine1 => '更智能地烹饪';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie 高级版。';
+
+  @override
+  String get premiumSeeMorePlans => '查看更多方案';
+
+  @override
+  String get premiumSeeLessPlans => '收起方案';
+
+  @override
+  String get premiumMostPopular => '最受欢迎';
+
+  @override
+  String get premiumAnnualPlan => '年付计划';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/年';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/年';
+
+  @override
+  String get premiumWeeklyPlan => '周付计划';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3天免费试用';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 为什么选择高级版？';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ 美食爱好者\n信赖之选';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => '几周内成为家庭厨师';
+
+  @override
+  String get premiumTestimonialQuote =>
+      '我不再浪费时间在网上搜索菜谱了。DishGenie 能根据我冰箱里的食材即时创建餐点。';
+
+  @override
+  String get premiumSocialStats => '📊 社交统计';
+
+  @override
+  String get premiumAverageRating => '⭐ 平均评分 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 20万+ 家庭厨师';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ 菜谱已生成';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      '购买时将从您的 Google 账户扣款。除非在账单期结束前取消，否则订阅将自动续订。';
+
+  @override
+  String get discountPopupTitle => '🔥 解锁您的\nDish Genie 专业版';
+
+  @override
+  String get discountPopupPerMonth => '每月';
 }

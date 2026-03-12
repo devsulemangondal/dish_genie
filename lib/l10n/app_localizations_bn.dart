@@ -2094,4 +2094,75 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Week';
+
+  @override
+  String get premiumTitleLine1 => 'আরও স্মার্টভাবে রান্না করুন';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium।';
+
+  @override
+  String get premiumSeeMorePlans => 'আরও প্ল্যান দেখুন';
+
+  @override
+  String get premiumSeeLessPlans => 'কম প্ল্যান দেখুন';
+
+  @override
+  String get premiumMostPopular => 'সবচেয়ে জনপ্রিয়';
+
+  @override
+  String get premiumAnnualPlan => 'বার্ষিক প্ল্যান';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/বছর';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/বছর';
+
+  @override
+  String get premiumWeeklyPlan => 'সাপ্তাহিক প্ল্যান';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '৩ দিন বিনামূল্যে ট্রায়াল';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 কেন Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ খাদ্য প্রেমীদের\nদ্বারা বিশ্বস্ত';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'সপ্তাহে ঘরোয়া শেফ';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'আমি আর অনলাইনে রেসিপি খুঁজতে সময় নষ্ট করি না। DishGenie আমার ফ্রিজে যা আছে তা দিয়ে তাৎক্ষণিক খাবার তৈরি করে।';
+
+  @override
+  String get premiumSocialStats => '📊 সামাজিক পরিসংখ্যান';
+
+  @override
+  String get premiumAverageRating => '⭐ গড় রেটিং ৪.৮';
+
+  @override
+  String get premiumHomeCooks => '🌎 ২০০K+ ঘরোয়া শেফ';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 ১০০০+ রেসিপি তৈরি হয়েছে';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'ক্রয়ের সময় আপনার Google অ্যাকাউন্টে চার্জ করা হবে। বিলিং পিরিয়ড শেষ হওয়ার আগে বাতিল না করা পর্যন্ত সাবস্ক্রিপশন স্বয়ংক্রিয়ভাবে নবায়ন হবে।';
+
+  @override
+  String get discountPopupTitle => '🔥 আপনার\nDish Genie PRO আনলক করুন';
+
+  @override
+  String get discountPopupPerMonth => 'প্রতি মাসে';
 }

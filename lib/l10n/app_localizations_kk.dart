@@ -2098,5 +2098,76 @@ class AppLocalizationsKk extends AppLocalizations {
       'AI рецептін жасау қазір өшірілген. Шексіз қолжетімділік үшін премиумға жаңартыңыз!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/Апта';
+
+  @override
+  String get premiumTitleLine1 => 'Ақылды аспаздан';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Көбірек жоспарларды көру';
+
+  @override
+  String get premiumSeeLessPlans => 'Азырақ жоспарларды көру';
+
+  @override
+  String get premiumMostPopular => 'Ең танымал';
+
+  @override
+  String get premiumAnnualPlan => 'Жылдық жоспар';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/жыл';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/жыл';
+
+  @override
+  String get premiumWeeklyPlan => 'Апталық жоспар';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 күн тегін сынақ';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Негізінде Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Тамақ әуесқойлары\nсенім артқан';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Апталар ішінде үй аспазшысы';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Мен енді рецепт іздеуге уақыт жоғалтпаймын. DishGenie тоңазытқыштағы заттарымнан бірден тағамдар жасайды.';
+
+  @override
+  String get premiumSocialStats => '📊 Әлеуметтік статистика';
+
+  @override
+  String get premiumAverageRating => '⭐ Орташа баға 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200К+ үй аспазшылары';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ рецепт жасалды';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Сатып алу кезінде Google тіркелгіңізге төленеді. Төлем кезеңі аяқталмай жойылмаса, жазылым автоматты түрде жаңартылады.';
+
+  @override
+  String get discountPopupTitle => '🔥 Dish Genie PRO-ңызды\nашыңыз';
+
+  @override
+  String get discountPopupPerMonth => 'Айына';
 }

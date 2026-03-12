@@ -2095,5 +2095,76 @@ class AppLocalizationsMs extends AppLocalizations {
       'Penjanaan resipi AI dilumpuhkan pada masa ini. Naik taraf kepada premium untuk akses tanpa had!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/Minggu';
+
+  @override
+  String get premiumTitleLine1 => 'Masak Lebih Bijak dengan';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Lihat lebih banyak rancangan';
+
+  @override
+  String get premiumSeeLessPlans => 'Lihat kurang rancangan';
+
+  @override
+  String get premiumMostPopular => 'Paling popular';
+
+  @override
+  String get premiumAnnualPlan => 'Rancangan Tahunan';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/tahun';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/tahun';
+
+  @override
+  String get premiumWeeklyPlan => 'Rancangan Mingguan';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 Hari Percubaan Percuma';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Mengapa Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Dipercayai oleh\nPencinta Makanan';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Juru masak rumah dalam minggu';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Saya tidak lagi membuang masa mencari resipi dalam talian. DishGenie mencipta hidangan serta-merta dari apa yang ada dalam peti sejuk saya.';
+
+  @override
+  String get premiumSocialStats => '📊 Statistik Sosial';
+
+  @override
+  String get premiumAverageRating => '⭐ Purata penilaian 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ juru masak rumah';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ resipi dijana';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Bayaran akan dikenakan pada akaun Google anda semasa pembelian. Langganan diperbaharui secara automatik melainkan dibatalkan sebelum tempoh pengebilan berakhir.';
+
+  @override
+  String get discountPopupTitle => '🔥 Buka Kunci Dish Genie PRO\nAnda';
+
+  @override
+  String get discountPopupPerMonth => 'Sebulan';
 }

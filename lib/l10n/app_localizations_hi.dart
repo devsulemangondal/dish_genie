@@ -2088,4 +2088,75 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/सप्ताह';
+
+  @override
+  String get premiumTitleLine1 => 'अधिक स्मार्ट तरीके से पकाएं';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium के साथ।';
+
+  @override
+  String get premiumSeeMorePlans => 'अधिक योजनाएं देखें';
+
+  @override
+  String get premiumSeeLessPlans => 'कम योजनाएं देखें';
+
+  @override
+  String get premiumMostPopular => 'सबसे लोकप्रिय';
+
+  @override
+  String get premiumAnnualPlan => 'वार्षिक योजना';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/वर्ष';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/वर्ष';
+
+  @override
+  String get premiumWeeklyPlan => 'साप्ताहिक योजना';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 दिन निःशुल्क ट्रायल';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Premium क्यों चुनें?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ फूड लवर्स द्वारा\nविश्वसनीय';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'कुछ हफ्तों में होम कुक';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'मैं अब ऑनलाइन रेसिपी खोजने में समय बर्बाद नहीं करता। DishGenie तुरंत उन चीज़ों से भोजन बनाता है जो मेरे फ्रिज में हैं।';
+
+  @override
+  String get premiumSocialStats => '📊 सोशल स्टैट्स';
+
+  @override
+  String get premiumAverageRating => '⭐ औसत रेटिंग 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ होम कुक';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ रेसिपी बनाई गई';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'खरीद पर भुगतान आपके Google खाते से लिया जाएगा। बिलिंग अवधि समाप्त होने से पहले रद्द न करने पर सदस्यता स्वचालित रूप से नवीनीकृत होती है।';
+
+  @override
+  String get discountPopupTitle => '🔥 अपना Dish Genie PRO\nअनलॉक करें';
+
+  @override
+  String get discountPopupPerMonth => 'प्रति माह';
 }

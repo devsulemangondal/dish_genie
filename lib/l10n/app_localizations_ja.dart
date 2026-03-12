@@ -2047,5 +2047,76 @@ class AppLocalizationsJa extends AppLocalizations {
       'AI レシピの生成は現在無効になっています。プレミアムにアップグレードすると無制限にアクセスできます!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/週';
+
+  @override
+  String get premiumTitleLine1 => 'もっとスマートに料理';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie プレミアム。';
+
+  @override
+  String get premiumSeeMorePlans => 'プランをさらに表示';
+
+  @override
+  String get premiumSeeLessPlans => 'プランを減らして表示';
+
+  @override
+  String get premiumMostPopular => '最も人気';
+
+  @override
+  String get premiumAnnualPlan => '年間プラン';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/年';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/年';
+
+  @override
+  String get premiumWeeklyPlan => '週間プラン';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3日間無料お試し';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 プレミアムのメリット';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ 料理愛好家に\n選ばれています';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => '数週間で家庭料理人に';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'オンラインでレシピを探す時間がなくなりました。DishGenieが冷蔵庫の食材で即座に料理を作ってくれます。';
+
+  @override
+  String get premiumSocialStats => '📊 ソーシャル統計';
+
+  @override
+  String get premiumAverageRating => '⭐ 平均評価 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 20万人以上の家庭料理人';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000件以上のレシピ生成';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      '購入時にGoogleアカウントに請求されます。請求期間終了前にキャンセルしない限り、サブスクリプションは自動更新されます。';
+
+  @override
+  String get discountPopupTitle => '🔥 あなたの\nDish Genie PROのロックを解除';
+
+  @override
+  String get discountPopupPerMonth => '月額';
 }

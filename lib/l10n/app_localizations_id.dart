@@ -2094,4 +2094,75 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Week';
+
+  @override
+  String get premiumTitleLine1 => 'Memasak Lebih Cerdas dengan';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Lihat lebih banyak paket';
+
+  @override
+  String get premiumSeeLessPlans => 'Lihat lebih sedikit paket';
+
+  @override
+  String get premiumMostPopular => 'Paling Populer';
+
+  @override
+  String get premiumAnnualPlan => 'Paket Tahunan';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/tahun';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/tahun';
+
+  @override
+  String get premiumWeeklyPlan => 'Paket Mingguan';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 Hari Uji Coba Gratis';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Mengapa Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Dipercaya oleh\nPecinta Kuliner';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Juru Masak Rumahan dalam Minggu';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Saya tidak lagi membuang waktu mencari resep online. DishGenie langsung membuat makanan dari apa yang ada di kulkas saya.';
+
+  @override
+  String get premiumSocialStats => '📊 Statistik Sosial';
+
+  @override
+  String get premiumAverageRating => '⭐ Peringkat Rata-rata 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ Juru Masak Rumahan';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ Resep Dibuat';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Pembayaran akan dibebankan ke akun Google Anda saat pembelian. Langganan diperpanjang otomatis kecuali dibatalkan sebelum periode penagihan berakhir.';
+
+  @override
+  String get discountPopupTitle => '🔥 Buka Kunci Dish Genie PRO\nAnda';
+
+  @override
+  String get discountPopupPerMonth => 'Per Bulan';
 }

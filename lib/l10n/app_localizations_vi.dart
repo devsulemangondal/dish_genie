@@ -2091,5 +2091,76 @@ class AppLocalizationsVi extends AppLocalizations {
       'Việc tạo công thức AI hiện bị vô hiệu hóa. Nâng cấp lên cao cấp để truy cập không giới hạn!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/Tuần';
+
+  @override
+  String get premiumTitleLine1 => 'Nấu ăn thông minh hơn với';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Xem thêm gói';
+
+  @override
+  String get premiumSeeLessPlans => 'Thu gọn gói';
+
+  @override
+  String get premiumMostPopular => 'Phổ biến nhất';
+
+  @override
+  String get premiumAnnualPlan => 'Gói hàng năm';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/năm';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/năm';
+
+  @override
+  String get premiumWeeklyPlan => 'Gói hàng tuần';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 ngày dùng thử miễn phí';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Tại sao chọn Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Được tin tưởng bởi\nngười yêu ẩm thực';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Đầu bếp gia đình trong vài tuần';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Tôi không còn lãng phí thời gian tìm kiếm công thức trực tuyến nữa. DishGenie tạo món ăn ngay lập tức từ những gì tôi có trong tủ lạnh.';
+
+  @override
+  String get premiumSocialStats => '📊 Thống kê xã hội';
+
+  @override
+  String get premiumAverageRating => '⭐ Đánh giá trung bình 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ đầu bếp gia đình';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ công thức đã tạo';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Thanh toán sẽ được trừ vào tài khoản Google của bạn khi mua. Đăng ký tự động gia hạn trừ khi hủy trước khi kết thúc kỳ thanh toán.';
+
+  @override
+  String get discountPopupTitle => '🔥 Mở khóa Dish Genie PRO\ncủa bạn';
+
+  @override
+  String get discountPopupPerMonth => 'Mỗi tháng';
 }

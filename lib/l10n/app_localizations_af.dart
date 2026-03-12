@@ -2090,4 +2090,75 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Week';
+
+  @override
+  String get premiumTitleLine1 => 'Kook slimmer met';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Sien meer planne';
+
+  @override
+  String get premiumSeeLessPlans => 'Sien minder planne';
+
+  @override
+  String get premiumMostPopular => 'Gewildste';
+
+  @override
+  String get premiumAnnualPlan => 'Jaarplan';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/jaar';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/jaar';
+
+  @override
+  String get premiumWeeklyPlan => 'Weekplan';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 Dae gratis proef';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Hoekom Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Vertrou deur\nKosliefhebbers';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Tuiskok in weke';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Ek mors nie meer tyd met reëlsoek op die web nie. DishGenie skep dadelik maaltye uit wat ek in my yskas het.';
+
+  @override
+  String get premiumSocialStats => '📊 Sosiale statistieke';
+
+  @override
+  String get premiumAverageRating => '⭐ Gemiddelde gradering 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ tuiskoks';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ resepte gegenereer';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Betaling sal by aankoop na jou Google-rekening gehef word. Intekening hernu outomaties tensy dit voor die einddatum geannuleer word.';
+
+  @override
+  String get discountPopupTitle => '🔥 Ontsluit jou\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'Per maand';
 }

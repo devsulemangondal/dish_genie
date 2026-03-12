@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/localization/l10n_extension.dart';
+
 /// Discount popup shown when user exits Pro screen (controlled by Remote Config).
 /// Uses outer card (popup.png) and inner card (popupinner.png) images with overlaid text.
 ///
@@ -75,7 +77,7 @@ class DiscountPopup extends StatelessWidget {
                       Transform.translate(
                         offset: Offset(0, -_r(context, 4)),
                         child: Text(
-                          "🔥 Unlock Your\nDish Genie PRO",
+                          context.t('discount.popup.title'),
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poetsenOne(
                             fontSize: _r(context, 30),
@@ -131,7 +133,7 @@ class DiscountPopup extends StatelessWidget {
                                   ),
                                   SizedBox(height: _r(context, 2)),
                                   Text(
-                                    "Per Month",
+                                    context.t('discount.popup.per.month'),
                                     style: GoogleFonts.poppins(
                                       fontSize: _r(context, 16),
                                       fontWeight: FontWeight.w400,
@@ -169,7 +171,7 @@ class DiscountPopup extends StatelessWidget {
                                           ),
                                           SizedBox(width: _r(context, 8)),
                                           Text(
-                                            "Subscribe Now",
+                                            context.t('premium.subscribe.now'),
                                             style: GoogleFonts.poppins(
                                               fontSize: _r(context, 16),
                                               fontWeight: FontWeight.w600,
@@ -185,20 +187,28 @@ class DiscountPopup extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      _link(
-                                        context,
-                                        "Privacy Policy",
-                                        "https://sites.google.com/view/dodishgenie/home",
+                                      Expanded(
+                                        child: _link(
+                                          context,
+                                          context.t('premium.privacy.policy'),
+                                          "https://sites.google.com/view/dodishgenie/home",
+                                        ),
                                       ),
-                                      _link(
-                                        context,
-                                        "Cancel Anytime",
-                                        "https://play.google.com/store/account/subscriptions",
+                                      SizedBox(width: _r(context, 8)),
+                                      Expanded(
+                                        child: _link(
+                                          context,
+                                          context.t('premium.cancel.any.time'),
+                                          "https://play.google.com/store/account/subscriptions",
+                                        ),
                                       ),
-                                      _link(
-                                        context,
-                                        "Terms of Use",
-                                        "https://sites.google.com/view/dodishgenieterms/home",
+                                      SizedBox(width: _r(context, 8)),
+                                      Expanded(
+                                        child: _link(
+                                          context,
+                                          context.t('premium.terms.of.use'),
+                                          "https://sites.google.com/view/dodishgenieterms/home",
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -234,6 +244,9 @@ class DiscountPopup extends StatelessWidget {
           decoration: TextDecoration.underline,
           color: Colors.black87,
         ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
       ),
     );
   }

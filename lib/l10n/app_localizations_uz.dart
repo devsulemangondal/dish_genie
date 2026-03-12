@@ -2103,5 +2103,77 @@ class AppLocalizationsUz extends AppLocalizations {
       'AI retseptlarini yaratish hozirda oʻchirib qoʻyilgan. Cheksiz kirish uchun premiumga yangilang!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/Hafta';
+
+  @override
+  String get premiumTitleLine1 => 'Aqlliroq pishiring';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium bilan.';
+
+  @override
+  String get premiumSeeMorePlans => 'Ko\'proq rejalarni ko\'ring';
+
+  @override
+  String get premiumSeeLessPlans => 'Rejalarni yoping';
+
+  @override
+  String get premiumMostPopular => 'Eng mashhur';
+
+  @override
+  String get premiumAnnualPlan => 'Yillik reja';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/yil';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/yil';
+
+  @override
+  String get premiumWeeklyPlan => 'Haftalik reja';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 kun bepul sinov';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Premium nima uchun?';
+
+  @override
+  String get premiumTrustedByTitle =>
+      '⭐ Oziq-ovqat ishqibozlari\ntomonidan ishonchli';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Haftalar ichida uy oshpazi';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Men endi onlayn retsept qidirishga vaqt sarflamayman. DishGenie muzlatgichimdagi mahsulotlardan darhol taomlar yaratadi.';
+
+  @override
+  String get premiumSocialStats => '📊 Ijtimoiy statistika';
+
+  @override
+  String get premiumAverageRating => '⭐ O\'rtacha reyting 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ uy oshpazi';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ retsept yaratildi';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Sotib olishda to\'lov Google hisobingizdan olinadi. To\'lov muddati tugashidan oldin bekor qilinmasa, obuna avtomatik yangilanadi.';
+
+  @override
+  String get discountPopupTitle => '🔥 Dish Genie PRO-ni\noching';
+
+  @override
+  String get discountPopupPerMonth => 'Oylik';
 }

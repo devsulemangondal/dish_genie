@@ -2093,5 +2093,77 @@ class AppLocalizationsUk extends AppLocalizations {
       'Генерація рецептів AI наразі вимкнена. Перейдіть на преміум для необмеженого доступу!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/Тиждень';
+
+  @override
+  String get premiumTitleLine1 => 'Готуйте розумніше з';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Переглянути більше планів';
+
+  @override
+  String get premiumSeeLessPlans => 'Згорнути плани';
+
+  @override
+  String get premiumMostPopular => 'Найпопулярніший';
+
+  @override
+  String get premiumAnnualPlan => 'Річний план';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/рік';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/рік';
+
+  @override
+  String get premiumWeeklyPlan => 'Тижневий план';
+
+  @override
+  String get premiumThreeDaysFreeTrial =>
+      '3 дні безкоштовного пробного періоду';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Чому Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Довіряють любителі\nготування';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Домашній кухар за тижні';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Я більше не витрачаю час на пошук рецептів в інтернеті. DishGenie миттєво створює страви з того, що є в моєму холодильнику.';
+
+  @override
+  String get premiumSocialStats => '📊 Соціальна статистика';
+
+  @override
+  String get premiumAverageRating => '⭐ Середній рейтинг 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ домашніх кухарів';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ рецептів створено';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Оплата буде зроблена з вашого облікового запису Google при покупці. Підписка продовжується автоматично, якщо не скасована до кінця платіжного періоду.';
+
+  @override
+  String get discountPopupTitle => '🔥 Розблокуйте свій\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'На місяць';
 }

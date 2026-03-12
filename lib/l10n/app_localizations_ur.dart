@@ -2091,5 +2091,77 @@ class AppLocalizationsUr extends AppLocalizations {
       'AI نسخہ جنریشن فی الحال غیر فعال ہے۔ لامحدود رسائی کے لئے پریمیم میں اپ گریڈ کریں!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/ہفتہ';
+
+  @override
+  String get premiumTitleLine1 => 'ہوشیاری سے پکائیں';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium کے ساتھ۔';
+
+  @override
+  String get premiumSeeMorePlans => 'مزید پلان دیکھیں';
+
+  @override
+  String get premiumSeeLessPlans => 'کم پلان دیکھیں';
+
+  @override
+  String get premiumMostPopular => 'سب سے مقبول';
+
+  @override
+  String get premiumAnnualPlan => 'سالانہ پلان';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/سال';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/سال';
+
+  @override
+  String get premiumWeeklyPlan => 'ہفتہ وار پلان';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 دن مفت ٹرائل';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Premium کیوں؟';
+
+  @override
+  String get premiumTrustedByTitle =>
+      '⭐ کھانا پسند کرنے والوں\nکی طرف سے معتبر';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'ہفتوں میں گھریلو باورچی';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'میں اب آن لائن ترکیبیں تلاش کرنے میں وقت ضائع نہیں کرتا۔ DishGenie فوری طور پر میری فرج میں موجود چیزوں سے کھانے بناتا ہے۔';
+
+  @override
+  String get premiumSocialStats => '📊 سماجی اعداد و شمار';
+
+  @override
+  String get premiumAverageRating => '⭐ اوسط درجہ بندی 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ گھریلو باورچی';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ ترکیبیں بنائی گئیں';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'خریداری پر آپ کے Google اکاؤنٹ سے ادائیگی وصول کی جائے گی۔ بلنگ کی مدت ختم ہونے سے پہلے منسوخ نہ کیے جانے پر سبسکرپشن خود کار طریقے سے تجدید ہو گی۔';
+
+  @override
+  String get discountPopupTitle => '🔥 اپنا Dish Genie PRO\nآزاد کریں';
+
+  @override
+  String get discountPopupPerMonth => 'فی مہینہ';
 }

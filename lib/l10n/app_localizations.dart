@@ -4114,6 +4114,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'/Week'**
   String get premiumPerWeek;
+
+  /// No description provided for @premiumTitleLine1.
+  ///
+  /// In en, this message translates to:
+  /// **'Cook Smarter with'**
+  String get premiumTitleLine1;
+
+  /// No description provided for @premiumTitleLine2.
+  ///
+  /// In en, this message translates to:
+  /// **'Dish Genie Premium.'**
+  String get premiumTitleLine2;
+
+  /// No description provided for @premiumSeeMorePlans.
+  ///
+  /// In en, this message translates to:
+  /// **'See more plans'**
+  String get premiumSeeMorePlans;
+
+  /// No description provided for @premiumSeeLessPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'See less plans'**
+  String get premiumSeeLessPlans;
+
+  /// No description provided for @premiumMostPopular.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Popular'**
+  String get premiumMostPopular;
+
+  /// No description provided for @premiumAnnualPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Plan'**
+  String get premiumAnnualPlan;
+
+  /// No description provided for @premiumAnnualPriceOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'\$140.99/year'**
+  String get premiumAnnualPriceOriginal;
+
+  /// No description provided for @premiumAnnualPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'\$124.99'**
+  String get premiumAnnualPrice;
+
+  /// No description provided for @premiumPerYear.
+  ///
+  /// In en, this message translates to:
+  /// **'/year'**
+  String get premiumPerYear;
+
+  /// No description provided for @premiumWeeklyPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Plan'**
+  String get premiumWeeklyPlan;
+
+  /// No description provided for @premiumThreeDaysFreeTrial.
+  ///
+  /// In en, this message translates to:
+  /// **'3 Days Free Trial'**
+  String get premiumThreeDaysFreeTrial;
+
+  /// No description provided for @premiumWhyGoPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'🔥 Why Go Premium?'**
+  String get premiumWhyGoPremium;
+
+  /// No description provided for @premiumTrustedByTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'⭐ Trusted by Food\nLovers'**
+  String get premiumTrustedByTitle;
+
+  /// No description provided for @premiumTestimonialName.
+  ///
+  /// In en, this message translates to:
+  /// **'Imogen Davies'**
+  String get premiumTestimonialName;
+
+  /// No description provided for @premiumTestimonialRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Cook in weeks'**
+  String get premiumTestimonialRole;
+
+  /// No description provided for @premiumTestimonialQuote.
+  ///
+  /// In en, this message translates to:
+  /// **'I stopped wasting time searching recipes online. DishGenie instantly creates meals from what I have in my fridge.'**
+  String get premiumTestimonialQuote;
+
+  /// No description provided for @premiumSocialStats.
+  ///
+  /// In en, this message translates to:
+  /// **'📊 Social Stats'**
+  String get premiumSocialStats;
+
+  /// No description provided for @premiumAverageRating.
+  ///
+  /// In en, this message translates to:
+  /// **'⭐ 4.8 Average Rating'**
+  String get premiumAverageRating;
+
+  /// No description provided for @premiumHomeCooks.
+  ///
+  /// In en, this message translates to:
+  /// **'🌎 200K+ Home Cooks'**
+  String get premiumHomeCooks;
+
+  /// No description provided for @premiumRecipesGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'👨‍🍳 1000+ Recipes Generated'**
+  String get premiumRecipesGenerated;
+
+  /// No description provided for @premiumPaymentDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment will be charged to your Google Account at purchase. Subscription renews automatically unless canceled before the billing period ends.'**
+  String get premiumPaymentDisclaimer;
+
+  /// No description provided for @discountPopupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'🔥 Unlock Your\nDish Genie PRO'**
+  String get discountPopupTitle;
+
+  /// No description provided for @discountPopupPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Per Month'**
+  String get discountPopupPerMonth;
 }
 
 class _AppLocalizationsDelegate

@@ -2096,4 +2096,75 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Semana';
+
+  @override
+  String get premiumTitleLine1 => 'Cozinhe com mais inteligência';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Ver mais planos';
+
+  @override
+  String get premiumSeeLessPlans => 'Ver menos planos';
+
+  @override
+  String get premiumMostPopular => 'Mais popular';
+
+  @override
+  String get premiumAnnualPlan => 'Plano anual';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140,99/ano';
+
+  @override
+  String get premiumAnnualPrice => '\$124,99';
+
+  @override
+  String get premiumPerYear => '/ano';
+
+  @override
+  String get premiumWeeklyPlan => 'Plano semanal';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 dias de teste grátis';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Por que Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Confiável por\namantes da culinária';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Cozinheira caseira em semanas';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Não perco mais tempo procurando receitas online. O DishGenie cria refeições instantaneamente com o que tenho na geladeira.';
+
+  @override
+  String get premiumSocialStats => '📊 Estatísticas sociais';
+
+  @override
+  String get premiumAverageRating => '⭐ Avaliação média 4,8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ cozinheiros caseiros';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ receitas geradas';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'O pagamento será cobrado na sua conta Google na compra. A assinatura é renovada automaticamente, a menos que cancelada antes do fim do período de cobrança.';
+
+  @override
+  String get discountPopupTitle => '🔥 Desbloqueie seu\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'Por mês';
 }

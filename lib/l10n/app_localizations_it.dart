@@ -2100,5 +2100,76 @@ class AppLocalizationsIt extends AppLocalizations {
       'La generazione di ricette AI è attualmente disabilitata. Passa a Premium per un accesso illimitato!';
 
   @override
-  String get premiumPerWeek => '/Week';
+  String get premiumPerWeek => '/Settimana';
+
+  @override
+  String get premiumTitleLine1 => 'Cucina in modo più intelligente con';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Vedi altri piani';
+
+  @override
+  String get premiumSeeLessPlans => 'Vedi meno piani';
+
+  @override
+  String get premiumMostPopular => 'Più popolare';
+
+  @override
+  String get premiumAnnualPlan => 'Piano annuale';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140,99/anno';
+
+  @override
+  String get premiumAnnualPrice => '\$124,99';
+
+  @override
+  String get premiumPerYear => '/anno';
+
+  @override
+  String get premiumWeeklyPlan => 'Piano settimanale';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 giorni di prova gratuita';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Perché Premium?';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ Scelto dagli\namanti del cibo';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Cuoco casalingo in poche settimane';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Non spreco più tempo a cercare ricette online. DishGenie crea istantaneamente pasti con quello che ho nel frigo.';
+
+  @override
+  String get premiumSocialStats => '📊 Statistiche social';
+
+  @override
+  String get premiumAverageRating => '⭐ Valutazione media 4,8';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ cuochi casalinghi';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ ricette generate';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Il pagamento verrà addebitato sul tuo account Google al momento dell\'acquisto. L\'abbonamento si rinnova automaticamente a meno che non venga annullato prima della fine del periodo di fatturazione.';
+
+  @override
+  String get discountPopupTitle => '🔥 Sblocca il tuo\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'Al mese';
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/localization/l10n_extension.dart';
-import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/ads/custom_native_ad_widget.dart';
@@ -104,11 +103,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     } else {
       await StorageService.setOnboardingComplete(true);
       if (mounted) {
-        // Navigate to pro screen after onboarding
-        final opened = await ProNavigation.tryOpen(context, replace: true);
-        if (!opened && mounted) {
-          context.go('/');
-        }
+        // Skip Pro on first session; go to home (Pro shows every 3rd+ session via splash)
+        context.go('/');
       }
     }
   }
@@ -116,11 +112,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Future<void> _handleSkip() async {
     await StorageService.setOnboardingComplete(true);
     if (mounted) {
-      // Navigate to pro screen after skipping onboarding
-      final opened = await ProNavigation.tryOpen(context, replace: true);
-      if (!opened && mounted) {
-        context.go('/');
-      }
+      // Skip Pro on first session; go to home (Pro shows every 3rd+ session via splash)
+      context.go('/');
     }
   }
 

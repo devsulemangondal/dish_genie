@@ -2078,4 +2078,75 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/أسبوع';
+
+  @override
+  String get premiumTitleLine1 => 'اطبخ بذكاء مع';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'عرض المزيد من الخطط';
+
+  @override
+  String get premiumSeeLessPlans => 'عرض خطط أقل';
+
+  @override
+  String get premiumMostPopular => 'الأكثر شعبية';
+
+  @override
+  String get premiumAnnualPlan => 'الخطة السنوية';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/سنة';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/سنة';
+
+  @override
+  String get premiumWeeklyPlan => 'الخطة الأسبوعية';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 أيام تجربة مجانية';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 لماذا تختار Premium؟';
+
+  @override
+  String get premiumTrustedByTitle => '⭐ موثوق به من عشاق\nالطعام';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'طباخ منزلي في أسابيع';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'توقفت عن إهدار الوقت في البحث عن الوصفات عبر الإنترنت. DishGenie ينشئ وجبات فورًا مما لدي في ثلاجتي.';
+
+  @override
+  String get premiumSocialStats => '📊 إحصائيات اجتماعية';
+
+  @override
+  String get premiumAverageRating => '⭐ متوسط التقييم 4.8';
+
+  @override
+  String get premiumHomeCooks => '🌎 أكثر من 200 ألف طباخ منزلي';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 أكثر من 1000 وصفة منشأة';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'سيتم خصم الدفع من حساب Google عند الشراء. تتجدد الاشتراك تلقائيًا ما لم يتم الإلغاء قبل نهاية فترة الفوترة.';
+
+  @override
+  String get discountPopupTitle => '🔥 افتح قفل\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'شهرياً';
 }

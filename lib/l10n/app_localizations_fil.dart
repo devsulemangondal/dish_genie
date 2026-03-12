@@ -2108,4 +2108,76 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get premiumPerWeek => '/Week';
+
+  @override
+  String get premiumTitleLine1 => 'Magluto nang mas matalino kasama ang';
+
+  @override
+  String get premiumTitleLine2 => 'Dish Genie Premium.';
+
+  @override
+  String get premiumSeeMorePlans => 'Tingnan ang mas maraming plano';
+
+  @override
+  String get premiumSeeLessPlans => 'Tingnan ang mas kaunting plano';
+
+  @override
+  String get premiumMostPopular => 'Pinakasikat';
+
+  @override
+  String get premiumAnnualPlan => 'Taunang Plano';
+
+  @override
+  String get premiumAnnualPriceOriginal => '\$140.99/taon';
+
+  @override
+  String get premiumAnnualPrice => '\$124.99';
+
+  @override
+  String get premiumPerYear => '/taon';
+
+  @override
+  String get premiumWeeklyPlan => 'Lingguhang Plano';
+
+  @override
+  String get premiumThreeDaysFreeTrial => '3 Araw na Libreng Trial';
+
+  @override
+  String get premiumWhyGoPremium => '🔥 Bakit Premium?';
+
+  @override
+  String get premiumTrustedByTitle =>
+      '⭐ Pinagkakatiwalaan ng mga\nLover ng Pagkain';
+
+  @override
+  String get premiumTestimonialName => 'Imogen Davies';
+
+  @override
+  String get premiumTestimonialRole => 'Home Cook sa loob ng linggo';
+
+  @override
+  String get premiumTestimonialQuote =>
+      'Hindi na ako nagsasayang ng oras sa paghahanap ng mga recipe online. Ang DishGenie ay agad na lumilikha ng mga pagkain mula sa mayroon ako sa aking ref.';
+
+  @override
+  String get premiumSocialStats => '📊 Mga Social Stats';
+
+  @override
+  String get premiumAverageRating => '⭐ 4.8 Average na Rating';
+
+  @override
+  String get premiumHomeCooks => '🌎 200K+ Home Cooks';
+
+  @override
+  String get premiumRecipesGenerated => '👨‍🍳 1000+ Mga Recipe na Nabuo';
+
+  @override
+  String get premiumPaymentDisclaimer =>
+      'Ang bayad ay ichacharge sa iyong Google Account sa pagbili. Ang subscription ay awtomatikong magre-renew maliban kung kinansela bago matapos ang billing period.';
+
+  @override
+  String get discountPopupTitle => '🔥 I-unlock ang Iyong\nDish Genie PRO';
+
+  @override
+  String get discountPopupPerMonth => 'Bawat Buwan';
 }
