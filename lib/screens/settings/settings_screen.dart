@@ -213,8 +213,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _shareApp() async {
     try {
       final size = MediaQuery.of(context).size;
+      // Use platform-specific store link: Play Store on Android, App Store on iOS
+      final appLink = Platform.isAndroid
+          ? 'https://play.google.com/store/apps/details?id=com.dishgenie.recipeapp'
+          : (AppStoreConfig.appStoreUrl ??
+                'https://apps.apple.com/search?term=Dish+Genie+AI');
       await Share.share(
-        'Check out DishGenie AI - Your magical kitchen assistant! https://dishgenie.app',
+        'Check out DishGenie AI - Your magical kitchen assistant! $appLink',
         subject: 'DishGenie AI',
         sharePositionOrigin: Rect.fromLTWH(0, 0, size.width, size.height),
       );
