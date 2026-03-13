@@ -7,5 +7,6 @@ class AdConfig {
 
   /// When false: no ads on iOS. When true: show ads on iOS.
   /// Android always shows ads regardless of this value.
-  static const bool showAdsOnIos = false;
+  /// Set true so iOS works same as Android; use remote config iOS keys to control per-platform.
+  static const bool showAdsOnIos = true;
 }

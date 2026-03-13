@@ -7,5 +7,6 @@ class ProConfig {
 
   /// When false: Pro (IAP) screen is hidden on iOS. When true: Pro screen is shown on iOS.
   /// Android always shows the Pro screen regardless of this value.
-  static const bool showProOnIos = false;
+  /// Set true so iOS works same as Android; use remote config iOS keys to control per-platform.
+  static const bool showProOnIos = true;
 }
