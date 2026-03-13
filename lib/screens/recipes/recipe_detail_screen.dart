@@ -259,7 +259,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     final shareUrl = 'https://dishgenie.app/recipe/${widget.slug}';
 
     try {
-      await Share.share('$shareText\n$shareUrl', subject: _recipe!.title);
+      final size = MediaQuery.of(context).size;
+      await Share.share(
+        '$shareText\n$shareUrl',
+        subject: _recipe!.title,
+        sharePositionOrigin: Rect.fromLTWH(0, 0, size.width, size.height),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

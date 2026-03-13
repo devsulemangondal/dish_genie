@@ -306,7 +306,12 @@ class _SavedListDetailScreenState extends State<SavedListDetailScreen> {
         '${_groceryList!.name}\n\n$itemsText\n\n${context.t('grocery.est.cost')}: ${_groceryList!.estimatedCost}';
 
     try {
-      await Share.share(shareText, subject: _groceryList!.name);
+      final size = MediaQuery.of(context).size;
+      await Share.share(
+        shareText,
+        subject: _groceryList!.name,
+        sharePositionOrigin: Rect.fromLTWH(0, 0, size.width, size.height),
+      );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

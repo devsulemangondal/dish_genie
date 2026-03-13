@@ -262,9 +262,11 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
       final shareText =
           '🛒 ${context.t('grocery.my.grocery.list')}\n\n$listText\n\n${context.t('grocery.total')}: ${list.items.length} ${context.t('grocery.items')}';
 
+      final size = MediaQuery.of(context).size;
       await Share.share(
         shareText,
         subject: context.t('grocery.my.grocery.list'),
+        sharePositionOrigin: Rect.fromLTWH(0, 0, size.width, size.height),
       );
 
       if (mounted) {

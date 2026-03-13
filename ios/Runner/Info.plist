@@ -63,6 +63,8 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>mailto</string>
+		<string>itms-apps</string>
+		<string>https</string>
 	</array>
 	<!-- Google Mobile Ads App ID -->
 	<key>GADApplicationIdentifier</key>

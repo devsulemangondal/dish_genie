@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../config/app_store_config.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/localization/language_config.dart';
 import '../../core/theme/colors.dart';
@@ -211,9 +212,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _shareApp() async {
     try {
+      final size = MediaQuery.of(context).size;
       await Share.share(
         'Check out DishGenie AI - Your magical kitchen assistant! https://dishgenie.app',
         subject: 'DishGenie AI',
+        sharePositionOrigin: Rect.fromLTWH(0, 0, size.width, size.height),
       );
     } catch (e) {
       if (mounted) {
@@ -260,14 +263,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         url =
             'https://play.google.com/store/apps/details?id=com.dishgenie.recipeapp';
       } else if (Platform.isIOS) {
-        // For iOS, we need the App Store ID
-        // TODO: Replace <APP_STORE_ID> with your actual App Store ID when the app is published
-        // You can find it in App Store Connect or use: https://apps.apple.com/app/id<APP_STORE_ID>
-        // For now, using a search URL as fallback
-        url = 'https://apps.apple.com/search?term=dishgenie';
-        // Once you have the App Store ID, use:
-        // url = 'itms-apps://itunes.apple.com/app/id<APP_STORE_ID>';
-        // Or web version: url = 'https://apps.apple.com/app/id<APP_STORE_ID>';
+        // Use direct App Store link if appStoreId is set in AppStoreConfig
+        url =
+            AppStoreConfig.appStoreUrl ??
+            'https://apps.apple.com/search?term=Dish+Genie+AI';
       } else {
         // For other platforms, show a message
         if (mounted) {
