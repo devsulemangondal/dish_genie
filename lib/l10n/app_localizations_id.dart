@@ -1590,6 +1590,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get splashSubtitle => 'Rekan Dapur AI Anda';
 
   @override
+  String get splashActionMayContainAd => 'Tindakan ini mungkin berisi iklan';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

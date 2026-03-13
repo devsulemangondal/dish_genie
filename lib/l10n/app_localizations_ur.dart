@@ -1590,6 +1590,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get splashSubtitle => 'آپ کا AI کچن اسسٹنٹ';
 
   @override
+  String get splashActionMayContainAd => 'اس عمل میں اشتہارات ہو سکتے ہیں';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

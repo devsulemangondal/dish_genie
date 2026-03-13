@@ -29,6 +29,9 @@ class ProScreen extends StatefulWidget {
 /// Minimum time to show Pro screen on first launch before allowing navigation away
 const Duration _kFirstLaunchMinDisplayDuration = Duration(seconds: 3);
 
+/// Set to true to enable discount popup on Pro screen close (for later releases).
+const bool kShowDiscountPopup = false;
+
 class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   StreamSubscription? _purchaseSubscription;
   StreamSubscription? _billingErrorSubscription;
@@ -46,6 +49,8 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
 
   /// Selected plan: 'annual' or 'weekly'
   String _selectedPlanId = 'annual';
+
+  final GlobalKey _scrollContentKey = GlobalKey();
 
   String _getOpenSource() {
     // Prefer GoRouterState if available, otherwise parse from router location.
@@ -229,6 +234,12 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
       return;
     }
 
+    // Discount popup hidden until kShowDiscountPopup is true (for later releases)
+    if (!kShowDiscountPopup) {
+      navigateAway();
+      return;
+    }
+
     // Show discount dialog: debug = every close; release = once per 24h if RC allows
     // Flow: close Pro screen FIRST, THEN show popup on the next screen
     final shouldShowDiscount = kDebugMode
@@ -267,11 +278,15 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
           Future.delayed(const Duration(milliseconds: 350), () {
             final navContext = AppRouter.getNavigatorKey()?.currentContext;
             if (navContext != null && navContext.mounted) {
-              _showDiscountDialogAfterClose(navContext, () async {
-                if (!kDebugMode) {
-                  await StorageService.setDiscountPopupShownNow();
-                }
-              });
+              _showDiscountDialogAfterClose(
+                navContext,
+                BillingService.yearlySubscriptionId,
+                () async {
+                  if (!kDebugMode) {
+                    await StorageService.setDiscountPopupShownNow();
+                  }
+                },
+              );
             }
           });
           return;
@@ -285,42 +300,38 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   /// Shows discount popup on the current screen (called after Pro has closed).
   Future<void> _showDiscountDialogAfterClose(
     BuildContext navContext,
+    String productId,
     Future<void> Function() onDismiss,
   ) async {
     final result = await showDialog<bool>(
       context: navContext,
       barrierDismissible: true,
       barrierColor: Colors.black54,
-      builder: (_) => const DiscountPopup(),
+      builder: (_) => DiscountPopup(productId: productId),
     );
     if (!navContext.mounted) return;
-    // If user tapped Subscribe, start weekly purchase in place (no navigation)
+    // If user tapped Subscribe, purchase the popup's product (yearly) in place
     if (result == true) {
       if (navContext.mounted) {
-        _purchaseWeeklyInPlace(navContext);
+        _purchaseProductInPlace(navContext, productId);
       }
     } else {
       await onDismiss();
     }
   }
 
-  /// Initiates weekly subscription purchase from current screen (e.g. discount popup).
-  /// Shows success/error dialogs in place without navigating to Pro.
-  static void _purchaseWeeklyInPlace(BuildContext context) async {
+  /// Initiates subscription purchase from current screen (e.g. discount popup).
+  /// [productId] - e.g. yearly_sub or weekly_sub. Shows success/error dialogs in place.
+  static void _purchaseProductInPlace(
+    BuildContext context,
+    String productId,
+  ) async {
     StreamSubscription? sub;
     try {
       await BillingService.initialize();
       await BillingService.loadProducts();
-      final products = BillingService.products;
-      ProductDetails? weeklyProduct;
-      try {
-        weeklyProduct = products.firstWhere(
-          (p) => p.id == BillingService.weeklySubscriptionId,
-        );
-      } catch (_) {
-        if (products.isNotEmpty) weeklyProduct = products.first;
-      }
-      if (weeklyProduct == null) {
+      final product = BillingService.getProduct(productId);
+      if (product == null) {
         if (context.mounted) {
           _showPurchaseErrorDialog(
             context,
@@ -329,7 +340,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
         }
         return;
       }
-      final ok = await BillingService.purchaseProduct(weeklyProduct);
+      final ok = await BillingService.purchaseProduct(product);
       if (!ok && context.mounted) {
         _showPurchaseErrorDialog(
           context,
@@ -338,7 +349,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
         return;
       }
       sub = BillingService.purchaseStream.listen((purchase) {
-        if (purchase.productID != BillingService.weeklySubscriptionId) return;
+        if (purchase.productID != productId) return;
         sub?.cancel();
         sub = null;
         if (!context.mounted) return;
@@ -560,7 +571,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             : AppColors.background,
         body: Stack(
           children: [
-            // Main scrollable content
+            // Column: scrollable content + sticky bottom bar
             SafeArea(
               top: false,
               child: LayoutBuilder(
@@ -568,50 +579,112 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                   final screenWidth = constraints.maxWidth;
                   final contentWidth = screenWidth - 32;
 
-                  return SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _buildHeaderWithClose(screenWidth),
-                          if (isPremium) ...[
-                            _buildPremiumBadge(),
-                            const SizedBox(height: 16),
-                          ],
-                          _buildTitleSection(screenWidth),
-                          const SizedBox(height: 16),
-                          _buildPlanCards(
-                            contentWidth,
-                            annualProduct,
-                            weeklyProduct,
+                  return Stack(
+                    children: [
+                      // Scrollable content (extends behind sticky bar)
+                      SingleChildScrollView(
+                        physics: const ClampingScrollPhysics(),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            bottom:
+                                (!isPremium ? 100 : 8) +
+                                MediaQuery.of(context).padding.bottom,
                           ),
-                          const SizedBox(height: 20),
-                          _buildWhyGoPremium(contentWidth),
-                          const SizedBox(height: 20),
-                          _buildTrustedBySection(contentWidth),
-                          const SizedBox(height: 20),
-                          _buildSocialStats(contentWidth),
-                          const SizedBox(height: 24),
-                          if (!isPremium) ...[
-                            _buildSubscribeButton(
-                              _selectedPlanId == 'annual'
-                                  ? annualProduct
-                                  : weeklyProduct,
-                            ),
-                            const SizedBox(height: 12),
-                            _buildContinueWithAdButton(),
-                          ],
-                          const SizedBox(height: 20),
-                          _buildPaymentDisclaimer(),
-                          const SizedBox(height: 12),
-                          _buildCancelTermsPrivacyLine(screenWidth),
-                          SizedBox(
-                            height: MediaQuery.of(context).padding.bottom + 8,
+                          child: Column(
+                            key: _scrollContentKey,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              _buildHeaderWithGradient(screenWidth),
+                              if (isPremium) ...[
+                                _buildPremiumBadge(),
+                                const SizedBox(height: 16),
+                              ],
+                              _buildTitleSection(screenWidth),
+                              const SizedBox(height: 12),
+                              _buildPlanCards(
+                                contentWidth,
+                                annualProduct,
+                                weeklyProduct,
+                              ),
+                              const SizedBox(height: 8),
+                              _buildWhyGoPremium(contentWidth),
+                              const SizedBox(height: 8),
+                              _buildTrustedBySection(contentWidth),
+                              const SizedBox(height: 8),
+                              _buildSocialStats(contentWidth),
+                              const SizedBox(height: 4),
+                              _buildPaymentDisclaimer(),
+                              const SizedBox(height: 4),
+                              _buildCancelTermsPrivacyLine(screenWidth),
+                              const SizedBox(height: 10),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      // Sticky bottom bar: gradient transparency (top clear → bottom opaque)
+                      if (!isPremium)
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              // Gradient bg: only under buttons (transparent top → opaque bottom)
+                              IgnorePointer(
+                                child: Container(
+                                  height:
+                                      108 +
+                                      MediaQuery.of(context).padding.bottom,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        (isDark
+                                                ? AppColors.backgroundDark
+                                                : AppColors.background)
+                                            .withOpacity(0),
+                                        (isDark
+                                                ? AppColors.backgroundDark
+                                                : AppColors.background)
+                                            .withOpacity(0.5),
+                                        (isDark
+                                            ? AppColors.backgroundDark
+                                            : AppColors.background),
+                                      ],
+                                      stops: const [0, 0, 0.5],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SafeArea(
+                                top: false,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 6,
+                                    bottom:
+                                        6 +
+                                        MediaQuery.of(context).padding.bottom,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      _buildSubscribeButton(
+                                        _selectedPlanId == 'annual'
+                                            ? annualProduct
+                                            : weeklyProduct,
+                                      ),
+                                      const SizedBox(height: 6),
+                                      _buildContinueWithAdButton(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
                   );
                 },
               ),
@@ -698,15 +771,57 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   static const double _titleBaseSize = 26.4;
   static const premiumPurple = Color(0xFF6E20E3);
 
-  Widget _buildHeaderWithClose(double contentWidth) {
+  /// Figma gradient EECEFF -> FFFFFF to blend header with body (no harsh divider)
+  static const Color _blendGradientTop = Color(0xFFEECEFF);
+  static const Color _blendGradientBottom = Color(0xFFFFFFFF);
+
+  /// Header image with gradient overlay to blend with body content
+  Widget _buildHeaderWithGradient(double contentWidth) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final headerHeight = (contentWidth * _headerAspectRatio).clamp(
       120.0,
       280.0,
     );
+    final bottomColor = isDark
+        ? AppColors.backgroundDark
+        : _blendGradientBottom;
     return SizedBox(
       width: contentWidth,
       height: headerHeight,
-      child: Image.asset('assets/pro_header.png', fit: BoxFit.cover),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('assets/pro_header.png', fit: BoxFit.cover),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 120,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: isDark
+                        ? [
+                            Colors.transparent,
+                            const Color(0xFF1A1F35).withOpacity(0.5),
+                            bottomColor,
+                          ]
+                        : [
+                            Colors.transparent,
+                            _blendGradientTop.withOpacity(0.4),
+                            bottomColor,
+                          ],
+                    stops: const [0.0, 0.4, 1.0],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -883,16 +998,6 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                           color: onSurface,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        context.t('premium.annual.price.original'),
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: premiumPurple,
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -903,7 +1008,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    context.t('premium.annual.price'),
+                    annualProduct?.price ?? context.t('premium.annual.price'),
                     style: GoogleFonts.poppins(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -936,6 +1041,10 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
         ? _unselectedBorderDark
         : _unselectedBorderLight;
     final onSurface = Theme.of(context).colorScheme.onSurface;
+    final hasFreeTrial = BillingService.hasFreeTrial(weeklyProduct);
+    if (kDebugMode && hasFreeTrial) {
+      debugPrint('[ProScreen] Weekly plan: has free trial (from IAP)');
+    }
     return Container(
       width: double.infinity,
       height: _planCardHeight,
@@ -963,15 +1072,17 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                     color: onSurface,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  context.t('premium.three.days.free.trial'),
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: premiumPurple,
+                if (hasFreeTrial) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    context.t('premium.three.days.free.trial'),
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: isDark ? Colors.white : premiumPurple,
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),
@@ -1204,7 +1315,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
           borderRadius: BorderRadius.circular(14),
           child: Container(
             width: double.infinity,
-            height: 56,
+            height: 54,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28),
               gradient: LinearGradient(
@@ -1229,7 +1340,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                       const Icon(Icons.bolt, color: Colors.white, size: 22),
                       const SizedBox(width: 8),
                       Text(
-                        context.t('premium.subscribe.now'),
+                        context.t('common.continue'),
                         style: GoogleFonts.poppins(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

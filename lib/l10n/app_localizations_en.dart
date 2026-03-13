@@ -1581,6 +1581,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get splashSubtitle => 'Your AI Kitchen Companion';
 
   @override
+  String get splashActionMayContainAd => 'This action may contain ads';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

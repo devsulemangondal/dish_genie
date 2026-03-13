@@ -472,6 +472,7 @@
   "savedMealPlanContinuePlan": "متابعة الخطة",
   "splashAppName": "ديشجيني",
   "splashSubtitle": "رفيقك في المطبخ بالذكاء الاصطناعي",
+  "splashActionMayContainAd": "قد تحتوي هذه العملية على إعلانات",
   "commonErrorMessage": "خطأ: {error}",
   "@commonErrorMessage": {
     "placeholders": {

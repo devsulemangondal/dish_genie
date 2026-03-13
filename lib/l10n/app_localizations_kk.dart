@@ -1591,6 +1591,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get splashSubtitle => 'Сіздің AI асхана серіктесіңіз';
 
   @override
+  String get splashActionMayContainAd =>
+      'Бұл әрекет жарнамаларды қамтуы мүмкін';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

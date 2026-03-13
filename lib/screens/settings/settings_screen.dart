@@ -349,7 +349,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     if (Platform.isIOS
                         ? RemoteConfigService.subCardIos
                         : RemoteConfigService.subCard) ...[
-                      const PremiumCard(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: const PremiumCard(),
+                      ),
                       const SizedBox(height: 8),
                     ],
                     // Language Section (first)

@@ -1585,6 +1585,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get splashSubtitle => 'Người bạn đồng hành nhà bếp AI của bạn';
 
   @override
+  String get splashActionMayContainAd => 'Hành động này có thể chứa quảng cáo';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

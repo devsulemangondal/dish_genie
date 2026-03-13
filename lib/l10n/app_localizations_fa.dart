@@ -1591,6 +1591,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get splashSubtitle => 'همراه آشپزخانه هوش مصنوعی شما';
 
   @override
+  String get splashActionMayContainAd => 'این اقدام ممکن است شامل تبلیغات باشد';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

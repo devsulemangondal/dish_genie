@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/localization/l10n_extension.dart';
+import '../../services/billing_service.dart';
 
 /// Discount popup shown when user exits Pro screen (controlled by Remote Config).
 /// Uses outer card (popup.png) and inner card (popupinner.png) images with overlaid text.
+/// Loads product by [productId] and shows real price and 30% higher discount (crossed out).
 ///
 /// Pops with true when user taps Subscribe, false when dismissed.
 class DiscountPopup extends StatelessWidget {
-  const DiscountPopup({super.key});
+  const DiscountPopup({
+    super.key,
+    this.productId = BillingService.yearlySubscriptionId,
+  });
+
+  /// Product ID to load and display (e.g. yearly_sub). Loads from BillingService.
+  final String productId;
 
   static const double _designWidth = 375;
 
@@ -20,8 +30,29 @@ class DiscountPopup extends StatelessWidget {
     return value * scale;
   }
 
+  /// Formats yearly price + 30% as the discount (crossed-out) price.
+  static String _formatDiscountPrice(ProductDetails product) {
+    final discountPrice = product.rawPrice * 1.30;
+    final symbol = product.currencySymbol.isNotEmpty
+        ? product.currencySymbol
+        : _currencySymbol(product.currencyCode);
+    return NumberFormat.currency(
+      locale: 'en_US',
+      symbol: symbol,
+      decimalDigits: 2,
+    ).format(discountPrice);
+  }
+
+  static String _currencySymbol(String code) {
+    const symbols = {
+      'USD': r'$', 'EUR': '€', 'GBP': '£', 'JPY': '¥', 'INR': '₹',
+    };
+    return symbols[code] ?? '$code ';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final product = BillingService.getProduct(productId);
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: EdgeInsets.symmetric(horizontal: _r(context, 24)),
@@ -112,7 +143,9 @@ class DiscountPopup extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    "\$19.99",
+                                    product != null
+                                        ? _formatDiscountPrice(product)
+                                        : r'$19.99',
                                     style: GoogleFonts.poppins(
                                       fontSize: _r(context, 20),
                                       fontWeight: FontWeight.w400,
@@ -123,7 +156,7 @@ class DiscountPopup extends StatelessWidget {
                                   Transform.translate(
                                     offset: Offset(0, -_r(context, 6)),
                                     child: Text(
-                                      "\$12.99",
+                                      product?.price ?? r'$12.99',
                                       style: GoogleFonts.poetsenOne(
                                         fontSize: _r(context, 44),
                                         fontWeight: FontWeight.w400,
@@ -133,7 +166,7 @@ class DiscountPopup extends StatelessWidget {
                                   ),
                                   SizedBox(height: _r(context, 2)),
                                   Text(
-                                    context.t('discount.popup.per.month'),
+                                    context.t('premium.per.year'),
                                     style: GoogleFonts.poppins(
                                       fontSize: _r(context, 16),
                                       fontWeight: FontWeight.w400,

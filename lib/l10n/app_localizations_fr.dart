@@ -1582,6 +1582,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get splashSubtitle => 'Votre compagnon de cuisine IA';
 
   @override
+  String get splashActionMayContainAd =>
+      'Cette action peut contenir des publicités';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

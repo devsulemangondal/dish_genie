@@ -228,10 +228,13 @@ class AppOpenAdManager {
     // Don't load if no internet
     if (!_isConnected) return;
 
-    // Check remote config first
+    // Check remote config: resume_appopen (Android) / resume_appopen_ios (iOS)
     try {
       await RemoteConfigService.initialize();
-      if (!RemoteConfigService.appOpen) return;
+      final resumeEnabled = Platform.isIOS
+          ? RemoteConfigService.resumeAppOpenIos
+          : RemoteConfigService.resumeAppOpen;
+      if (!resumeEnabled) return;
     } catch (e) {
       // Continue if remote config fails
     }
@@ -251,7 +254,7 @@ class AppOpenAdManager {
       await Future.delayed(const Duration(milliseconds: 500));
 
       await AppOpenAd.load(
-        adUnitId: AdService.appOpenAdUnitId,
+        adUnitId: AdService.resumeAppOpenAdUnitId,
         request: const AdRequest(),
         adLoadCallback: AppOpenAdLoadCallback(
           onAdLoaded: (ad) {
@@ -805,19 +808,21 @@ class AppOpenAdManager {
         return false;
       }
 
-      // Check remote config
+      // Check remote config: resume_appopen (Android) / resume_appopen_ios (iOS)
       try {
         await RemoteConfigService.initialize();
-        final appOpenEnabled = RemoteConfigService.appOpen;
+        final resumeEnabled = Platform.isIOS
+            ? RemoteConfigService.resumeAppOpenIos
+            : RemoteConfigService.resumeAppOpen;
         if (kDebugMode) {
           print(
-            '📊 [AppOpenAdManager] Remote config app_open: $appOpenEnabled',
+            '📊 [AppOpenAdManager] Remote config resume_appopen: $resumeEnabled',
           );
         }
-        if (!appOpenEnabled) {
+        if (!resumeEnabled) {
           if (kDebugMode) {
             print(
-              '⚠️ [AppOpenAdManager] App open ad disabled in remote config, skipping loader',
+              '⚠️ [AppOpenAdManager] Resume app open ad disabled in remote config, skipping loader',
             );
           }
           return false;
@@ -886,8 +891,10 @@ class AppOpenAdManager {
         print(
           '✅ [AppOpenAdManager] All conditions met, loader should be shown',
         );
-        print('  - Internet: $_isConnected');
-        print('  - Remote config app_open: ${RemoteConfigService.appOpen}');
+        print(        '  - Internet: $_isConnected');
+        print(
+          '  - Remote config resume_appopen: ${Platform.isIOS ? RemoteConfigService.resumeAppOpenIos : RemoteConfigService.resumeAppOpen}',
+        );
         print(
           '  - Interstitial showing: ${AdService.isAnyInterstitialShowing}',
         );
@@ -941,13 +948,16 @@ class AppOpenAdManager {
         return completer.future;
       }
 
-      // Check remote config
+      // Check remote config: resume_appopen (Android) / resume_appopen_ios (iOS)
       try {
         await RemoteConfigService.initialize();
-        if (!RemoteConfigService.appOpen) {
+        final resumeEnabled = Platform.isIOS
+            ? RemoteConfigService.resumeAppOpenIos
+            : RemoteConfigService.resumeAppOpen;
+        if (!resumeEnabled) {
           if (kDebugMode) {
             print(
-              '⚠️ [AppOpenAdManager] App open ad disabled in remote config',
+              '⚠️ [AppOpenAdManager] Resume app open ad disabled in remote config',
             );
           }
           completer.complete(null);
@@ -975,12 +985,12 @@ class AppOpenAdManager {
       await Future.delayed(delay);
 
       if (kDebugMode) {
-        print('📥 [AppOpenAdManager] Starting to load app open ad...');
-        print('📡 [AppOpenAdManager] Ad Unit ID: ${AdService.appOpenAdUnitId}');
+        print('📥 [AppOpenAdManager] Starting to load resume app open ad...');
+        print('📡 [AppOpenAdManager] Ad Unit ID: ${AdService.resumeAppOpenAdUnitId}');
       }
 
       AppOpenAd.load(
-        adUnitId: AdService.appOpenAdUnitId,
+        adUnitId: AdService.resumeAppOpenAdUnitId,
         request: const AdRequest(),
         adLoadCallback: AppOpenAdLoadCallback(
           onAdLoaded: (ad) {

@@ -24,8 +24,13 @@ class RemoteConfigService {
     // Ad configuration flags
     // Fail-safe: keep Pro/paywall hidden unless explicitly enabled remotely.
     'weekly_sub': false,
+    // Weekly plan: trial added from backend (Play Console/App Store) - show trial text when true
+    'weekly_sub_trial': false,
     'splash_inter': true,
     'app_open': true,
+    // Resume app open ad when app returns from background (Android / iOS)
+    'resume_appopen': true,
+    'resume_appopen_ios': true,
     // Splash app open ad on first install (Android / iOS separate keys)
     'splash_appopen_1sttime': false,
     'splash_appopen_1sttime_ios': false,
@@ -196,6 +201,13 @@ class RemoteConfigService {
     return _remoteConfig!.getBool('weekly_sub');
   }
 
+  /// Weekly subscription trial added from backend (Play Console / App Store).
+  /// When true, Pro screen shows "3 Days Free Trial" for weekly plan.
+  static bool get weeklySubTrial {
+    if (!isInitialized) return _defaults['weekly_sub_trial'] as bool;
+    return _remoteConfig!.getBool('weekly_sub_trial');
+  }
+
   // Splash interstitial ad
   static bool get splashInter =>
       _remoteConfig?.getBool('splash_inter') ?? _defaults['splash_inter'];
@@ -203,6 +215,16 @@ class RemoteConfigService {
   // App open ad
   static bool get appOpen =>
       _remoteConfig?.getBool('app_open') ?? _defaults['app_open'];
+
+  /// Resume app open ad when app returns from background - Android (show only when true)
+  static bool get resumeAppOpen =>
+      _remoteConfig?.getBool('resume_appopen') ??
+      _defaults['resume_appopen'];
+
+  /// Resume app open ad when app returns from background - iOS (show only when true)
+  static bool get resumeAppOpenIos =>
+      _remoteConfig?.getBool('resume_appopen_ios') ??
+      _defaults['resume_appopen_ios'];
 
   /// Splash app open ad on first install - Android (show only when true)
   static bool get splashAppOpen1stTime =>
@@ -578,8 +600,11 @@ class RemoteConfigService {
     // Boolean values
     final booleanKeys = [
       'weekly_sub',
+      'weekly_sub_trial',
       'splash_inter',
       'app_open',
+      'resume_appopen',
+      'resume_appopen_ios',
       'splash_appopen_1sttime',
       'splash_appopen_1sttime_ios',
       'splash_appopen_2ndtime',

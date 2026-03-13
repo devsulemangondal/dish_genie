@@ -587,6 +587,28 @@ class _SplashScreenState extends State<SplashScreen>
                   ],
                 ),
               ),
+              // Ad disclaimer at bottom - above system nav
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Center(
+                      child: Text(
+                        context.t('splashActionMayContainAd'),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                        textDirection: Directionality.of(context),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

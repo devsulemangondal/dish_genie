@@ -1589,6 +1589,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get splashSubtitle => 'Yapay Zekalı Mutfak Arkadaşınız';
 
   @override
+  String get splashActionMayContainAd => 'Bu işlem reklam içerebilir';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

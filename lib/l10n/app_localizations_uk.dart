@@ -1587,6 +1587,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get splashSubtitle => 'Ваш AI Kitchen Companion';
 
   @override
+  String get splashActionMayContainAd => 'Ця дія може містити рекламу';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

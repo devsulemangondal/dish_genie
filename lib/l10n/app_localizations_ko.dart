@@ -1560,6 +1560,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get splashSubtitle => '당신의 AI 주방 동반자';
 
   @override
+  String get splashActionMayContainAd => '이 작업에 광고가 포함될 수 있습니다';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

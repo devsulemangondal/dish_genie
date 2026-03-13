@@ -1570,6 +1570,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get splashSubtitle => 'เพื่อนร่วมครัว AI ของคุณ';
 
   @override
+  String get splashActionMayContainAd => 'การกระทำนี้อาจมีโฆษณา';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

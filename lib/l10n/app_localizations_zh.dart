@@ -1554,6 +1554,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get splashSubtitle => '您的人工智能厨房伴侣';
 
   @override
+  String get splashActionMayContainAd => '此操作可能包含广告';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

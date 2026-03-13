@@ -86,7 +86,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                 _lastLifecycleState == AppLifecycleState.hidden) &&
             _wasPausedBeforeInactive;
         if (fromPaused || fromInactiveAfterPause) {
-          // App open ads removed - reserved for future ad plan
+          _adManager.resume();
           _wasPausedBeforeInactive = false;
         } else {
           if (kDebugMode) {

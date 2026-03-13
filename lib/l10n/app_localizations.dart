@@ -3194,6 +3194,12 @@ abstract class AppLocalizations {
   /// **'Your AI Kitchen Companion'**
   String get splashSubtitle;
 
+  /// No description provided for @splashActionMayContainAd.
+  ///
+  /// In en, this message translates to:
+  /// **'This action may contain ads'**
+  String get splashActionMayContainAd;
+
   /// No description provided for @commonErrorMessage.
   ///
   /// In en, this message translates to:

@@ -557,6 +557,7 @@
   "savedMealPlanContinuePlan": "Continue Plan",
   "splashAppName": "DishGenie",
   "splashSubtitle": "Your AI Kitchen Companion",
+  "splashActionMayContainAd": "This action may contain ads",
   "commonErrorMessage": "Error: {error}",
   "@commonErrorMessage": {
     "placeholders": {

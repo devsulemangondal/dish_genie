@@ -1600,6 +1600,10 @@ class AppLocalizationsFil extends AppLocalizations {
   String get splashSubtitle => 'Ang iyong AI Kitchen Companion';
 
   @override
+  String get splashActionMayContainAd =>
+      'Ang aksyon na ito ay maaaring maglaman ng mga ad';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

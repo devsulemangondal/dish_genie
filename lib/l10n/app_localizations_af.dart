@@ -1587,6 +1587,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get splashSubtitle => 'Jou KI-kombuisgenoot';
 
   @override
+  String get splashActionMayContainAd => 'Hierdie aksie kan advertensies bevat';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

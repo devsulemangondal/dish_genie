@@ -1594,6 +1594,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get splashSubtitle => 'Sizning AI oshxona hamrohingiz';
 
   @override
+  String get splashActionMayContainAd =>
+      'Ushbu harakat reklamalar o\'z ichiga olishi mumkin';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

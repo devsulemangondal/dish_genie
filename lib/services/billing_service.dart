@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
+import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
 
 /// In-app subscription (weekly). Product ID in code must match Play Console exactly.
 ///
@@ -361,6 +364,31 @@ class BillingService {
     } catch (e) {
       return null;
     }
+  }
+
+  /// Returns true if the product has a free trial (from Play Console / App Store).
+  static bool hasFreeTrial(ProductDetails productDetails) {
+    if (productDetails is GooglePlayProductDetails) {
+      final offerDetails =
+          productDetails.productDetails.subscriptionOfferDetails ?? [];
+      for (final offer in offerDetails) {
+        for (final phase in offer.pricingPhases) {
+          if (phase.priceAmountMicros == 0) {
+            return true;
+          }
+        }
+      }
+    }
+
+    if (productDetails is AppStoreProductDetails) {
+      final intro = productDetails.skProduct.introductoryPrice;
+      if (intro != null &&
+          intro.paymentMode == SKProductDiscountPaymentMode.freeTrail) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   static String? get lastError => _lastError;

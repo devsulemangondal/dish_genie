@@ -82,6 +82,11 @@ class AdService {
       'ca-app-pub-6882687050623219/2773535082';
   static const String _productionViewPlanContinueInterIos =
       'ca-app-pub-6882687050623219/9422703914';
+  // Resume app open ad when app returns from background (Android / iOS)
+  static const String _productionResumeAppOpenAndroid =
+      'ca-app-pub-6882687050623219/7730206739';
+  static const String _productionResumeAppOpenIos =
+      'ca-app-pub-6882687050623219/1854729725';
   // Splash app open ad on first install (Android / iOS)
   static const String _productionSplashAppOpen1stTimeAndroid =
       'ca-app-pub-6882687050623219/1308080602';
@@ -137,6 +142,14 @@ class AdService {
 
   static String get appOpenAdUnitId =>
       _getAdUnitId(_productionAppOpenAdUnitId, testAdType: 'appOpen');
+  /// Resume app open ad - shown when app returns from background
+  static String get resumeAppOpenAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(_productionResumeAppOpenIos, testAdType: 'appOpen')
+          : _getAdUnitId(
+              _productionResumeAppOpenAndroid,
+              testAdType: 'appOpen',
+            );
   static String get splashAppOpen1stTimeAdUnitId =>
       Platform.isIOS
           ? _getAdUnitId(_productionSplashAppOpen1stTimeIos, testAdType: 'appOpen')

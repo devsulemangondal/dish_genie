@@ -198,8 +198,11 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
   @override
   Widget build(BuildContext context) {
     final mealPlanProvider = context.watch<MealPlanProvider>();
+    final premiumProvider = context.watch<PremiumProvider>();
     final mealPlan = mealPlanProvider.currentMealPlan;
     final isLoading = mealPlanProvider.isLoading;
+    final mealPlanLimit = premiumProvider.getMealPlanLimit();
+    final mealPlanCount = premiumProvider.mealPlanCount;
 
     // If meal plan is loaded and we're still showing form, switch to plan view
     // This handles the case where meal plan loads after initState
@@ -242,6 +245,34 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                   statusBarColor: Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF1A1F35)
                       : AppColors.genieBlush,
+                  rightContent: !premiumProvider.isPremium && mealPlanLimit != null
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surface
+                                .withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Theme.of(context)
+                                  .dividerColor
+                                  .withOpacity(0.3),
+                            ),
+                          ),
+                          child: Text(
+                            '$mealPlanCount/$mealPlanLimit',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        )
+                      : null,
                 ),
                 Expanded(
                   child: isLoading

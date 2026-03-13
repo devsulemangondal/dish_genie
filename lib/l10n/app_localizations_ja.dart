@@ -1560,6 +1560,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get splashSubtitle => 'AI キッチンの相棒';
 
   @override
+  String get splashActionMayContainAd => 'このアクションには広告が含まれる場合があります';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

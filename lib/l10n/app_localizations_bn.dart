@@ -1588,6 +1588,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get splashSubtitle => 'আপনার এআই রান্নাঘরের সঙ্গী';
 
   @override
+  String get splashActionMayContainAd => 'এই ক্রিয়ায় বিজ্ঞাপন থাকতে পারে';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

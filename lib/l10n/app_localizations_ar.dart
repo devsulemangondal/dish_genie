@@ -1579,6 +1579,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get splashSubtitle => 'رفيقك في المطبخ بالذكاء الاصطناعي';
 
   @override
+  String get splashActionMayContainAd => 'قد تحتوي هذه العملية على إعلانات';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

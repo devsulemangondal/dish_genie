@@ -1585,6 +1585,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get splashSubtitle => 'आपका एआई रसोई साथी';
 
   @override
+  String get splashActionMayContainAd => 'इस क्रिया में विज्ञापन हो सकते हैं';
+
+  @override
   String commonErrorMessage(
     String error,
     Object erreur,

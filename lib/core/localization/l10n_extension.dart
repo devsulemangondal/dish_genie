@@ -141,6 +141,7 @@ extension L10nExtension on BuildContext {
     'common.view.all': (l) => l.commonViewAll,
     'splashAppName': (l) => l.splashAppName,
     'splashSubtitle': (l) => l.splashSubtitle,
+    'splashActionMayContainAd': (l) => l.splashActionMayContainAd,
     'settingsAppearance': (l) => l.settingsAppearance,
     'settingsTheme': (l) => l.settingsTheme,
     'settingsChooseTheme': (l) => l.settingsChooseTheme,
