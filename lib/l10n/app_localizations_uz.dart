@@ -375,11 +375,11 @@ class AppLocalizationsUz extends AppLocalizations {
   String get recipesGenerating => 'Yaratilmoqda...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => 'Yaratishni bekor qilish?';
 
   @override
   String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+      'Retsept yaratilmoqda. Bekor qilib orqaga qaytishga ishonchingiz komilmi?';
 
   @override
   String get recipesNewRecipe => 'Yangi Retsept';
@@ -624,11 +624,11 @@ class AppLocalizationsUz extends AppLocalizations {
   String get grocerySubtitle => 'Xarid ro\'yxatingiz';
 
   @override
-  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+  String get groceryCancelGenerationTitle => 'Yaratishni bekor qilish?';
 
   @override
   String get groceryCancelGenerationMessage =>
-      'A grocery list is being created. Are you sure you want to cancel and go back?';
+      'Xarid ro\'yxati yaratilmoqda. Bekor qilib orqaga qaytishga ishonchingiz komilmi?';
 
   @override
   String get groceryQuickActions => 'Tezkor harakatlar';

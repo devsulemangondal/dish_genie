@@ -374,11 +374,11 @@ class AppLocalizationsAf extends AppLocalizations {
   String get recipesGenerating => 'Genereer...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => 'Kanselleer generering?';
 
   @override
   String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+      '\'n Resep word gegenereer. Is jy seker jy wil kanselleer en teruggaan?';
 
   @override
   String get recipesNewRecipe => 'Nuwe Resep';
@@ -624,11 +624,11 @@ class AppLocalizationsAf extends AppLocalizations {
   String get grocerySubtitle => 'Jou inkopielys';
 
   @override
-  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+  String get groceryCancelGenerationTitle => 'Kanselleer generering?';
 
   @override
   String get groceryCancelGenerationMessage =>
-      'A grocery list is being created. Are you sure you want to cancel and go back?';
+      '\'n Winkellys word geskep. Is jy seker jy wil kanselleer en teruggaan?';
 
   @override
   String get groceryQuickActions => 'Vinnige Aksies';

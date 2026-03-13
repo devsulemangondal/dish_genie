@@ -373,11 +373,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get recipesGenerating => 'جاري الإنشاء...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => 'إلغاء الإنشاء؟';
 
   @override
   String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+      'يتم إنشاء وصفة. هل أنت متأكد أنك تريد الإلغاء والرجوع؟';
 
   @override
   String get recipesNewRecipe => 'وصفة جديدة';

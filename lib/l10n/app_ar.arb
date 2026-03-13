@@ -123,6 +123,8 @@
   "recipesTime": "الوقت",
   "recipesCal": "سعرة",
   "recipesGenerating": "جاري الإنشاء...",
+  "recipesCancelGenerationTitle": "إلغاء الإنشاء؟",
+  "recipesCancelGenerationMessage": "يتم إنشاء وصفة. هل أنت متأكد أنك تريد الإلغاء والرجوع؟",
   "recipesNewRecipe": "وصفة جديدة",
   "recipesWhatCraving": "ماذا تشتهي؟",
   "recipesMoodsComfortFood": "طعام مريح",

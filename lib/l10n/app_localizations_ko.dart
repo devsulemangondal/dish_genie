@@ -372,11 +372,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get recipesGenerating => '생성 중...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => '생성 취소할까요?';
 
   @override
-  String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+  String get recipesCancelGenerationMessage => '레시피를 만들고 있습니다. 취소하고 돌아가시겠습니까?';
 
   @override
   String get recipesNewRecipe => '새 레시피';
@@ -620,11 +619,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get grocerySubtitle => '쇼핑 목록';
 
   @override
-  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+  String get groceryCancelGenerationTitle => '생성 취소할까요?';
 
   @override
   String get groceryCancelGenerationMessage =>
-      'A grocery list is being created. Are you sure you want to cancel and go back?';
+      '장보기 목록을 만들고 있습니다. 취소하고 돌아가시겠습니까?';
 
   @override
   String get groceryQuickActions => '빠른 작업';

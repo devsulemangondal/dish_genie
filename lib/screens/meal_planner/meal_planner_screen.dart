@@ -82,16 +82,16 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text(ctx.t('meal.planner.cancel.generation.title')),
-          content: Text(ctx.t('meal.planner.cancel.generation.message')),
+          title: Text(context.t('meal.planner.cancel.generation.title')),
+          content: Text(context.t('meal.planner.cancel.generation.message')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(false),
-              child: Text(ctx.t('common.cancel')),
+              child: Text(context.t('common.cancel')),
             ),
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(true),
-              child: Text(ctx.t('common.confirm')),
+              child: Text(context.t('common.confirm')),
             ),
           ],
         ),
@@ -276,7 +276,7 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                 ),
                 Expanded(
                   child: isLoading
-                      ? const LoadingGenie(message: 'Creating Your Plan...')
+                      ? LoadingGenie(message: context.t('meal.planner.creating.plan'))
                       : mealPlan != null && !_showForm
                           ? _buildMealPlanView(context, mealPlan, mealPlanProvider)
                           : _buildFormView(context),

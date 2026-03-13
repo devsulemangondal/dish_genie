@@ -90,16 +90,16 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text(ctx.t('recipes.cancel.generation.title')),
-          content: Text(ctx.t('recipes.cancel.generation.message')),
+          title: Text(context.t('recipes.cancel.generation.title')),
+          content: Text(context.t('recipes.cancel.generation.message')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(false),
-              child: Text(ctx.t('common.cancel')),
+              child: Text(context.t('common.cancel')),
             ),
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(true),
-              child: Text(ctx.t('common.confirm')),
+              child: Text(context.t('common.confirm')),
             ),
           ],
         ),
@@ -187,16 +187,16 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
           final confirmed = await showDialog<bool>(
             context: context,
             builder: (ctx) => AlertDialog(
-              title: Text(ctx.t('recipes.cancel.generation.title')),
-              content: Text(ctx.t('recipes.cancel.generation.message')),
+              title: Text(context.t('recipes.cancel.generation.title')),
+              content: Text(context.t('recipes.cancel.generation.message')),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(ctx).pop(false),
-                  child: Text(ctx.t('common.cancel')),
+                  child: Text(context.t('common.cancel')),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(ctx).pop(true),
-                  child: Text(ctx.t('common.confirm')),
+                  child: Text(context.t('common.confirm')),
                 ),
               ],
             ),

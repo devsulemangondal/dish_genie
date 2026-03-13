@@ -376,11 +376,11 @@ class AppLocalizationsKk extends AppLocalizations {
   String get recipesGenerating => 'Жасалуда...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => 'Құруды болдырмау керек пе?';
 
   @override
   String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+      'Рецепт құрылуда. Болдырмап, артқа оралғыңыз келетініне сенімдісіз бе?';
 
   @override
   String get recipesNewRecipe => 'Жаңа Рецепт';
@@ -625,11 +625,11 @@ class AppLocalizationsKk extends AppLocalizations {
   String get grocerySubtitle => 'Сауда тізіміңіз';
 
   @override
-  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+  String get groceryCancelGenerationTitle => 'Құруды болдырмау керек пе?';
 
   @override
   String get groceryCancelGenerationMessage =>
-      'A grocery list is being created. Are you sure you want to cancel and go back?';
+      'Сатып алу тізімі құрылуда. Болдырмап, артқа оралғыңыз келетініне сенімдісіз бе?';
 
   @override
   String get groceryQuickActions => 'Жылдам Әрекеттер';

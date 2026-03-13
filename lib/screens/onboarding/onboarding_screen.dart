@@ -158,13 +158,21 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     itemCount: _steps.length,
                     itemBuilder: (context, index) {
                       final step = _steps[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Mascot with float animation
-                            AnimatedBuilder(
+                      return LayoutBuilder(
+                        builder: (context, constraints) {
+                          return SingleChildScrollView(
+                            physics: const ClampingScrollPhysics(),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minHeight: constraints.maxHeight,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // Mascot with float animation
+                                    AnimatedBuilder(
                               animation: _floatAnimation,
                               builder: (context, child) {
                                 return Transform.translate(
@@ -266,8 +274,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                 );
                               },
                             ),
-                          ],
-                        ),
+                            const SizedBox(height: 24),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),

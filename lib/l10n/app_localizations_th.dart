@@ -374,11 +374,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get recipesGenerating => 'กำลังสร้าง...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => 'ยกเลิกการสร้าง?';
 
   @override
   String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+      'กำลังสร้างสูตรอาหาร คุณแน่ใจหรือไม่ว่าต้องการยกเลิกและกลับไป?';
 
   @override
   String get recipesNewRecipe => 'สูตรใหม่';
@@ -622,11 +622,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get grocerySubtitle => 'รายการซื้อของของคุณ';
 
   @override
-  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+  String get groceryCancelGenerationTitle => 'ยกเลิกการสร้าง?';
 
   @override
   String get groceryCancelGenerationMessage =>
-      'A grocery list is being created. Are you sure you want to cancel and go back?';
+      'กำลังสร้างรายการซื้อของ คุณแน่ใจหรือไม่ว่าต้องการยกเลิกและกลับไป?';
 
   @override
   String get groceryQuickActions => 'การดำเนินการด่วน';

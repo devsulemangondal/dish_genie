@@ -375,11 +375,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get recipesGenerating => 'Генерація...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => 'Скасувати створення?';
 
   @override
   String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+      'Рецепт створюється. Ви впевнені, що хочете скасувати та повернутися назад?';
 
   @override
   String get recipesNewRecipe => 'Новий рецепт';
@@ -624,11 +624,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get grocerySubtitle => 'Ваш список покупок';
 
   @override
-  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+  String get groceryCancelGenerationTitle => 'Скасувати створення?';
 
   @override
   String get groceryCancelGenerationMessage =>
-      'A grocery list is being created. Are you sure you want to cancel and go back?';
+      'Список покупок створюється. Ви впевнені, що хочете скасувати та повернутися назад?';
 
   @override
   String get groceryQuickActions => 'Швидкі дії';

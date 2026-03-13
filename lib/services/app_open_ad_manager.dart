@@ -1109,7 +1109,14 @@ class AppOpenAdManager {
     }
     // Mark that app has been paused (so we know it's a real resume, not initial launch)
     _hasBeenPaused = true;
-    // Nothing special needed here, loader/ad flow handled on resume
+    // If user minimizes while ad is showing, suppress next resume to prevent double ad
+    // When they return, we don't show another ad (1 ad at a time)
+    if (_isShowingAd || _isResuming) {
+      suppressNextResume(
+        duration: const Duration(seconds: 30),
+        reason: 'ad_was_showing_on_pause',
+      );
+    }
   }
 
   /// Dispose resources

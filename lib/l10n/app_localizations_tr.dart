@@ -376,11 +376,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get recipesGenerating => 'Oluşturuluyor...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => 'Oluşturmayı iptal et?';
 
   @override
   String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+      'Tarif oluşturuluyor. İptal edip geri dönmek istediğinizden emin misiniz?';
 
   @override
   String get recipesNewRecipe => 'Yeni Tarif';
@@ -626,11 +626,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get grocerySubtitle => 'Alışveriş listeniz';
 
   @override
-  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+  String get groceryCancelGenerationTitle => 'Oluşturmayı iptal et?';
 
   @override
   String get groceryCancelGenerationMessage =>
-      'A grocery list is being created. Are you sure you want to cancel and go back?';
+      'Alışveriş listesi oluşturuluyor. İptal edip geri dönmek istediğinizden emin misiniz?';
 
   @override
   String get groceryQuickActions => 'Hızlı İşlemler';

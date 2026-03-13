@@ -371,11 +371,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recipesGenerating => '生成中...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => '取消生成？';
 
   @override
-  String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+  String get recipesCancelGenerationMessage => '正在创建食谱。您确定要取消并返回吗？';
 
   @override
   String get recipesNewRecipe => '新食谱';
@@ -618,11 +617,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get grocerySubtitle => '您的购物清单';
 
   @override
-  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+  String get groceryCancelGenerationTitle => '取消生成？';
 
   @override
-  String get groceryCancelGenerationMessage =>
-      'A grocery list is being created. Are you sure you want to cancel and go back?';
+  String get groceryCancelGenerationMessage => '正在创建购物清单。您确定要取消并返回吗？';
 
   @override
   String get groceryQuickActions => '快捷操作';

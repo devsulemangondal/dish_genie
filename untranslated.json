@@ -1,10 +1,6 @@
 {
   "af": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -19,8 +15,6 @@
 
   "ar": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -35,10 +29,6 @@
 
   "bn": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -53,10 +43,6 @@
 
   "de": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -71,10 +57,6 @@
 
   "fa": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -89,10 +71,6 @@
 
   "fil": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -107,10 +85,6 @@
 
   "fr": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -125,10 +99,6 @@
 
   "hi": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -143,10 +113,6 @@
 
   "id": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -161,10 +127,6 @@
 
   "it": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -179,10 +141,6 @@
 
   "ja": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -197,10 +155,6 @@
 
   "kk": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -215,10 +169,6 @@
 
   "ko": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -233,10 +183,6 @@
 
   "ms": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -251,10 +197,6 @@
 
   "nl": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -269,10 +211,6 @@
 
   "pl": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -287,10 +225,6 @@
 
   "pt": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -305,10 +239,6 @@
 
   "ru": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -323,10 +253,6 @@
 
   "th": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -341,10 +267,6 @@
 
   "tr": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -359,10 +281,6 @@
 
   "uk": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -377,10 +295,6 @@
 
   "ur": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -395,10 +309,6 @@
 
   "uz": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -413,10 +323,6 @@
 
   "vi": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",
@@ -431,10 +337,6 @@
 
   "zh": [
     "commonRetry",
-    "recipesCancelGenerationTitle",
-    "recipesCancelGenerationMessage",
-    "groceryCancelGenerationTitle",
-    "groceryCancelGenerationMessage",
     "chatNewChatConfirmTitle",
     "chatNewChatConfirmMessage",
     "scannerCancelAnalysisTitle",

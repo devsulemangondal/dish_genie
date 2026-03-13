@@ -92,16 +92,16 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text(ctx.t('grocery.cancel.generation.title')),
-          content: Text(ctx.t('grocery.cancel.generation.message')),
+          title: Text(context.t('grocery.cancel.generation.title')),
+          content: Text(context.t('grocery.cancel.generation.message')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(false),
-              child: Text(ctx.t('common.cancel')),
+              child: Text(context.t('common.cancel')),
             ),
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(true),
-              child: Text(ctx.t('common.confirm')),
+              child: Text(context.t('common.confirm')),
             ),
           ],
         ),

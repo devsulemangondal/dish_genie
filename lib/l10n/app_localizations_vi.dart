@@ -374,11 +374,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get recipesGenerating => 'Đang tạo...';
 
   @override
-  String get recipesCancelGenerationTitle => 'Cancel Generation?';
+  String get recipesCancelGenerationTitle => 'Hủy tạo?';
 
   @override
   String get recipesCancelGenerationMessage =>
-      'A recipe is being generated. Are you sure you want to cancel and go back?';
+      'Đang tạo công thức. Bạn có chắc chắn muốn hủy và quay lại không?';
 
   @override
   String get recipesNewRecipe => 'Công Thức Mới';
@@ -623,11 +623,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get grocerySubtitle => 'Danh sách mua sắm của bạn';
 
   @override
-  String get groceryCancelGenerationTitle => 'Cancel Generation?';
+  String get groceryCancelGenerationTitle => 'Hủy tạo?';
 
   @override
   String get groceryCancelGenerationMessage =>
-      'A grocery list is being created. Are you sure you want to cancel and go back?';
+      'Đang tạo danh sách mua sắm. Bạn có chắc chắn muốn hủy và quay lại không?';
 
   @override
   String get groceryQuickActions => 'Thao Tác Nhanh';
