@@ -17,7 +17,6 @@
 		A02486DD7BD12E5E97D752DA /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B53022BE6637A649873414A5 /* Pods_Runner.framework */; };
 		BC46911223D9D12CFFF380E4 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8FE1F6F56E8B2BF7815710 /* Pods_RunnerTests.framework */; };
 		NADF0001A1ED2DC5600515810 /* NativeAdFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = NADF0002A1ED2DC5600515810 /* NativeAdFactory.swift */; };
-		NADF0003A1ED2DC5600515810 /* NativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = NADF0004A1ED2DC5600515810 /* NativeAdView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,7 +67,6 @@
 		B53022BE6637A649873414A5 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0421B16E1E99505D5AAEDCF /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		NADF0002A1ED2DC5600515810 /* NativeAdFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdFactory.swift; sourceTree = "<group>"; };
-		NADF0004A1ED2DC5600515810 /* NativeAdView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NativeAdView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,7 +141,6 @@
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 				NADF0002A1ED2DC5600515810 /* NativeAdFactory.swift */,
-				NADF0004A1ED2DC5600515810 /* NativeAdView.xib */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -270,7 +267,6 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
-				NADF0003A1ED2DC5600515810 /* NativeAdView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
