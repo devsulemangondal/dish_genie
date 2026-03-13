@@ -6,21 +6,21 @@ import google_mobile_ads
 /// Uses the same view for both - container size is controlled by Flutter.
 class NativeAdFactory: NSObject, FLTNativeAdFactory {
   func createNativeAd(
-    _ nativeAd: GADNativeAd,
+    _ nativeAd: NativeAd,
     customOptions: [AnyHashable: Any]? = nil
-  ) -> GADNativeAdView? {
+  ) -> NativeAdView? {
     guard let objects = Bundle.main.loadNibNamed(
       "NativeAdView",
       owner: nil,
       options: nil
     ) as? [Any],
-          let adView = objects.first(where: { $0 is GADNativeAdView }) as? GADNativeAdView else {
+          let adView = objects.first(where: { $0 is NativeAdView }) as? NativeAdView else {
       return nil
     }
 
     adView.headlineView = adView.viewWithTag(1)
     adView.bodyView = adView.viewWithTag(2)
-    adView.mediaView = adView.viewWithTag(3) as? GADMediaView
+    adView.mediaView = adView.viewWithTag(3) as? MediaView
     adView.callToActionView = adView.viewWithTag(4)
     adView.iconView = adView.viewWithTag(5)
 
