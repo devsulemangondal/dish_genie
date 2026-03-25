@@ -197,9 +197,9 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
 
     if (isFirstLaunch) {
-      // First launch: Splash → (App Open Ad if RC) → Onboarding
-      debugPrint('[SplashScreen] 📱 First launch: checking splash app open ad');
-      await _showSplashFirstTimeAppOpenThenGo('/onboarding');
+      // First launch: Splash → (App Open Ad if RC) → Language → Onboarding
+      debugPrint('[SplashScreen] 📱 First launch: language then onboarding');
+      await _showSplashFirstTimeAppOpenThenGo('/language-selection');
       return;
     }
 
