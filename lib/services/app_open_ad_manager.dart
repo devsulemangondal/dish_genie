@@ -1029,20 +1029,25 @@ class AppOpenAdManager {
                 print(
                   '   Test App Open Ad Unit ID (Android): ca-app-pub-3940256099942544/9257395921',
                 );
+              }
 
-                // Retry once for error code 3 (format mismatch - often transient)
-                if (retryCount == 0) {
-                  print(
-                    '🔄 [AppOpenAdManager] Retrying ad load after error code 3...',
-                  );
-                  Future.delayed(const Duration(milliseconds: 500), () async {
-                    final retryAd = await loadAd(retryCount: 1);
-                    if (!completer.isCompleted) {
-                      completer.complete(retryAd);
-                    }
-                  });
-                  return; // Don't complete with null yet - wait for retry
-                }
+              // Retry once for transient load failures.
+              // These codes can vary by SDK version, but commonly:
+              // 0 = internal error, 2 = no fill, 3 = internal/format mismatch.
+              final shouldRetry = retryCount == 0 &&
+                  (error.code == 0 || error.code == 2 || error.code == 3);
+              if (shouldRetry) {
+                final retryDelay = const Duration(milliseconds: 800);
+                print(
+                  '🔄 [AppOpenAdManager] Retrying resume app-open ad load (retry=${retryCount + 1}) in ${retryDelay.inMilliseconds}ms...',
+                );
+                Future.delayed(retryDelay, () async {
+                  final retryAd = await loadAd(retryCount: 1);
+                  if (!completer.isCompleted) {
+                    completer.complete(retryAd);
+                  }
+                });
+                return; // Don't complete with null yet - wait for retry
               }
             }
             _appOpenAd = null;
@@ -1055,10 +1060,10 @@ class AppOpenAdManager {
       );
 
       // Add timeout to prevent indefinite waiting
-      Future.delayed(const Duration(seconds: 10), () {
+      Future.delayed(const Duration(seconds: 15), () {
         if (!completer.isCompleted) {
           if (kDebugMode) {
-            print('⏱️ [AppOpenAdManager] Ad loading timeout after 10 seconds');
+            print('⏱️ [AppOpenAdManager] Ad loading timeout after 15 seconds');
           }
           completer.complete(null);
         }

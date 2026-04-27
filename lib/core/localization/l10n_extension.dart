@@ -825,6 +825,22 @@ extension L10nExtension on BuildContext {
     'premium.home.cooks': (l) => l.premiumHomeCooks,
     'premium.recipes.generated': (l) => l.premiumRecipesGenerated,
     'premium.payment.disclaimer': (l) => l.premiumPaymentDisclaimer,
+    'premium.cook.smarter.with.ai': (l) => l.premiumCookSmarterWithAi,
+    'premium.genius.cooking.plan': (l) => l.premiumGeniusCookingPlan,
+    'premium.feature.daily.ai.recipe.suggestions': (l) =>
+        l.premiumFeatureDailyAiRecipeSuggestions,
+    'premium.feature.ingredient.based.cooking': (l) =>
+        l.premiumFeatureIngredientBasedCooking,
+    'premium.feature.smart.meal.planning': (l) =>
+        l.premiumFeatureSmartMealPlanning,
+    'premium.feature.nutrition.insights': (l) => l.premiumFeatureNutritionInsights,
+    'premium.choose.your.plan': (l) => l.premiumChooseYourPlanNew,
+    'premium.unlimited.recipes': (l) => l.premiumUnlimitedRecipes,
+    'premium.best.value': (l) => l.premiumBestValue,
+    'premium.plan.weekly': (l) => l.premiumPlanWeekly,
+    'premium.plan.yearly': (l) => l.premiumPlanYearly,
+    'premium.unlock.unlimited.recipes.now': (l) => l.premiumUnlockUnlimitedRecipesNow,
+    'premium.best.value.ribbon': (l) => l.premiumBestValueRibbon,
     'discount.popup.title': (l) => l.discountPopupTitle,
     'discount.popup.per.month': (l) => l.discountPopupPerMonth,
   };
@@ -879,5 +895,7 @@ extension L10nExtension on BuildContext {
       final error = params?['error'] ?? '';
       return l.premiumError(error, error, error, error, error, error);
     },
+    'premium.start.free.trial': (l, params) =>
+        l.premiumStartFreeTrial(params?['price'] ?? ''),
   };
 }

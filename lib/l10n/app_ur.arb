@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200K+ گھریلو باورچی",
   "premiumRecipesGenerated": "👨‍🍳 1000+ ترکیبیں بنائی گئیں",
   "premiumPaymentDisclaimer": "خریداری پر آپ کے Google اکاؤنٹ سے ادائیگی وصول کی جائے گی۔ بلنگ کی مدت ختم ہونے سے پہلے منسوخ نہ کیے جانے پر سبسکرپشن خود کار طریقے سے تجدید ہو گی۔",
+  "premiumCookSmarterWithAi": "AI کے ساتھ زیادہ سمجھداری سے پکائیں",
+  "premiumGeniusCookingPlan": "جینیئس ککنگ پلان",
+  "premiumFeatureDailyAiRecipeSuggestions": "روزانہ AI ریسیپی\nتجاویز",
+  "premiumFeatureIngredientBasedCooking": "اجزاء پر\nمبنی پکانا",
+  "premiumFeatureSmartMealPlanning": "سمارٹ میل\nپلاننگ",
+  "premiumFeatureNutritionInsights": "غذائیت\nاندرونیاں",
+  "premiumChooseYourPlanNew": "اپنا پلان منتخب کریں",
+  "premiumUnlimitedRecipes": "لامحدود ریسیپیز، ",
+  "premiumBestValue": "بہترین قیمت",
+  "premiumPlanWeekly": "ہفتہ وار",
+  "premiumPlanYearly": "سالانہ",
+  "premiumStartFreeTrial": "3 دن کا مفت ٹرائل شروع کریں {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "ابھی لامحدود ریسیپیز انلاک کریں",
+  "premiumBestValueRibbon": "بہترین قیمت",
   "discountPopupTitle": "🔥 اپنا Dish Genie PRO\nآزاد کریں",
   "discountPopupPerMonth": "فی مہینہ",
   "premiumPrivacyPolicy": "رازداری کی پالیسی",

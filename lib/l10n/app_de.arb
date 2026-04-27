@@ -767,6 +767,28 @@
   "premiumHomeCooks": "🌎 200K+ Hobbyköche",
   "premiumRecipesGenerated": "👨‍🍳 1000+ generierte Rezepte",
   "premiumPaymentDisclaimer": "Die Zahlung wird bei Kauf Ihrem Google-Konto belastet. Das Abonnement verlängert sich automatisch, es sei denn, es wird vor Ende des Abrechnungszeitraums gekündigt.",
+  "premiumCookSmarterWithAi": "Mit KI smarter kochen",
+  "premiumGeniusCookingPlan": "Genialer Kochplan",
+  "premiumFeatureDailyAiRecipeSuggestions": "Tägliche KI-Rezept\nvorschläge",
+  "premiumFeatureIngredientBasedCooking": "Zutaten-\nbasiertes Kochen",
+  "premiumFeatureSmartMealPlanning": "Smarte Mahlzeiten\nplanung",
+  "premiumFeatureNutritionInsights": "Nährwert-\ninfos",
+  "premiumChooseYourPlanNew": "Wähle deinen Plan",
+  "premiumUnlimitedRecipes": "Unbegrenzte Rezepte, ",
+  "premiumBestValue": "Bester Wert",
+  "premiumPlanWeekly": "Wöchentlich",
+  "premiumPlanYearly": "Jährlich",
+  "premiumStartFreeTrial": "Starte 3 Tage kostenlos {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Unbegrenzte Rezepte jetzt freischalten",
+  "premiumBestValueRibbon": "BESTER WERT",
   "discountPopupTitle": "🔥 Schalten Sie Ihren\nDish Genie PRO frei",
   "discountPopupPerMonth": "Pro Monat"
 }

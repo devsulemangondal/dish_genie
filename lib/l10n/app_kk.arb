@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200К+ үй аспазшылары",
   "premiumRecipesGenerated": "👨‍🍳 1000+ рецепт жасалды",
   "premiumPaymentDisclaimer": "Сатып алу кезінде Google тіркелгіңізге төленеді. Төлем кезеңі аяқталмай жойылмаса, жазылым автоматты түрде жаңартылады.",
+  "premiumCookSmarterWithAi": "AI көмегімен ақылдырақ пісіріңіз",
+  "premiumGeniusCookingPlan": "Genius пісіру жоспары",
+  "premiumFeatureDailyAiRecipeSuggestions": "Күнделікті AI рецепт\nұсыныстары",
+  "premiumFeatureIngredientBasedCooking": "Ингредиентке\nнегізделген пісіру",
+  "premiumFeatureSmartMealPlanning": "Ақылды ас\nжоспарлау",
+  "premiumFeatureNutritionInsights": "Қоректік\nинсайттар",
+  "premiumChooseYourPlanNew": "Жоспарыңызды таңдаңыз",
+  "premiumUnlimitedRecipes": "Шексіз рецепттер, ",
+  "premiumBestValue": "Ең тиімді",
+  "premiumPlanWeekly": "Апталық",
+  "premiumPlanYearly": "Жылдық",
+  "premiumStartFreeTrial": "3 күндік тегін сынақты бастаңыз {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Шексіз рецепттерді қазір ашыңыз",
+  "premiumBestValueRibbon": "ЕҢ ТИІМДІ",
   "discountPopupTitle": "🔥 Dish Genie PRO-ңызды\nашыңыз",
   "discountPopupPerMonth": "Айына",
   "premiumPrivacyPolicy": "Құпиялылық саясаты",

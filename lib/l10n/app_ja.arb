@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 20万人以上の家庭料理人",
   "premiumRecipesGenerated": "👨‍🍳 1000件以上のレシピ生成",
   "premiumPaymentDisclaimer": "購入時にGoogleアカウントに請求されます。請求期間終了前にキャンセルしない限り、サブスクリプションは自動更新されます。",
+  "premiumCookSmarterWithAi": "AIで賢く料理しよう",
+  "premiumGeniusCookingPlan": "ジーニアス料理プラン",
+  "premiumFeatureDailyAiRecipeSuggestions": "毎日のAIレシピ\n提案",
+  "premiumFeatureIngredientBasedCooking": "食材ベースの\n料理",
+  "premiumFeatureSmartMealPlanning": "スマートな献立\n計画",
+  "premiumFeatureNutritionInsights": "栄養\nインサイト",
+  "premiumChooseYourPlanNew": "プランを選択",
+  "premiumUnlimitedRecipes": "無制限レシピ、",
+  "premiumBestValue": "お得",
+  "premiumPlanWeekly": "週間",
+  "premiumPlanYearly": "年間",
+  "premiumStartFreeTrial": "3日間無料トライアルを開始 {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "今すぐ無制限レシピを解放",
+  "premiumBestValueRibbon": "お得",
   "discountPopupTitle": "🔥 あなたの\nDish Genie PROのロックを解除",
   "discountPopupPerMonth": "月額",
   "premiumPrivacyPolicy": "プライバシーポリシー",

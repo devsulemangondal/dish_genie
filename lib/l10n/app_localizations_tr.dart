@@ -2165,6 +2165,52 @@ class AppLocalizationsTr extends AppLocalizations {
       'Satın alma sırasında ödeme Google hesabınızdan çekilecektir. Faturalama dönemi bitmeden iptal edilmediği sürece abonelik otomatik olarak yenilenir.';
 
   @override
+  String get premiumCookSmarterWithAi => 'Yapay zekâ ile daha akıllı pişirin';
+
+  @override
+  String get premiumGeniusCookingPlan => 'Dâhi Pişirme Planı';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions =>
+      'Günlük AI tarif\nönerileri';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking => 'Malzeme\ntabanlı pişirme';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'Akıllı öğün\nplanlama';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'Beslenme\niçgörüleri';
+
+  @override
+  String get premiumChooseYourPlanNew => 'Planınızı seçin';
+
+  @override
+  String get premiumUnlimitedRecipes => 'Sınırsız tarif, ';
+
+  @override
+  String get premiumBestValue => 'En iyi değer';
+
+  @override
+  String get premiumPlanWeekly => 'Haftalık';
+
+  @override
+  String get premiumPlanYearly => 'Yıllık';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return '3 günlük ücretsiz denemeyi başlatın $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow =>
+      'Sınırsız tarifleri şimdi açın';
+
+  @override
+  String get premiumBestValueRibbon => 'EN İYİ DEĞER';
+
+  @override
   String get discountPopupTitle => '🔥 Dish Genie PRO\'nuzu\nAçın';
 
   @override

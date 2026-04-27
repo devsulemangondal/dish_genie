@@ -233,8 +233,9 @@ class _SplashScreenState extends State<SplashScreen>
     }
   }
 
-  /// First launch: show splash app open ad if RC allows, then navigate.
-  /// RC keys: splash_appopen_1sttime (Android), splash_appopen_1sttime_ios (iOS)
+  /// First launch: show splash ad if RC allows, then navigate.
+  /// Android uses interstitial RC key: splash_inter_1sttime.
+  /// iOS keeps existing app open RC key: splash_appopen_1sttime_ios.
   Future<void> _showSplashFirstTimeAppOpenThenGo(String route) async {
     if (!mounted) return;
     try {
@@ -251,14 +252,24 @@ class _SplashScreenState extends State<SplashScreen>
 
     final shouldShow = Platform.isIOS
         ? RemoteConfigService.splashAppOpen1stTimeIos
-        : RemoteConfigService.splashAppOpen1stTime;
+        : RemoteConfigService.splashInter1stTime;
 
     if (!shouldShow) {
       if (mounted) context.go(route);
       return;
     }
 
-    await AdService.loadAndShowSplashFirstTimeAppOpenAd(
+    if (Platform.isIOS) {
+      await AdService.loadAndShowSplashFirstTimeAppOpenAd(
+        context: context,
+        onComplete: () {
+          if (mounted) context.go(route);
+        },
+      );
+      return;
+    }
+
+    await AdService.loadAndShowSplashFirstTimeInterstitialAd(
       context: context,
       onComplete: () {
         if (mounted) context.go(route);
@@ -266,8 +277,9 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  /// Returning user: show splash app open ad if RC allows, then navigate.
-  /// RC keys: splash_appopen_2ndtime (Android), splash_appopen_2ndtime_ios (iOS)
+  /// Returning user: show splash ad if RC allows, then navigate.
+  /// Android uses interstitial RC key: splash_inter_2ndtime.
+  /// iOS keeps existing app open RC key: splash_appopen_2ndtime_ios.
   Future<void> _showSplashReturningUserAppOpenThenGo(String route) async {
     if (!mounted) return;
     try {
@@ -284,14 +296,24 @@ class _SplashScreenState extends State<SplashScreen>
 
     final shouldShow = Platform.isIOS
         ? RemoteConfigService.splashAppOpen2ndTimeIos
-        : RemoteConfigService.splashAppOpen2ndTime;
+        : RemoteConfigService.splashInter2ndTime;
 
     if (!shouldShow) {
       if (mounted) context.go(route);
       return;
     }
 
-    await AdService.loadAndShowSplashReturningUserAppOpenAd(
+    if (Platform.isIOS) {
+      await AdService.loadAndShowSplashReturningUserAppOpenAd(
+        context: context,
+        onComplete: () {
+          if (mounted) context.go(route);
+        },
+      );
+      return;
+    }
+
+    await AdService.loadAndShowSplashReturningUserInterstitialAd(
       context: context,
       onComplete: () {
         if (mounted) context.go(route);

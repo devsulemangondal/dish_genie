@@ -2118,6 +2118,50 @@ class AppLocalizationsJa extends AppLocalizations {
       '購入時にGoogleアカウントに請求されます。請求期間終了前にキャンセルしない限り、サブスクリプションは自動更新されます。';
 
   @override
+  String get premiumCookSmarterWithAi => 'AIで賢く料理しよう';
+
+  @override
+  String get premiumGeniusCookingPlan => 'ジーニアス料理プラン';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions => '毎日のAIレシピ\n提案';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking => '食材ベースの\n料理';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'スマートな献立\n計画';
+
+  @override
+  String get premiumFeatureNutritionInsights => '栄養\nインサイト';
+
+  @override
+  String get premiumChooseYourPlanNew => 'プランを選択';
+
+  @override
+  String get premiumUnlimitedRecipes => '無制限レシピ、';
+
+  @override
+  String get premiumBestValue => 'お得';
+
+  @override
+  String get premiumPlanWeekly => '週間';
+
+  @override
+  String get premiumPlanYearly => '年間';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return '3日間無料トライアルを開始 $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow => '今すぐ無制限レシピを解放';
+
+  @override
+  String get premiumBestValueRibbon => 'お得';
+
+  @override
   String get discountPopupTitle => '🔥 あなたの\nDish Genie PROのロックを解除';
 
   @override

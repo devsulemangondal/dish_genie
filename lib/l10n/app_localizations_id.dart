@@ -2164,6 +2164,51 @@ class AppLocalizationsId extends AppLocalizations {
       'Pembayaran akan dibebankan ke akun Google Anda saat pembelian. Langganan diperpanjang otomatis kecuali dibatalkan sebelum periode penagihan berakhir.';
 
   @override
+  String get premiumCookSmarterWithAi => 'Masak lebih cerdas dengan AI';
+
+  @override
+  String get premiumGeniusCookingPlan => 'Paket Memasak Genius';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions => 'Saran resep AI\nharian';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking => 'Memasak berbasis\nbahan';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'Perencanaan makan\ncerdas';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'Wawasan\nnutrisi';
+
+  @override
+  String get premiumChooseYourPlanNew => 'Pilih paket Anda';
+
+  @override
+  String get premiumUnlimitedRecipes => 'Resep tanpa batas, ';
+
+  @override
+  String get premiumBestValue => 'Nilai terbaik';
+
+  @override
+  String get premiumPlanWeekly => 'Mingguan';
+
+  @override
+  String get premiumPlanYearly => 'Tahunan';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return 'Mulai uji coba gratis 3 hari $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow =>
+      'Buka resep tanpa batas sekarang';
+
+  @override
+  String get premiumBestValueRibbon => 'NILAI TERBAIK';
+
+  @override
   String get discountPopupTitle => '🔥 Buka Kunci Dish Genie PRO\nAnda';
 
   @override

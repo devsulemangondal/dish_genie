@@ -2139,6 +2139,50 @@ class AppLocalizationsTh extends AppLocalizations {
       'จะเรียกเก็บเงินจากบัญชี Google ของคุณเมื่อซื้อ การสมัครสมาชิกจะต่ออายุอัตโนมัติ เว้นแต่จะยกเลิกก่อนสิ้นช่วงการเรียกเก็บเงิน';
 
   @override
+  String get premiumCookSmarterWithAi => 'ทำอาหารอย่างฉลาดด้วย AI';
+
+  @override
+  String get premiumGeniusCookingPlan => 'แผนทำอาหารอัจฉริยะ';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions => 'คำแนะนำสูตร AI\nรายวัน';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking => 'ทำอาหารจาก\nวัตถุดิบ';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'วางแผนมื้ออาหาร\nอัจฉริยะ';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'ข้อมูลเชิงลึก\nโภชนาการ';
+
+  @override
+  String get premiumChooseYourPlanNew => 'เลือกแผนของคุณ';
+
+  @override
+  String get premiumUnlimitedRecipes => 'สูตรไม่จำกัด, ';
+
+  @override
+  String get premiumBestValue => 'คุ้มค่าที่สุด';
+
+  @override
+  String get premiumPlanWeekly => 'รายสัปดาห์';
+
+  @override
+  String get premiumPlanYearly => 'รายปี';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return 'เริ่มทดลองใช้งานฟรี 3 วัน $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow => 'ปลดล็อกสูตรไม่จำกัดตอนนี้';
+
+  @override
+  String get premiumBestValueRibbon => 'คุ้มสุด';
+
+  @override
   String get discountPopupTitle => '🔥 ปลดล็อก Dish Genie PRO\nของคุณ';
 
   @override

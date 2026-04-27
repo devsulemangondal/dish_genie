@@ -2103,6 +2103,50 @@ class AppLocalizationsZh extends AppLocalizations {
       '购买时将从您的 Google 账户扣款。除非在账单期结束前取消，否则订阅将自动续订。';
 
   @override
+  String get premiumCookSmarterWithAi => '用AI更聪明地做饭';
+
+  @override
+  String get premiumGeniusCookingPlan => '天才烹饪计划';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions => '每日AI食谱\n推荐';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking => '基于食材的\n烹饪';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => '智能餐食\n规划';
+
+  @override
+  String get premiumFeatureNutritionInsights => '营养\n洞察';
+
+  @override
+  String get premiumChooseYourPlanNew => '选择你的方案';
+
+  @override
+  String get premiumUnlimitedRecipes => '无限食谱，';
+
+  @override
+  String get premiumBestValue => '超值之选';
+
+  @override
+  String get premiumPlanWeekly => '每周';
+
+  @override
+  String get premiumPlanYearly => '每年';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return '开始3天免费试用 $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow => '立即解锁无限食谱';
+
+  @override
+  String get premiumBestValueRibbon => '超值';
+
+  @override
   String get discountPopupTitle => '🔥 解锁您的\nDish Genie 专业版';
 
   @override

@@ -2165,6 +2165,54 @@ class AppLocalizationsUk extends AppLocalizations {
       'Оплата буде зроблена з вашого облікового запису Google при покупці. Підписка продовжується автоматично, якщо не скасована до кінця платіжного періоду.';
 
   @override
+  String get premiumCookSmarterWithAi => 'Готуйте розумніше з ШІ';
+
+  @override
+  String get premiumGeniusCookingPlan => 'Геніальний план приготування';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions =>
+      'Щоденні ШІ\nпропозиції рецептів';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking =>
+      'Готування на основі\nінгредієнтів';
+
+  @override
+  String get premiumFeatureSmartMealPlanning =>
+      'Розумне планування\nхарчування';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'Нутрієнтні\nінсайти';
+
+  @override
+  String get premiumChooseYourPlanNew => 'Оберіть свій план';
+
+  @override
+  String get premiumUnlimitedRecipes => 'Необмежені рецепти, ';
+
+  @override
+  String get premiumBestValue => 'Найкраща вигода';
+
+  @override
+  String get premiumPlanWeekly => 'Щотижня';
+
+  @override
+  String get premiumPlanYearly => 'Щороку';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return 'Почніть 3-денний безкоштовний пробний період $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow =>
+      'Відкрити необмежені рецепти зараз';
+
+  @override
+  String get premiumBestValueRibbon => 'НАЙКРАЩА ВИГОДА';
+
+  @override
   String get discountPopupTitle => '🔥 Розблокуйте свій\nDish Genie PRO';
 
   @override

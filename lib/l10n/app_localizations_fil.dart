@@ -2180,6 +2180,54 @@ class AppLocalizationsFil extends AppLocalizations {
       'Ang bayad ay ichacharge sa iyong Google Account sa pagbili. Ang subscription ay awtomatikong magre-renew maliban kung kinansela bago matapos ang billing period.';
 
   @override
+  String get premiumCookSmarterWithAi =>
+      'Magluto nang mas matalino gamit ang AI';
+
+  @override
+  String get premiumGeniusCookingPlan => 'Genius na Plano sa Pagluluto';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions =>
+      'Araw-araw na AI recipe\nsuggestions';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking =>
+      'Pagluluto batay sa\nsangkap';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'Matalinong meal\nplanning';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'Mga insight sa\nnutrisyon';
+
+  @override
+  String get premiumChooseYourPlanNew => 'Piliin ang iyong Plan';
+
+  @override
+  String get premiumUnlimitedRecipes => 'Walang limitasyong resipe, ';
+
+  @override
+  String get premiumBestValue => 'Pinakamagandang halaga';
+
+  @override
+  String get premiumPlanWeekly => 'Lingguhan';
+
+  @override
+  String get premiumPlanYearly => 'Taunan';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return 'Simulan ang 3-araw na libreng trial $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow =>
+      'I-unlock ang walang limitasyong resipe ngayon';
+
+  @override
+  String get premiumBestValueRibbon => 'PINAKAMAHUSAY';
+
+  @override
   String get discountPopupTitle => '🔥 I-unlock ang Iyong\nDish Genie PRO';
 
   @override

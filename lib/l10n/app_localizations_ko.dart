@@ -2119,6 +2119,50 @@ class AppLocalizationsKo extends AppLocalizations {
       '구매 시 Google 계정으로 청구됩니다. 결제 기간 종료 전에 취소하지 않으면 구독이 자동으로 갱신됩니다.';
 
   @override
+  String get premiumCookSmarterWithAi => 'AI로 더 스마트하게 요리하세요';
+
+  @override
+  String get premiumGeniusCookingPlan => '천재 요리 플랜';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions => '매일 AI 레시피\n추천';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking => '재료 기반\n요리';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => '스마트 식단\n계획';
+
+  @override
+  String get premiumFeatureNutritionInsights => '영양\n인사이트';
+
+  @override
+  String get premiumChooseYourPlanNew => '플랜 선택';
+
+  @override
+  String get premiumUnlimitedRecipes => '무제한 레시피, ';
+
+  @override
+  String get premiumBestValue => '최고의 가치';
+
+  @override
+  String get premiumPlanWeekly => '주간';
+
+  @override
+  String get premiumPlanYearly => '연간';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return '3일 무료 체험 시작 $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow => '지금 무제한 레시피 잠금 해제';
+
+  @override
+  String get premiumBestValueRibbon => '최고의 가치';
+
+  @override
   String get discountPopupTitle => '🔥 Dish Genie PRO\n잠금 해제';
 
   @override

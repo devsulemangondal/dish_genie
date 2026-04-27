@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200K+ uy oshpazi",
   "premiumRecipesGenerated": "👨‍🍳 1000+ retsept yaratildi",
   "premiumPaymentDisclaimer": "Sotib olishda to'lov Google hisobingizdan olinadi. To'lov muddati tugashidan oldin bekor qilinmasa, obuna avtomatik yangilanadi.",
+  "premiumCookSmarterWithAi": "AI bilan aqlliroq pishiring",
+  "premiumGeniusCookingPlan": "Genius pishirish rejasi",
+  "premiumFeatureDailyAiRecipeSuggestions": "Har kungi AI retsept\ntakliflari",
+  "premiumFeatureIngredientBasedCooking": "Ingredientlarga\nasoslangan pishirish",
+  "premiumFeatureSmartMealPlanning": "Aqlli ovqat\nrejalash",
+  "premiumFeatureNutritionInsights": "Oziqlanish\ninsaytlari",
+  "premiumChooseYourPlanNew": "Rejangizni tanlang",
+  "premiumUnlimitedRecipes": "Cheksiz retseptlar, ",
+  "premiumBestValue": "Eng yaxshi qiymat",
+  "premiumPlanWeekly": "Haftalik",
+  "premiumPlanYearly": "Yillik",
+  "premiumStartFreeTrial": "3 kunlik bepul sinovni boshlang {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Cheksiz retseptlarni hozir oching",
+  "premiumBestValueRibbon": "ENG YAXSHI",
   "discountPopupTitle": "🔥 Dish Genie PRO-ni\noching",
   "discountPopupPerMonth": "Oylik",
   "premiumPrivacyPolicy": "Maxfiylik siyosati",

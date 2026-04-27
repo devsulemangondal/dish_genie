@@ -97,6 +97,11 @@ class AdService {
       'ca-app-pub-6882687050623219/7371255644';
   static const String _productionSplashAppOpen2ndTimeIos =
       'ca-app-pub-6882687050623219/9227262791';
+  // Splash interstitial ad (Android first install / returning)
+  static const String _productionSplashInter1stTimeAndroid =
+      'ca-app-pub-6882687050623219/1089595004';
+  static const String _productionSplashInter2ndTimeAndroid =
+      'ca-app-pub-6882687050623219/5051550699';
   // Bottom banner on bottom nav screens (Android / iOS)
   static const String _productionBottomBannerAndroid =
       'ca-app-pub-6882687050623219/9130584518';
@@ -166,6 +171,20 @@ class AdService {
             );
   static String get splashInterAdUnitId =>
       _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial');
+  static String get splashInter1stTimeAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial')
+          : _getAdUnitId(
+              _productionSplashInter1stTimeAndroid,
+              testAdType: 'interstitial',
+            );
+  static String get splashInter2ndTimeAdUnitId =>
+      Platform.isIOS
+          ? _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial')
+          : _getAdUnitId(
+              _productionSplashInter2ndTimeAndroid,
+              testAdType: 'interstitial',
+            );
   static String get languageNativeAdUnitId =>
       Platform.isIOS
           ? _getAdUnitId(_productionLanguageNativeIos, testAdType: 'native')
@@ -545,6 +564,7 @@ class AdService {
     required String adUnitId,
     Function(InterstitialAd)? onAdLoaded,
     Function(LoadAdError)? onAdFailedToLoad,
+    int retryCount = 0,
   }) async {
     if (!_shouldShowAdsOnPlatform) return;
 
@@ -579,6 +599,30 @@ class AdService {
         onAdFailedToLoad: (error) {
           _interstitialAds[adType] = null;
           _isLoadingInterstitial[adType] = false;
+
+          // Retry once for common transient failures.
+          // (0 = internal error, 2 = no fill, 3 = internal/invalid request in some SDKs)
+          final shouldRetry = retryCount == 0 &&
+              (error.code == 0 || error.code == 2 || error.code == 3);
+          if (shouldRetry) {
+            if (kDebugMode) {
+              print(
+                '🔄 [AdService] Retrying interstitial load for "$adType" (retry=${retryCount + 1}) after error code ${error.code}',
+              );
+            }
+            Future.delayed(const Duration(milliseconds: 800), () {
+              // Fire-and-forget retry; show flow polls for _interstitialAds[adType].
+              loadInterstitialAdForType(
+                adType: adType,
+                adUnitId: adUnitId,
+                onAdLoaded: onAdLoaded,
+                onAdFailedToLoad: onAdFailedToLoad,
+                retryCount: 1,
+              );
+            });
+            return;
+          }
+
           onAdFailedToLoad?.call(error);
         },
       ),
@@ -592,6 +636,7 @@ class AdService {
     Function(Ad)? onAdShowed,
     Function(Ad?)? onAdFailedToShow,
     Future<void> Function()? loadAdFunction,
+    bool showLoader = true,
   }) async {
     if (!_shouldShowAdsOnPlatform) {
       onAdFailedToShow?.call(null);
@@ -698,9 +743,9 @@ class AdService {
       }
     }
 
-    // Show loader dialog first if context is provided
+    // Show loader dialog first if context is provided (optional)
     try {
-      if (context != null && context.mounted) {
+      if (showLoader && context != null && context.mounted) {
         // Capture the root navigator now (safe even if caller context unmounts later).
         rootNavigator = Navigator.of(context, rootNavigator: true);
 
@@ -731,7 +776,8 @@ class AdService {
       if (ad == null && loadAdFunction != null) {
         final completer = Completer<void>();
         int pollCount = 0;
-        const int maxPolls = 50; // 50 * 100ms = 5 seconds max
+        // Give the auction/network more time on real devices.
+        const int maxPolls = 100; // 100 * 100ms = 10 seconds max
 
         // Poll for ad to be loaded or failed (check every 100ms)
         pollTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
@@ -909,6 +955,30 @@ class AdService {
     return loadInterstitialAdForType(
       adType: 'splash',
       adUnitId: splashInterAdUnitId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+    );
+  }
+
+  static Future<void> loadSplashFirstTimeInterstitialAd({
+    Function(InterstitialAd)? onAdLoaded,
+    Function(LoadAdError)? onAdFailedToLoad,
+  }) async {
+    return loadInterstitialAdForType(
+      adType: 'splashFirstTime',
+      adUnitId: splashInter1stTimeAdUnitId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+    );
+  }
+
+  static Future<void> loadSplashReturningInterstitialAd({
+    Function(InterstitialAd)? onAdLoaded,
+    Function(LoadAdError)? onAdFailedToLoad,
+  }) async {
+    return loadInterstitialAdForType(
+      adType: 'splashReturning',
+      adUnitId: splashInter2ndTimeAdUnitId,
       onAdLoaded: onAdLoaded,
       onAdFailedToLoad: onAdFailedToLoad,
     );
@@ -1102,10 +1172,12 @@ class AdService {
       }
     }
 
-    const loadTimeout = Duration(seconds: 5);
+    // Give the ad auction enough time during app start/network variance.
+    const loadTimeout = Duration(seconds: 10);
     final completer = Completer<void>();
     AppOpenAd? ad;
     bool didComplete = false;
+    int retryCount = 0;
 
     void complete() {
       if (didComplete) return;
@@ -1116,59 +1188,88 @@ class AdService {
       onComplete();
     }
 
-    AppOpenAd.load(
-      adUnitId: splashAppOpen1stTimeAdUnitId,
-      request: const AdRequest(),
-      adLoadCallback: AppOpenAdLoadCallback(
-        onAdLoaded: (loadedAd) {
-          if (didComplete) {
-            loadedAd.dispose();
-            return;
-          }
-          ad = loadedAd;
-          ad!.fullScreenContentCallback = FullScreenContentCallback(
-            onAdShowedFullScreenContent: (_) {
-              dismissLoader(); // Dismiss loader when ad appears
-              if (kDebugMode) {
-                print('✅ [AdService] Splash first-time app open ad showed');
-              }
-            },
-            onAdDismissedFullScreenContent: (_) {
-              if (kDebugMode) {
-                print('✅ [AdService] Splash first-time app open ad dismissed');
-              }
+    void startLoad() {
+      if (didComplete) return;
+      if (kDebugMode) {
+        print(
+          '📥 [AdService] Splash first-time app open startLoad(retry=$retryCount) adUnitId=$splashAppOpen1stTimeAdUnitId',
+        );
+      }
+
+      AppOpenAd.load(
+        adUnitId: splashAppOpen1stTimeAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: AppOpenAdLoadCallback(
+          onAdLoaded: (loadedAd) {
+            if (didComplete) {
+              loadedAd.dispose();
+              return;
+            }
+            ad = loadedAd;
+            ad!.fullScreenContentCallback = FullScreenContentCallback(
+              onAdShowedFullScreenContent: (_) {
+                dismissLoader(); // Dismiss loader when ad appears
+                if (kDebugMode) {
+                  print('✅ [AdService] Splash first-time app open ad showed');
+                }
+              },
+              onAdDismissedFullScreenContent: (_) {
+                if (kDebugMode) {
+                  print('✅ [AdService] Splash first-time app open ad dismissed');
+                }
+                ad?.dispose();
+                ad = null;
+                complete();
+              },
+              onAdFailedToShowFullScreenContent: (_, error) {
+                if (kDebugMode) {
+                  print(
+                    '❌ [AdService] Splash first-time app open ad failed to show: $error',
+                  );
+                }
+                ad?.dispose();
+                ad = null;
+                complete();
+              },
+            );
+            if (context.mounted) {
+              ad!.show();
+            } else {
               ad?.dispose();
-              ad = null;
               complete();
-            },
-            onAdFailedToShowFullScreenContent: (_, error) {
+            }
+          },
+          onAdFailedToLoad: (error) {
+            if (kDebugMode) {
+              print(
+                '❌ [AdService] Splash first-time app open ad failed to load: ${error.code} ${error.message}',
+              );
+            }
+
+            // Retry once for common transient failures (network / internal / SDK timing).
+            // If it's truly a configuration problem, this won't help, but it improves resilience.
+            final shouldRetry = retryCount < 1 &&
+                (error.code == 0 || error.code == 2 || error.code == 3);
+            if (shouldRetry) {
+              retryCount++;
               if (kDebugMode) {
                 print(
-                  '❌ [AdService] Splash first-time app open ad failed to show: $error',
+                  '🔄 [AdService] Retrying splash first-time app open ad load (retry=$retryCount)...',
                 );
               }
-              ad?.dispose();
-              ad = null;
-              complete();
-            },
-          );
-          if (context.mounted) {
-            ad!.show();
-          } else {
-            ad?.dispose();
+              Future.delayed(const Duration(milliseconds: 800), () {
+                if (!didComplete) startLoad();
+              });
+              return;
+            }
+
             complete();
-          }
-        },
-        onAdFailedToLoad: (error) {
-          if (kDebugMode) {
-            print(
-              '❌ [AdService] Splash first-time app open ad failed to load: ${error.code} ${error.message}',
-            );
-          }
-          complete();
-        },
-      ),
-    );
+          },
+        ),
+      );
+    }
+
+    startLoad();
 
     // Timeout: proceed if ad doesn't load in time
     Future.delayed(loadTimeout, () {
@@ -1239,10 +1340,12 @@ class AdService {
       }
     }
 
-    const loadTimeout = Duration(seconds: 5);
+    // Give the ad auction enough time during app start/network variance.
+    const loadTimeout = Duration(seconds: 10);
     final completer = Completer<void>();
     AppOpenAd? ad;
     bool didComplete = false;
+    int retryCount = 0;
 
     void complete() {
       if (didComplete) return;
@@ -1253,63 +1356,91 @@ class AdService {
       onComplete();
     }
 
-    AppOpenAd.load(
-      adUnitId: splashAppOpen2ndTimeAdUnitId,
-      request: const AdRequest(),
-      adLoadCallback: AppOpenAdLoadCallback(
-        onAdLoaded: (loadedAd) {
-          if (didComplete) {
-            loadedAd.dispose();
-            return;
-          }
-          ad = loadedAd;
-          ad!.fullScreenContentCallback = FullScreenContentCallback(
-            onAdShowedFullScreenContent: (_) {
-              dismissLoader();
-              if (kDebugMode) {
-                print(
-                  '✅ [AdService] Splash returning user app open ad showed',
-                );
-              }
-            },
-            onAdDismissedFullScreenContent: (_) {
-              if (kDebugMode) {
-                print(
-                  '✅ [AdService] Splash returning user app open ad dismissed',
-                );
-              }
-              ad?.dispose();
-              ad = null;
-              complete();
-            },
-            onAdFailedToShowFullScreenContent: (_, error) {
-              if (kDebugMode) {
-                print(
-                  '❌ [AdService] Splash returning user app open ad failed to show: $error',
-                );
-              }
-              ad?.dispose();
-              ad = null;
-              complete();
-            },
-          );
-          if (context.mounted) {
-            ad!.show();
-          } else {
-            ad?.dispose();
-            complete();
-          }
-        },
-        onAdFailedToLoad: (error) {
-          if (kDebugMode) {
-            print(
-              '❌ [AdService] Splash returning user app open ad failed to load: ${error.code} ${error.message}',
+    void startLoad() {
+      if (didComplete) return;
+      if (kDebugMode) {
+        print(
+          '📥 [AdService] Splash returning user app open startLoad(retry=$retryCount) adUnitId=$splashAppOpen2ndTimeAdUnitId',
+        );
+      }
+
+      AppOpenAd.load(
+        adUnitId: splashAppOpen2ndTimeAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: AppOpenAdLoadCallback(
+          onAdLoaded: (loadedAd) {
+            if (didComplete) {
+              loadedAd.dispose();
+              return;
+            }
+            ad = loadedAd;
+            ad!.fullScreenContentCallback = FullScreenContentCallback(
+              onAdShowedFullScreenContent: (_) {
+                dismissLoader();
+                if (kDebugMode) {
+                  print(
+                    '✅ [AdService] Splash returning user app open ad showed',
+                  );
+                }
+              },
+              onAdDismissedFullScreenContent: (_) {
+                if (kDebugMode) {
+                  print(
+                    '✅ [AdService] Splash returning user app open ad dismissed',
+                  );
+                }
+                ad?.dispose();
+                ad = null;
+                complete();
+              },
+              onAdFailedToShowFullScreenContent: (_, error) {
+                if (kDebugMode) {
+                  print(
+                    '❌ [AdService] Splash returning user app open ad failed to show: $error',
+                  );
+                }
+                ad?.dispose();
+                ad = null;
+                complete();
+              },
             );
-          }
-          complete();
-        },
-      ),
-    );
+            if (context.mounted) {
+              ad!.show();
+            } else {
+              ad?.dispose();
+              complete();
+            }
+          },
+          onAdFailedToLoad: (error) {
+            if (kDebugMode) {
+              print(
+                '❌ [AdService] Splash returning user app open ad failed to load: ${error.code} ${error.message}',
+              );
+            }
+
+            // Retry once for common transient failures (network / internal / SDK timing).
+            final shouldRetry = retryCount < 1 &&
+                (error.code == 0 || error.code == 2 || error.code == 3);
+            if (shouldRetry) {
+              retryCount++;
+              if (kDebugMode) {
+                print(
+                  '🔄 [AdService] Retrying splash returning user app open ad load (retry=$retryCount)...',
+                );
+              }
+              Future.delayed(const Duration(milliseconds: 800), () {
+                if (!didComplete) startLoad();
+              });
+              return;
+            }
+
+            complete();
+          },
+        ),
+      );
+    }
+
+    startLoad();
 
     Future.delayed(loadTimeout, () {
       if (!didComplete) {
@@ -1323,6 +1454,38 @@ class AdService {
     });
 
     await completer.future;
+  }
+
+  /// Load and show splash interstitial ad on first install.
+  /// Android RC key: splash_inter_1sttime
+  static Future<void> loadAndShowSplashFirstTimeInterstitialAd({
+    required BuildContext context,
+    required VoidCallback onComplete,
+  }) async {
+    await showInterstitialAdForType(
+      adType: 'splashFirstTime',
+      context: context,
+      loadAdFunction: () => loadSplashFirstTimeInterstitialAd(),
+      showLoader: false,
+      onAdDismissed: onComplete,
+      onAdFailedToShow: (_) => onComplete(),
+    );
+  }
+
+  /// Load and show splash interstitial ad for returning users.
+  /// Android RC key: splash_inter_2ndtime
+  static Future<void> loadAndShowSplashReturningUserInterstitialAd({
+    required BuildContext context,
+    required VoidCallback onComplete,
+  }) async {
+    await showInterstitialAdForType(
+      adType: 'splashReturning',
+      context: context,
+      loadAdFunction: () => loadSplashReturningInterstitialAd(),
+      showLoader: false,
+      onAdDismissed: onComplete,
+      onAdFailedToShow: (_) => onComplete(),
+    );
   }
 
   static void showAppOpenAd({

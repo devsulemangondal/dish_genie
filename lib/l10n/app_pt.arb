@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200K+ cozinheiros caseiros",
   "premiumRecipesGenerated": "👨‍🍳 1000+ receitas geradas",
   "premiumPaymentDisclaimer": "O pagamento será cobrado na sua conta Google na compra. A assinatura é renovada automaticamente, a menos que cancelada antes do fim do período de cobrança.",
+  "premiumCookSmarterWithAi": "Cozinhe de forma mais inteligente com IA",
+  "premiumGeniusCookingPlan": "Plano de Cozinha Genial",
+  "premiumFeatureDailyAiRecipeSuggestions": "Sugestões diárias de\nreceitas com IA",
+  "premiumFeatureIngredientBasedCooking": "Cozinha baseada em\ningredientes",
+  "premiumFeatureSmartMealPlanning": "Planeamento de refeições\ninteligente",
+  "premiumFeatureNutritionInsights": "Insights de\nnutrição",
+  "premiumChooseYourPlanNew": "Escolha o seu plano",
+  "premiumUnlimitedRecipes": "Receitas ilimitadas, ",
+  "premiumBestValue": "Melhor valor",
+  "premiumPlanWeekly": "Semanal",
+  "premiumPlanYearly": "Anual",
+  "premiumStartFreeTrial": "Comece o teste grátis de 3 dias {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Desbloquear receitas ilimitadas agora",
+  "premiumBestValueRibbon": "MELHOR VALOR",
   "discountPopupTitle": "🔥 Desbloqueie seu\nDish Genie PRO",
   "discountPopupPerMonth": "Por mês",
   "premiumPrivacyPolicy": "Política de Privacidade",

@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200K+ เชฟมือสมัครเล่น",
   "premiumRecipesGenerated": "👨‍🍳 สร้าง 1000+ รูปแบบ",
   "premiumPaymentDisclaimer": "จะเรียกเก็บเงินจากบัญชี Google ของคุณเมื่อซื้อ การสมัครสมาชิกจะต่ออายุอัตโนมัติ เว้นแต่จะยกเลิกก่อนสิ้นช่วงการเรียกเก็บเงิน",
+  "premiumCookSmarterWithAi": "ทำอาหารอย่างฉลาดด้วย AI",
+  "premiumGeniusCookingPlan": "แผนทำอาหารอัจฉริยะ",
+  "premiumFeatureDailyAiRecipeSuggestions": "คำแนะนำสูตร AI\nรายวัน",
+  "premiumFeatureIngredientBasedCooking": "ทำอาหารจาก\nวัตถุดิบ",
+  "premiumFeatureSmartMealPlanning": "วางแผนมื้ออาหาร\nอัจฉริยะ",
+  "premiumFeatureNutritionInsights": "ข้อมูลเชิงลึก\nโภชนาการ",
+  "premiumChooseYourPlanNew": "เลือกแผนของคุณ",
+  "premiumUnlimitedRecipes": "สูตรไม่จำกัด, ",
+  "premiumBestValue": "คุ้มค่าที่สุด",
+  "premiumPlanWeekly": "รายสัปดาห์",
+  "premiumPlanYearly": "รายปี",
+  "premiumStartFreeTrial": "เริ่มทดลองใช้งานฟรี 3 วัน {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "ปลดล็อกสูตรไม่จำกัดตอนนี้",
+  "premiumBestValueRibbon": "คุ้มสุด",
   "discountPopupTitle": "🔥 ปลดล็อก Dish Genie PRO\nของคุณ",
   "discountPopupPerMonth": "ต่อเดือน",
   "premiumPrivacyPolicy": "นโยบายความเป็นส่วนตัว",

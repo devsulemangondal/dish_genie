@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200K+ ev aşçısı",
   "premiumRecipesGenerated": "👨‍🍳 1000+ tarif oluşturuldu",
   "premiumPaymentDisclaimer": "Satın alma sırasında ödeme Google hesabınızdan çekilecektir. Faturalama dönemi bitmeden iptal edilmediği sürece abonelik otomatik olarak yenilenir.",
+  "premiumCookSmarterWithAi": "Yapay zekâ ile daha akıllı pişirin",
+  "premiumGeniusCookingPlan": "Dâhi Pişirme Planı",
+  "premiumFeatureDailyAiRecipeSuggestions": "Günlük AI tarif\nönerileri",
+  "premiumFeatureIngredientBasedCooking": "Malzeme\ntabanlı pişirme",
+  "premiumFeatureSmartMealPlanning": "Akıllı öğün\nplanlama",
+  "premiumFeatureNutritionInsights": "Beslenme\niçgörüleri",
+  "premiumChooseYourPlanNew": "Planınızı seçin",
+  "premiumUnlimitedRecipes": "Sınırsız tarif, ",
+  "premiumBestValue": "En iyi değer",
+  "premiumPlanWeekly": "Haftalık",
+  "premiumPlanYearly": "Yıllık",
+  "premiumStartFreeTrial": "3 günlük ücretsiz denemeyi başlatın {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Sınırsız tarifleri şimdi açın",
+  "premiumBestValueRibbon": "EN İYİ DEĞER",
   "discountPopupTitle": "🔥 Dish Genie PRO'nuzu\nAçın",
   "discountPopupPerMonth": "Aylık",
   "premiumPrivacyPolicy": "Gizlilik Politikası",

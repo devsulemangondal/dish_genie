@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 20만+ 홈 셰프",
   "premiumRecipesGenerated": "👨‍🍳 1000+ 레시피 생성됨",
   "premiumPaymentDisclaimer": "구매 시 Google 계정으로 청구됩니다. 결제 기간 종료 전에 취소하지 않으면 구독이 자동으로 갱신됩니다.",
+  "premiumCookSmarterWithAi": "AI로 더 스마트하게 요리하세요",
+  "premiumGeniusCookingPlan": "천재 요리 플랜",
+  "premiumFeatureDailyAiRecipeSuggestions": "매일 AI 레시피\n추천",
+  "premiumFeatureIngredientBasedCooking": "재료 기반\n요리",
+  "premiumFeatureSmartMealPlanning": "스마트 식단\n계획",
+  "premiumFeatureNutritionInsights": "영양\n인사이트",
+  "premiumChooseYourPlanNew": "플랜 선택",
+  "premiumUnlimitedRecipes": "무제한 레시피, ",
+  "premiumBestValue": "최고의 가치",
+  "premiumPlanWeekly": "주간",
+  "premiumPlanYearly": "연간",
+  "premiumStartFreeTrial": "3일 무료 체험 시작 {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "지금 무제한 레시피 잠금 해제",
+  "premiumBestValueRibbon": "최고의 가치",
   "discountPopupTitle": "🔥 Dish Genie PRO\n잠금 해제",
   "discountPopupPerMonth": "월간",
   "premiumPrivacyPolicy": "개인 정보 보호 정책",

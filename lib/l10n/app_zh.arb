@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 20万+ 家庭厨师",
   "premiumRecipesGenerated": "👨‍🍳 1000+ 菜谱已生成",
   "premiumPaymentDisclaimer": "购买时将从您的 Google 账户扣款。除非在账单期结束前取消，否则订阅将自动续订。",
+  "premiumCookSmarterWithAi": "用AI更聪明地做饭",
+  "premiumGeniusCookingPlan": "天才烹饪计划",
+  "premiumFeatureDailyAiRecipeSuggestions": "每日AI食谱\n推荐",
+  "premiumFeatureIngredientBasedCooking": "基于食材的\n烹饪",
+  "premiumFeatureSmartMealPlanning": "智能餐食\n规划",
+  "premiumFeatureNutritionInsights": "营养\n洞察",
+  "premiumChooseYourPlanNew": "选择你的方案",
+  "premiumUnlimitedRecipes": "无限食谱，",
+  "premiumBestValue": "超值之选",
+  "premiumPlanWeekly": "每周",
+  "premiumPlanYearly": "每年",
+  "premiumStartFreeTrial": "开始3天免费试用 {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "立即解锁无限食谱",
+  "premiumBestValueRibbon": "超值",
   "discountPopupTitle": "🔥 解锁您的\nDish Genie 专业版",
   "discountPopupPerMonth": "每月",
   "premiumPrivacyPolicy": "隐私政策",

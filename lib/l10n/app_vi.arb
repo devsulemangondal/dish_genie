@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200K+ đầu bếp gia đình",
   "premiumRecipesGenerated": "👨‍🍳 1000+ công thức đã tạo",
   "premiumPaymentDisclaimer": "Thanh toán sẽ được trừ vào tài khoản Google của bạn khi mua. Đăng ký tự động gia hạn trừ khi hủy trước khi kết thúc kỳ thanh toán.",
+  "premiumCookSmarterWithAi": "Nấu ăn thông minh hơn với AI",
+  "premiumGeniusCookingPlan": "Gói Nấu Ăn Thiên Tài",
+  "premiumFeatureDailyAiRecipeSuggestions": "Gợi ý công thức AI\nhằng ngày",
+  "premiumFeatureIngredientBasedCooking": "Nấu ăn dựa trên\nnguyên liệu",
+  "premiumFeatureSmartMealPlanning": "Lên kế hoạch bữa ăn\nthông minh",
+  "premiumFeatureNutritionInsights": "Thông tin\ndinh dưỡng",
+  "premiumChooseYourPlanNew": "Chọn gói của bạn",
+  "premiumUnlimitedRecipes": "Công thức không giới hạn, ",
+  "premiumBestValue": "Giá trị tốt nhất",
+  "premiumPlanWeekly": "Hàng tuần",
+  "premiumPlanYearly": "Hàng năm",
+  "premiumStartFreeTrial": "Bắt đầu dùng thử miễn phí 3 ngày {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Mở khóa công thức không giới hạn ngay",
+  "premiumBestValueRibbon": "TỐT NHẤT",
   "discountPopupTitle": "🔥 Mở khóa Dish Genie PRO\ncủa bạn",
   "discountPopupPerMonth": "Mỗi tháng",
   "premiumPrivacyPolicy": "Chính sách bảo mật",

@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200K+ juru masak rumah",
   "premiumRecipesGenerated": "👨‍🍳 1000+ resipi dijana",
   "premiumPaymentDisclaimer": "Bayaran akan dikenakan pada akaun Google anda semasa pembelian. Langganan diperbaharui secara automatik melainkan dibatalkan sebelum tempoh pengebilan berakhir.",
+  "premiumCookSmarterWithAi": "Masak lebih bijak dengan AI",
+  "premiumGeniusCookingPlan": "Pelan Memasak Genius",
+  "premiumFeatureDailyAiRecipeSuggestions": "Cadangan resipi AI\nharian",
+  "premiumFeatureIngredientBasedCooking": "Memasak berasaskan\nbahan",
+  "premiumFeatureSmartMealPlanning": "Perancangan hidangan\npintar",
+  "premiumFeatureNutritionInsights": "Wawasan\npemakanan",
+  "premiumChooseYourPlanNew": "Pilih pelan anda",
+  "premiumUnlimitedRecipes": "Resipi tanpa had, ",
+  "premiumBestValue": "Nilai terbaik",
+  "premiumPlanWeekly": "Mingguan",
+  "premiumPlanYearly": "Tahunan",
+  "premiumStartFreeTrial": "Mulakan percubaan percuma 3 hari {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Buka resipi tanpa had sekarang",
+  "premiumBestValueRibbon": "NILAI TERBAIK",
   "discountPopupTitle": "🔥 Buka Kunci Dish Genie PRO\nAnda",
   "discountPopupPerMonth": "Sebulan",
   "premiumPrivacyPolicy": "Dasar Privasi",

@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200K+ thuiskoks",
   "premiumRecipesGenerated": "👨‍🍳 1000+ recepten gegenereerd",
   "premiumPaymentDisclaimer": "Betaling wordt bij aankoop in rekening gebracht op uw Google-account. Het abonnement wordt automatisch verlengd tenzij geannuleerd vóór het einde van de factureringsperiode.",
+  "premiumCookSmarterWithAi": "Kook slimmer met AI",
+  "premiumGeniusCookingPlan": "Geniaal kookplan",
+  "premiumFeatureDailyAiRecipeSuggestions": "Dagelijkse AI-recept\nsuggesties",
+  "premiumFeatureIngredientBasedCooking": "Ingrediënt-\ngebaseerd koken",
+  "premiumFeatureSmartMealPlanning": "Slimme maaltijd\nplanning",
+  "premiumFeatureNutritionInsights": "Voedings-\ninzichten",
+  "premiumChooseYourPlanNew": "Kies je plan",
+  "premiumUnlimitedRecipes": "Onbeperkte recepten, ",
+  "premiumBestValue": "Beste waarde",
+  "premiumPlanWeekly": "Wekelijks",
+  "premiumPlanYearly": "Jaarlijks",
+  "premiumStartFreeTrial": "Start 3 dagen gratis proefperiode {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Ontgrendel nu onbeperkte recepten",
+  "premiumBestValueRibbon": "BESTE WAARDE",
   "discountPopupTitle": "🔥 Ontgrendel uw\nDish Genie PRO",
   "discountPopupPerMonth": "Per maand",
   "premiumPrivacyPolicy": "Privacybeleid",

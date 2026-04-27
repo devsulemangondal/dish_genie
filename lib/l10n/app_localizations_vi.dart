@@ -2162,6 +2162,54 @@ class AppLocalizationsVi extends AppLocalizations {
       'Thanh toán sẽ được trừ vào tài khoản Google của bạn khi mua. Đăng ký tự động gia hạn trừ khi hủy trước khi kết thúc kỳ thanh toán.';
 
   @override
+  String get premiumCookSmarterWithAi => 'Nấu ăn thông minh hơn với AI';
+
+  @override
+  String get premiumGeniusCookingPlan => 'Gói Nấu Ăn Thiên Tài';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions =>
+      'Gợi ý công thức AI\nhằng ngày';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking =>
+      'Nấu ăn dựa trên\nnguyên liệu';
+
+  @override
+  String get premiumFeatureSmartMealPlanning =>
+      'Lên kế hoạch bữa ăn\nthông minh';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'Thông tin\ndinh dưỡng';
+
+  @override
+  String get premiumChooseYourPlanNew => 'Chọn gói của bạn';
+
+  @override
+  String get premiumUnlimitedRecipes => 'Công thức không giới hạn, ';
+
+  @override
+  String get premiumBestValue => 'Giá trị tốt nhất';
+
+  @override
+  String get premiumPlanWeekly => 'Hàng tuần';
+
+  @override
+  String get premiumPlanYearly => 'Hàng năm';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return 'Bắt đầu dùng thử miễn phí 3 ngày $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow =>
+      'Mở khóa công thức không giới hạn ngay';
+
+  @override
+  String get premiumBestValueRibbon => 'TỐT NHẤT';
+
+  @override
   String get discountPopupTitle => '🔥 Mở khóa Dish Genie PRO\ncủa bạn';
 
   @override

@@ -781,6 +781,28 @@
   "premiumHomeCooks": "🌎 200K+ Home Cooks",
   "premiumRecipesGenerated": "👨‍🍳 1000+ Recipes Generated",
   "premiumPaymentDisclaimer": "Payment will be charged to your Google Account at purchase. Subscription renews automatically unless canceled before the billing period ends.",
+  "premiumCookSmarterWithAi": "Cook Smarter with AI",
+  "premiumGeniusCookingPlan": "Genius Cooking Plan",
+  "premiumFeatureDailyAiRecipeSuggestions": "Daily AI recipe\nsuggestions",
+  "premiumFeatureIngredientBasedCooking": "Ingredient-\nbased cooking",
+  "premiumFeatureSmartMealPlanning": "Smart meal\nplanning",
+  "premiumFeatureNutritionInsights": "Nutrition\ninsights",
+  "premiumChooseYourPlanNew": "Choose your Plan",
+  "premiumUnlimitedRecipes": "Unlimited Recipes, ",
+  "premiumBestValue": "Best value",
+  "premiumPlanWeekly": "Weekly",
+  "premiumPlanYearly": "Yearly",
+  "premiumStartFreeTrial": "Start 3-days free trial {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Unlock Unlimited Recipes Now",
+  "premiumBestValueRibbon": "BEST VALUE",
   "discountPopupTitle": "🔥 Unlock Your\nDish Genie PRO",
   "discountPopupPerMonth": "Per Month"
 }

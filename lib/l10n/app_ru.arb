@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 200K+ домашних поваров",
   "premiumRecipesGenerated": "👨‍🍳 1000+ рецептов создано",
   "premiumPaymentDisclaimer": "Оплата будет списана с вашей учётной записи Google при покупке. Подписка продлевается автоматически, если не отменена до окончания платёжного периода.",
+  "premiumCookSmarterWithAi": "Готовьте умнее с ИИ",
+  "premiumGeniusCookingPlan": "Гениальный план готовки",
+  "premiumFeatureDailyAiRecipeSuggestions": "Ежедневные ИИ\nрекомендации рецептов",
+  "premiumFeatureIngredientBasedCooking": "Готовка на основе\nингредиентов",
+  "premiumFeatureSmartMealPlanning": "Умное планирование\nпитания",
+  "premiumFeatureNutritionInsights": "Питательные\nинсайты",
+  "premiumChooseYourPlanNew": "Выберите план",
+  "premiumUnlimitedRecipes": "Безлимитные рецепты, ",
+  "premiumBestValue": "Лучшая выгода",
+  "premiumPlanWeekly": "Еженедельно",
+  "premiumPlanYearly": "Ежегодно",
+  "premiumStartFreeTrial": "Начните 3‑дневный бесплатный пробный период {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "Открыть безлимитные рецепты сейчас",
+  "premiumBestValueRibbon": "ЛУЧШАЯ ВЫГОДА",
   "discountPopupTitle": "🔥 Разблокируйте свой\nDish Genie PRO",
   "discountPopupPerMonth": "В месяц",
   "premiumPrivacyPolicy": "Политика конфиденциальности",

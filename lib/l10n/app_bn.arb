@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 ২০০K+ ঘরোয়া শেফ",
   "premiumRecipesGenerated": "👨‍🍳 ১০০০+ রেসিপি তৈরি হয়েছে",
   "premiumPaymentDisclaimer": "ক্রয়ের সময় আপনার Google অ্যাকাউন্টে চার্জ করা হবে। বিলিং পিরিয়ড শেষ হওয়ার আগে বাতিল না করা পর্যন্ত সাবস্ক্রিপশন স্বয়ংক্রিয়ভাবে নবায়ন হবে।",
+  "premiumCookSmarterWithAi": "AI দিয়ে আরও স্মার্টভাবে রান্না করুন",
+  "premiumGeniusCookingPlan": "জিনিয়াস কুকিং প্ল্যান",
+  "premiumFeatureDailyAiRecipeSuggestions": "দৈনিক AI রেসিপি\nসাজেশন",
+  "premiumFeatureIngredientBasedCooking": "উপকরণ-\nভিত্তিক রান্না",
+  "premiumFeatureSmartMealPlanning": "স্মার্ট মিল\nপ্ল্যানিং",
+  "premiumFeatureNutritionInsights": "পুষ্টি\nইনসাইটস",
+  "premiumChooseYourPlanNew": "আপনার প্ল্যান বেছে নিন",
+  "premiumUnlimitedRecipes": "অসীম রেসিপি, ",
+  "premiumBestValue": "সেরা মূল্য",
+  "premiumPlanWeekly": "সাপ্তাহিক",
+  "premiumPlanYearly": "বার্ষিক",
+  "premiumStartFreeTrial": "৩ দিনের ফ্রি ট্রায়াল শুরু করুন {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "এখনই অসীম রেসিপি আনলক করুন",
+  "premiumBestValueRibbon": "সেরা",
   "discountPopupTitle": "🔥 আপনার\nDish Genie PRO আনলক করুন",
   "discountPopupPerMonth": "প্রতি মাসে",
   "premiumPrivacyPolicy": "গোপনীয়তা নীতি",

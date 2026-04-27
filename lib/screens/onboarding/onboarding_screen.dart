@@ -167,114 +167,126 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                 minHeight: constraints.maxHeight,
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     // Mascot with float animation
                                     AnimatedBuilder(
-                              animation: _floatAnimation,
-                              builder: (context, child) {
-                                return Transform.translate(
-                                  offset: Offset(0, _floatAnimation.value),
-                                  child: const GenieMascot(
-                                    size: GenieMascotSize.xl,
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 32),
-                            // Icon with scale animation
-                            AnimatedBuilder(
-                              animation: _scaleAnimation,
-                              builder: (context, child) {
-                                return Transform.scale(
-                                  scale: _scaleAnimation.value,
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: step['gradient'] as List<Color>,
-                                      ),
-                                      borderRadius: BorderRadius.circular(24),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color:
-                                              (step['gradient']
-                                                      as List<Color>)[0]
-                                                  .withOpacity(0.3),
-                                          blurRadius: 20,
-                                          spreadRadius: 2,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Icon(
-                                      step['icon'] as IconData,
-                                      size: 40,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 24),
-                            // Title with slide animation
-                            AnimatedBuilder(
-                              animation: _slideAnimation,
-                              builder: (context, child) {
-                                return SlideTransition(
-                                  position: _slideAnimation,
-                                  child: FadeTransition(
-                                    opacity: _slideController,
-                                    child: Text(
-                                      context.t(step['titleKey'] as String),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
+                                      animation: _floatAnimation,
+                                      builder: (context, child) {
+                                        return Transform.translate(
+                                          offset: Offset(
+                                            0,
+                                            _floatAnimation.value,
                                           ),
-                                      textAlign: TextAlign.center,
+                                          child: const GenieMascot(
+                                            size: GenieMascotSize.xl,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 12),
-                            // Description with slide animation
-                            AnimatedBuilder(
-                              animation: _slideAnimation,
-                              builder: (context, child) {
-                                return SlideTransition(
-                                  position: _slideAnimation,
-                                  child: FadeTransition(
-                                    opacity: _slideController,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                      ),
-                                      child: Text(
-                                        context.t(
-                                          step['descriptionKey'] as String,
-                                        ),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.copyWith(
-                                              color: Colors.grey[600],
-                                              height: 1.6,
+                                    const SizedBox(height: 32),
+                                    // Icon with scale animation
+                                    AnimatedBuilder(
+                                      animation: _scaleAnimation,
+                                      builder: (context, child) {
+                                        return Transform.scale(
+                                          scale: _scaleAnimation.value,
+                                          child: Container(
+                                            width: 80,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors:
+                                                    step['gradient']
+                                                        as List<Color>,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color:
+                                                      (step['gradient']
+                                                              as List<Color>)[0]
+                                                          .withOpacity(0.3),
+                                                  blurRadius: 20,
+                                                  spreadRadius: 2,
+                                                ),
+                                              ],
                                             ),
-                                        textAlign: TextAlign.center,
-                                      ),
+                                            child: Icon(
+                                              step['icon'] as IconData,
+                                              size: 40,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 24),
+                                    const SizedBox(height: 24),
+                                    // Title with slide animation
+                                    AnimatedBuilder(
+                                      animation: _slideAnimation,
+                                      builder: (context, child) {
+                                        return SlideTransition(
+                                          position: _slideAnimation,
+                                          child: FadeTransition(
+                                            opacity: _slideController,
+                                            child: Text(
+                                              context.t(
+                                                step['titleKey'] as String,
+                                              ),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineMedium
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(height: 12),
+                                    // Description with slide animation
+                                    AnimatedBuilder(
+                                      animation: _slideAnimation,
+                                      builder: (context, child) {
+                                        return SlideTransition(
+                                          position: _slideAnimation,
+                                          child: FadeTransition(
+                                            opacity: _slideController,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 16,
+                                                  ),
+                                              child: Text(
+                                                context.t(
+                                                  step['descriptionKey']
+                                                      as String,
+                                                ),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                      color: Colors.grey[600],
+                                                      height: 1.6,
+                                                    ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(height: 24),
                                   ],
                                 ),
                               ),

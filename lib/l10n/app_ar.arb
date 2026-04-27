@@ -767,6 +767,28 @@
   "premiumHomeCooks": "🌎 أكثر من 200 ألف طباخ منزلي",
   "premiumRecipesGenerated": "👨‍🍳 أكثر من 1000 وصفة منشأة",
   "premiumPaymentDisclaimer": "سيتم خصم الدفع من حساب Google عند الشراء. تتجدد الاشتراك تلقائيًا ما لم يتم الإلغاء قبل نهاية فترة الفوترة.",
+  "premiumCookSmarterWithAi": "اطبخ بذكاء مع الذكاء الاصطناعي",
+  "premiumGeniusCookingPlan": "خطة طبخ عبقرية",
+  "premiumFeatureDailyAiRecipeSuggestions": "اقتراحات وصفات ذكاء اصطناعي\nيومية",
+  "premiumFeatureIngredientBasedCooking": "طبخ قائم على\nالمكونات",
+  "premiumFeatureSmartMealPlanning": "تخطيط وجبات\nذكي",
+  "premiumFeatureNutritionInsights": "رؤى\nالتغذية",
+  "premiumChooseYourPlanNew": "اختر خطتك",
+  "premiumUnlimitedRecipes": "وصفات غير محدودة، ",
+  "premiumBestValue": "أفضل قيمة",
+  "premiumPlanWeekly": "أسبوعي",
+  "premiumPlanYearly": "سنوي",
+  "premiumStartFreeTrial": "ابدأ تجربة مجانية لمدة 3 أيام {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "افتح وصفات غير محدودة الآن",
+  "premiumBestValueRibbon": "أفضل قيمة",
   "discountPopupTitle": "🔥 افتح قفل\nDish Genie PRO",
   "discountPopupPerMonth": "شهرياً"
 }

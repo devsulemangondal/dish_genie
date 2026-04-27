@@ -2153,6 +2153,52 @@ class AppLocalizationsEn extends AppLocalizations {
       'Payment will be charged to your Google Account at purchase. Subscription renews automatically unless canceled before the billing period ends.';
 
   @override
+  String get premiumCookSmarterWithAi => 'Cook Smarter with AI';
+
+  @override
+  String get premiumGeniusCookingPlan => 'Genius Cooking Plan';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions =>
+      'Daily AI recipe\nsuggestions';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking =>
+      'Ingredient-\nbased cooking';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'Smart meal\nplanning';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'Nutrition\ninsights';
+
+  @override
+  String get premiumChooseYourPlanNew => 'Choose your Plan';
+
+  @override
+  String get premiumUnlimitedRecipes => 'Unlimited Recipes, ';
+
+  @override
+  String get premiumBestValue => 'Best value';
+
+  @override
+  String get premiumPlanWeekly => 'Weekly';
+
+  @override
+  String get premiumPlanYearly => 'Yearly';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return 'Start 3-days free trial $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow => 'Unlock Unlimited Recipes Now';
+
+  @override
+  String get premiumBestValueRibbon => 'BEST VALUE';
+
+  @override
   String get discountPopupTitle => '🔥 Unlock Your\nDish Genie PRO';
 
   @override

@@ -2163,6 +2163,52 @@ class AppLocalizationsUr extends AppLocalizations {
       'خریداری پر آپ کے Google اکاؤنٹ سے ادائیگی وصول کی جائے گی۔ بلنگ کی مدت ختم ہونے سے پہلے منسوخ نہ کیے جانے پر سبسکرپشن خود کار طریقے سے تجدید ہو گی۔';
 
   @override
+  String get premiumCookSmarterWithAi => 'AI کے ساتھ زیادہ سمجھداری سے پکائیں';
+
+  @override
+  String get premiumGeniusCookingPlan => 'جینیئس ککنگ پلان';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions =>
+      'روزانہ AI ریسیپی\nتجاویز';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking => 'اجزاء پر\nمبنی پکانا';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'سمارٹ میل\nپلاننگ';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'غذائیت\nاندرونیاں';
+
+  @override
+  String get premiumChooseYourPlanNew => 'اپنا پلان منتخب کریں';
+
+  @override
+  String get premiumUnlimitedRecipes => 'لامحدود ریسیپیز، ';
+
+  @override
+  String get premiumBestValue => 'بہترین قیمت';
+
+  @override
+  String get premiumPlanWeekly => 'ہفتہ وار';
+
+  @override
+  String get premiumPlanYearly => 'سالانہ';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return '3 دن کا مفت ٹرائل شروع کریں $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow =>
+      'ابھی لامحدود ریسیپیز انلاک کریں';
+
+  @override
+  String get premiumBestValueRibbon => 'بہترین قیمت';
+
+  @override
   String get discountPopupTitle => '🔥 اپنا Dish Genie PRO\nآزاد کریں';
 
   @override

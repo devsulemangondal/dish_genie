@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+// ignore_for_file: unused_element
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,7 +50,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   bool _showMorePlansExpanded = false;
 
   /// Selected plan: 'annual' or 'weekly'
-  String _selectedPlanId = 'annual';
+  String _selectedPlanId = 'yearly';
 
   final GlobalKey _scrollContentKey = GlobalKey();
 
@@ -563,143 +565,98 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bg = isDark ? AppColors.backgroundDark : const Color(0xFFF9F6F1);
+
+    final selectedProduct = _selectedPlanId == 'yearly'
+        ? annualProduct
+        : weeklyProduct;
+
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: isDark
-            ? AppColors.backgroundDark
-            : AppColors.background,
+        backgroundColor: bg,
         body: Stack(
           children: [
-            // Column: scrollable content + sticky bottom bar
             SafeArea(
-              top: false,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final screenWidth = constraints.maxWidth;
-                  final contentWidth = screenWidth - 32;
-
-                  return Stack(
-                    children: [
-                      // Scrollable content (extends behind sticky bar)
-                      SingleChildScrollView(
-                        physics: const ClampingScrollPhysics(),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            bottom:
-                                (!isPremium ? 100 : 8) +
-                                MediaQuery.of(context).padding.bottom,
+              bottom: false,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      child: Column(
+                        key: _scrollContentKey,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Full-bleed header image (no horizontal padding).
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: _buildTopImage(),
                           ),
-                          child: Column(
-                            key: _scrollContentKey,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              _buildHeaderWithGradient(screenWidth),
-                              if (isPremium) ...[
-                                _buildPremiumBadge(),
-                                const SizedBox(height: 16),
+                          // Padded content below the image.
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              top: 12,
+                              // Make room for sticky button (only when not premium)
+                              bottom: (isPremium
+                                  ? (12 + MediaQuery.of(context).padding.bottom)
+                                  : (52 + 10)),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                _buildHeadline(),
+                                const SizedBox(height: 14),
+                                _buildGeniusPlanCard(isDark: isDark),
+                                const SizedBox(height: 14),
+                                _buildChoosePlanHeader(),
+                                const SizedBox(height: 20),
+                                _buildPlanRow(
+                                  isDark: isDark,
+                                  annualProduct: annualProduct,
+                                  weeklyProduct: weeklyProduct,
+                                ),
+                                if (_selectedPlanId == 'weekly' &&
+                                    RemoteConfigService.weeklySubTrial) ...[
+                                  const SizedBox(height: 20),
+                                  _buildTrialLine(weeklyProduct),
+                                ],
+                                if (isPremium) ...[
+                                  const SizedBox(height: 12),
+                                  _buildPremiumBadge(),
+                                ],
+                                const SizedBox(height: 10),
+                                _buildCancelTermsPrivacyLine(
+                                  MediaQuery.of(context).size.width,
+                                ),
                               ],
-                              _buildTitleSection(screenWidth),
-                              const SizedBox(height: 12),
-                              _buildPlanCards(
-                                contentWidth,
-                                annualProduct,
-                                weeklyProduct,
-                              ),
-                              const SizedBox(height: 8),
-                              _buildWhyGoPremium(contentWidth),
-                              const SizedBox(height: 8),
-                              _buildTrustedBySection(contentWidth),
-                              const SizedBox(height: 8),
-                              _buildSocialStats(contentWidth),
-                              const SizedBox(height: 4),
-                              _buildPaymentDisclaimer(),
-                              const SizedBox(height: 4),
-                              _buildCancelTermsPrivacyLine(screenWidth),
-                              const SizedBox(height: 10),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                      // Sticky bottom bar: gradient transparency (top clear → bottom opaque)
-                      if (!isPremium)
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: [
-                              // Gradient bg: only under buttons (transparent top → opaque bottom)
-                              IgnorePointer(
-                                child: Container(
-                                  height:
-                                      108 +
-                                      MediaQuery.of(context).padding.bottom,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        (isDark
-                                                ? AppColors.backgroundDark
-                                                : AppColors.background)
-                                            .withOpacity(0),
-                                        (isDark
-                                                ? AppColors.backgroundDark
-                                                : AppColors.background)
-                                            .withOpacity(0.5),
-                                        (isDark
-                                            ? AppColors.backgroundDark
-                                            : AppColors.background),
-                                      ],
-                                      stops: const [0, 0, 0.5],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SafeArea(
-                                top: false,
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 6,
-                                    bottom:
-                                        6 +
-                                        MediaQuery.of(context).padding.bottom,
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      _buildSubscribeButton(
-                                        _selectedPlanId == 'annual'
-                                            ? annualProduct
-                                            : weeklyProduct,
-                                      ),
-                                      const SizedBox(height: 6),
-                                      _buildContinueWithAdButton(),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  );
-                },
+                    ),
+                  ),
+                  if (!isPremium)
+                    SafeArea(
+                      top: false,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: _buildGreenCtaButton(selectedProduct),
+                      ),
+                    ),
+                ],
               ),
             ),
-            // Close button - circle bg, respects dark mode
             Positioned(
-              top: MediaQuery.of(context).padding.top + 8,
-              right: 16,
+              top: MediaQuery.of(context).padding.top + 16,
+              left: 16,
               child: SizedBox(
-                width: 30,
-                height: 30,
+                width: 17,
+                height: 17,
                 child: Material(
-                  color: isDark ? AppColors.mutedDark : const Color(0xFFDDDEE7),
-                  shape: const CircleBorder(),
-                  elevation: 0,
+                  color: Colors.transparent,
                   child: Opacity(
                     opacity: _canExitProScreen ? 1.0 : 0.4,
                     child: InkWell(
@@ -707,21 +664,426 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                           ? () async => _exitProFlow()
                           : null,
                       customBorder: const CircleBorder(),
-                      child: Center(
-                        child: Icon(
-                          Icons.close,
-                          size: 16,
-                          color: isDark
-                              ? AppColors.foregroundDark
-                              : const Color(0xFF43233A),
-                        ),
-                      ),
+                      child: const _CloseXIcon(),
                     ),
                   ),
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  // Figma: 17x17, stroke 2.5, color #BC571980
+  static const Color _kCloseColor = Color(0x80BC5719);
+  static const double _kCloseStroke = 2.5;
+  static const double _kCloseSize = 17;
+
+  Widget _buildTopImage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: AspectRatio(
+        aspectRatio: 360 / 230,
+        child: Image.asset(
+          'assets/pro_top.png',
+          fit: BoxFit.cover,
+          alignment: Alignment.topCenter,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeadline() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final titleColor = isDark ? Colors.white : const Color(0xFF313132);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/search.png',
+          width: 20,
+          height: 20,
+          fit: BoxFit.contain,
+        ),
+        const SizedBox(width: 10),
+        Flexible(
+          child: Text(
+            context.t('premium.cook.smarter.with.ai'),
+            style: GoogleFonts.hahmlet(
+              fontSize: 18,
+              height: 1.0,
+              fontWeight: FontWeight.w600,
+              color: titleColor,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGeniusPlanCard({required bool isDark}) {
+    final cardBg = isDark ? AppColors.cardDark : const Color(0xFFFAEDDC);
+    final borderColor = isDark ? AppColors.borderDark : const Color(0x80DBEAFE);
+    final tileBg = isDark ? const Color(0xFF2A2F3A) : Colors.white;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Base width from Figma (outer card width). Use available width so it
+        // scales on all devices while keeping the same proportions.
+        final scale = (constraints.maxWidth / 494.111083984375).clamp(
+          0.75,
+          1.35,
+        );
+        double r(double v) => v * scale;
+
+        // Snap to physical pixels to avoid tiny RenderFlex overflows due to
+        // fractional rounding (e.g. 0.24px).
+        final dpr = MediaQuery.devicePixelRatioOf(context);
+        double snap(double v) => (v * dpr).floorToDouble() / dpr;
+
+        final padX = snap(r(30.04));
+        final padY = snap(r(30.04));
+        final tileGap = snap(r(18));
+        const tileAspect = 199.61636352539062 / 142.3677215576172;
+        // Allow tiles slightly wider than original to fit text better.
+        const designTileW = 215.0;
+        final maxGridWidth = r(designTileW) * 2 + tileGap;
+        final contentW = (constraints.maxWidth - (padX * 2)).clamp(0.0, 1e9);
+        final gridMaxW = maxGridWidth.clamp(0.0, contentW);
+        // Compute a grid width first (snapped), then derive tile widths from it
+        // so `tileWidth + gap + tileWidth` can never exceed the parent.
+        final desiredGridW = snap(gridMaxW);
+        final rawTileW = ((desiredGridW - tileGap) / 2).clamp(
+          0.0,
+          r(designTileW),
+        );
+        var tileWidth = snap(rawTileW);
+        var gridW = snap((tileWidth * 2 + tileGap).clamp(0.0, desiredGridW));
+
+        // Safety: if rounding still makes us exceed, shrink tiles by 1px.
+        if (tileWidth * 2 + tileGap > gridW) {
+          tileWidth = snap((tileWidth - (1 / dpr)).clamp(0.0, tileWidth));
+          gridW = snap((tileWidth * 2 + tileGap).clamp(0.0, desiredGridW));
+        }
+
+        return Container(
+          // Make bottom padding same as top padding (requested).
+          padding: EdgeInsets.fromLTRB(padX, padY, padX, padY),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(r(36.38)),
+            border: Border.all(width: r(1.66), color: borderColor),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: r(48.487178802490234),
+                    height: r(48.487178802490234),
+                    padding: EdgeInsets.symmetric(horizontal: r(10.61)),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFBC5719),
+                      borderRadius: BorderRadius.circular(r(55831364)),
+                    ),
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/icons/ai.svg',
+                      width: r(22),
+                      height: r(22),
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: r(10)),
+                  Expanded(
+                    child: Text(
+                      context.t('premium.genius.cooking.plan'),
+                      style: GoogleFonts.inter(
+                        fontSize: r(27.29),
+                        height: 42.45 / 27.29,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? Colors.white : const Color(0xFF101828),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: r(30.31)),
+              Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: gridW == 0 ? null : gridW,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: AspectRatio(
+                              aspectRatio: tileAspect,
+                              child: _FeatureTile(
+                                scale: scale,
+                                background: tileBg,
+                                svgAsset: 'assets/icons/ai.svg',
+                                text: context.t(
+                                  'premium.feature.daily.ai.recipe.suggestions',
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: tileGap),
+                          Expanded(
+                            child: AspectRatio(
+                              aspectRatio: tileAspect,
+                              child: _FeatureTile(
+                                scale: scale,
+                                background: tileBg,
+                                svgAsset: 'assets/icons/scan.svg',
+                                text: context.t(
+                                  'premium.feature.ingredient.based.cooking',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: tileGap),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: AspectRatio(
+                              aspectRatio: tileAspect,
+                              child: _FeatureTile(
+                                scale: scale,
+                                background: tileBg,
+                                svgAsset: 'assets/icons/calender.svg',
+                                text: context.t(
+                                  'premium.feature.smart.meal.planning',
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: tileGap),
+                          Expanded(
+                            child: AspectRatio(
+                              aspectRatio: tileAspect,
+                              child: _FeatureTile(
+                                scale: scale,
+                                background: tileBg,
+                                svgAsset: 'assets/icons/stat.svg',
+                                text: context.t(
+                                  'premium.feature.nutrition.insights',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildChoosePlanHeader() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final titleColor = isDark ? Colors.white : const Color(0xFF313132);
+    final pillTextColor = isDark
+        ? AppColors.mutedForegroundDark
+        : const Color(0xFF6E6A64);
+    return Column(
+      children: [
+        Text(
+          context.t('premium.choose.your.plan'),
+          style: GoogleFonts.inter(
+            fontSize: 20,
+            // height: 1.0,
+            fontWeight: FontWeight.w600,
+            color: titleColor,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 7),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFAEDDC),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Text.rich(
+            TextSpan(
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: pillTextColor,
+              ),
+              children: [
+                TextSpan(text: context.t('premium.unlimited.recipes')),
+                TextSpan(
+                  text: context.t('premium.best.value'),
+                  style: const TextStyle(color: Color(0xFFE07B67)),
+                ),
+              ],
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlanRow({
+    required bool isDark,
+    required ProductDetails? annualProduct,
+    required ProductDetails? weeklyProduct,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final dpr = MediaQuery.devicePixelRatioOf(context);
+        double snap(double v) => (v * dpr).floorToDouble() / dpr;
+        final gap = 12.0;
+        final cardW = (constraints.maxWidth - gap) / 2;
+        final scale = (cardW / 180).clamp(0.85, 1.15);
+        final cardH = snap(96 * scale);
+
+        return Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: cardH,
+                child: _PlanCard(
+                  scale: scale,
+                  title: context.t('premium.plan.weekly'),
+                  price: weeklyProduct?.price ?? '\$9.99',
+                  suffix: '/week',
+                  isSelected: _selectedPlanId == 'weekly',
+                  isBestValue: false,
+                  isDark: isDark,
+                  centerTitle: true,
+                  onTap: () => setState(() => _selectedPlanId = 'weekly'),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: SizedBox(
+                height: cardH,
+                child: _PlanCard(
+                  scale: scale,
+                  title: context.t('premium.plan.yearly'),
+                  price: annualProduct?.price ?? '\$9.99',
+                  suffix: '/year',
+                  isSelected: _selectedPlanId == 'yearly',
+                  isBestValue: true,
+                  isDark: isDark,
+                  onTap: () => setState(() => _selectedPlanId = 'yearly'),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildTrialLine(ProductDetails? weeklyProduct) {
+    final weeklyText = weeklyProduct?.price != null
+        ? '${weeklyProduct!.price}/week'
+        : '\$9.99/week';
+
+    return Text(
+      context.t('premium.start.free.trial', {'price': weeklyText}),
+      style: GoogleFonts.poppins(
+        fontSize: 12,
+        height: 1.0,
+        fontWeight: FontWeight.w500,
+        color: Theme.of(context).brightness == Brightness.dark
+            ? AppColors.mutedForegroundDark
+            : const Color(0xFF707070),
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildGreenCtaButton(ProductDetails? selectedProduct) {
+    return Padding(
+      padding: EdgeInsets.zero,
+      child: SizedBox(
+        width: double.infinity,
+        height: 52,
+        child: ElevatedButton(
+          onPressed: (selectedProduct != null && !_isLoading)
+              ? () => _purchaseProduct(selectedProduct)
+              : _isLoadingProducts
+              ? null
+              : () async {
+                  setState(() => _isLoadingProducts = true);
+                  try {
+                    final ok = await BillingService.loadProducts(retry: true);
+                    if (mounted && ok) {
+                      final p = BillingService.products;
+                      final targetId = _selectedPlanId == 'yearly'
+                          ? BillingService.yearlySubscriptionId
+                          : BillingService.weeklySubscriptionId;
+                      ProductDetails? product;
+                      try {
+                        product = p.firstWhere((x) => x.id == targetId);
+                      } catch (_) {
+                        if (p.isNotEmpty) product = p.first;
+                      }
+                      if (product != null) await _purchaseProduct(product);
+                    }
+                  } finally {
+                    if (mounted) setState(() => _isLoadingProducts = false);
+                  }
+                },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF2AA948),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            elevation: 0,
+          ),
+          child: _isLoadingProducts || (_isLoading && selectedProduct != null)
+              ? const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : Text(
+                  context.t('premium.unlock.unlimited.recipes.now'),
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
         ),
       ),
     );
@@ -1589,13 +1951,14 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   /// Privacy Policy • Cancel Anytime • Terms of Use (each tappable).
   /// Uses Wrap so links flow to multiple lines when text is long (e.g. RTL/long translations).
   Widget _buildCancelTermsPrivacyLine(double screenWidth) {
-    final linkColor = Theme.of(context).colorScheme.onSurface;
+    final linkColor = Theme.of(context).brightness == Brightness.dark
+        ? AppColors.mutedForegroundDark
+        : const Color(0xFF707070);
     final style = GoogleFonts.poppins(
       fontSize: 10,
       fontWeight: FontWeight.w400,
       color: linkColor,
-      decoration: TextDecoration.underline,
-      decorationColor: linkColor,
+      decoration: TextDecoration.none,
     );
 
     final maxLinkWidth = screenWidth - 40;
@@ -1604,7 +1967,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
       child: Wrap(
         alignment: WrapAlignment.center,
         runAlignment: WrapAlignment.center,
-        spacing: 12,
+        spacing: 10,
         runSpacing: 8,
         children: [
           ConstrainedBox(
@@ -1619,6 +1982,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
               softWrap: true,
             ),
           ),
+          Text('|', style: style),
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: maxLinkWidth),
             child: _LinkText(
@@ -1632,6 +1996,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
               softWrap: true,
             ),
           ),
+          Text('|', style: style),
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: maxLinkWidth),
             child: _LinkText(
@@ -1753,4 +2118,287 @@ class _FeatureComparison {
       availableInPro: true,
     ),
   ];
+}
+
+class _FeatureTile extends StatelessWidget {
+  final double scale;
+  final Color background;
+  final String svgAsset;
+  final String text;
+
+  const _FeatureTile({
+    required this.scale,
+    required this.background,
+    required this.svgAsset,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Figma inner tile:
+    // 199.62 x 142.37, radius 24.26, top border 1.66 #FFFFFF99
+    // shadows:
+    //   0 1.52 3.03 -1.52 #0000001A
+    //   0 1.52 4.55 0    #0000001A
+    double r(double v) => v * scale;
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : const Color(0xFF364153);
+
+    return Container(
+      padding: EdgeInsets.all(r(16)),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(r(24.26)),
+        border: Border(
+          top: BorderSide(width: r(1.66), color: const Color(0x99FFFFFF)),
+        ),
+        boxShadow: const [
+          BoxShadow(
+            offset: Offset(0, 1.52),
+            blurRadius: 3.03,
+            spreadRadius: -1.52,
+            color: Color(0x1A000000),
+          ),
+          BoxShadow(
+            offset: Offset(0, 1.52),
+            blurRadius: 4.55,
+            spreadRadius: 0,
+            color: Color(0x1A000000),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.circle, size: 0), // keeps layout stable across fonts
+          SvgPicture.asset(
+            svgAsset,
+            width: r(22),
+            height: r(22),
+            colorFilter: const ColorFilter.mode(
+              Color(0xFFE07B67),
+              BlendMode.srcIn,
+            ),
+          ),
+          SizedBox(height: r(12)),
+          Text(
+            text,
+            style: GoogleFonts.inter(
+              fontSize: r(19.71),
+              height: 27.1 / 19.71,
+              fontWeight: FontWeight.w500,
+              color: textColor,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlanCard extends StatelessWidget {
+  final double scale;
+  final String title;
+  final String price;
+  final String suffix;
+  final bool isSelected;
+  final bool isBestValue;
+  final bool isDark;
+  final bool centerTitle;
+  final VoidCallback onTap;
+
+  const _PlanCard({
+    required this.scale,
+    required this.title,
+    required this.price,
+    required this.suffix,
+    required this.isSelected,
+    required this.isBestValue,
+    required this.isDark,
+    this.centerTitle = false,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = isDark ? AppColors.cardDark : Colors.white;
+    const accent = Color(0xFFC46E3D);
+    final borderColor = isSelected ? accent : const Color(0xFFDBD8D5);
+    final onSurface = isDark ? Colors.white : const Color(0xFF111827);
+    final suffixColor = isDark ? Colors.white70 : const Color(0xFF7A7A7A);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(22 * scale),
+          border: Border.all(color: borderColor, width: isSelected ? 2 : 1.25),
+          boxShadow: isDark
+              ? null
+              : const [
+                  BoxShadow(
+                    color: Color(0x14000000),
+                    offset: Offset(0, 6),
+                    blurRadius: 18,
+                  ),
+                ],
+        ),
+        child: Stack(
+          clipBehavior: Clip.hardEdge,
+          children: [
+            if (isBestValue)
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 11 * scale,
+                    vertical: 6 * scale,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Color(0xFFE28121), Color(0xFFA53E15)],
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(26),
+                      bottomLeft: Radius.circular(16),
+                    ),
+                  ),
+                  child: Text(
+                    context.t('premium.best.value.ribbon'),
+                    style: GoogleFonts.inter(
+                      fontSize: 9.5 * scale,
+                      fontWeight: FontWeight.w700,
+                      height: 1.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                14 * scale,
+                12 * scale,
+                14 * scale,
+                10 * scale,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  centerTitle
+                      ? Center(
+                          child: Text(
+                            title,
+                            style: GoogleFonts.inter(
+                              fontSize: 15.5 * scale,
+                              fontWeight: FontWeight.w700,
+                              height: 1.0,
+                              color: onSurface,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      : Text(
+                          title,
+                          style: GoogleFonts.inter(
+                            fontSize: 15.5 * scale,
+                            fontWeight: FontWeight.w700,
+                            height: 1.0,
+                            color: onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                  SizedBox(height: 8 * scale),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        price,
+                        style: GoogleFonts.inter(
+                          fontSize: 22 * scale,
+                          fontWeight: FontWeight.w800,
+                          height: 1.0,
+                          color: onSurface,
+                        ),
+                      ),
+                      const SizedBox(width: 3),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 2 * scale),
+                        child: Text(
+                          suffix,
+                          style: GoogleFonts.inter(
+                            fontSize: 14 * scale,
+                            fontWeight: FontWeight.w500,
+                            height: 1.0,
+                            color: suffixColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CloseXIcon extends StatelessWidget {
+  const _CloseXIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    // Uses constants from _ProScreenState for exact Figma match.
+    return CustomPaint(
+      size: const Size(
+        _ProScreenState._kCloseSize,
+        _ProScreenState._kCloseSize,
+      ),
+      painter: _CloseXPainter(
+        color: _ProScreenState._kCloseColor,
+        strokeWidth: _ProScreenState._kCloseStroke,
+      ),
+    );
+  }
+}
+
+class _CloseXPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+
+  _CloseXPainter({required this.color, required this.strokeWidth});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final inset = strokeWidth / 2;
+    final p1 = Offset(inset, inset);
+    final p2 = Offset(size.width - inset, size.height - inset);
+    final p3 = Offset(size.width - inset, inset);
+    final p4 = Offset(inset, size.height - inset);
+
+    canvas.drawLine(p1, p2, paint);
+    canvas.drawLine(p3, p4, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _CloseXPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
 }

@@ -2165,6 +2165,53 @@ class AppLocalizationsFa extends AppLocalizations {
       'در زمان خرید به حساب Google شما شارژ می‌شود. اشتراک به‌طور خودکار تمدید می‌شود مگر قبل از پایان دوره صورتحساب لغو شود.';
 
   @override
+  String get premiumCookSmarterWithAi => 'با هوش مصنوعی هوشمندتر آشپزی کنید';
+
+  @override
+  String get premiumGeniusCookingPlan => 'طرح آشپزی نابغه';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions =>
+      'پیشنهادهای دستور پخت AI\nروزانه';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking =>
+      'آشپزی بر اساس\nمواد اولیه';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'برنامه‌ریزی وعده‌ها\nهوشمند';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'بینش‌های\nتغذیه';
+
+  @override
+  String get premiumChooseYourPlanNew => 'طرح خود را انتخاب کنید';
+
+  @override
+  String get premiumUnlimitedRecipes => 'دستورهای نامحدود، ';
+
+  @override
+  String get premiumBestValue => 'بهترین ارزش';
+
+  @override
+  String get premiumPlanWeekly => 'هفتگی';
+
+  @override
+  String get premiumPlanYearly => 'سالانه';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return 'شروع آزمایشی رایگان ۳ روزه $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow =>
+      'اکنون دستورهای نامحدود را باز کنید';
+
+  @override
+  String get premiumBestValueRibbon => 'بهترین';
+
+  @override
   String get discountPopupTitle => '🔥 قفل Dish Genie PRO خود را\nباز کنید';
 
   @override

@@ -105,10 +105,12 @@ class _AppOpenAdLoaderScreenState extends State<AppOpenAdLoaderScreen> {
         print('📥 [LoaderScreen] Calling loadAd()...');
       }
       final ad = await adManager.loadAd().timeout(
-        const Duration(seconds: 12),
+        // Resume loads happen immediately after lifecycle resume; give it more
+        // time for the ad auction to complete.
+        const Duration(seconds: 18),
         onTimeout: () {
           if (kDebugMode) {
-            print('⏱️ [LoaderScreen] Ad loading timed out after 12 seconds');
+            print('⏱️ [LoaderScreen] Ad loading timed out after 18 seconds');
           }
           return null;
         },

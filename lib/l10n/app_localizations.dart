@@ -4247,6 +4247,90 @@ abstract class AppLocalizations {
   /// **'Payment will be charged to your Google Account at purchase. Subscription renews automatically unless canceled before the billing period ends.'**
   String get premiumPaymentDisclaimer;
 
+  /// No description provided for @premiumCookSmarterWithAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Cook Smarter with AI'**
+  String get premiumCookSmarterWithAi;
+
+  /// No description provided for @premiumGeniusCookingPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Genius Cooking Plan'**
+  String get premiumGeniusCookingPlan;
+
+  /// No description provided for @premiumFeatureDailyAiRecipeSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily AI recipe\nsuggestions'**
+  String get premiumFeatureDailyAiRecipeSuggestions;
+
+  /// No description provided for @premiumFeatureIngredientBasedCooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredient-\nbased cooking'**
+  String get premiumFeatureIngredientBasedCooking;
+
+  /// No description provided for @premiumFeatureSmartMealPlanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart meal\nplanning'**
+  String get premiumFeatureSmartMealPlanning;
+
+  /// No description provided for @premiumFeatureNutritionInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition\ninsights'**
+  String get premiumFeatureNutritionInsights;
+
+  /// No description provided for @premiumChooseYourPlanNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your Plan'**
+  String get premiumChooseYourPlanNew;
+
+  /// No description provided for @premiumUnlimitedRecipes.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited Recipes, '**
+  String get premiumUnlimitedRecipes;
+
+  /// No description provided for @premiumBestValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Best value'**
+  String get premiumBestValue;
+
+  /// No description provided for @premiumPlanWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get premiumPlanWeekly;
+
+  /// No description provided for @premiumPlanYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get premiumPlanYearly;
+
+  /// No description provided for @premiumStartFreeTrial.
+  ///
+  /// In en, this message translates to:
+  /// **'Start 3-days free trial {price}'**
+  String premiumStartFreeTrial(String price);
+
+  /// No description provided for @premiumUnlockUnlimitedRecipesNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Unlimited Recipes Now'**
+  String get premiumUnlockUnlimitedRecipesNow;
+
+  /// No description provided for @premiumBestValueRibbon.
+  ///
+  /// In en, this message translates to:
+  /// **'BEST VALUE'**
+  String get premiumBestValueRibbon;
+
   /// No description provided for @discountPopupTitle.
   ///
   /// In en, this message translates to:

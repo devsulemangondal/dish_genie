@@ -466,6 +466,28 @@
   "premiumHomeCooks": "🌎 بیش از ۲۰۰ هزار آشپز خانگی",
   "premiumRecipesGenerated": "👨‍🍳 بیش از ۱۰۰۰ دستور پخت تولید شده",
   "premiumPaymentDisclaimer": "در زمان خرید به حساب Google شما شارژ می‌شود. اشتراک به‌طور خودکار تمدید می‌شود مگر قبل از پایان دوره صورتحساب لغو شود.",
+  "premiumCookSmarterWithAi": "با هوش مصنوعی هوشمندتر آشپزی کنید",
+  "premiumGeniusCookingPlan": "طرح آشپزی نابغه",
+  "premiumFeatureDailyAiRecipeSuggestions": "پیشنهادهای دستور پخت AI\nروزانه",
+  "premiumFeatureIngredientBasedCooking": "آشپزی بر اساس\nمواد اولیه",
+  "premiumFeatureSmartMealPlanning": "برنامه‌ریزی وعده‌ها\nهوشمند",
+  "premiumFeatureNutritionInsights": "بینش‌های\nتغذیه",
+  "premiumChooseYourPlanNew": "طرح خود را انتخاب کنید",
+  "premiumUnlimitedRecipes": "دستورهای نامحدود، ",
+  "premiumBestValue": "بهترین ارزش",
+  "premiumPlanWeekly": "هفتگی",
+  "premiumPlanYearly": "سالانه",
+  "premiumStartFreeTrial": "شروع آزمایشی رایگان ۳ روزه {price}",
+  "@premiumStartFreeTrial": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockUnlimitedRecipesNow": "اکنون دستورهای نامحدود را باز کنید",
+  "premiumBestValueRibbon": "بهترین",
   "discountPopupTitle": "🔥 قفل Dish Genie PRO خود را\nباز کنید",
   "discountPopupPerMonth": "ماهانه",
   "premiumPrivacyPolicy": "سیاست حفظ حریم خصوصی",

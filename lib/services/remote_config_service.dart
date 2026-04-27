@@ -37,6 +37,9 @@ class RemoteConfigService {
     // Splash app open ad for returning user (2nd+ open) (Android / iOS separate keys)
     'splash_appopen_2ndtime': false,
     'splash_appopen_2ndtime_ios': false,
+    // Splash interstitial ad keys for Android flow
+    'splash_inter_1sttime': false,
+    'splash_inter_2ndtime': false,
     // Native ad flags
     'language_native': true,
     'language_native_ios': true,
@@ -245,6 +248,16 @@ class RemoteConfigService {
   static bool get splashAppOpen2ndTimeIos =>
       _remoteConfig?.getBool('splash_appopen_2ndtime_ios') ??
       _defaults['splash_appopen_2ndtime_ios'];
+
+  /// Splash interstitial ad on first install - Android (show only when true)
+  static bool get splashInter1stTime =>
+      _remoteConfig?.getBool('splash_inter_1sttime') ??
+      _defaults['splash_inter_1sttime'];
+
+  /// Splash interstitial ad for returning user - Android (show only when true)
+  static bool get splashInter2ndTime =>
+      _remoteConfig?.getBool('splash_inter_2ndtime') ??
+      _defaults['splash_inter_2ndtime'];
 
   // Native ad flags
   static bool get languageNative =>
@@ -609,6 +622,8 @@ class RemoteConfigService {
       'splash_appopen_1sttime_ios',
       'splash_appopen_2ndtime',
       'splash_appopen_2ndtime_ios',
+      'splash_inter_1sttime',
+      'splash_inter_2ndtime',
       'language_native',
       'language_native_ios',
       'home_native',

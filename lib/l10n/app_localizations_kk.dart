@@ -2170,6 +2170,53 @@ class AppLocalizationsKk extends AppLocalizations {
       'Сатып алу кезінде Google тіркелгіңізге төленеді. Төлем кезеңі аяқталмай жойылмаса, жазылым автоматты түрде жаңартылады.';
 
   @override
+  String get premiumCookSmarterWithAi => 'AI көмегімен ақылдырақ пісіріңіз';
+
+  @override
+  String get premiumGeniusCookingPlan => 'Genius пісіру жоспары';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions =>
+      'Күнделікті AI рецепт\nұсыныстары';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking =>
+      'Ингредиентке\nнегізделген пісіру';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'Ақылды ас\nжоспарлау';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'Қоректік\nинсайттар';
+
+  @override
+  String get premiumChooseYourPlanNew => 'Жоспарыңызды таңдаңыз';
+
+  @override
+  String get premiumUnlimitedRecipes => 'Шексіз рецепттер, ';
+
+  @override
+  String get premiumBestValue => 'Ең тиімді';
+
+  @override
+  String get premiumPlanWeekly => 'Апталық';
+
+  @override
+  String get premiumPlanYearly => 'Жылдық';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return '3 күндік тегін сынақты бастаңыз $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow =>
+      'Шексіз рецепттерді қазір ашыңыз';
+
+  @override
+  String get premiumBestValueRibbon => 'ЕҢ ТИІМДІ';
+
+  @override
   String get discountPopupTitle => '🔥 Dish Genie PRO-ңызды\nашыңыз';
 
   @override

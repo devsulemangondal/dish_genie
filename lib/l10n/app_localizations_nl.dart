@@ -2161,6 +2161,53 @@ class AppLocalizationsNl extends AppLocalizations {
       'Betaling wordt bij aankoop in rekening gebracht op uw Google-account. Het abonnement wordt automatisch verlengd tenzij geannuleerd vóór het einde van de factureringsperiode.';
 
   @override
+  String get premiumCookSmarterWithAi => 'Kook slimmer met AI';
+
+  @override
+  String get premiumGeniusCookingPlan => 'Geniaal kookplan';
+
+  @override
+  String get premiumFeatureDailyAiRecipeSuggestions =>
+      'Dagelijkse AI-recept\nsuggesties';
+
+  @override
+  String get premiumFeatureIngredientBasedCooking =>
+      'Ingrediënt-\ngebaseerd koken';
+
+  @override
+  String get premiumFeatureSmartMealPlanning => 'Slimme maaltijd\nplanning';
+
+  @override
+  String get premiumFeatureNutritionInsights => 'Voedings-\ninzichten';
+
+  @override
+  String get premiumChooseYourPlanNew => 'Kies je plan';
+
+  @override
+  String get premiumUnlimitedRecipes => 'Onbeperkte recepten, ';
+
+  @override
+  String get premiumBestValue => 'Beste waarde';
+
+  @override
+  String get premiumPlanWeekly => 'Wekelijks';
+
+  @override
+  String get premiumPlanYearly => 'Jaarlijks';
+
+  @override
+  String premiumStartFreeTrial(String price) {
+    return 'Start 3 dagen gratis proefperiode $price';
+  }
+
+  @override
+  String get premiumUnlockUnlimitedRecipesNow =>
+      'Ontgrendel nu onbeperkte recepten';
+
+  @override
+  String get premiumBestValueRibbon => 'BESTE WAARDE';
+
+  @override
   String get discountPopupTitle => '🔥 Ontgrendel uw\nDish Genie PRO';
 
   @override
