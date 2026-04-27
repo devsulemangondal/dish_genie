@@ -318,6 +318,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recipesVoice => '语音';
 
   @override
+  String get smartChefTitle => '智能厨师';
+
+  @override
+  String get smartChefPro => '专业版';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => '你有哪些';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => '食材？';
+
+  @override
+  String get smartChefSubtitle => '把你的食材变成\n一道美味佳肴';
+
+  @override
+  String get smartChefIngredientsHint => '例如：鸡肉、大蒜、番茄、米饭...';
+
+  @override
   String get recipesStop => '停止';
 
   @override

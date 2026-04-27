@@ -322,6 +322,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recipesVoice => 'Voice';
 
   @override
+  String get smartChefTitle => 'Smart Chef';
+
+  @override
+  String get smartChefPro => 'Pro';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'What ingredients';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'do you have?';
+
+  @override
+  String get smartChefSubtitle =>
+      'Turn your ingredients into a\ndelicious meal';
+
+  @override
+  String get smartChefIngredientsHint =>
+      'e.g., chicken, garlic, tomato, rice...';
+
+  @override
   String get recipesStop => 'Stop';
 
   @override

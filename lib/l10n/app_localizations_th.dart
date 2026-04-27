@@ -321,6 +321,26 @@ class AppLocalizationsTh extends AppLocalizations {
   String get recipesVoice => 'เสียง';
 
   @override
+  String get smartChefTitle => 'เชฟอัจฉริยะ';
+
+  @override
+  String get smartChefPro => 'โปร';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'คุณมีวัตถุดิบ';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'อะไรบ้าง?';
+
+  @override
+  String get smartChefSubtitle =>
+      'เปลี่ยนวัตถุดิบของคุณให้เป็น\nมื้ออาหารแสนอร่อย';
+
+  @override
+  String get smartChefIngredientsHint =>
+      'เช่น: ไก่, กระเทียม, มะเขือเทศ, ข้าว...';
+
+  @override
   String get recipesStop => 'หยุด';
 
   @override

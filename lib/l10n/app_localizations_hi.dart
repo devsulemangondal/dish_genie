@@ -322,6 +322,25 @@ class AppLocalizationsHi extends AppLocalizations {
   String get recipesVoice => 'आवाज';
 
   @override
+  String get smartChefTitle => 'स्मार्ट शेफ';
+
+  @override
+  String get smartChefPro => 'प्रो';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'आपके पास कौन से';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'सामग्री हैं?';
+
+  @override
+  String get smartChefSubtitle =>
+      'अपनी सामग्री को बदलें\nएक स्वादिष्ट भोजन में';
+
+  @override
+  String get smartChefIngredientsHint => 'उदा.: चिकन, लहसुन, टमाटर, चावल...';
+
+  @override
   String get recipesStop => 'रोकें';
 
   @override

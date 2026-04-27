@@ -319,6 +319,26 @@ class AppLocalizationsNl extends AppLocalizations {
   String get recipesVoice => 'Stem';
 
   @override
+  String get smartChefTitle => 'Slimme Chef';
+
+  @override
+  String get smartChefPro => 'Pro';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'Welke ingrediënten';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'heb je?';
+
+  @override
+  String get smartChefSubtitle =>
+      'Maak van je ingrediënten\neen heerlijke maaltijd';
+
+  @override
+  String get smartChefIngredientsHint =>
+      'bijv.: kip, knoflook, tomaat, rijst...';
+
+  @override
   String get recipesStop => 'Stop';
 
   @override

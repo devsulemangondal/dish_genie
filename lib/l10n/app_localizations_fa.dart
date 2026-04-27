@@ -322,6 +322,25 @@ class AppLocalizationsFa extends AppLocalizations {
   String get recipesVoice => 'صدا';
 
   @override
+  String get smartChefTitle => 'سرآشپز هوشمند';
+
+  @override
+  String get smartChefPro => 'پرو';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'چه مواد غذایی';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'دارید؟';
+
+  @override
+  String get smartChefSubtitle =>
+      'مواد اولیه‌ات را تبدیل کن به\nیک غذای خوشمزه';
+
+  @override
+  String get smartChefIngredientsHint => 'مثلاً: مرغ، سیر، گوجه، برنج...';
+
+  @override
   String get recipesStop => 'توقف';
 
   @override

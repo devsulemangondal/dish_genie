@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/localization/l10n_extension.dart';
 import '../../core/localization/language_config.dart';
 import '../../core/theme/colors.dart';
 import '../../providers/language_provider.dart';
@@ -96,19 +95,55 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.gradientHeroDark
-                  : AppColors.gradientHero,
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.backgroundDark : null,
+                gradient: isDark
+                    ? null
+                    : const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFFF5FAFF),
+                          Color(0xFFFFFFFF),
+                        ],
+                      ),
+              ),
             ),
           ),
+          if (!isDark)
+            Positioned.fill(
+              child: IgnorePointer(
+                child: Center(
+                  // Center vertical "bluish" band (not full width).
+                  child: FractionallySizedBox(
+                    widthFactor: 0.72,
+                    heightFactor: 1,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color(0x00EAF4FF),
+                            Color(0xFFEAF4FF),
+                            Color(0x00EAF4FF),
+                          ],
+                          stops: [0.0, 0.52, 1.0],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           Column(
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: StickyHeader(
-                  title: context.t('settings.language'),
+                  title: 'Languages',
                   showBack: _showBackButton,
                   onBack: () {
                     if (context.canPop()) {
@@ -121,39 +156,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   statusBarColor:
                       Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF1A1F35)
-                      : AppColors.genieBlush,
-                  rightContent: OutlinedButton(
-                    onPressed: _tempSelectedLanguage != null
-                        ? _saveLanguage
-                        : null,
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 4,
-                      ),
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      side: BorderSide(
-                        color: _tempSelectedLanguage != null
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurface
-                                  .withOpacity(isDark ? 0.3 : 0.2),
-                        width: 1,
-                      ),
-                    ),
-                    child: Text(
-                      context.t('common.done'),
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: _tempSelectedLanguage != null
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurface
-                                  .withOpacity(isDark ? 0.5 : 0.4),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                      : const Color(0xFFF5FAFF),
+                  rightContent: _LanguageSaveButton(
+                    enabled: _tempSelectedLanguage != null,
+                    onTap: _saveLanguage,
                   ),
                 ),
               ),
@@ -203,156 +209,129 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   ) {
     final isSelected = _tempSelectedLanguage == language.code;
 
+    const selectedFill = Color(0xFFD0E3FF);
+    const selectedBorder = Color(0xFF5A98FD);
+    const unselectedBorder = Color(0xFFBFCFE3);
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
             _selectLanguage(language.code);
           },
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(22),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 22),
             decoration: BoxDecoration(
-              color: isSelected
-                  ? Theme.of(
-                      context,
-                    ).colorScheme.primary.withOpacity(isDark ? 0.25 : 0.15)
-                  : isDark
-                  ? Theme.of(context).colorScheme.surface.withOpacity(0.6)
-                  : Theme.of(context).cardColor.withOpacity(0.7),
-              borderRadius: BorderRadius.circular(16),
-              border: isSelected
-                  ? Border.all(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 2,
-                    )
-                  : isDark && !isSelected
-                  ? Border.all(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.outline.withOpacity(0.2),
-                      width: 1,
-                    )
-                  : null,
-              boxShadow: AppColors.getCardShadow(context),
+              color: isDark
+                  ? Theme.of(context).colorScheme.surface.withOpacity(0.65)
+                  : (isSelected ? selectedFill : Colors.white),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(
+                color: isSelected ? selectedBorder : unselectedBorder,
+                width: isSelected ? 1.6 : 1.1,
+              ),
+              boxShadow: isDark
+                  ? null
+                  : const [
+                      BoxShadow(
+                        color: Color(0x14000000),
+                        offset: Offset(0, 6),
+                        blurRadius: 14,
+                      ),
+                    ],
             ),
             child: Row(
               children: [
-                // Flag with better styling
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: isSelected
-                        ? [
-                            BoxShadow(
-                              color: Theme.of(context).colorScheme.primary
-                                  .withOpacity(isDark ? 0.4 : 0.3),
-                              blurRadius: 8,
-                              spreadRadius: 1,
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: ClipOval(
-                    child: Image.network(
-                      LanguageConfig.getFlagUrl(language.code),
-                      width: 48,
-                      height: 48,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isDark
-                              ? Theme.of(
-                                  context,
-                                ).colorScheme.surfaceContainerHighest
-                              : Theme.of(
-                                  context,
-                                ).colorScheme.surfaceContainerHighest,
-                        ),
-                        child: Icon(
-                          Icons.flag,
-                          size: 24,
-                          color: Theme.of(context).colorScheme.onSurface
-                              .withOpacity(isDark ? 0.7 : 0.6),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _FlagBadge(flagCode: language.flagCode),
 
-                const SizedBox(width: 16),
+                const SizedBox(width: 14),
 
                 // Language Name with Native Name
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        language.name,
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: isSelected
-                              ? FontWeight.bold
-                              : FontWeight.w600,
-                          color: isSelected
-                              ? (isDark ? Colors.white : Colors.black)
-                              : Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      if (language.nativeName != language.name &&
-                          language.nativeName.isNotEmpty) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          language.nativeName,
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.normal,
-                            color: isSelected
-                                ? (isDark
-                                      ? Colors.white.withOpacity(0.9)
-                                      : Colors.black.withOpacity(0.8))
-                                : Theme.of(context).colorScheme.onSurface
-                                      .withOpacity(isDark ? 0.7 : 0.6),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: language.name,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF111827),
                           ),
                         ),
+                        if (language.nativeName.isNotEmpty &&
+                            language.nativeName != language.name)
+                          TextSpan(
+                            text: '  (${language.nativeName})',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF6B7280),
+                            ),
+                          ),
                       ],
-                    ],
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-
-                const SizedBox(width: 12),
-
-                // Check Icon
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : Colors.transparent,
-                  ),
-                  child: isSelected
-                      ? Icon(
-                          Icons.check,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          size: 18,
-                        )
-                      : null,
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FlagBadge extends StatelessWidget {
+  final String flagCode;
+
+  const _FlagBadge({required this.flagCode});
+
+  String _flagEmojiFromCountryCode(String code) {
+    final cc = code.trim().toUpperCase();
+    if (cc.length != 2) return '🏳️';
+    final int base = 0x1F1E6;
+    final int a = 'A'.codeUnitAt(0);
+    final int first = base + (cc.codeUnitAt(0) - a);
+    final int second = base + (cc.codeUnitAt(1) - a);
+    return String.fromCharCode(first) + String.fromCharCode(second);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final emoji = _flagEmojiFromCountryCode(flagCode);
+    return Text(
+      emoji,
+      style: const TextStyle(fontSize: 26, height: 1.0),
+    );
+  }
+}
+
+class _LanguageSaveButton extends StatelessWidget {
+  final bool enabled;
+  final VoidCallback onTap;
+
+  const _LanguageSaveButton({required this.enabled, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: 66,
+        height: 34,
+        decoration: BoxDecoration(
+          color: enabled ? const Color(0xFF5A98FD) : const Color(0xFFBFCFE3),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: const Center(
+          child: Icon(Icons.check, color: Colors.white, size: 18),
         ),
       ),
     );

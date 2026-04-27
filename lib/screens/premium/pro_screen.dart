@@ -52,8 +52,6 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   /// Selected plan: 'annual' or 'weekly'
   String _selectedPlanId = 'yearly';
 
-  final GlobalKey _scrollContentKey = GlobalKey();
-
   String _getOpenSource() {
     // Prefer GoRouterState if available, otherwise parse from router location.
     try {
@@ -574,103 +572,99 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: bg,
-        body: Stack(
-          children: [
-            SafeArea(
-              bottom: false,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      physics: const ClampingScrollPhysics(),
-                      child: Column(
-                        key: _scrollContentKey,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // Full-bleed header image (no horizontal padding).
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: _buildTopImage(),
-                          ),
-                          // Padded content below the image.
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: 20,
-                              right: 20,
-                              top: 12,
-                              // Make room for sticky button (only when not premium)
-                              bottom: (isPremium
-                                  ? (12 + MediaQuery.of(context).padding.bottom)
-                                  : (52 + 10)),
+        backgroundColor: Colors.transparent,
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            // Match the provided reference layout exactly, while keeping it
+            // non-scrollable by scaling down on short devices.
+            const designW = 360.0;
+            const designH = 800.0;
+            final scaleW = constraints.maxWidth / designW;
+            final scaleH = constraints.maxHeight / designH;
+            final scale = (scaleW < scaleH ? scaleW : scaleH).clamp(0.78, 1.0);
+
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: isDark ? bg : null,
+                      gradient: isDark
+                          ? null
+                          : const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Color(0xFFF5FAFF), Color(0xFFFFFFFF)],
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                _buildHeadline(),
-                                const SizedBox(height: 14),
-                                _buildGeniusPlanCard(isDark: isDark),
-                                const SizedBox(height: 14),
-                                _buildChoosePlanHeader(),
-                                const SizedBox(height: 20),
-                                _buildPlanRow(
-                                  isDark: isDark,
-                                  annualProduct: annualProduct,
-                                  weeklyProduct: weeklyProduct,
-                                ),
-                                if (_selectedPlanId == 'weekly' &&
-                                    RemoteConfigService.weeklySubTrial) ...[
-                                  const SizedBox(height: 20),
-                                  _buildTrialLine(weeklyProduct),
-                                ],
-                                if (isPremium) ...[
-                                  const SizedBox(height: 12),
-                                  _buildPremiumBadge(),
-                                ],
-                                const SizedBox(height: 10),
-                                _buildCancelTermsPrivacyLine(
-                                  MediaQuery.of(context).size.width,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (!isPremium)
-                    SafeArea(
-                      top: false,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: _buildGreenCtaButton(selectedProduct),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: MediaQuery.of(context).padding.top + 16,
-              left: 16,
-              child: SizedBox(
-                width: 17,
-                height: 17,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Opacity(
-                    opacity: _canExitProScreen ? 1.0 : 0.4,
-                    child: InkWell(
-                      onTap: _canExitProScreen
-                          ? () async => _exitProFlow()
-                          : null,
-                      customBorder: const CircleBorder(),
-                      child: const _CloseXIcon(),
                     ),
                   ),
                 ),
-              ),
-            ),
-          ],
+                SafeArea(
+                  bottom: false,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Transform.scale(
+                      scale: scale,
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        width: designW,
+                        height: designH,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const SizedBox(height: 6),
+                              _buildTopHeroImage(),
+                              const SizedBox(height: 14),
+                              _buildScreenshotTitle(),
+                              const SizedBox(height: 14),
+                              _buildScreenshotFeatures(),
+                              const SizedBox(height: 18),
+                              if (!isPremium) ...[
+                                _buildCtaWithSubtitle(
+                                  selectedProduct,
+                                  weeklyProduct,
+                                ),
+                                const SizedBox(height: 26),
+                              ],
+                              _buildScreenshotPlanCards(
+                                isDark: isDark,
+                                annualProduct: annualProduct,
+                                weeklyProduct: weeklyProduct,
+                              ),
+                              const SizedBox(height: 18),
+                              _buildCancelTermsPrivacyLine(designW),
+                              const Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + 10,
+                  left: 14,
+                  child: SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Opacity(
+                        opacity: _canExitProScreen ? 1.0 : 0.4,
+                        child: InkWell(
+                          onTap: _canExitProScreen ? _exitProFlow : null,
+                          customBorder: const CircleBorder(),
+                          child: const Center(child: _ScreenshotCloseButton()),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -681,17 +675,156 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   static const double _kCloseStroke = 2.5;
   static const double _kCloseSize = 17;
 
-  Widget _buildTopImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: AspectRatio(
-        aspectRatio: 360 / 230,
-        child: Image.asset(
-          'assets/pro_top.png',
-          fit: BoxFit.cover,
-          alignment: Alignment.topCenter,
+  Widget _buildTopHeroImage() {
+    // Screenshot shows a large character image on a light background, not cropped.
+    return SizedBox(
+      height: 238,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5FAFF),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Image.asset(
+            'assets/pro_top_new.png',
+            fit: BoxFit.contain,
+            alignment: Alignment.topCenter,
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildScreenshotTitle() {
+    final titleColor = const Color(0xFF2B2B2B);
+
+    return Text(
+      'Cook Smarter with AI',
+      style: GoogleFonts.hahmlet(
+        fontSize: 18.5,
+        fontWeight: FontWeight.w700,
+        color: titleColor,
+        height: 1.15,
+      ),
+      textAlign: TextAlign.center,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget _buildScreenshotFeatures() {
+    final textColor = const Color(0xFF6B6B6B);
+    const iconColor = Color(0xFF2F80ED);
+
+    Widget row(String asset, String text) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            asset,
+            width: 18,
+            height: 18,
+            colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: GoogleFonts.poppins(
+                fontSize: 12.5,
+                fontWeight: FontWeight.w500,
+                color: textColor,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: Column(
+        children: [
+          row('assets/icons/ai.svg', 'Daily AI recipe suggestions'),
+          row('assets/icons/scan.svg', 'Ingredient-based cooking'),
+          row('assets/icons/calender.svg', 'Smart meal planning'),
+          row('assets/icons/stat.svg', 'Nutrition Insights'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCtaWithSubtitle(
+    ProductDetails? selectedProduct,
+    ProductDetails? weeklyProduct,
+  ) {
+    final isWeeklySelected = _selectedPlanId == 'weekly';
+    final weeklyPrice = weeklyProduct?.price ?? 'Rs 2,250';
+    final subtitle = isWeeklySelected
+        ? 'Try 3 days for free, then $weeklyPrice/week'
+        : null;
+
+    return _ScreenshotCtaButton(
+      enabled: selectedProduct != null && !_isLoading,
+      isLoading: _isLoadingProducts || (_isLoading && selectedProduct != null),
+      title: isWeeklySelected ? 'Start Free Trial' : 'Subscribe',
+      subtitle: subtitle,
+      onTap: (selectedProduct != null && !_isLoading)
+          ? () => _purchaseProduct(selectedProduct)
+          : _isLoadingProducts
+          ? null
+          : () async {
+              setState(() => _isLoadingProducts = true);
+              try {
+                final ok = await BillingService.loadProducts(retry: true);
+                if (mounted && ok) {
+                  final p = BillingService.products;
+                  final targetId = _selectedPlanId == 'yearly'
+                      ? BillingService.yearlySubscriptionId
+                      : BillingService.weeklySubscriptionId;
+                  ProductDetails? product;
+                  try {
+                    product = p.firstWhere((x) => x.id == targetId);
+                  } catch (_) {
+                    if (p.isNotEmpty) product = p.first;
+                  }
+                  if (product != null) await _purchaseProduct(product);
+                }
+              } finally {
+                if (mounted) setState(() => _isLoadingProducts = false);
+              }
+            },
+    );
+  }
+
+  Widget _buildScreenshotPlanCards({
+    required bool isDark,
+    required ProductDetails? annualProduct,
+    required ProductDetails? weeklyProduct,
+  }) {
+    return Column(
+      children: [
+        _ScreenshotPlanCard.yearly(
+          title: 'Yearly',
+          leftSubtitle: 'Just Rs 7,200.00 per year',
+          rightPrice: annualProduct?.price ?? 'Rs 139.00',
+          rightSuffix: 'per year',
+          isSelected: _selectedPlanId == 'yearly',
+          onTap: () => setState(() => _selectedPlanId = 'yearly'),
+        ),
+        const SizedBox(height: 14),
+        _ScreenshotPlanCard.weekly(
+          title: 'Weekly',
+          leftSubtitle: 'Full Access Included',
+          rightPrice: weeklyProduct?.price ?? 'Rs 2,250',
+          rightSuffix: 'per week',
+          isSelected: _selectedPlanId == 'weekly',
+          onTap: () => setState(() => _selectedPlanId = 'weekly'),
+        ),
+      ],
     );
   }
 
@@ -1949,68 +2082,67 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   /// Privacy Policy • Cancel Anytime • Terms of Use (each tappable).
-  /// Uses Wrap so links flow to multiple lines when text is long (e.g. RTL/long translations).
+  /// Keep it on a single line (scale down if needed).
   Widget _buildCancelTermsPrivacyLine(double screenWidth) {
     final linkColor = Theme.of(context).brightness == Brightness.dark
         ? AppColors.mutedForegroundDark
         : const Color(0xFF707070);
     final style = GoogleFonts.poppins(
-      fontSize: 10,
-      fontWeight: FontWeight.w400,
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
       color: linkColor,
       decoration: TextDecoration.none,
     );
 
-    final maxLinkWidth = screenWidth - 40;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        runAlignment: WrapAlignment.center,
-        spacing: 10,
-        runSpacing: 8,
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxLinkWidth),
-            child: _LinkText(
-              text: context.t('premium.privacy.policy'),
-              style: style,
-              textAlign: TextAlign.center,
-              onTap: () =>
-                  _launchURL('https://sites.google.com/view/dodishgenie/home'),
-              maxLines: 3,
-              softWrap: true,
-            ),
-          ),
-          Text('|', style: style),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxLinkWidth),
-            child: _LinkText(
-              text: context.t('premium.cancel.any.time'),
-              style: style,
-              textAlign: TextAlign.center,
-              onTap: () => _launchURL(
-                'https://play.google.com/store/account/subscriptions',
+      child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _LinkText(
+                text: context.t('premium.terms.of.use'),
+                style: style,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                softWrap: false,
+                onTap: () => _launchURL(
+                  'https://sites.google.com/view/dodishgenieterms/home',
+                ),
               ),
-              maxLines: 3,
-              softWrap: true,
-            ),
-          ),
-          Text('|', style: style),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxLinkWidth),
-            child: _LinkText(
-              text: context.t('premium.terms.of.use'),
-              style: style,
-              textAlign: TextAlign.center,
-              onTap: () => _launchURL(
-                'https://sites.google.com/view/dodishgenieterms/home',
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text('|', style: style),
               ),
-              maxLines: 3,
-              softWrap: true,
-            ),
+              _LinkText(
+                text: context.t('premium.cancel.any.time'),
+                style: style,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                softWrap: false,
+                onTap: () => _launchURL(
+                  'https://play.google.com/store/account/subscriptions',
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text('|', style: style),
+              ),
+              _LinkText(
+                text: context.t('premium.privacy.policy'),
+                style: style,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                softWrap: false,
+                onTap: () => _launchURL(
+                  'https://sites.google.com/view/dodishgenie/home',
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -2401,4 +2533,302 @@ class _CloseXPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _CloseXPainter oldDelegate) =>
       oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
+}
+
+class _ScreenshotCloseButton extends StatelessWidget {
+  const _ScreenshotCloseButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 26,
+      height: 26,
+      decoration: BoxDecoration(
+        color: const Color(0xFFD4D4D4),
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 1.5),
+      ),
+      child: const Center(
+        child: Icon(Icons.close, size: 16, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _ScreenshotCtaButton extends StatelessWidget {
+  final String title;
+  final String? subtitle;
+  final VoidCallback? onTap;
+  final bool enabled;
+  final bool isLoading;
+
+  const _ScreenshotCtaButton({
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    required this.enabled,
+    required this.isLoading,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = enabled ? const Color(0xFF2AA948) : const Color(0xFF93D5A2);
+    return SizedBox(
+      height: 64,
+      child: ElevatedButton(
+        onPressed: enabled ? onTap : null,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: bg,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          elevation: 0,
+        ),
+        child: isLoading
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w600,
+                      height: 1.0,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w500,
+                        height: 1.0,
+                        color: Colors.white.withOpacity(0.92),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ],
+              ),
+      ),
+    );
+  }
+}
+
+class _ScreenshotPlanCard extends StatelessWidget {
+  final String title;
+  final String leftSubtitle;
+  final String rightPrice;
+  final String? rightSuffix;
+  final String? actionText;
+  final bool isSelected;
+  final bool isYearly;
+  final VoidCallback onTap;
+
+  const _ScreenshotPlanCard._({
+    required this.title,
+    required this.leftSubtitle,
+    required this.rightPrice,
+    required this.isSelected,
+    required this.onTap,
+    required this.isYearly,
+    this.rightSuffix,
+    this.actionText,
+  });
+
+  factory _ScreenshotPlanCard.yearly({
+    required String title,
+    required String leftSubtitle,
+    required String rightPrice,
+    required String rightSuffix,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return _ScreenshotPlanCard._(
+      title: title,
+      leftSubtitle: leftSubtitle,
+      rightPrice: rightPrice,
+      rightSuffix: rightSuffix,
+      actionText: null,
+      isSelected: isSelected,
+      onTap: onTap,
+      isYearly: true,
+    );
+  }
+
+  factory _ScreenshotPlanCard.lifetimeStyle({
+    required String title,
+    required String leftSubtitle,
+    required String rightPrice,
+    required String actionText,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return _ScreenshotPlanCard._(
+      title: title,
+      leftSubtitle: leftSubtitle,
+      rightPrice: rightPrice,
+      rightSuffix: null,
+      actionText: actionText,
+      isSelected: isSelected,
+      onTap: onTap,
+      isYearly: false,
+    );
+  }
+
+  factory _ScreenshotPlanCard.weekly({
+    required String title,
+    required String leftSubtitle,
+    required String rightPrice,
+    required String rightSuffix,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return _ScreenshotPlanCard._(
+      title: title,
+      leftSubtitle: leftSubtitle,
+      rightPrice: rightPrice,
+      rightSuffix: rightSuffix,
+      actionText: null,
+      isSelected: isSelected,
+      onTap: onTap,
+      isYearly: false,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const selectedBg = Color(0xFFD0E3FF);
+    const selectedBorder = Color(0xFF5A98FD);
+    const unselectedBg = Colors.white;
+    const unselectedBorder = Color(0xFFBFCFE3);
+
+    final border = isSelected ? selectedBorder : unselectedBorder;
+    final bg = isSelected ? selectedBg : unselectedBg;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: border, width: isSelected ? 1.6 : 1),
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            if (isYearly)
+              Positioned(
+                // Screenshot: badge overlaps the border line and is pulled
+                // inward from the top-right corner.
+                top: -16,
+                right: 18,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Color(0xFFFD5C17), Color(0xFFFFB301)],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    'Best Offer',
+                    style: GoogleFonts.poppins(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF111827),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          leftSubtitle,
+                          style: GoogleFonts.poppins(
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w400,
+                            color: const Color(0xFF111827),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        rightPrice,
+                        style: GoogleFonts.poppins(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF111827),
+                          height: 1.0,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        actionText ?? (rightSuffix ?? ''),
+                        style: GoogleFonts.poppins(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF6B7280),
+                          height: 1.0,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

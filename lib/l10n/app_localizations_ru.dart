@@ -322,6 +322,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recipesVoice => 'Голос';
 
   @override
+  String get smartChefTitle => 'Умный шеф';
+
+  @override
+  String get smartChefPro => 'ПРО';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'Какие ингредиенты';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'у вас есть?';
+
+  @override
+  String get smartChefSubtitle => 'Превратите ингредиенты в\nвкусное блюдо';
+
+  @override
+  String get smartChefIngredientsHint =>
+      'например: курица, чеснок, помидор, рис...';
+
+  @override
   String get recipesStop => 'Стоп';
 
   @override

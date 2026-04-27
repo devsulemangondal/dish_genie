@@ -13,6 +13,7 @@ class StickyHeader extends StatelessWidget {
   final Widget? rightContent;
   final Color? backgroundColor;
   final Color? statusBarColor;
+  final TextStyle? titleStyle;
 
   const StickyHeader({
     super.key,
@@ -23,6 +24,7 @@ class StickyHeader extends StatelessWidget {
     this.rightContent,
     this.backgroundColor,
     this.statusBarColor,
+    this.titleStyle,
   });
 
   bool _isAndroid() {
@@ -97,11 +99,12 @@ class StickyHeader extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onSurface,
-                          ),
+                          style: titleStyle ??
+                              TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.onSurface,
+                              ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           textDirection: textDirection,

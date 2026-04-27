@@ -508,6 +508,14 @@ extension L10nExtension on BuildContext {
     'recipes.what.craving': (l) => l.recipesWhatCraving,
     'recipes.what.ingredients': (l) => l.recipesWhatIngredients,
     'recipes.your.ingredients': (l) => l.recipesYourIngredients,
+
+    // Smart Chef (Home AI Generate)
+    'smartChefTitle': (l) => l.smartChefTitle,
+    'smartChefPro': (l) => l.smartChefPro,
+    'smartChefWhatIngredientsLine1': (l) => l.smartChefWhatIngredientsLine1,
+    'smartChefWhatIngredientsLine2': (l) => l.smartChefWhatIngredientsLine2,
+    'smartChefSubtitle': (l) => l.smartChefSubtitle,
+    'smartChefIngredientsHint': (l) => l.smartChefIngredientsHint,
     'saved.list.add.item.title': (l) => l.savedListAddItemTitle,
     'saved.list.add.to.current.list': (l) => l.savedListAddToCurrentList,
     'saved.list.ai.optimizing': (l) => l.savedListAiOptimizing,

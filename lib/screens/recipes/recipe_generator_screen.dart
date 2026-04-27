@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/dialogs/app_dialogs.dart';
@@ -9,7 +10,6 @@ import '../../core/theme/colors.dart';
 import '../../data/models/recipe.dart';
 import '../../providers/premium_provider.dart';
 import '../../providers/recipe_provider.dart';
-import '../../widgets/voice/voice_input_dialog.dart';
 import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
@@ -17,12 +17,23 @@ import '../../widgets/common/loading_genie.dart';
 import '../../widgets/common/sticky_header.dart';
 import '../../widgets/recipe/recipe_card.dart';
 import '../../widgets/recipe/recipe_grid_card.dart';
+import '../../widgets/voice/voice_input_dialog.dart';
 
 class RecipeGeneratorScreen extends StatefulWidget {
   final String? searchQuery;
   final String? category;
+  final int initialTabIndex;
+  final bool lockToAiGenerateTab;
+  final bool showAsHomeTab;
 
-  const RecipeGeneratorScreen({super.key, this.searchQuery, this.category});
+  const RecipeGeneratorScreen({
+    super.key,
+    this.searchQuery,
+    this.category,
+    this.initialTabIndex = 0,
+    this.lockToAiGenerateTab = false,
+    this.showAsHomeTab = false,
+  });
 
   @override
   State<RecipeGeneratorScreen> createState() => _RecipeGeneratorScreenState();
@@ -44,8 +55,19 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
-      if (mounted) setState(() {});
+      if (!mounted) return;
+      if (widget.lockToAiGenerateTab && _tabController.index != 1) {
+        _tabController.animateTo(1);
+        return;
+      }
+      setState(() {});
     });
+    if (widget.initialTabIndex > 0) {
+      _tabController.index = widget.initialTabIndex.clamp(0, 1);
+    }
+    if (widget.lockToAiGenerateTab) {
+      _tabController.index = 1;
+    }
     if (widget.searchQuery != null) {
       _ingredientsController.text = widget.searchQuery!;
       _tabController.animateTo(1);
@@ -222,135 +244,220 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
         context.go('/');
       },
       child: Scaffold(
-        bottomNavigationBar: const BottomNav(activeTab: 'recipes'),
+        bottomNavigationBar: BottomNav(
+          activeTab: widget.showAsHomeTab ? 'home' : 'recipes',
+        ),
         body: Stack(
           children: [
-          // Background
-          Container(
-            decoration: BoxDecoration(
-              gradient: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.gradientHeroDark
-                  : AppColors.gradientHero,
+            // Background
+            Container(
+              decoration: BoxDecoration(
+                gradient: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.gradientHeroDark
+                    : (widget.showAsHomeTab
+                          ? const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Color(0xFFEAF4FF), Color(0xFFFFFFFF)],
+                            )
+                          : AppColors.gradientHero),
+              ),
             ),
-          ),
-          // Floating elements
-          const FloatingSparkles(),
-          // Main content with safe area handling
-          SafeArea(
-            child: Column(
-              children: [
-                // Sticky Header
-                StickyHeader(
-                  title: context.t('recipes.title'),
-                  onBack: () => _handleBack(context, recipeProvider, isLoading),
-                  backgroundColor: Colors.transparent,
-                  statusBarColor:
-                      Theme.of(context).brightness == Brightness.dark
-                          ? const Color(0xFF1A1F35)
-                          : AppColors.genieBlush,
-                  rightContent: _tabController.index == 1 &&
-                          !premiumProvider.isPremium &&
-                          aiRecipeLimit != null
-                      ? Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surface
-                                .withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Theme.of(context)
-                                  .dividerColor
-                                  .withOpacity(0.3),
-                            ),
-                          ),
-                          child: Text(
-                            '$aiRecipeCount/$aiRecipeLimit',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                        )
-                      : null,
-                ),
-                // Tabs (hidden while generating)
-                if (!isLoading)
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
+            // Floating elements
+            const FloatingSparkles(),
+            // Main content with safe area handling
+            SafeArea(
+              child: Column(
+                children: [
+                  // Sticky Header
+                  StickyHeader(
+                    title: widget.showAsHomeTab
+                        ? context.t('smartChefTitle')
+                        : context.t('recipes.title'),
+                    titleStyle: widget.showAsHomeTab
+                        ? GoogleFonts.inter(
+                            fontSize: 26,
+                            height: 34 / 26,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF1E2945),
+                          )
+                        : null,
+                    showBack: !widget.showAsHomeTab,
+                    onBack: widget.showAsHomeTab
+                        ? null
+                        : () => _handleBack(context, recipeProvider, isLoading),
+                    backgroundColor: Colors.transparent,
+                    statusBarColor:
+                        Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xFF1A1F35)
+                        : const Color(0xFFEAF4FF),
+                    rightContent: widget.showAsHomeTab
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: 70,
+                                height: 32,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFFFFB301),
+                                        Color(0xFFFD5C17),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.auto_awesome,
+                                          size: 14,
+                                          color: Colors.white,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          context.t('smartChefPro'),
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12.5,
+                                            height: 1.0,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 2),
+                              IconButton(
+                                onPressed: () => context.push('/settings'),
+                                icon: const Icon(Icons.settings),
+                                iconSize: 24,
+                                color: const Color(0xFF5A6A7C),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints.tightFor(
+                                  width: 36,
+                                  height: 36,
+                                ),
+                                splashRadius: 16,
+                              ),
+                            ],
+                          )
+                        : (_tabController.index == 1 &&
+                                  !premiumProvider.isPremium &&
+                                  aiRecipeLimit != null
+                              ? Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface.withOpacity(0.9),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Theme.of(
+                                        context,
+                                      ).dividerColor.withOpacity(0.3),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    '$aiRecipeCount/$aiRecipeLimit',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface,
+                                    ),
+                                  ),
+                                )
+                              : null),
                   ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: AppColors.getCardShadow(context),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: TabBar(
-                      controller: _tabController,
-                      labelColor: Theme.of(context).colorScheme.onPrimary,
-                      unselectedLabelColor: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.7),
-                      indicator: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [AppColors.geniePurple, AppColors.geniePink],
+                  // Tabs (hidden while generating, and hidden when shown as Home tab)
+                  if (!isLoading && !widget.showAsHomeTab)
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: AppColors.getCardShadow(context),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: TabBar(
+                          controller: _tabController,
+                          labelColor: Theme.of(context).colorScheme.onPrimary,
+                          unselectedLabelColor: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.7),
+                          indicator: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                AppColors.geniePurple,
+                                AppColors.geniePink,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          dividerColor: Colors.transparent,
+                          labelStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          unselectedLabelStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          tabs: [
+                            Tab(text: context.t('recipes.browse')),
+                            Tab(text: context.t('recipes.ai.generate')),
+                          ],
                         ),
-                        borderRadius: BorderRadius.circular(8),
                       ),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      dividerColor: Colors.transparent,
-                      labelStyle: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      unselectedLabelStyle: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      tabs: [
-                        Tab(text: context.t('recipes.browse')),
-                        Tab(text: context.t('recipes.ai.generate')),
+                    ),
+                  // Tab Content
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      physics: isLoading
+                          ? const NeverScrollableScrollPhysics()
+                          : (widget.lockToAiGenerateTab
+                                ? const NeverScrollableScrollPhysics()
+                                : null),
+                      children: [
+                        // Browse Tab
+                        _buildBrowseTab(context, recipeProvider),
+                        // Generate Tab
+                        _buildGenerateTab(
+                          context,
+                          recipeProvider,
+                          premiumProvider,
+                          isLoading,
+                          recipe,
+                          canGenerateRecipe,
+                          aiRecipeLimit,
+                          aiRecipeCount,
+                        ),
                       ],
                     ),
                   ),
-                ),
-                // Tab Content
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    physics: isLoading
-                        ? const NeverScrollableScrollPhysics()
-                        : null,
-                    children: [
-                      // Browse Tab
-                      _buildBrowseTab(context, recipeProvider),
-                      // Generate Tab
-                      _buildGenerateTab(
-                        context,
-                        recipeProvider,
-                        premiumProvider,
-                        isLoading,
-                        recipe,
-                        canGenerateRecipe,
-                        aiRecipeLimit,
-                        aiRecipeCount,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
           ],
         ),
       ),
@@ -788,211 +895,9 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Ingredients Input Card
-                Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: AppColors.getCardShadow(context),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header with icon and title
-                      Row(
-                        children: [
-                          // Fork and knife icon
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Icon(
-                              Icons.restaurant,
-                              size: 20,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          // Title
-                          Expanded(
-                            child: Text(
-                              context.t('recipes.what.ingredients'),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          // Circular dot in top right
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.6),
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      // Large text input field
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.inputDark
-                              : AppColors.input,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: TextField(
-                          controller: _ingredientsController,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            hintText: context.t(
-                              'recipes.ingredients.placeholder',
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(16),
-                            hintStyle: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withOpacity(0.5),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      // Scan and Voice buttons
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Theme.of(
-                                    context,
-                                  ).dividerColor.withOpacity(0.3),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () async {
-                                    final premiumProvider =
-                                        context.read<PremiumProvider>();
-                                    final canUse =
-                                        await premiumProvider.canUseScanner();
-                                    if (!mounted) return;
-                                    if (canUse) {
-                                      premiumProvider.incrementScanCount();
-                                      if (mounted) context.push('/scan');
-                                    } else {
-                                      ProNavigation.tryOpen(
-                                        context,
-                                        replace: false,
-                                      );
-                                    }
-                                  },
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                      horizontal: 16,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.camera_alt,
-                                          size: 18,
-                                          color: AppColors.primary,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          context.t('recipes.scan'),
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Theme.of(
-                                    context,
-                                  ).dividerColor.withOpacity(0.3),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: _showVoiceInputDialog,
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                      horizontal: 16,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.mic,
-                                          size: 18,
-                                          color: AppColors.geniePurple,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          context.t('recipes.voice'),
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                widget.showAsHomeTab
+                    ? _buildSmartChefIngredientsCard(context)
+                    : _buildClassicIngredientsCard(context),
                 const SizedBox(height: 24),
                 // Mood Selection
                 Text(
@@ -1514,6 +1419,403 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                 color: isSelected
                     ? Theme.of(context).colorScheme.onPrimary
                     : Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildClassicIngredientsCard(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: AppColors.getCardShadow(context),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.restaurant,
+                  size: 20,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  context.t('recipes.what.ingredients'),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.6),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.inputDark
+                  : AppColors.input,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: TextField(
+              controller: _ingredientsController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: context.t('recipes.ingredients.placeholder'),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.all(16),
+                hintStyle: TextStyle(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withOpacity(0.5),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _classicActionButton(
+                  context,
+                  icon: Icons.camera_alt,
+                  label: context.t('recipes.scan'),
+                  onTap: () async {
+                    final premiumProvider = context.read<PremiumProvider>();
+                    final canUse = await premiumProvider.canUseScanner();
+                    if (!mounted) return;
+                    if (canUse) {
+                      premiumProvider.incrementScanCount();
+                      if (mounted) context.push('/scan');
+                    } else {
+                      ProNavigation.tryOpen(context, replace: false);
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _classicActionButton(
+                  context,
+                  icon: Icons.mic,
+                  label: context.t('recipes.voice'),
+                  onTap: _showVoiceInputDialog,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _classicActionButton(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withOpacity(0.3),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 18, color: AppColors.primary),
+                const SizedBox(width: 8),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSmartChefIngredientsCard(BuildContext context) {
+    final dir = Directionality.of(context);
+    const rightImageReserve = 147.97;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [Color(0xFFDFF0FB), Color(0xFFDBEDFF), Color(0xFFD8EEEC)],
+          stops: [0.0, 0.45, 1.0],
+          transform: GradientRotation(0.954),
+        ),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: const Color(0x804994FE), width: 1.2),
+      ),
+      child: Stack(
+        children: [
+          // Corner decoration image (behind content).
+          Positioned(
+            right: 0,
+            top: 0,
+            child: IgnorePointer(
+              child: Image.asset(
+                'assets/home_corner.png',
+                width: 120,
+                height: 120,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(17.46, 27.19, 17.46, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: rightImageReserve),
+                  child: SizedBox(
+                    // Don't hard-lock height; it was clipping the 2nd line.
+                    child: RichText(
+                      textAlign: dir == TextDirection.rtl
+                          ? TextAlign.right
+                          : TextAlign.left,
+                      text: TextSpan(
+                        style: GoogleFonts.inter(
+                          fontSize: 18,
+                          height: 1.15,
+                          letterSpacing: -0.15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        children: [
+                          TextSpan(
+                            text:
+                                '${context.t('smartChefWhatIngredientsLine1')} ',
+                            style: const TextStyle(color: Color(0xFF1E1E3A)),
+                          ),
+                          TextSpan(
+                            text:
+                                '\n${context.t('smartChefWhatIngredientsLine2')}',
+                            style: const TextStyle(color: Color(0xFF4290FE)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Padding(
+                  padding: const EdgeInsets.only(right: rightImageReserve),
+                  child: Text(
+                    context.t('smartChefSubtitle'),
+                    // In RTL, keep description on the left to avoid the right corner image.
+                    textAlign: dir == TextDirection.rtl
+                        ? TextAlign.left
+                        : TextAlign.left,
+                    style: GoogleFonts.inter(
+                      fontSize: 14.9,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF6264A0),
+                      height: 1.2,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  // Match Android margins inside the card.
+                  // Card left pad is 17.46; input wants 22.46 (=> +5.0)
+                  // Card right pad is 17.46; input wants 27.19 (=> +9.73)
+                  padding: const EdgeInsets.only(left: 5, right: 9.73),
+                  child: SizedBox(
+                    height: 96.95,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xB3FFFFFF),
+                        borderRadius: BorderRadius.circular(19.55),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x1A000000),
+                            offset: Offset(0, 10),
+                            blurRadius: 24,
+                          ),
+                        ],
+                      ),
+                      foregroundDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(19.55),
+                        border: Border.all(
+                          color: const Color(0xFFB8D7FF),
+                          width: 3,
+                        ),
+                      ),
+                      // Clip only the TextField/content, not the border stroke.
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(19.55),
+                        child: TextField(
+                          controller: _ingredientsController,
+                          maxLines: 3,
+                          decoration: InputDecoration(
+                            hintText: context.t('smartChefIngredientsHint'),
+                            border: InputBorder.none,
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                            disabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                            errorBorder: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedErrorBorder: const OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
+                            hintStyle: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF8A8FB0),
+                            ),
+                          ),
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF1E1E3A),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  // Match Android margins inside the card row.
+                  padding: const EdgeInsets.only(left: 5, right: 9.73),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _smartChefPillButton(
+                          icon: Icons.camera_alt,
+                          label: context.t('recipes.scan'),
+                          onTap: () => context.push('/scan'),
+                          height: 50.69,
+                          radius: 25.3431,
+                          background: const Color(0xFF4994FE),
+                          outlined: false,
+                          elevation: 8,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _smartChefPillButton(
+                          icon: Icons.mic,
+                          label: context.t('recipes.voice'),
+                          onTap: _showVoiceInputDialog,
+                          height: 50.69,
+                          radius: 25.3431,
+                          outlined: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _smartChefPillButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    bool outlined = false,
+    double height = 36,
+    double radius = 20,
+    Color background = const Color(0xFF5A98FD),
+    double elevation = 0,
+  }) {
+    final bg = outlined ? Colors.white : background;
+    final fg = outlined ? background : Colors.white;
+    return SizedBox(
+      height: height,
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: bg,
+          foregroundColor: fg,
+          elevation: elevation,
+          shadowColor: const Color(0x33000000),
+          side: outlined
+              ? BorderSide(color: background.withOpacity(0.35), width: 1.2)
+              : BorderSide.none,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radius),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 16, color: fg),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: fg,
+                height: 1.0,
               ),
             ),
           ],

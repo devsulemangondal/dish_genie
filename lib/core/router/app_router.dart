@@ -129,6 +129,16 @@ class AppRouter {
         GoRoute(
           path: '/',
           name: 'home',
+          builder: (context, state) => const RecipeGeneratorScreen(
+            initialTabIndex: 1,
+            lockToAiGenerateTab: true,
+            showAsHomeTab: true,
+          ),
+        ),
+        GoRoute(
+          // Old Home screen (Quick Actions, etc.)
+          path: '/home',
+          name: 'home-old',
           builder: (context, state) => const HomeScreen(),
         ),
         GoRoute(

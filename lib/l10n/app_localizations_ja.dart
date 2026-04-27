@@ -319,6 +319,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get recipesVoice => '音声';
 
   @override
+  String get smartChefTitle => 'スマートシェフ';
+
+  @override
+  String get smartChefPro => 'プロ';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'どんな食材';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'がありますか？';
+
+  @override
+  String get smartChefSubtitle => '食材をおいしい料理に\n変えましょう';
+
+  @override
+  String get smartChefIngredientsHint => '例：鶏肉、にんにく、トマト、米...';
+
+  @override
   String get recipesStop => '停止';
 
   @override

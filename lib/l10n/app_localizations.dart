@@ -758,6 +758,42 @@ abstract class AppLocalizations {
   /// **'Voice'**
   String get recipesVoice;
 
+  /// No description provided for @smartChefTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Chef'**
+  String get smartChefTitle;
+
+  /// No description provided for @smartChefPro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro'**
+  String get smartChefPro;
+
+  /// No description provided for @smartChefWhatIngredientsLine1.
+  ///
+  /// In en, this message translates to:
+  /// **'What ingredients'**
+  String get smartChefWhatIngredientsLine1;
+
+  /// No description provided for @smartChefWhatIngredientsLine2.
+  ///
+  /// In en, this message translates to:
+  /// **'do you have?'**
+  String get smartChefWhatIngredientsLine2;
+
+  /// No description provided for @smartChefSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn your ingredients into a\ndelicious meal'**
+  String get smartChefSubtitle;
+
+  /// No description provided for @smartChefIngredientsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., chicken, garlic, tomato, rice...'**
+  String get smartChefIngredientsHint;
+
   /// No description provided for @recipesStop.
   ///
   /// In en, this message translates to:

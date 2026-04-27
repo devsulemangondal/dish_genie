@@ -323,6 +323,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get recipesVoice => 'Ses';
 
   @override
+  String get smartChefTitle => 'Akıllı Şef';
+
+  @override
+  String get smartChefPro => 'Pro';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'Hangi malzemeler';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'var?';
+
+  @override
+  String get smartChefSubtitle => 'Malzemelerini\nleziz bir yemeğe dönüştür';
+
+  @override
+  String get smartChefIngredientsHint =>
+      'örn.: tavuk, sarımsak, domates, pirinç...';
+
+  @override
   String get recipesStop => 'Dur';
 
   @override

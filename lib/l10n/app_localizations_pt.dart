@@ -322,6 +322,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get recipesVoice => 'Voz';
 
   @override
+  String get smartChefTitle => 'Chef Inteligente';
+
+  @override
+  String get smartChefPro => 'Pro';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'Quais ingredientes';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'você tem?';
+
+  @override
+  String get smartChefSubtitle =>
+      'Transforme seus ingredientes em\numa refeição deliciosa';
+
+  @override
+  String get smartChefIngredientsHint => 'ex.: frango, alho, tomate, arroz...';
+
+  @override
   String get recipesStop => 'Parar';
 
   @override

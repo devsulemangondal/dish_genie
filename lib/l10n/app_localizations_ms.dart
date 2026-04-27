@@ -323,6 +323,26 @@ class AppLocalizationsMs extends AppLocalizations {
   String get recipesVoice => 'Suara';
 
   @override
+  String get smartChefTitle => 'Chef Pintar';
+
+  @override
+  String get smartChefPro => 'Pro';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'Bahan apa';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'yang anda ada?';
+
+  @override
+  String get smartChefSubtitle =>
+      'Tukar bahan anda menjadi\nhidangan yang lazat';
+
+  @override
+  String get smartChefIngredientsHint =>
+      'cth.: ayam, bawang putih, tomato, nasi...';
+
+  @override
   String get recipesStop => 'Berhenti';
 
   @override

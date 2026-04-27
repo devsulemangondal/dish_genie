@@ -320,6 +320,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get recipesVoice => 'صوت';
 
   @override
+  String get smartChefTitle => 'الشيف الذكي';
+
+  @override
+  String get smartChefPro => 'احترافي';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'ما المكوّنات';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'التي لديك؟';
+
+  @override
+  String get smartChefSubtitle => 'حوّل مكوّناتك إلى\nوجبة لذيذة';
+
+  @override
+  String get smartChefIngredientsHint => 'مثال: دجاج، ثوم، طماطم، أرز...';
+
+  @override
   String get recipesStop => 'إيقاف';
 
   @override

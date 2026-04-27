@@ -323,6 +323,26 @@ class AppLocalizationsKk extends AppLocalizations {
   String get recipesVoice => 'Дауыс';
 
   @override
+  String get smartChefTitle => 'Ақылды аспаз';
+
+  @override
+  String get smartChefPro => 'Pro';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'Қандай ингредиенттер';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'бар?';
+
+  @override
+  String get smartChefSubtitle =>
+      'Ингредиенттеріңізді\nдәмді асқа айналдырыңыз';
+
+  @override
+  String get smartChefIngredientsHint =>
+      'мысалы: тауық, сарымсақ, қызанақ, күріш...';
+
+  @override
   String get recipesStop => 'Тоқтату';
 
   @override

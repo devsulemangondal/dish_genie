@@ -105,6 +105,8 @@ flutter:
     - assets/genie-mascot-padded.png
     - assets/pro_header.png
     - assets/pro_top.png
+    - assets/pro_top_new.png
+    - assets/home_corner.png
     - assets/profile.png
     - assets/popup.png
     - assets/popupinner.png

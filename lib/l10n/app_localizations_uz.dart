@@ -322,6 +322,26 @@ class AppLocalizationsUz extends AppLocalizations {
   String get recipesVoice => 'Ovoz';
 
   @override
+  String get smartChefTitle => 'Aqlli oshpaz';
+
+  @override
+  String get smartChefPro => 'Pro';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'Qanday masalliqlar';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'bor?';
+
+  @override
+  String get smartChefSubtitle =>
+      'Masalliqlaringizni\nmazali taomga aylantiring';
+
+  @override
+  String get smartChefIngredientsHint =>
+      'masalan: tovuq, sarimsoq, pomidor, guruch...';
+
+  @override
   String get recipesStop => 'To\'xtatish';
 
   @override

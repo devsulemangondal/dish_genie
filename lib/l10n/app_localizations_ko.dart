@@ -319,6 +319,24 @@ class AppLocalizationsKo extends AppLocalizations {
   String get recipesVoice => '음성';
 
   @override
+  String get smartChefTitle => '스마트 셰프';
+
+  @override
+  String get smartChefPro => '프로';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => '어떤 재료가';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => '있나요?';
+
+  @override
+  String get smartChefSubtitle => '재료를 맛있는 요리로\n바꿔 보세요';
+
+  @override
+  String get smartChefIngredientsHint => '예: 치킨, 마늘, 토마토, 밥...';
+
+  @override
   String get recipesStop => '중지';
 
   @override

@@ -323,6 +323,25 @@ class AppLocalizationsBn extends AppLocalizations {
   String get recipesVoice => 'ভয়েস';
 
   @override
+  String get smartChefTitle => 'স্মার্ট শেফ';
+
+  @override
+  String get smartChefPro => 'প্রো';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'আপনার কাছে কোন কোন';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'উপকরণ আছে?';
+
+  @override
+  String get smartChefSubtitle =>
+      'আপনার উপকরণকে বদলে দিন\nএকটি সুস্বাদু খাবারে';
+
+  @override
+  String get smartChefIngredientsHint => 'যেমন: মুরগি, রসুন, টমেটো, চাল...';
+
+  @override
   String get recipesStop => 'থামুন';
 
   @override

@@ -321,6 +321,25 @@ class AppLocalizationsVi extends AppLocalizations {
   String get recipesVoice => 'Giọng nói';
 
   @override
+  String get smartChefTitle => 'Đầu bếp thông minh';
+
+  @override
+  String get smartChefPro => 'Pro';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'Bạn có những';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'nguyên liệu nào?';
+
+  @override
+  String get smartChefSubtitle =>
+      'Biến nguyên liệu của bạn thành\nmột bữa ăn ngon';
+
+  @override
+  String get smartChefIngredientsHint => 'vd: gà, tỏi, cà chua, cơm...';
+
+  @override
   String get recipesStop => 'Dừng';
 
   @override

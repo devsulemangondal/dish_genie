@@ -322,6 +322,26 @@ class AppLocalizationsFil extends AppLocalizations {
   String get recipesVoice => 'Boses';
 
   @override
+  String get smartChefTitle => 'Smart Chef';
+
+  @override
+  String get smartChefPro => 'Pro';
+
+  @override
+  String get smartChefWhatIngredientsLine1 => 'Anong mga sangkap';
+
+  @override
+  String get smartChefWhatIngredientsLine2 => 'ang meron ka?';
+
+  @override
+  String get smartChefSubtitle =>
+      'Gawing masarap na pagkain\nang mga sangkap mo';
+
+  @override
+  String get smartChefIngredientsHint =>
+      'hal.: manok, bawang, kamatis, kanin...';
+
+  @override
   String get recipesStop => 'Itigil';
 
   @override
