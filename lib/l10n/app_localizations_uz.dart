@@ -18,7 +18,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get commonPlan => 'Reja';
 
   @override
-  String get commonShop => 'Do\'kon';
+  String get commonShop => 'Oziq-ovqat';
 
   @override
   String get commonChat => 'Chat';
@@ -52,6 +52,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get commonSearch => 'Qidirish';
+
+  @override
+  String get commonGallery => 'Galereya';
 
   @override
   String get commonLoading => 'Yuklanmoqda...';
@@ -226,11 +229,11 @@ class AppLocalizationsUz extends AppLocalizations {
   String get authHasAccount => 'Allaqachon hisobingiz bormi?';
 
   @override
-  String get authWelcomeBack => 'DishGenie\'ga xush kelibsiz!';
+  String get authWelcomeBack => 'Smart Chef\'ga xush kelibsiz!';
 
   @override
   String get authWelcomeNew =>
-      'DishGenie\'ga xush kelibsiz! Hisobingiz yaratildi.';
+      'Smart Chef\'ga xush kelibsiz! Hisobingiz yaratildi.';
 
   @override
   String get authInvalidCredentials => 'Noto\'g\'ri email yoki parol';
@@ -320,6 +323,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get recipesVoice => 'Ovoz';
+
+  @override
+  String get scannerCameraNotAvailable => 'Kamera mavjud emas';
 
   @override
   String get smartChefTitle => 'Aqlli oshpaz';
@@ -953,13 +959,13 @@ class AppLocalizationsUz extends AppLocalizations {
       'AI sizning ro\'yxatingizni optimallashtirmoqda...';
 
   @override
-  String get chatTitle => 'DishGenie Chat';
+  String get chatTitle => 'Smart Chef Chat';
 
   @override
   String get chatSubtitle => 'Sizning SI oshpazlik yordamchingiz';
 
   @override
-  String get chatGreeting => 'Salom, men DishGenie!';
+  String get chatGreeting => 'Salom, men Smart Chef!';
 
   @override
   String get chatGreetingSubtitle =>
@@ -1608,7 +1614,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get savedMealPlanContinuePlan => 'Rejani davom ettirish';
 
   @override
-  String get splashAppName => 'DishGenie';
+  String get splashAppName => 'Smart Chef';
 
   @override
   String get splashSubtitle => 'Sizning AI oshxona hamrohingiz';
@@ -1670,7 +1676,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get settingsThemeSystem => 'Tizim';
 
   @override
-  String get landingAppName => 'DishGenie AI';
+  String get landingAppName => 'Smart Chef AI';
 
   @override
   String get landingDownloadForIOS => 'IOS uchun yuklab olish';
@@ -1687,7 +1693,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get premiumWelcomeMessage =>
-      'DishGenie Pro-ga xush kelibsiz! Barcha premium funksiyalardan rohatlaning.';
+      'Smart Chef Pro-ga xush kelibsiz! Barcha premium funksiyalardan rohatlaning.';
 
   @override
   String get premiumPurchasesRestored => 'Xaridlar muvaffaqiyatli tiklandi';
@@ -1700,7 +1706,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get premiumYouArePro => 'Siz Prosiz!';
 
   @override
-  String get premiumUnlockTitle => 'DishGenie Pro qulfini oching';
+  String get premiumUnlockTitle => 'Smart Chef Pro qulfini oching';
 
   @override
   String get premiumSubtitle => 'Sizning shaxsiy AI pishirish yordamchingiz';
@@ -1776,7 +1782,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get scannerKcal => 'kkal';
 
   @override
-  String get appTitle => 'DishGenie';
+  String get appTitle => 'Smart Chef';
 
   @override
   String get searchTitle => 'Qidiruv';
@@ -1910,20 +1916,20 @@ class AppLocalizationsUz extends AppLocalizations {
   String get backButtonExit => 'Chiqish';
 
   @override
-  String get appHeaderTitle => 'DishGenie';
+  String get appHeaderTitle => 'Smart Chef';
 
   @override
   String get premiumCardUnlock => 'Qulfni ochish ';
 
   @override
-  String get premiumCardDishGeniePro => 'DishGenie Pro';
+  String get premiumCardSmartChefPro => 'Smart Chef Pro';
 
   @override
   String get premiumCardSubtitle =>
       'Reklamasiz tajriba va cheksiz AI funksiyalari';
 
   @override
-  String get premiumCardTryPlus => 'Dish Genie Plus ni sinab ko\'ring';
+  String get premiumCardTryPlus => 'Smart Chef Plus ni sinab ko\'ring';
 
   @override
   String get premiumCardGetPlus => 'Plus oling';
@@ -2010,7 +2016,7 @@ class AppLocalizationsUz extends AppLocalizations {
       'Sizning shaxsiy AI bilan ishlaydigan oshxona yordamchingiz. Sog\'lom retseptlar yarating, hafta davomida ovqatlanishni rejalashtiring va aqlli oziq-ovqat ro\'yxatlarini yarating - barchasi sizning didingiz, byudjetingiz va maqsadlaringizga moslashtirilgan.';
 
   @override
-  String get landingWhyDishGenie => 'Nima uchun DishGenie?';
+  String get landingWhySmartChef => 'Nima uchun Smart Chef?';
 
   @override
   String get landingKitchenSupercharged =>
@@ -2080,7 +2086,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get landingTestimonial1Quote =>
-      'DishGenie mening ovqatlanishni rejalashtirishimni o\'zgartirdi. Men har hafta 5+ soatni tejayman!';
+      'Smart Chef mening ovqatlanishni rejalashtirishimni o\'zgartirdi. Men har hafta 5+ soatni tejayman!';
 
   @override
   String get landingTestimonial2Name => 'Ahmad K.';
@@ -2112,7 +2118,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get landingCopyright =>
-      '© 2024 DishGenie AI. Barcha huquqlar himoyalangan.';
+      '© 2024 Smart Chef AI. Barcha huquqlar himoyalangan.';
 
   @override
   String get recipesLimitReached => 'Siz chegarangizga yetdingiz';
@@ -2133,7 +2139,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get premiumTitleLine1 => 'Aqlliroq pishiring';
 
   @override
-  String get premiumTitleLine2 => 'Dish Genie Premium bilan.';
+  String get premiumTitleLine2 => 'Smart Chef Premium bilan.';
 
   @override
   String get premiumSeeMorePlans => 'Ko\'proq rejalarni ko\'ring';
@@ -2177,7 +2183,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get premiumTestimonialQuote =>
-      'Men endi onlayn retsept qidirishga vaqt sarflamayman. DishGenie muzlatgichimdagi mahsulotlardan darhol taomlar yaratadi.';
+      'Men endi onlayn retsept qidirishga vaqt sarflamayman. Smart Chef muzlatgichimdagi mahsulotlardan darhol taomlar yaratadi.';
 
   @override
   String get premiumSocialStats => '📊 Ijtimoiy statistika';
@@ -2243,7 +2249,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get premiumBestValueRibbon => 'ENG YAXSHI';
 
   @override
-  String get discountPopupTitle => '🔥 Dish Genie PRO-ni\noching';
+  String get discountPopupTitle => '🔥 Smart Chef PRO-ni\noching';
 
   @override
   String get discountPopupPerMonth => 'Oylik';

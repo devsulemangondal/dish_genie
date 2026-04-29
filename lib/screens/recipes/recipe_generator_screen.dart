@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/dialogs/app_dialogs.dart';
@@ -41,43 +44,33 @@ class RecipeGeneratorScreen extends StatefulWidget {
 
 class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  final TextEditingController _searchController = TextEditingController();
   final TextEditingController _ingredientsController = TextEditingController();
+  final ImagePicker _imagePicker = ImagePicker();
+  String _searchText = '';
+  String? _selectedCategory;
   String? _selectedCuisine;
   String? _selectedDiet;
   String? _selectedGoal;
   String? _selectedMood;
-  String? _selectedCategory;
   int _cookingTime = 30;
   int _targetCalories = 500;
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(() {
+    _selectedCategory = widget.category;
+    _searchText = (widget.searchQuery ?? '').trim();
+    _searchController.text = _searchText;
+    if (widget.showAsHomeTab && widget.searchQuery != null) {
+      _ingredientsController.text = widget.searchQuery!.trim();
+    }
+    _searchController.addListener(() {
+      final next = _searchController.text.trim();
+      if (next == _searchText) return;
       if (!mounted) return;
-      if (widget.lockToAiGenerateTab && _tabController.index != 1) {
-        _tabController.animateTo(1);
-        return;
-      }
-      setState(() {});
+      setState(() => _searchText = next);
     });
-    if (widget.initialTabIndex > 0) {
-      _tabController.index = widget.initialTabIndex.clamp(0, 1);
-    }
-    if (widget.lockToAiGenerateTab) {
-      _tabController.index = 1;
-    }
-    if (widget.searchQuery != null) {
-      _ingredientsController.text = widget.searchQuery!;
-      _tabController.animateTo(1);
-      // Auto-generate if needed
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (widget.searchQuery != null && widget.searchQuery!.isNotEmpty) {
-          _handleGenerate();
-        }
-      });
-    }
     _trackCardScreenOpen();
   }
 
@@ -87,7 +80,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _searchController.dispose();
     _ingredientsController.dispose();
     super.dispose();
   }
@@ -96,81 +89,56 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
     final text = await showVoiceInputDialog(context);
     if (text != null && text.trim().isNotEmpty && mounted) {
       setState(() {
-        _ingredientsController.text = _ingredientsController.text.isEmpty
+        final controller = widget.showAsHomeTab
+            ? _ingredientsController
+            : _searchController;
+        controller.text = controller.text.isEmpty
             ? text.trim()
-            : '${_ingredientsController.text}, ${text.trim()}';
+            : '${controller.text}, ${text.trim()}';
       });
     }
   }
 
-  Future<void> _handleBack(
-    BuildContext context,
-    RecipeProvider recipeProvider,
-    bool isLoading,
-  ) async {
-    if (isLoading) {
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(context.t('recipes.cancel.generation.title')),
-          content: Text(context.t('recipes.cancel.generation.message')),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: Text(context.t('common.cancel')),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              child: Text(context.t('common.confirm')),
-            ),
-          ],
-        ),
-      );
-      if (confirmed == true && mounted) {
-        recipeProvider.cancelGeneration();
-        if (_tabController.index > 0) {
-          _tabController.animateTo(0);
-        } else if (context.canPop()) {
-          context.pop();
-        } else {
-          context.go('/');
-        }
-      }
+  Future<void> _pickScanFromGallery() async {
+    final premiumProvider = context.read<PremiumProvider>();
+    if (!premiumProvider.canUseScannerSync()) {
+      ProNavigation.tryOpen(context, replace: false);
       return;
     }
-    if (context.canPop()) {
-      context.pop();
-    } else if (_tabController.index > 0) {
-      _tabController.animateTo(0);
-    } else {
-      context.go('/');
-    }
+
+    try {
+      final XFile? image = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
+      if (image != null && mounted) {
+        context.push('/scan-crop', extra: image);
+      }
+    } catch (_) {}
   }
 
   Future<void> _handleGenerate() async {
-    if (_ingredientsController.text.trim().isEmpty) {
+    final ingredients = _ingredientsController.text.trim();
+    if (ingredients.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.t('recipes.enter.ingredients'))),
       );
       return;
     }
+
     if (!await ensureConnectedAndShowDialog(context)) return;
 
-    // Check if user can generate AI recipes based on remote config
     final premiumProvider = context.read<PremiumProvider>();
-    if (!premiumProvider.isPremium) {
-      if (!premiumProvider.canGenerateAiRecipe()) {
-        // Don't generate - limit reached message is shown in UI
-        return;
-      }
+    if (!premiumProvider.isPremium && !premiumProvider.canGenerateAiRecipe()) {
+      ProNavigation.tryOpen(context, replace: false);
+      return;
     }
 
-    // Get current language code
     final languageCode = Localizations.localeOf(context).languageCode;
-
     final recipeProvider = context.read<RecipeProvider>();
+
     final generatedRecipe = await recipeProvider.generateRecipe(
-      ingredients: _ingredientsController.text,
+      ingredients: ingredients,
       cookingTime: _cookingTime,
       targetCalories: _targetCalories,
       cuisine: _selectedCuisine,
@@ -180,9 +148,16 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
       language: languageCode,
     );
 
-    // Increment AI recipe count for free users after successful generation
     if (generatedRecipe != null && !premiumProvider.isPremium) {
       premiumProvider.incrementAiRecipeCount();
+    }
+  }
+
+  Future<void> _handleBack(BuildContext context) async {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/');
     }
   }
 
@@ -190,55 +165,11 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
   Widget build(BuildContext context) {
     final recipeProvider = context.watch<RecipeProvider>();
     final premiumProvider = context.watch<PremiumProvider>();
-    final recipe = recipeProvider.recipe;
-    final isLoading = recipeProvider.isLoading;
-
-    // Check if user can generate AI recipes
-    final canGenerateRecipe =
-        premiumProvider.isPremium || premiumProvider.canGenerateAiRecipe();
-    final aiRecipeLimit = premiumProvider.getAiRecipeLimit();
-    final aiRecipeCount = premiumProvider.aiRecipeCount;
 
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
         if (didPop) return;
-
-        // If generating, show confirmation before going back.
-        if (isLoading) {
-          final confirmed = await showDialog<bool>(
-            context: context,
-            builder: (ctx) => AlertDialog(
-              title: Text(context.t('recipes.cancel.generation.title')),
-              content: Text(context.t('recipes.cancel.generation.message')),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(ctx).pop(false),
-                  child: Text(context.t('common.cancel')),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(ctx).pop(true),
-                  child: Text(context.t('common.confirm')),
-                ),
-              ],
-            ),
-          );
-          if (confirmed == true && mounted) {
-            recipeProvider.cancelGeneration();
-            if (_tabController.index > 0) {
-              _tabController.animateTo(0);
-            } else {
-              context.go('/');
-            }
-          }
-          return;
-        }
-
-        // If user is on the AI Generated tab, go back to Browse tab first.
-        if (_tabController.index > 0) {
-          _tabController.animateTo(0);
-          return;
-        }
 
         // Otherwise, go to Home (bottom nav index 0).
         context.go('/');
@@ -279,13 +210,15 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                             fontSize: 26,
                             height: 34 / 26,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF1E2945),
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : const Color(0xFF1E2945),
                           )
                         : null,
                     showBack: !widget.showAsHomeTab,
                     onBack: widget.showAsHomeTab
                         ? null
-                        : () => _handleBack(context, recipeProvider, isLoading),
+                        : () => _handleBack(context),
                     backgroundColor: Colors.transparent,
                     statusBarColor:
                         Theme.of(context).brightness == Brightness.dark
@@ -295,41 +228,47 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                         ? Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                width: 70,
-                                height: 32,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                      colors: [
-                                        Color(0xFFFFB301),
-                                        Color(0xFFFD5C17),
-                                      ],
+                              GestureDetector(
+                                onTap: () => ProNavigation.tryOpen(
+                                  context,
+                                  replace: false,
+                                ),
+                                child: SizedBox(
+                                  width: 70,
+                                  height: 32,
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [
+                                          Color(0xFFFFB301),
+                                          Color(0xFFFD5C17),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(
-                                          Icons.auto_awesome,
-                                          size: 14,
-                                          color: Colors.white,
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          context.t('smartChefPro'),
-                                          style: GoogleFonts.inter(
-                                            fontSize: 12.5,
-                                            height: 1.0,
-                                            fontWeight: FontWeight.w700,
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(
+                                            Icons.auto_awesome,
+                                            size: 14,
                                             color: Colors.white,
                                           ),
-                                        ),
-                                      ],
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            context.t('smartChefPro'),
+                                            style: GoogleFonts.inter(
+                                              fontSize: 12.5,
+                                              height: 1.0,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -349,111 +288,16 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                               ),
                             ],
                           )
-                        : (_tabController.index == 1 &&
-                                  !premiumProvider.isPremium &&
-                                  aiRecipeLimit != null
-                              ? Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.surface.withOpacity(0.9),
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: Theme.of(
-                                        context,
-                                      ).dividerColor.withOpacity(0.3),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    '$aiRecipeCount/$aiRecipeLimit',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurface,
-                                    ),
-                                  ),
-                                )
-                              : null),
+                        : null,
                   ),
-                  // Tabs (hidden while generating, and hidden when shown as Home tab)
-                  if (!isLoading && !widget.showAsHomeTab)
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: AppColors.getCardShadow(context),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: TabBar(
-                          controller: _tabController,
-                          labelColor: Theme.of(context).colorScheme.onPrimary,
-                          unselectedLabelColor: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withOpacity(0.7),
-                          indicator: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                AppColors.geniePurple,
-                                AppColors.geniePink,
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          dividerColor: Colors.transparent,
-                          labelStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          unselectedLabelStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          tabs: [
-                            Tab(text: context.t('recipes.browse')),
-                            Tab(text: context.t('recipes.ai.generate')),
-                          ],
-                        ),
-                      ),
-                    ),
-                  // Tab Content
                   Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      physics: isLoading
-                          ? const NeverScrollableScrollPhysics()
-                          : (widget.lockToAiGenerateTab
-                                ? const NeverScrollableScrollPhysics()
-                                : null),
-                      children: [
-                        // Browse Tab
-                        _buildBrowseTab(context, recipeProvider),
-                        // Generate Tab
-                        _buildGenerateTab(
-                          context,
-                          recipeProvider,
-                          premiumProvider,
-                          isLoading,
-                          recipe,
-                          canGenerateRecipe,
-                          aiRecipeLimit,
-                          aiRecipeCount,
-                        ),
-                      ],
-                    ),
+                    child: widget.showAsHomeTab
+                        ? _buildAiHomeTab(
+                            context,
+                            recipeProvider,
+                            premiumProvider,
+                          )
+                        : _buildBrowseTab(context, recipeProvider),
                   ),
                 ],
               ),
@@ -465,10 +309,12 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
   }
 
   Widget _buildBrowseTab(BuildContext context, RecipeProvider recipeProvider) {
+    final searchText = _searchText.trim();
+
     // Filter recipes based on search or category
     List<Recipe> displayRecipes = [];
-    if (widget.searchQuery != null) {
-      displayRecipes = recipeProvider.searchRecipes(widget.searchQuery!);
+    if (searchText.isNotEmpty) {
+      displayRecipes = recipeProvider.searchRecipes(searchText);
     } else if (_selectedCategory != null) {
       displayRecipes = recipeProvider.filterByCategory(_selectedCategory!);
     } else {
@@ -521,8 +367,11 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Search Bar
+          _buildBrowseSearchBar(context),
+          const SizedBox(height: 12),
           // Search Results Header
-          if (widget.searchQuery != null)
+          if (searchText.isNotEmpty)
             Container(
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.only(bottom: 16),
@@ -546,7 +395,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                             text: '${context.t('recipes.results.for')} ',
                           ),
                           TextSpan(
-                            text: '"${widget.searchQuery}"',
+                            text: '"$searchText"',
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -554,7 +403,13 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => context.go('/recipes'),
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      setState(() {
+                        _searchController.clear();
+                        _searchText = '';
+                      });
+                    },
                     child: Container(
                       width: 24,
                       height: 24,
@@ -573,7 +428,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
               ),
             ),
           // No Results Message
-          if (widget.searchQuery != null && displayRecipes.isEmpty)
+          if (searchText.isNotEmpty && displayRecipes.isEmpty)
             Container(
               padding: const EdgeInsets.all(32),
               margin: const EdgeInsets.only(bottom: 16),
@@ -595,7 +450,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${context.t('recipes.try.other')} "${widget.searchQuery}"',
+                    '${context.t('recipes.try.other')} "$searchText"',
                     style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(
@@ -606,14 +461,20 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                   ),
                   const SizedBox(height: 16),
                   TextButton(
-                    onPressed: () => context.go('/recipes'),
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      setState(() {
+                        _searchController.clear();
+                        _searchText = '';
+                      });
+                    },
                     child: Text(context.t('recipes.clear.search')),
                   ),
                 ],
               ),
             ),
           // Category Chips - hide when searching
-          if (widget.searchQuery == null)
+          if (searchText.isEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 4, bottom: 0),
               child: GridView.count(
@@ -752,7 +613,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                 ],
               ),
             ),
-          if (widget.searchQuery == null) const SizedBox(height: 8),
+          if (searchText.isEmpty) const SizedBox(height: 8),
           // Recipes Grid
           if (displayRecipes.isNotEmpty)
             LayoutBuilder(
@@ -783,108 +644,90 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
     );
   }
 
-  Widget _buildGenerateTab(
+  Widget _buildBrowseSearchBar(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final fillColor = isDark ? AppColors.inputDark : AppColors.input;
+
+    final hint =
+        context.t('recipes.search.placeholder') != 'recipes.search.placeholder'
+        ? context.t('recipes.search.placeholder')
+        : 'Search recipes, ingredients...';
+
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: BorderSide(color: theme.dividerColor.withOpacity(0.25)),
+    );
+
+    return TextField(
+      controller: _searchController,
+      textInputAction: TextInputAction.search,
+      decoration: InputDecoration(
+        hintText: hint,
+        filled: true,
+        fillColor: fillColor,
+        prefixIcon: const Icon(
+          Icons.search,
+          size: 18,
+          color: AppColors.primary,
+        ),
+        suffixIcon: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (_searchText.trim().isNotEmpty)
+              IconButton(
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  setState(() {
+                    _searchController.clear();
+                    _searchText = '';
+                  });
+                },
+                icon: Icon(
+                  Icons.close,
+                  size: 18,
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                ),
+                splashRadius: 18,
+                tooltip:
+                    context.t('recipes.clear.search') != 'recipes.clear.search'
+                    ? context.t('recipes.clear.search')
+                    : 'Clear',
+              ),
+            IconButton(
+              onPressed: _showVoiceInputDialog,
+              icon: const Icon(Icons.mic, color: AppColors.primary, size: 20),
+              splashRadius: 18,
+              tooltip: context.t('recipes.voice'),
+            ),
+            const SizedBox(width: 4),
+          ],
+        ),
+        border: border,
+        enabledBorder: border,
+        focusedBorder: border.copyWith(
+          borderSide: BorderSide(color: AppColors.primary.withOpacity(0.55)),
+        ),
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+      ),
+    );
+  }
+
+  Widget _buildAiHomeTab(
     BuildContext context,
     RecipeProvider recipeProvider,
     PremiumProvider premiumProvider,
-    bool isLoading,
-    Recipe? recipe,
-    bool canGenerateRecipe,
-    int? aiRecipeLimit,
-    int aiRecipeCount,
   ) {
+    final isLoading = recipeProvider.isLoading;
+    final recipe = recipeProvider.recipe;
+    final canGenerateRecipe =
+        premiumProvider.isPremium || premiumProvider.canGenerateAiRecipe();
+    final aiRecipeLimit = premiumProvider.getAiRecipeLimit();
+    final aiRecipeCount = premiumProvider.aiRecipeCount;
+
     if (isLoading) {
       return const Center(child: LoadingGenie());
-    }
-
-    if (recipe != null) {
-      return Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: RecipeCard(
-                title: recipe.title,
-                image: recipe.image,
-                time: recipe.time,
-                servings: recipe.servings,
-                calories: recipe.calories,
-                tags: recipe.tags,
-                hideImage: true, // Hide images for AI generated recipes
-                onTap: () {
-                  // Navigate to AI recipe detail screen
-                  context.push('/ai-recipe', extra: recipe);
-                },
-              ),
-            ),
-          ),
-          // Create New Recipe Button
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
-            child: SafeArea(
-              top: false,
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Reset the recipe and form
-                    recipeProvider.setRecipe(null);
-                    _ingredientsController.clear();
-                    setState(() {
-                      _selectedCuisine = null;
-                      _selectedDiet = null;
-                      _selectedGoal = null;
-                      _selectedMood = null;
-                      _cookingTime = 30;
-                      _targetCalories = 500;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).cardColor,
-                    foregroundColor: Theme.of(context).colorScheme.onSurface,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(
-                        color: Theme.of(context).dividerColor.withOpacity(0.3),
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.add_circle_outline,
-                        size: 20,
-                        color: AppColors.primary,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        context.t('recipes.new.recipe'),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
     }
 
     return Column(
@@ -895,11 +738,8 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                widget.showAsHomeTab
-                    ? _buildSmartChefIngredientsCard(context)
-                    : _buildClassicIngredientsCard(context),
+                _buildSmartChefIngredientsCard(context),
                 const SizedBox(height: 24),
-                // Mood Selection
                 Text(
                   context.t('recipes.what.craving'),
                   style: const TextStyle(
@@ -975,7 +815,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                   ],
                 ),
                 const SizedBox(height: 24),
-                // Time and Calories Sliders Side by Side
                 Row(
                   children: [
                     Expanded(
@@ -1065,7 +904,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                   ],
                 ),
                 const SizedBox(height: 24),
-                // Cuisine Section
                 Text(
                   context.t('recipes.cuisine'),
                   style: const TextStyle(
@@ -1120,7 +958,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                       ),
                     ),
                     _buildMoodChip(
-                      '🇹🇭',
+                      '🌶️',
                       context.t('recipes.cuisines.thai'),
                       _selectedCuisine == 'thai',
                       () => setState(
@@ -1163,7 +1001,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                   ],
                 ),
                 const SizedBox(height: 24),
-                // Diet Type Section
                 Text(
                   context.t('recipes.diet.type'),
                   style: const TextStyle(
@@ -1239,7 +1076,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                   ],
                 ),
                 const SizedBox(height: 24),
-                // Health Goal Section
                 Text(
                   context.t('recipes.health.goal'),
                   style: const TextStyle(
@@ -1294,18 +1130,28 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                     ),
                   ],
                 ),
-                // Limit Reached Banner (if limit reached)
                 if (!canGenerateRecipe && !premiumProvider.isPremium)
                   _buildLimitReachedBanner(
                     context,
                     aiRecipeLimit,
                     aiRecipeCount,
                   ),
+                const SizedBox(height: 12),
+                if (recipe != null)
+                  RecipeCard(
+                    title: recipe.title,
+                    image: recipe.image,
+                    time: recipe.time,
+                    servings: recipe.servings,
+                    calories: recipe.calories,
+                    tags: recipe.tags,
+                    hideImage: true,
+                    onTap: () => context.push('/ai-recipe', extra: recipe),
+                  ),
               ],
             ),
           ),
         ),
-        // Fixed Generate Button (non-scrollable)
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
@@ -1320,61 +1166,53 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
           ),
           child: SafeArea(
             top: false,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: canGenerateRecipe && !isLoading
-                    ? AppColors.gradientPrimary
-                    : null,
-                color: canGenerateRecipe && !isLoading
-                    ? null
-                    : Theme.of(context).cardColor.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: canGenerateRecipe && !isLoading
-                    ? [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.15),
-                          blurRadius: 24,
-                          offset: const Offset(0, 4),
+            child: Align(
+              alignment: Alignment.center,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 320),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: canGenerateRecipe ? AppColors.gradientPrimary : null,
+                    color: canGenerateRecipe
+                        ? null
+                        : Theme.of(context).cardColor.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: canGenerateRecipe ? _handleGenerate : null,
+                      borderRadius: BorderRadius.circular(20),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.restaurant_menu,
+                              color: canGenerateRecipe
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withOpacity(0.4),
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              context.t('recipes.generate.recipe'),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: canGenerateRecipe
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface.withOpacity(0.4),
+                              ),
+                            ),
+                          ],
                         ),
-                      ]
-                    : null,
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: (canGenerateRecipe && !isLoading)
-                      ? _handleGenerate
-                      : null,
-                  borderRadius: BorderRadius.circular(20),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.restaurant_menu,
-                          color: (canGenerateRecipe && !isLoading)
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withOpacity(0.4),
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          context.t('recipes.generate.recipe'),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: (canGenerateRecipe && !isLoading)
-                                ? Theme.of(context).colorScheme.onPrimary
-                                : Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface.withOpacity(0.4),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -1427,351 +1265,254 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
     );
   }
 
-  Widget _buildClassicIngredientsCard(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: AppColors.getCardShadow(context),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.restaurant,
-                  size: 20,
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  context.t('recipes.what.ingredients'),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.6),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.inputDark
-                  : AppColors.input,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: TextField(
-              controller: _ingredientsController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                hintText: context.t('recipes.ingredients.placeholder'),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.all(16),
-                hintStyle: TextStyle(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withOpacity(0.5),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _classicActionButton(
-                  context,
-                  icon: Icons.camera_alt,
-                  label: context.t('recipes.scan'),
-                  onTap: () async {
-                    final premiumProvider = context.read<PremiumProvider>();
-                    final canUse = await premiumProvider.canUseScanner();
-                    if (!mounted) return;
-                    if (canUse) {
-                      premiumProvider.incrementScanCount();
-                      if (mounted) context.push('/scan');
-                    } else {
-                      ProNavigation.tryOpen(context, replace: false);
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _classicActionButton(
-                  context,
-                  icon: Icons.mic,
-                  label: context.t('recipes.voice'),
-                  onTap: _showVoiceInputDialog,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _classicActionButton(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.3),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, size: 18, color: AppColors.primary),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildSmartChefIngredientsCard(BuildContext context) {
     final dir = Directionality.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     const rightImageReserve = 147.97;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [Color(0xFFDFF0FB), Color(0xFFDBEDFF), Color(0xFFD8EEEC)],
-          stops: [0.0, 0.45, 1.0],
-          transform: GradientRotation(0.954),
-        ),
+        gradient: isDark
+            ? const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF111827),
+                  Color(0xFF020617),
+                ],
+              )
+            : const LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xFFDFF0FB), Color(0xFFDBEDFF), Color(0xFFD8EEEC)],
+                stops: [0.0, 0.45, 1.0],
+                transform: GradientRotation(0.954),
+              ),
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: const Color(0x804994FE), width: 1.2),
       ),
-      child: Stack(
-        children: [
-          // Corner decoration image (behind content).
-          Positioned(
-            right: 0,
-            top: 0,
-            child: IgnorePointer(
-              child: Image.asset(
-                'assets/home_corner.png',
-                width: 120,
-                height: 120,
-                fit: BoxFit.contain,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22),
+        child: Stack(
+          children: [
+            Positioned(
+              left: -70,
+              bottom: -90,
+              child: IgnorePointer(
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                  child: Container(
+                    width: 260,
+                    height: 260,
+                    decoration: const BoxDecoration(
+                      gradient: RadialGradient(
+                        center: Alignment(-0.6, 0.6),
+                        radius: 0.9,
+                        colors: [
+                          Color(0x664994FE),
+                          Color(0x1A8FD3FF),
+                          Color(0x004994FE),
+                        ],
+                        stops: [0.0, 0.45, 1.0],
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(17.46, 27.19, 17.46, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: rightImageReserve),
-                  child: SizedBox(
-                    // Don't hard-lock height; it was clipping the 2nd line.
-                    child: RichText(
-                      textAlign: dir == TextDirection.rtl
-                          ? TextAlign.right
-                          : TextAlign.left,
-                      text: TextSpan(
-                        style: GoogleFonts.inter(
-                          fontSize: 18,
-                          height: 1.15,
-                          letterSpacing: -0.15,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        children: [
-                          TextSpan(
-                            text:
-                                '${context.t('smartChefWhatIngredientsLine1')} ',
-                            style: const TextStyle(color: Color(0xFF1E1E3A)),
-                          ),
-                          TextSpan(
-                            text:
-                                '\n${context.t('smartChefWhatIngredientsLine2')}',
-                            style: const TextStyle(color: Color(0xFF4290FE)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+            Positioned(
+              right: 0,
+              top: 0,
+              child: IgnorePointer(
+                child: Image.asset(
+                  'assets/home_corner.png',
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.contain,
                 ),
-                const SizedBox(height: 6),
-                Padding(
-                  padding: const EdgeInsets.only(right: rightImageReserve),
-                  child: Text(
-                    context.t('smartChefSubtitle'),
-                    // In RTL, keep description on the left to avoid the right corner image.
-                    textAlign: dir == TextDirection.rtl
-                        ? TextAlign.left
-                        : TextAlign.left,
-                    style: GoogleFonts.inter(
-                      fontSize: 14.9,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF6264A0),
-                      height: 1.2,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Padding(
-                  // Match Android margins inside the card.
-                  // Card left pad is 17.46; input wants 22.46 (=> +5.0)
-                  // Card right pad is 17.46; input wants 27.19 (=> +9.73)
-                  padding: const EdgeInsets.only(left: 5, right: 9.73),
-                  child: SizedBox(
-                    height: 96.95,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xB3FFFFFF),
-                        borderRadius: BorderRadius.circular(19.55),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x1A000000),
-                            offset: Offset(0, 10),
-                            blurRadius: 24,
-                          ),
-                        ],
-                      ),
-                      foregroundDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(19.55),
-                        border: Border.all(
-                          color: const Color(0xFFB8D7FF),
-                          width: 3,
-                        ),
-                      ),
-                      // Clip only the TextField/content, not the border stroke.
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(19.55),
-                        child: TextField(
-                          controller: _ingredientsController,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            hintText: context.t('smartChefIngredientsHint'),
-                            border: InputBorder.none,
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            disabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            errorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedErrorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 14,
-                            ),
-                            hintStyle: GoogleFonts.inter(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xFF8A8FB0),
-                            ),
-                          ),
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF1E1E3A),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Padding(
-                  // Match Android margins inside the card row.
-                  padding: const EdgeInsets.only(left: 5, right: 9.73),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _smartChefPillButton(
-                          icon: Icons.camera_alt,
-                          label: context.t('recipes.scan'),
-                          onTap: () => context.push('/scan'),
-                          height: 50.69,
-                          radius: 25.3431,
-                          background: const Color(0xFF4994FE),
-                          outlined: false,
-                          elevation: 8,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _smartChefPillButton(
-                          icon: Icons.mic,
-                          label: context.t('recipes.voice'),
-                          onTap: _showVoiceInputDialog,
-                          height: 50.69,
-                          radius: 25.3431,
-                          outlined: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(17.46, 27.19, 17.46, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: rightImageReserve),
+                    child: SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.t('smartChefWhatIngredientsLine1'),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: dir == TextDirection.rtl
+                                ? TextAlign.right
+                                : TextAlign.left,
+                            style: GoogleFonts.inter(
+                              fontSize: 18,
+                              height: 1.15,
+                              letterSpacing: -0.15,
+                              fontWeight: FontWeight.w700,
+                              color:
+                                  isDark ? Colors.white : const Color(0xFF1E1E3A),
+                            ),
+                          ),
+                          Text(
+                            context.t('smartChefWhatIngredientsLine2'),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: dir == TextDirection.rtl
+                                ? TextAlign.right
+                                : TextAlign.left,
+                            style: GoogleFonts.inter(
+                              fontSize: 18,
+                              height: 1.15,
+                              letterSpacing: -0.15,
+                              fontWeight: FontWeight.w700,
+                              color: isDark
+                                  ? const Color(0xFF60A5FA)
+                                  : const Color(0xFF4290FE),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Padding(
+                    padding: const EdgeInsets.only(right: rightImageReserve),
+                    child: Text(
+                      context.t('smartChefSubtitle'),
+                      textAlign: dir == TextDirection.rtl
+                          ? TextAlign.left
+                          : TextAlign.left,
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: isDark
+                            ? Colors.white.withOpacity(0.75)
+                            : const Color(0xFF6264A0),
+                        height: 1.2,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5, right: 9.73),
+                    child: SizedBox(
+                      height: 96.95,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xB3FFFFFF),
+                          borderRadius: BorderRadius.circular(19.55),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x1A000000),
+                              offset: Offset(0, 10),
+                              blurRadius: 24,
+                            ),
+                          ],
+                        ),
+                        foregroundDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(19.55),
+                          border: Border.all(
+                            color: const Color(0xFFB8D7FF),
+                            width: 3,
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(19.55),
+                          child: TextField(
+                            controller: _ingredientsController,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                              hintText: context.t('smartChefIngredientsHint'),
+                              border: InputBorder.none,
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                              disabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                              errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedErrorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: _showVoiceInputDialog,
+                                icon: const Icon(
+                                  Icons.mic,
+                                  size: 18,
+                                  color: AppColors.primary,
+                                ),
+                                splashRadius: 18,
+                                tooltip: context.t('recipes.voice'),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
+                              hintStyle: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xFF8A8FB0),
+                              ),
+                            ),
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1E1E3A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5, right: 9.73),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _smartChefPillButton(
+                            icon: Icons.camera_alt,
+                            label: context.t('recipes.scan'),
+                            onTap: () => context.push('/scan-camera'),
+                            height: 50.69,
+                            radius: 25.3431,
+                            background: const Color(0xFF4994FE),
+                            outlined: false,
+                            elevation: 8,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _smartChefPillButton(
+                            icon: Icons.photo_library_outlined,
+                            label: context.t('common.gallery'),
+                            onTap: _pickScanFromGallery,
+                            height: 50.69,
+                            radius: 25.3431,
+                            outlined: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1861,13 +1602,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                 decoration: BoxDecoration(
                   gradient: AppColors.gradientPrimary,
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primary.withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
                 ),
                 child: const Icon(
                   Icons.workspace_premium,
@@ -1904,17 +1638,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                           ).colorScheme.onSurface.withOpacity(0.7),
                         ),
                       ),
-                    ] else ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        context.t('recipes.ai.recipe.disabled'),
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withOpacity(0.7),
-                        ),
-                      ),
                     ],
                   ],
                 ),
@@ -1925,9 +1648,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                ProNavigation.tryOpen(context, replace: false);
-              },
+              onPressed: () => ProNavigation.tryOpen(context, replace: false),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
@@ -1943,13 +1664,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                 decoration: BoxDecoration(
                   gradient: AppColors.gradientPrimary,
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primary.withOpacity(0.4),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Row(
@@ -1962,9 +1676,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      context.t('common.upgrade') != 'common.upgrade'
-                          ? context.t('common.upgrade')
-                          : context.t('common.upgrade'),
+                      context.t('common.upgrade'),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -1976,6 +1688,19 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
               ),
             ),
           ),
+          if (limit != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                '$recipeCount/$limit',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withOpacity(0.6),
+                ),
+              ),
+            ),
         ],
       ),
     );

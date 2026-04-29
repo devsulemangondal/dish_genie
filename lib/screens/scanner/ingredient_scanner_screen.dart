@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -8,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/dialogs/app_dialogs.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
@@ -26,7 +24,9 @@ import '../../widgets/recipe/recipe_image_widget.dart';
 enum ScannerViewMode { camera, ingredients, recipes, recipeDetail }
 
 class IngredientScannerScreen extends StatefulWidget {
-  const IngredientScannerScreen({super.key});
+  const IngredientScannerScreen({super.key, this.initialImage});
+
+  final XFile? initialImage;
 
   @override
   State<IngredientScannerScreen> createState() =>
@@ -34,7 +34,6 @@ class IngredientScannerScreen extends StatefulWidget {
 }
 
 class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
-  final ImagePicker _imagePicker = ImagePicker();
   ScannerViewMode _viewMode = ScannerViewMode.camera;
   bool _isAnalyzing = false;
   XFile? _capturedImage;
@@ -59,74 +58,13 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
     if (_scanResult != null) {
       _editableIngredients = List.from(_scanResult!.ingredients);
     }
-  }
 
-  Future<void> _pickImageFromGallery() async {
-    // Check if user can use scanner (sub_scancamera limit)
-    final premiumProvider = context.read<PremiumProvider>();
-    if (!premiumProvider.canUseScannerSync()) {
-      // Limit reached - show Pro screen
-      if (mounted) ProNavigation.tryOpen(context, replace: false);
-      return;
-    }
-
-    try {
-      final XFile? image = await _imagePicker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 85,
-      );
-
-      if (image != null) {
-        await _processImage(image);
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              '${context.t('common.error')}: ${context.t('scanner.error.picking.image', {'error': e.toString()})}',
-            ),
-            backgroundColor: AppColors.destructive,
-          ),
-        );
-      }
-    }
-  }
-
-  Future<void> _captureImageFromCamera() async {
-    // Check if user can use scanner (sub_scancamera limit)
-    final premiumProvider = context.read<PremiumProvider>();
-    if (!premiumProvider.canUseScannerSync()) {
-      // Limit reached - show Pro screen
-      if (mounted) ProNavigation.tryOpen(context, replace: false);
-      return;
-    }
-
-    try {
-      final XFile? image = await _imagePicker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 85,
-      );
-
-      if (image != null) {
-        await _processImage(image);
-      }
-    } catch (e) {
-      if (mounted) {
-        final err = e.toString().toLowerCase();
-        if (err.contains('permission') || err.contains('camera')) {
-          showPermissionDeniedDialog(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                '${context.t('common.error')}: ${context.t('scanner.error.capturing.image', {'error': e.toString()})}',
-              ),
-              backgroundColor: AppColors.destructive,
-            ),
-          );
-        }
-      }
+    // If an initial image was passed (from the custom camera flow),
+    // just preview it. The user can set preferences and then start scanning.
+    final initial = widget.initialImage;
+    if (initial != null) {
+      _capturedImage = initial;
+      _viewMode = ScannerViewMode.camera;
     }
   }
 
@@ -501,12 +439,16 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
     }
 
     return PopScope(
-      canPop: _viewMode == ScannerViewMode.camera,
+      canPop: false,
       onPopInvoked: (didPop) async {
-        if (!didPop) {
-          // Handle back navigation for non-camera modes
-          _handleBack();
+        if (didPop) return;
+        if (_viewMode == ScannerViewMode.camera) {
+          // If user opens scan directly (e.g. from Home),
+          // popping would close the app. Always go to new Home instead.
+          if (mounted) context.go('/');
+          return;
         }
+        _handleBack();
       },
       child: Scaffold(
         body: Stack(
@@ -772,145 +714,48 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
           // Preferences Card (before camera section)
           _buildPreferencesCard(context),
           const SizedBox(height: 32),
-          // Camera/Upload Section
-          Center(
-            child: Column(
-              children: [
-                // Large light blue circle with camera icon
-                Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: AppColors.genieLavender.withOpacity(0.3),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.camera_alt,
-                    size: 48,
-                    color: AppColors.geniePurple,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  context.t('scanner.capture.or.upload'),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withOpacity(0.7),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                // Open Camera Button (gradient blue to green)
-                SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: canUseScanner
-                          ? const LinearGradient(
-                              colors: [
-                                AppColors.geniePurple,
-                                AppColors.geniePink,
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            )
-                          : null,
-                      color: canUseScanner
-                          ? null
-                          : Theme.of(context).cardColor.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ElevatedButton.icon(
-                      onPressed: canUseScanner
-                          ? _captureImageFromCamera
-                          : null,
-                      icon: Icon(
-                        Icons.camera_alt,
-                        color: canUseScanner
-                            ? Colors.white
-                            : Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withOpacity(0.4),
-                      ),
-                      label: Text(
-                        context.t('scanner.open.camera'),
-                        style: TextStyle(
-                          color: canUseScanner
-                              ? Colors.white
-                              : Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withOpacity(0.4),
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                // Upload Photo Button (theme-aware background)
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: canUseScanner ? _pickImageFromGallery : null,
-                    icon: Icon(
-                      Icons.photo_library,
-                      color: canUseScanner
-                          ? Theme.of(context).colorScheme.onSurface
-                          : Theme.of(
-                              context,
-                            ).colorScheme.onSurface.withOpacity(0.4),
-                    ),
-                    label: Text(
-                      context.t('scanner.upload.photo'),
-                      style: TextStyle(
-                        color: canUseScanner
-                            ? Theme.of(context).colorScheme.onSurface
-                            : Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withOpacity(0.4),
-                      ),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: Theme.of(context).cardColor,
-                      foregroundColor: Theme.of(context).colorScheme.onSurface,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.onSurface
-                            .withOpacity(canUseScanner ? 0.2 : 0.1),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 32),
+          // Camera/Upload Section removed.
+          // Scan flow starts from Home → custom camera → crop → this screen.
           // Show captured image if available
           if (_capturedImage != null)
-            Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.file(
-                  File(_capturedImage!.path),
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+            Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.file(
+                      File(_capturedImage!.path),
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
+                if (!_isAnalyzing && _scanResult == null)
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () => _processImage(_capturedImage!),
+                      icon: const Icon(Icons.search),
+                      label: Text(
+                        context.t('recipes.scan'),
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          if (_capturedImage == null)
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => context.go('/'),
+                icon: const Icon(Icons.home_outlined),
+                label: Text(context.t('common.home')),
               ),
             ),
         ],
@@ -1369,47 +1214,6 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
         return _buildRecipeCard(recipe);
       },
     );
-  }
-
-  // Helper function to check if a string is a valid URL
-  bool _isValidUrl(String? url) {
-    if (url == null || url.isEmpty || url.trim().isEmpty) return false;
-    final trimmed = url.trim();
-
-    // Check if it's a base64 data URI first
-    if (trimmed.startsWith('data:image/')) return false;
-
-    // Check if it looks like a URL (starts with http:// or https://)
-    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-      try {
-        final uri = Uri.parse(trimmed);
-        // More lenient check - just verify it has a scheme and looks like a URL
-        return uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https');
-      } catch (e) {
-        // Even if parsing fails, if it starts with http/https, try to display it
-        return trimmed.startsWith('http://') || trimmed.startsWith('https://');
-      }
-    }
-
-    return false;
-  }
-
-  // Helper function to check if a string is a base64 data URI
-  bool _isBase64DataUri(String? url) {
-    if (url == null || url.isEmpty) return false;
-    return url.trim().startsWith('data:image/');
-  }
-
-  // Helper function to decode base64 data URI to Uint8List
-  Uint8List? _decodeBase64DataUri(String dataUri) {
-    try {
-      final commaIndex = dataUri.indexOf(',');
-      if (commaIndex == -1) return null;
-      final base64String = dataUri.substring(commaIndex + 1);
-      return base64Decode(base64String);
-    } catch (e) {
-      return null;
-    }
   }
 
   // Helper function to get theme-aware tag colors

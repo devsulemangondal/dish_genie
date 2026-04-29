@@ -148,7 +148,7 @@ class LandingScreen extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Why DishGenie?',
+            'Why Smart Chef?',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.bold,

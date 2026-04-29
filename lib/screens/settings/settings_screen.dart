@@ -99,8 +99,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// No dialog - just launches mailto:support@dishgenie.app.
   Future<void> _openFeedbackEmail() async {
     const email = 'support@dishgenie.app';
-    const subject = 'DishGenie Feedback';
-    // Use %20 for spaces so Gmail shows "DishGenie Feedback" instead of "DishGenie+Feedback"
+    const subject = 'Smart Chef Feedback';
+    // Use %20 for spaces so Gmail shows "Smart Chef Feedback" instead of "Smart Chef+Feedback"
     final emailUri = Uri.parse(
       'mailto:$email?subject=${Uri.encodeComponent(subject)}',
     );
@@ -219,8 +219,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           : (AppStoreConfig.appStoreUrl ??
                 'https://apps.apple.com/search?term=Dish+Genie+AI');
       await Share.share(
-        'Check out DishGenie AI - Your magical kitchen assistant! $appLink',
-        subject: 'DishGenie AI',
+        'Check out Smart Chef AI - Your magical kitchen assistant! $appLink',
+        subject: 'Smart Chef AI',
         sharePositionOrigin: Rect.fromLTWH(0, 0, size.width, size.height),
       );
     } catch (e) {

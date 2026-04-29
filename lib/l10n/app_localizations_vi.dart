@@ -18,7 +18,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get commonPlan => 'Kế hoạch';
 
   @override
-  String get commonShop => 'Mua sắm';
+  String get commonShop => 'Tạp hoá';
 
   @override
   String get commonChat => 'Trò chuyện';
@@ -52,6 +52,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get commonSearch => 'Tìm kiếm';
+
+  @override
+  String get commonGallery => 'Thư viện';
 
   @override
   String get commonLoading => 'Đang tải...';
@@ -226,11 +229,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get authHasAccount => 'Đã có tài khoản?';
 
   @override
-  String get authWelcomeBack => 'Chào mừng trở lại với DishGenie!';
+  String get authWelcomeBack => 'Chào mừng trở lại với Smart Chef!';
 
   @override
   String get authWelcomeNew =>
-      'Chào mừng đến với DishGenie! Tài khoản của bạn đã được tạo.';
+      'Chào mừng đến với Smart Chef! Tài khoản của bạn đã được tạo.';
 
   @override
   String get authInvalidCredentials => 'Email hoặc mật khẩu không hợp lệ';
@@ -319,6 +322,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get recipesVoice => 'Giọng nói';
+
+  @override
+  String get scannerCameraNotAvailable => 'Không khả dụng camera';
 
   @override
   String get smartChefTitle => 'Đầu bếp thông minh';
@@ -944,13 +950,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get savedListAiOptimizing => 'AI đang tối ưu hóa danh sách của bạn...';
 
   @override
-  String get chatTitle => 'Trò Chuyện DishGenie';
+  String get chatTitle => 'Trò Chuyện Smart Chef';
 
   @override
   String get chatSubtitle => 'Trợ lý nấu ăn AI của bạn';
 
   @override
-  String get chatGreeting => 'Xin chào, tôi là DishGenie!';
+  String get chatGreeting => 'Xin chào, tôi là Smart Chef!';
 
   @override
   String get chatGreetingSubtitle =>
@@ -1659,7 +1665,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsThemeSystem => 'Hệ thống';
 
   @override
-  String get landingAppName => 'DishGenie AI';
+  String get landingAppName => 'Smart Chef AI';
 
   @override
   String get landingDownloadForIOS => 'Tải xuống cho iOS';
@@ -1676,7 +1682,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get premiumWelcomeMessage =>
-      'Chào mừng đến với DishGenie Pro! Tận hưởng tất cả các tính năng cao cấp.';
+      'Chào mừng đến với Smart Chef Pro! Tận hưởng tất cả các tính năng cao cấp.';
 
   @override
   String get premiumPurchasesRestored =>
@@ -1690,7 +1696,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumYouArePro => 'Bạn là người chuyên nghiệp!';
 
   @override
-  String get premiumUnlockTitle => 'Mở khóa DishGenie Pro';
+  String get premiumUnlockTitle => 'Mở khóa Smart Chef Pro';
 
   @override
   String get premiumSubtitle => 'Trợ lý nấu ăn AI cá nhân của bạn';
@@ -1904,14 +1910,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumCardUnlock => 'Mở khóa ';
 
   @override
-  String get premiumCardDishGeniePro => 'DishGenie Pro';
+  String get premiumCardSmartChefPro => 'Smart Chef Pro';
 
   @override
   String get premiumCardSubtitle =>
       'Trải nghiệm không quảng cáo và tính năng AI không giới hạn';
 
   @override
-  String get premiumCardTryPlus => 'Dùng thử Dish Genie Plus';
+  String get premiumCardTryPlus => 'Dùng thử Smart Chef Plus';
 
   @override
   String get premiumCardGetPlus => 'Nhận Plus';
@@ -1999,7 +2005,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Trợ lý nhà bếp hỗ trợ AI cá nhân của bạn. Tạo các công thức nấu ăn lành mạnh, lên kế hoạch cho bữa ăn trong tuần và tạo danh sách thực phẩm thông minh — tất cả đều phù hợp với sở thích, ngân sách và mục tiêu của bạn.';
 
   @override
-  String get landingWhyDishGenie => 'Tại sao lại là DishGenie?';
+  String get landingWhySmartChef => 'Tại sao lại là Smart Chef?';
 
   @override
   String get landingKitchenSupercharged => 'Nhà bếp của bạn, tăng áp';
@@ -2067,7 +2073,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get landingTestimonial1Quote =>
-      'DishGenie đã thay đổi kế hoạch bữa ăn của tôi. Tôi tiết kiệm được hơn 5 giờ mỗi tuần!';
+      'Smart Chef đã thay đổi kế hoạch bữa ăn của tôi. Tôi tiết kiệm được hơn 5 giờ mỗi tuần!';
 
   @override
   String get landingTestimonial2Name => 'Ahmed K.';
@@ -2098,7 +2104,8 @@ class AppLocalizationsVi extends AppLocalizations {
       'Tham gia cùng hàng nghìn đầu bếp tại nhà, những người đã thay đổi trải nghiệm nấu nướng của họ bằng cách lập kế hoạch bữa ăn được hỗ trợ bởi AI.';
 
   @override
-  String get landingCopyright => '© 2024 DishGenie AI. Mọi quyền được bảo lưu.';
+  String get landingCopyright =>
+      '© 2024 Smart Chef AI. Mọi quyền được bảo lưu.';
 
   @override
   String get recipesLimitReached => 'Bạn đã đạt đến giới hạn của mình';
@@ -2119,7 +2126,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumTitleLine1 => 'Nấu ăn thông minh hơn với';
 
   @override
-  String get premiumTitleLine2 => 'Dish Genie Premium.';
+  String get premiumTitleLine2 => 'Smart Chef Premium.';
 
   @override
   String get premiumSeeMorePlans => 'Xem thêm gói';
@@ -2162,7 +2169,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get premiumTestimonialQuote =>
-      'Tôi không còn lãng phí thời gian tìm kiếm công thức trực tuyến nữa. DishGenie tạo món ăn ngay lập tức từ những gì tôi có trong tủ lạnh.';
+      'Tôi không còn lãng phí thời gian tìm kiếm công thức trực tuyến nữa. Smart Chef tạo món ăn ngay lập tức từ những gì tôi có trong tủ lạnh.';
 
   @override
   String get premiumSocialStats => '📊 Thống kê xã hội';
@@ -2229,7 +2236,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumBestValueRibbon => 'TỐT NHẤT';
 
   @override
-  String get discountPopupTitle => '🔥 Mở khóa Dish Genie PRO\ncủa bạn';
+  String get discountPopupTitle => '🔥 Mở khóa Smart Chef PRO\ncủa bạn';
 
   @override
   String get discountPopupPerMonth => 'Mỗi tháng';

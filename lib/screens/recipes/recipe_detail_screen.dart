@@ -889,7 +889,11 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     child: Material(
                                       color: Colors.transparent,
                                       child: InkWell(
-                                        onTap: () => context.go('/chat'),
+                                        onTap: () {
+                                          final r = _recipe;
+                                          if (r == null) return;
+                                          context.push('/chat', extra: r);
+                                        },
                                         borderRadius: BorderRadius.circular(20),
                                         child: Center(
                                           child: Row(

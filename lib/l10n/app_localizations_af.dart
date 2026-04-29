@@ -18,7 +18,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get commonPlan => 'Beplan';
 
   @override
-  String get commonShop => 'Winkel';
+  String get commonShop => 'Kruideniersware';
 
   @override
   String get commonChat => 'Klets';
@@ -52,6 +52,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get commonSearch => 'Soek';
+
+  @override
+  String get commonGallery => 'Galery';
 
   @override
   String get commonLoading => 'Laai...';
@@ -226,10 +229,10 @@ class AppLocalizationsAf extends AppLocalizations {
   String get authHasAccount => 'Het jy reeds \'n rekening?';
 
   @override
-  String get authWelcomeBack => 'Welkom terug by DishGenie!';
+  String get authWelcomeBack => 'Welkom terug by Smart Chef!';
 
   @override
-  String get authWelcomeNew => 'Welkom by DishGenie! Jou rekening is geskep.';
+  String get authWelcomeNew => 'Welkom by Smart Chef! Jou rekening is geskep.';
 
   @override
   String get authInvalidCredentials => 'Ongeldige e-pos of wagwoord';
@@ -319,6 +322,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get recipesVoice => 'Stem';
+
+  @override
+  String get scannerCameraNotAvailable => 'Kamera nie beskikbaar nie';
 
   @override
   String get smartChefTitle => 'Slim Sjef';
@@ -948,13 +954,13 @@ class AppLocalizationsAf extends AppLocalizations {
       'KI is besig om jou lys te optimaliseer ...';
 
   @override
-  String get chatTitle => 'DishGenie Klets';
+  String get chatTitle => 'Smart Chef Klets';
 
   @override
   String get chatSubtitle => 'Jou KI kook assistent';
 
   @override
-  String get chatGreeting => 'Hallo, ek is DishGenie!';
+  String get chatGreeting => 'Hallo, ek is Smart Chef!';
 
   @override
   String get chatGreetingSubtitle =>
@@ -1601,7 +1607,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get savedMealPlanContinuePlan => 'Gaan Voort met Plan';
 
   @override
-  String get splashAppName => 'DishGenie';
+  String get splashAppName => 'Smart Chef';
 
   @override
   String get splashSubtitle => 'Jou KI-kombuisgenoot';
@@ -1662,7 +1668,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get settingsThemeSystem => 'Stelsel';
 
   @override
-  String get landingAppName => 'DishGenie AI';
+  String get landingAppName => 'Smart Chef AI';
 
   @override
   String get landingDownloadForIOS => 'Laai af vir iOS';
@@ -1679,7 +1685,7 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get premiumWelcomeMessage =>
-      'Welkom by DishGenie Pro! Geniet alle premium kenmerke.';
+      'Welkom by Smart Chef Pro! Geniet alle premium kenmerke.';
 
   @override
   String get premiumPurchasesRestored => 'Aankope is suksesvol herstel';
@@ -1692,7 +1698,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get premiumYouArePro => 'Jy is Pro!';
 
   @override
-  String get premiumUnlockTitle => 'Ontsluit DishGenie Pro';
+  String get premiumUnlockTitle => 'Ontsluit Smart Chef Pro';
 
   @override
   String get premiumSubtitle => 'Jou persoonlike KI-kookassistent';
@@ -1767,7 +1773,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get scannerKcal => 'kcal';
 
   @override
-  String get appTitle => 'DishGenie';
+  String get appTitle => 'Smart Chef';
 
   @override
   String get searchTitle => 'Soek';
@@ -1901,20 +1907,20 @@ class AppLocalizationsAf extends AppLocalizations {
   String get backButtonExit => 'Verlaat';
 
   @override
-  String get appHeaderTitle => 'DishGenie';
+  String get appHeaderTitle => 'Smart Chef';
 
   @override
   String get premiumCardUnlock => 'Ontsluit ';
 
   @override
-  String get premiumCardDishGeniePro => 'DishGenie Pro';
+  String get premiumCardSmartChefPro => 'Smart Chef Pro';
 
   @override
   String get premiumCardSubtitle =>
       'Advertensie-vrye ervaring en onbeperkte AI funksies';
 
   @override
-  String get premiumCardTryPlus => 'Probeer Dish Genie Plus';
+  String get premiumCardTryPlus => 'Probeer Smart Chef Plus';
 
   @override
   String get premiumCardGetPlus => 'Kry Plus';
@@ -2000,7 +2006,7 @@ class AppLocalizationsAf extends AppLocalizations {
       'Jou persoonlike KI-aangedrewe kombuisassistent. Genereer gesonde resepte, beplan maaltye vir die week, en skep slim kruidenierswarelyste – alles aangepas by jou smaak, begroting en doelwitte.';
 
   @override
-  String get landingWhyDishGenie => 'Hoekom DishGenie?';
+  String get landingWhySmartChef => 'Hoekom Smart Chef?';
 
   @override
   String get landingKitchenSupercharged => 'Jou kombuis, Supercharged';
@@ -2067,7 +2073,7 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get landingTestimonial1Quote =>
-      'DishGenie het my maaltydbeplanning verander. Ek spaar elke week 5+ ure!';
+      'Smart Chef het my maaltydbeplanning verander. Ek spaar elke week 5+ ure!';
 
   @override
   String get landingTestimonial2Name => 'Ahmed K.';
@@ -2097,7 +2103,7 @@ class AppLocalizationsAf extends AppLocalizations {
       'Sluit aan by duisende tuiskokke wat hul kombuiservaring verander het met KI-aangedrewe maaltydbeplanning.';
 
   @override
-  String get landingCopyright => '© 2024 DishGenie AI. Alle regte voorbehou.';
+  String get landingCopyright => '© 2024 Smart Chef AI. Alle regte voorbehou.';
 
   @override
   String get recipesLimitReached => 'Jy het jou limiet bereik';
@@ -2118,7 +2124,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get premiumTitleLine1 => 'Kook slimmer met';
 
   @override
-  String get premiumTitleLine2 => 'Dish Genie Premium.';
+  String get premiumTitleLine2 => 'Smart Chef Premium.';
 
   @override
   String get premiumSeeMorePlans => 'Sien meer planne';
@@ -2161,7 +2167,7 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get premiumTestimonialQuote =>
-      'Ek mors nie meer tyd met reëlsoek op die web nie. DishGenie skep dadelik maaltye uit wat ek in my yskas het.';
+      'Ek mors nie meer tyd met reëlsoek op die web nie. Smart Chef skep dadelik maaltye uit wat ek in my yskas het.';
 
   @override
   String get premiumSocialStats => '📊 Sosiale statistieke';
@@ -2227,7 +2233,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get premiumBestValueRibbon => 'BESTE WAARDE';
 
   @override
-  String get discountPopupTitle => '🔥 Ontsluit jou\nDish Genie PRO';
+  String get discountPopupTitle => '🔥 Ontsluit jou\nSmart Chef PRO';
 
   @override
   String get discountPopupPerMonth => 'Per maand';

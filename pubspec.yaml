@@ -50,6 +50,8 @@ dependencies:
   # Media & Camera
   image_picker: ^1.1.2
   cached_network_image: ^3.4.1
+  camera: any
+  image_cropper: ^12.2.1
 
   # Voice & Speech
   speech_to_text: ^7.0.0

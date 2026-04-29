@@ -12,7 +12,10 @@
     
     <!-- Storage for Android 12 and below only (camera save, etc.). Gallery uses Photo Picker - no permission needed. -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29"
+        tools:replace="android:maxSdkVersion"/>
     
     <!-- Strip READ_MEDIA_* so we use Android Photo Picker only (Google Play policy). -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove"/>
@@ -30,12 +33,17 @@
     <uses-feature android:name="android.hardware.microphone" android:required="false"/>
     
     <application
-        android:label="Dish Genie AI"
+        android:label="Smart Chef"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
      
         >
+        <!-- Required by image_cropper (uCrop) -->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

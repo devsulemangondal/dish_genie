@@ -1,4 +1,4 @@
-/// Supabase configuration for the DishGenie app.
+/// Supabase configuration for the Smart Chef app.
 ///
 /// This file is used as a last‑resort fallback by `ApiConfigService`
 /// when environment variables and Remote Config are not set.

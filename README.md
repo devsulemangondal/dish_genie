@@ -1,4 +1,4 @@
-# dish_genie
+# Smart Chef
 
 A new Flutter project.
 
@@ -15,10 +15,10 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 Swift Compiler Error (Xcode): 'GADNativeAd' has been renamed to 'NativeAd'
-/Users/ahmad/Desktop/dish_genie/ios/Runner/NativeAdFactory.swift:8:16
+/Users/ahmad/Desktop/Smart Chef/ios/Runner/NativeAdFactory.swift:8:16
 
 Swift Compiler Error (Xcode): 'GADNativeAdView' has been renamed to 'NativeAdView'
-/Users/ahmad/Desktop/dish_genie/ios/Runner/NativeAdFactory.swift:10:7
+/Users/ahmad/Desktop/Smart Chef/ios/Runner/NativeAdFactory.swift:10:7
 
 Could not build the application for the simulator.
 Error launching application on iPhone 17 Pro.

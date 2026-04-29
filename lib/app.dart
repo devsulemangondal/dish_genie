@@ -146,7 +146,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           final router = _getOrCreateRouter(languageProvider);
 
           return MaterialApp.router(
-            title: 'DishGenie',
+            title: 'Smart Chef',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,

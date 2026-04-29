@@ -6,7 +6,7 @@ import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
 
 /// Premium card for settings screen. Uses asset image as background with
-/// overlaid "Try Dish Genie Plus" text and "Get Plus" button.
+/// overlaid "Try Smart Chef Plus" text and "Get Plus" button.
 class PremiumCard extends StatelessWidget {
   const PremiumCard({super.key});
 

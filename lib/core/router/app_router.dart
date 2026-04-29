@@ -19,6 +19,9 @@ import '../../screens/grocery/saved_list_detail_screen.dart';
 import '../../screens/chat/chat_assistant_screen.dart';
 import '../../screens/chat/chat_history_screen.dart';
 import '../../screens/scanner/ingredient_scanner_screen.dart';
+import '../../screens/scanner/custom_camera_screen.dart';
+import '../../screens/scanner/crop_image_screen.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../screens/favorites/favorites_screen.dart';
 import '../../screens/settings/settings_screen.dart';
 import '../../screens/search/search_screen.dart';
@@ -204,7 +207,12 @@ class AppRouter {
         GoRoute(
           path: '/chat',
           name: 'chat',
-          builder: (context, state) => const ChatAssistantScreen(),
+          builder: (context, state) {
+            final extra = state.extra;
+            return ChatAssistantScreen(
+              initialRecipe: extra is Recipe ? extra : null,
+            );
+          },
         ),
         GoRoute(
           path: '/chat-history',
@@ -212,9 +220,28 @@ class AppRouter {
           builder: (context, state) => const ChatHistoryScreen(),
         ),
         GoRoute(
+          path: '/scan-camera',
+          name: 'scan-camera',
+          builder: (context, state) => const CustomCameraScreen(),
+        ),
+        GoRoute(
+          path: '/scan-crop',
+          name: 'scan-crop',
+          builder: (context, state) {
+            final extra = state.extra;
+            if (extra is! XFile) return const NotFoundScreen();
+            return CropImageScreen(image: extra);
+          },
+        ),
+        GoRoute(
           path: '/scan',
           name: 'scan',
-          builder: (context, state) => const IngredientScannerScreen(),
+          builder: (context, state) {
+            final extra = state.extra;
+            return IngredientScannerScreen(
+              initialImage: extra is XFile ? extra : null,
+            );
+          },
         ),
         GoRoute(
           path: '/favorites',

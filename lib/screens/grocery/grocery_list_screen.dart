@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/localization/l10n_extension.dart';
+import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
 import '../../data/models/grocery_item.dart';
 import '../../data/models/grocery_list.dart';
 import '../../providers/grocery_provider.dart';
 import '../../providers/meal_plan_provider.dart';
-import '../../providers/premium_provider.dart';
 import '../../services/grocery_service.dart';
 import '../../widgets/voice/voice_input_dialog.dart';
 import '../../widgets/common/bottom_nav.dart';
@@ -37,7 +38,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
   bool _isBudgetMode = false;
   bool _isShoppingMode = false;
   String? _selectedCategory;
-  int _selectedTab = 0; // 0: Home, 1: List, 2: Add
+  int _selectedTab = 0; // 0: List, 1: Add
   final TextEditingController _quickAddController = TextEditingController();
   bool _isCategoryGridView = true;
   final Map<String, bool> _expandedCategories = {};
@@ -56,7 +57,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     super.initState();
     // If coming from meal plan, start on the List tab to show the generated items
     if (widget.fromPlan) {
-      _selectedTab = 1;
+      _selectedTab = 0;
     }
     // Defer heavy operations to after first frame to improve initial load time
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -237,7 +238,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     }
     // Switch to list tab after generating (matching web app)
     if (mounted) {
-      setState(() => _selectedTab = 1);
+      setState(() => _selectedTab = 0);
     }
   }
 
@@ -520,14 +521,84 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
               child: Column(
                 children: [
                   StickyHeader(
-                    title: context.t('grocery.title'),
-                    onBack: _handleBack,
-                    rightContent: _buildCartBadge(context, cartCount),
+                    title: context.t('smartChefTitle'),
+                    titleStyle: GoogleFonts.inter(
+                      fontSize: 26,
+                      height: 34 / 26,
+                      fontWeight: FontWeight.w700,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : const Color(0xFF1E2945),
+                    ),
+                    showBack: false,
+                    onBack: null,
+                    rightContent: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () => ProNavigation.tryOpen(
+                            context,
+                            replace: false,
+                          ),
+                          child: SizedBox(
+                            width: 70,
+                            height: 32,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    Color(0xFFFFB301),
+                                    Color(0xFFFD5C17),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Center(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.auto_awesome,
+                                      size: 14,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      context.t('smartChefPro'),
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12.5,
+                                        height: 1.0,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        IconButton(
+                          onPressed: () => context.push('/settings'),
+                          icon: const Icon(Icons.settings),
+                          iconSize: 24,
+                          color: const Color(0xFF5A6A7C),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints.tightFor(
+                            width: 36,
+                            height: 36,
+                          ),
+                        ),
+                      ],
+                    ),
                     backgroundColor: Colors.transparent,
                     statusBarColor:
                         Theme.of(context).brightness == Brightness.dark
                         ? const Color(0xFF1A1F35)
-                        : AppColors.genieBlush,
+                        : const Color(0xFFEAF4FF),
                   ),
                   // Tab Navigation
                   Container(
@@ -536,10 +607,11 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                       vertical: 8,
                     ),
                     padding: EdgeInsets.all(4),
-                    height: 40,
+                    height: 48,
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: const Color(0xFFBEDAFE)),
                       boxShadow: AppColors.getCardShadow(context),
                     ),
                     child: Row(
@@ -547,7 +619,9 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                         Expanded(
                           child: _buildTabButton(
                             context,
-                            context.t('grocery.home'),
+                            cartCount > 0
+                                ? '${context.t('grocery.list')} ($cartCount)'
+                                : context.t('grocery.list'),
                             0,
                             null,
                           ),
@@ -555,18 +629,8 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                         Expanded(
                           child: _buildTabButton(
                             context,
-                            cartCount > 0
-                                ? '${context.t('grocery.list')} ($cartCount)'
-                                : context.t('grocery.list'),
-                            1,
-                            null,
-                          ),
-                        ),
-                        Expanded(
-                          child: _buildTabButton(
-                            context,
                             context.t('grocery.add'),
-                            2,
+                            1,
                             null,
                           ),
                         ),
@@ -577,12 +641,6 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                     child: IndexedStack(
                       index: _selectedTab,
                       children: [
-                        _buildHomeTab(
-                          context,
-                          groceryProvider,
-                          groceryList,
-                          isLoading,
-                        ),
                         _buildListTab(
                           context,
                           groceryProvider,
@@ -602,12 +660,13 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildCartBadge(BuildContext context, int count) {
     return GestureDetector(
       onTap: () {
-        if (_selectedTab != 1) {
+        if (_selectedTab != 0) {
           setState(() {
-            _selectedTab = 1;
+            _selectedTab = 0;
           });
         }
       },
@@ -1554,6 +1613,148 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     );
   }
 
+  Widget _buildListExtras(
+    BuildContext context,
+    GroceryProvider provider,
+    GroceryList? list,
+  ) {
+    final currentItems = list?.items ?? const <GroceryItem>[];
+
+    bool hasItemNamed(String name) {
+      final n = name.trim().toLowerCase();
+      return currentItems.any((i) => i.name.trim().toLowerCase() == n);
+    }
+
+    Future<void> addSuggestion(String itemName) async {
+      provider.addItemsByName([itemName]);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$itemName ${context.t('grocery.added')}'),
+          backgroundColor: AppColors.primary,
+          duration: const Duration(seconds: 1),
+        ),
+      );
+      setState(() {});
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Smart Suggestions (moved from Home tab)
+        Row(
+          children: [
+            Icon(Icons.auto_awesome, color: AppColors.genieGold, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              context.t('grocery.smart.suggestions'),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        _buildSmartSuggestionTile(
+          context,
+          icon: Icons.warning_amber_rounded,
+          iconColor: AppColors.genieGold,
+          text: context.t('groceryLowStock'),
+          isAdded: hasItemNamed(context.t('ingredient.onions')),
+          onAdd: () => addSuggestion(context.t('ingredient.onions')),
+        ),
+        const SizedBox(height: 10),
+        _buildSmartSuggestionTile(
+          context,
+          icon: Icons.calendar_today,
+          iconColor: AppColors.geniePurple,
+          text: context.t('groceryRecipeNeed'),
+          isAdded: hasItemNamed(context.t('ingredient.yogurt')),
+          onAdd: () => addSuggestion(context.t('ingredient.yogurt')),
+        ),
+        const SizedBox(height: 10),
+        _buildSmartSuggestionTile(
+          context,
+          icon: Icons.refresh,
+          iconColor: AppColors.geniePink,
+          text: context.t('groceryFrequentItem'),
+          isAdded: hasItemNamed(context.t('ingredient.rice')),
+          onAdd: () => addSuggestion(context.t('ingredient.rice')),
+        ),
+        const SizedBox(height: 10),
+        _buildSmartSuggestionTile(
+          context,
+          icon: Icons.warning_amber_rounded,
+          iconColor: AppColors.destructive,
+          text: context.t('groceryExpiringItem'),
+          isAdded: hasItemNamed(context.t('ingredient.milk')),
+          onAdd: () => addSuggestion(context.t('ingredient.milk')),
+        ),
+        const SizedBox(height: 24),
+
+        // Saved Lists (moved from Home tab)
+        Text(
+          context.t('grocery.saved.lists'),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 120,
+          child: ListView.separated(
+            clipBehavior: Clip.none,
+            padding: const EdgeInsets.fromLTRB(0, 4, 0, 24),
+            scrollDirection: Axis.horizontal,
+            itemCount: provider.savedLists.isNotEmpty ? provider.savedLists.length : 3,
+            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              if (provider.savedLists.isEmpty) {
+                final placeholders = [
+                  {
+                    'name': context.t('grocery.placeholder.weekly.grocery'),
+                    'items': const <dynamic>[],
+                  },
+                  {
+                    'name': context.t('grocery.placeholder.monthly.stock'),
+                    'items': const <dynamic>[],
+                  },
+                  {
+                    'name': context.t('grocery.placeholder.high.protein.diet'),
+                    'items': const <dynamic>[],
+                  },
+                ];
+                final data = placeholders[index];
+                return _buildSavedListCard(
+                  context,
+                  title: data['name'] as String,
+                  itemCount: 0,
+                  onTap: null,
+                );
+              }
+
+              final saved = provider.savedLists[index];
+              final id = saved['id']?.toString();
+              final name = saved['name']?.toString() ?? context.t('grocery.list');
+              final items = (saved['items'] as List?) ?? const <dynamic>[];
+              return _buildSavedListCard(
+                context,
+                title: name,
+                itemCount: items.length,
+                onTap: id == null ? null : () => context.go('/grocery/$id'),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+
+        // Current List summary (moved from Home tab)
+        _buildCurrentListCard(context, list),
+      ],
+    );
+  }
+
+  // ignore: unused_element
   Widget _buildHomeTab(
     BuildContext context,
     GroceryProvider provider,
@@ -2025,6 +2226,17 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     }
   }
 
+  Future<void> _showVoiceSearchDialog() async {
+    final text = await showVoiceInputDialog(context);
+    if (text == null || text.trim().isEmpty || !mounted) return;
+    final q = text.trim();
+    setState(() {
+      _searchQuery = q;
+      _searchController.text = q;
+      _searchController.selection = TextSelection.collapsed(offset: q.length);
+    });
+  }
+
   Widget _buildViewToggleOption(
     BuildContext context, {
     required IconData icon,
@@ -2382,7 +2594,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
               ),
               const Spacer(),
               TextButton(
-                onPressed: () => setState(() => _selectedTab = 1),
+                onPressed: () => setState(() => _selectedTab = 0),
                 style:
                     TextButton.styleFrom(
                       foregroundColor: Colors.white,
@@ -2485,6 +2697,12 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
       return const LoadingGenie();
     }
 
+    // Lazy load saved lists (moved from Home tab)
+    if (!_hasLoadedSavedLists) {
+      _hasLoadedSavedLists = true;
+      Future.microtask(() => provider.loadSavedLists());
+    }
+
     // If list is null, show empty state (will update when storage loads in background)
     // This allows UI to render immediately without waiting for storage
     if (list == null || list.items.isEmpty) {
@@ -2535,29 +2753,47 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
           // Search Bar
           Container(
             margin: const EdgeInsets.only(bottom: 24),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.border),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: const Color(0xFFBEDAFE)),
               boxShadow: AppColors.getCardShadow(context),
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.search,
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
-                  size: 20,
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Icon(
+                      Icons.search,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.55),
+                      size: 20,
+                    ),
+                    Positioned(
+                      left: 13,
+                      top: 2,
+                      child: Container(
+                        width: 6,
+                        height: 6,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFF6A3D),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
                       hintText: context.t('grocery.search.items'),
                       border: InputBorder.none,
+                      isDense: true,
                       hintStyle: TextStyle(
                         color: Theme.of(
                           context,
@@ -2565,6 +2801,30 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                       ),
                     ),
                     onChanged: (value) => setState(() => _searchQuery = value),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: _showVoiceSearchDialog,
+                    borderRadius: BorderRadius.circular(999),
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xFFBEDAFE),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.mic,
+                        size: 18,
+                        color: Color(0xFF2F80FF),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -2693,7 +2953,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                           _itemNameController.clear();
                           _quantityController.clear();
                           _selectedCategory = null;
-                          setState(() => _selectedTab = 1);
+                          setState(() => _selectedTab = 0);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(context.t('grocery.item.added')),
@@ -2936,6 +3196,8 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                 );
               }).toList(),
             ),
+          const SizedBox(height: 24),
+          _buildListExtras(context, provider, groceryList),
         ],
       ),
     );

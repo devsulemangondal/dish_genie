@@ -1,6 +1,6 @@
 {
-    "name": "dish_genie",
-    "short_name": "dish_genie",
+    "name": "Smart Chef",
+    "short_name": "Smart Chef",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

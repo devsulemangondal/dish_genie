@@ -18,7 +18,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get commonPlan => 'แผน';
 
   @override
-  String get commonShop => 'ช้อป';
+  String get commonShop => 'ของชำ';
 
   @override
   String get commonChat => 'แชท';
@@ -52,6 +52,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get commonSearch => 'ค้นหา';
+
+  @override
+  String get commonGallery => 'แกลเลอรี';
 
   @override
   String get commonLoading => 'กำลังโหลด...';
@@ -226,11 +229,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get authHasAccount => 'มีบัญชีแล้ว?';
 
   @override
-  String get authWelcomeBack => 'ยินดีต้อนรับกลับสู่ DishGenie!';
+  String get authWelcomeBack => 'ยินดีต้อนรับกลับสู่ Smart Chef!';
 
   @override
   String get authWelcomeNew =>
-      'ยินดีต้อนรับสู่ DishGenie! บัญชีของคุณถูกสร้างแล้ว';
+      'ยินดีต้อนรับสู่ Smart Chef! บัญชีของคุณถูกสร้างแล้ว';
 
   @override
   String get authInvalidCredentials => 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
@@ -319,6 +322,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get recipesVoice => 'เสียง';
+
+  @override
+  String get scannerCameraNotAvailable => 'ไม่พร้อมใช้งานกล้อง';
 
   @override
   String get smartChefTitle => 'เชฟอัจฉริยะ';
@@ -942,13 +948,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get savedListAiOptimizing => 'AI กำลังเพิ่มประสิทธิภาพรายการของคุณ...';
 
   @override
-  String get chatTitle => 'แชท DishGenie';
+  String get chatTitle => 'แชท Smart Chef';
 
   @override
   String get chatSubtitle => 'ผู้ช่วยทำอาหาร AI ของคุณ';
 
   @override
-  String get chatGreeting => 'สวัสดี ฉันคือ DishGenie!';
+  String get chatGreeting => 'สวัสดี ฉันคือ Smart Chef!';
 
   @override
   String get chatGreetingSubtitle =>
@@ -1645,7 +1651,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settingsThemeSystem => 'ระบบ';
 
   @override
-  String get landingAppName => 'DishGenie AI';
+  String get landingAppName => 'Smart Chef AI';
 
   @override
   String get landingDownloadForIOS => 'ดาวน์โหลดสำหรับ iOS';
@@ -1661,7 +1667,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get premiumWelcomeMessage =>
-      'ยินดีต้อนรับสู่ DishGenie Pro! เพลิดเพลินกับคุณสมบัติระดับพรีเมียมทั้งหมด';
+      'ยินดีต้อนรับสู่ Smart Chef Pro! เพลิดเพลินกับคุณสมบัติระดับพรีเมียมทั้งหมด';
 
   @override
   String get premiumPurchasesRestored => 'กู้คืนการซื้อเรียบร้อยแล้ว';
@@ -1674,7 +1680,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumYouArePro => 'คุณเป็นมือโปร!';
 
   @override
-  String get premiumUnlockTitle => 'ปลดล็อค DishGenie Pro';
+  String get premiumUnlockTitle => 'ปลดล็อค Smart Chef Pro';
 
   @override
   String get premiumSubtitle => 'ผู้ช่วยทำอาหาร AI ส่วนตัวของคุณ';
@@ -1887,14 +1893,14 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumCardUnlock => 'ปลดล็อก ';
 
   @override
-  String get premiumCardDishGeniePro => 'ดิชจีนี่โปร';
+  String get premiumCardSmartChefPro => 'ดิชจีนี่โปร';
 
   @override
   String get premiumCardSubtitle =>
       'ประสบการณ์ปลอดโฆษณา และฟีเจอร์ AI ไม่จำกัด';
 
   @override
-  String get premiumCardTryPlus => 'ลอง Dish Genie Plus';
+  String get premiumCardTryPlus => 'ลอง Smart Chef Plus';
 
   @override
   String get premiumCardGetPlus => 'รับ Plus';
@@ -1980,7 +1986,7 @@ class AppLocalizationsTh extends AppLocalizations {
       'ผู้ช่วยในครัวที่ขับเคลื่อนด้วย AI ส่วนตัวของคุณ สร้างสูตรอาหารเพื่อสุขภาพ วางแผนมื้ออาหารประจำสัปดาห์ และสร้างรายการซื้อของชำอัจฉริยะ ทั้งหมดนี้ปรับให้เหมาะกับรสนิยม งบประมาณ และเป้าหมายของคุณ';
 
   @override
-  String get landingWhyDishGenie => 'ทำไมต้อง DishGenie?';
+  String get landingWhySmartChef => 'ทำไมต้อง Smart Chef?';
 
   @override
   String get landingKitchenSupercharged => 'ห้องครัวของคุณชาร์จพลังมากเกินไป';
@@ -2046,7 +2052,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get landingTestimonial1Quote =>
-      'DishGenie เปลี่ยนการวางแผนมื้ออาหารของฉัน ฉันประหยัดเวลาได้ 5+ ชั่วโมงทุกสัปดาห์!';
+      'Smart Chef เปลี่ยนการวางแผนมื้ออาหารของฉัน ฉันประหยัดเวลาได้ 5+ ชั่วโมงทุกสัปดาห์!';
 
   @override
   String get landingTestimonial2Name => 'อาเหม็ด เค.';
@@ -2076,7 +2082,7 @@ class AppLocalizationsTh extends AppLocalizations {
       'เข้าร่วมกับแม่ครัวที่บ้านหลายพันคนที่เปลี่ยนประสบการณ์ในครัวด้วยการวางแผนมื้ออาหารที่ขับเคลื่อนด้วย AI';
 
   @override
-  String get landingCopyright => '© 2024 DishGenie AI. สงวนลิขสิทธิ์.';
+  String get landingCopyright => '© 2024 Smart Chef AI. สงวนลิขสิทธิ์.';
 
   @override
   String get recipesLimitReached => 'คุณถึงขีดจำกัดของคุณแล้ว';
@@ -2097,7 +2103,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumTitleLine1 => 'ทำอาหารอย่างชาญฉลาดกับ';
 
   @override
-  String get premiumTitleLine2 => 'Dish Genie Premium';
+  String get premiumTitleLine2 => 'Smart Chef Premium';
 
   @override
   String get premiumSeeMorePlans => 'ดูแพ็คเกจเพิ่มเติม';
@@ -2140,7 +2146,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get premiumTestimonialQuote =>
-      'ฉันไม่ต้องเสียเวลาเสิร์ชสูตรอาหารออนไลน์อีกต่อไป DishGenie สร้างมื้ออาหารจากของในตู้เย็นได้ทันที';
+      'ฉันไม่ต้องเสียเวลาเสิร์ชสูตรอาหารออนไลน์อีกต่อไป Smart Chef สร้างมื้ออาหารจากของในตู้เย็นได้ทันที';
 
   @override
   String get premiumSocialStats => '📊 สถิติโซเชียล';
@@ -2203,7 +2209,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumBestValueRibbon => 'คุ้มสุด';
 
   @override
-  String get discountPopupTitle => '🔥 ปลดล็อก Dish Genie PRO\nของคุณ';
+  String get discountPopupTitle => '🔥 ปลดล็อก Smart Chef PRO\nของคุณ';
 
   @override
   String get discountPopupPerMonth => 'ต่อเดือน';

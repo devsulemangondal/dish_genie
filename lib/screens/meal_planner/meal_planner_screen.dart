@@ -28,7 +28,7 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
   final _formKey = GlobalKey<FormState>();
   int _days = 7;
   int _dailyCalories = 2000;
-  int _familySize = 1;
+  int _familySize = 3;
   String? _selectedDiet;
   String? _selectedGoal;
   String? _selectedBudget = 'moderate'; // Default to Moderate
@@ -1020,7 +1020,7 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                           _showForm = true;
                           _days = 7;
                           _dailyCalories = 2000;
-                          _familySize = 1;
+                          _familySize = 3;
                           _selectedDiet = null;
                           _selectedGoal = null;
                           _selectedBudget = 'moderate';
@@ -1170,7 +1170,7 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                     _showForm = true;
                     _days = 7;
                     _dailyCalories = 2000;
-                    _familySize = 1;
+                    _familySize = 3;
                     _selectedDiet = null;
                     _selectedGoal = null;
                     _selectedBudget = 'moderate';

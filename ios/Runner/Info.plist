@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Dish Genie AI</string>
+	<string>Smart Chef</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>dish_genie</string>
+	<string>Smart Chef</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -47,15 +47,15 @@
 	<true/>
 	<!-- Camera Permission -->
 	<key>NSCameraUsageDescription</key>
-	<string>Dish Genie AI needs access to your camera to scan ingredients and take photos of food items for recipe generation.</string>
+	<string>Smart Chef needs access to your camera to scan ingredients and take photos of food items for recipe generation.</string>
 	<!-- Photo Library Permission -->
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Dish Genie AI needs access to your photo library to select images of ingredients for recipe generation.</string>
+	<string>Smart Chef needs access to your photo library to select images of ingredients for recipe generation.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Dish Genie AI needs permission to save recipe images and generated content to your photo library.</string>
+	<string>Smart Chef needs permission to save recipe images and generated content to your photo library.</string>
 	<!-- Microphone Permission -->
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Dish Genie AI needs access to your microphone for voice input to search for recipes and interact with the AI assistant.</string>
+	<string>Smart Chef needs access to your microphone for voice input to search for recipes and interact with the AI assistant.</string>
 	<!-- Required for url_launcher mailto (feedback email); canLaunchUrl checks these -->
 	<key>NSSpeechRecognitionUsageDescription</key>
 <string>This app uses speech recognition to convert your voice into text.</string>

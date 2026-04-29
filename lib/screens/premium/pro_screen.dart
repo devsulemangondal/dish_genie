@@ -581,7 +581,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             const designH = 800.0;
             final scaleW = constraints.maxWidth / designW;
             final scaleH = constraints.maxHeight / designH;
-            final scale = (scaleW < scaleH ? scaleW : scaleH).clamp(0.78, 1.0);
+            final scale = (scaleW < scaleH ? scaleW : scaleH).clamp(0.72, 1.0);
 
             return Stack(
               children: [
@@ -626,14 +626,14 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                                   selectedProduct,
                                   weeklyProduct,
                                 ),
-                                const SizedBox(height: 26),
+                                const SizedBox(height: 20),
                               ],
                               _buildScreenshotPlanCards(
                                 isDark: isDark,
                                 annualProduct: annualProduct,
                                 weeklyProduct: weeklyProduct,
                               ),
-                              const SizedBox(height: 18),
+                              const SizedBox(height: 16),
                               _buildCancelTermsPrivacyLine(designW),
                               const Spacer(),
                             ],
@@ -677,11 +677,14 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
 
   Widget _buildTopHeroImage() {
     // Screenshot shows a large character image on a light background, not cropped.
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       height: 238,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: const Color(0xFFF5FAFF),
+          color: isDark
+              ? Theme.of(context).scaffoldBackgroundColor
+              : const Color(0xFFF5FAFF),
           borderRadius: BorderRadius.circular(18),
         ),
         child: Padding(
@@ -697,10 +700,11 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildScreenshotTitle() {
-    final titleColor = const Color(0xFF2B2B2B);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final titleColor = isDark ? Colors.white : const Color(0xFF2B2B2B);
 
     return Text(
-      'Cook Smarter with AI',
+      context.t('premium.cook.smarter.with.ai'),
       style: GoogleFonts.hahmlet(
         fontSize: 18.5,
         fontWeight: FontWeight.w700,
@@ -714,12 +718,20 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildScreenshotFeatures() {
-    final textColor = const Color(0xFF6B6B6B);
-    const iconColor = Color(0xFF2F80ED);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final textColor = isDark
+        ? Colors.white.withOpacity(0.80)
+        : const Color(0xFF6B6B6B);
+
+    final iconColor = isDark
+        ? Colors.white.withOpacity(0.90)
+        : const Color(0xFF2F80ED);
 
     Widget row(String asset, String text) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SvgPicture.asset(
             asset,
@@ -728,16 +740,21 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
           ),
           const SizedBox(width: 10),
+
           Expanded(
-            child: Text(
-              text,
-              style: GoogleFonts.poppins(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w500,
-                color: textColor,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                text,
+                style: GoogleFonts.poppins(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
+                maxLines: 1,
+                softWrap: false,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
@@ -748,14 +765,87 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: Column(
         children: [
-          row('assets/icons/ai.svg', 'Daily AI recipe suggestions'),
-          row('assets/icons/scan.svg', 'Ingredient-based cooking'),
-          row('assets/icons/calender.svg', 'Smart meal planning'),
-          row('assets/icons/stat.svg', 'Nutrition Insights'),
+          row(
+            'assets/icons/ai.svg',
+            context.t('premium.feature.daily.ai.recipe.suggestions'),
+          ),
+          row(
+            'assets/icons/scan.svg',
+            context.t('premium.feature.ingredient.based.cooking'),
+          ),
+          row(
+            'assets/icons/calender.svg',
+            context.t('premium.feature.smart.meal.planning'),
+          ),
+          row(
+            'assets/icons/stat.svg',
+            context.t('premium.feature.nutrition.insights'),
+          ),
         ],
       ),
     );
   }
+  // Widget _buildScreenshotFeatures() {
+  //   final isDark = Theme.of(context).brightness == Brightness.dark;
+  //   final textColor = isDark
+  //       ? Colors.white.withOpacity(0.80)
+  //       : const Color(0xFF6B6B6B);
+  //   final iconColor = isDark
+  //       ? Colors.white.withOpacity(0.90)
+  //       : const Color(0xFF2F80ED);
+
+  //   Widget row(String asset, String text) => Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 6),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.max,
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         SvgPicture.asset(
+  //           asset,
+  //           width: 18,
+  //           height: 18,
+  //           colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+  //         ),
+  //         const SizedBox(width: 10),
+  //         Expanded(
+  //           child: _FitOneLineText(
+  //             text: text,
+  //             minScale: 0.75,
+  //             style: GoogleFonts.poppins(
+  //               fontSize: 12.5,
+  //               fontWeight: FontWeight.w500,
+  //               color: textColor,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 6),
+  //     child: Column(
+  //       children: [
+  //         row(
+  //           'assets/icons/ai.svg',
+  //           context.t('premium.feature.daily.ai.recipe.suggestions'),
+  //         ),
+  //         row(
+  //           'assets/icons/scan.svg',
+  //           context.t('premium.feature.ingredient.based.cooking'),
+  //         ),
+  //         row(
+  //           'assets/icons/calender.svg',
+  //           context.t('premium.feature.smart.meal.planning'),
+  //         ),
+  //         row(
+  //           'assets/icons/stat.svg',
+  //           context.t('premium.feature.nutrition.insights'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildCtaWithSubtitle(
     ProductDetails? selectedProduct,
@@ -764,13 +854,15 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     final isWeeklySelected = _selectedPlanId == 'weekly';
     final weeklyPrice = weeklyProduct?.price ?? 'Rs 2,250';
     final subtitle = isWeeklySelected
-        ? 'Try 3 days for free, then $weeklyPrice/week'
+        ? '${context.t('premium.three.days.free.trial')} • $weeklyPrice${context.t('premium.per.week')}'
         : null;
 
     return _ScreenshotCtaButton(
       enabled: selectedProduct != null && !_isLoading,
       isLoading: _isLoadingProducts || (_isLoading && selectedProduct != null),
-      title: isWeeklySelected ? 'Start Free Trial' : 'Subscribe',
+      title: isWeeklySelected
+          ? context.t('premium.three.days.free.trial')
+          : context.t('premium.subscribe.now'),
       subtitle: subtitle,
       onTap: (selectedProduct != null && !_isLoading)
           ? () => _purchaseProduct(selectedProduct)
@@ -808,19 +900,20 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     return Column(
       children: [
         _ScreenshotPlanCard.yearly(
-          title: 'Yearly',
-          leftSubtitle: 'Just Rs 7,200.00 per year',
-          rightPrice: annualProduct?.price ?? 'Rs 139.00',
-          rightSuffix: 'per year',
+          title: context.t('premium.plan.yearly'),
+          leftSubtitle:
+              '${annualProduct?.price ?? context.t('premium.annual.price')}${context.t('premium.per.year')}',
+          rightPrice: annualProduct?.price ?? context.t('premium.annual.price'),
+          rightSuffix: context.t('premium.per.year'),
           isSelected: _selectedPlanId == 'yearly',
           onTap: () => setState(() => _selectedPlanId = 'yearly'),
         ),
         const SizedBox(height: 14),
         _ScreenshotPlanCard.weekly(
-          title: 'Weekly',
-          leftSubtitle: 'Full Access Included',
-          rightPrice: weeklyProduct?.price ?? 'Rs 2,250',
-          rightSuffix: 'per week',
+          title: context.t('premium.plan.weekly'),
+          leftSubtitle: context.t('premium.full.access'),
+          rightPrice: weeklyProduct?.price ?? '',
+          rightSuffix: context.t('premium.per.week'),
           isSelected: _selectedPlanId == 'weekly',
           onTap: () => setState(() => _selectedPlanId = 'weekly'),
         ),
@@ -957,75 +1050,77 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                 alignment: Alignment.center,
                 child: SizedBox(
                   width: gridW == 0 ? null : gridW,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  child: LayoutBuilder(
+                    builder: (context, gridConstraints) {
+                      final singleColumn = gridConstraints.maxWidth < 420;
+
+                      Widget tile(String icon, String key) => AspectRatio(
+                        aspectRatio: tileAspect,
+                        child: _FeatureTile(
+                          scale: scale,
+                          background: tileBg,
+                          svgAsset: icon,
+                          text: context.t(key),
+                        ),
+                      );
+
+                      final tiles = <Widget>[
+                        tile(
+                          'assets/icons/ai.svg',
+                          'premium.feature.daily.ai.recipe.suggestions',
+                        ),
+                        tile(
+                          'assets/icons/scan.svg',
+                          'premium.feature.ingredient.based.cooking',
+                        ),
+                        tile(
+                          'assets/icons/calender.svg',
+                          'premium.feature.smart.meal.planning',
+                        ),
+                        tile(
+                          'assets/icons/stat.svg',
+                          'premium.feature.nutrition.insights',
+                        ),
+                      ];
+
+                      if (singleColumn) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            tiles[0],
+                            SizedBox(height: tileGap),
+                            tiles[1],
+                            SizedBox(height: tileGap),
+                            tiles[2],
+                            SizedBox(height: tileGap),
+                            tiles[3],
+                          ],
+                        );
+                      }
+
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Expanded(
-                            child: AspectRatio(
-                              aspectRatio: tileAspect,
-                              child: _FeatureTile(
-                                scale: scale,
-                                background: tileBg,
-                                svgAsset: 'assets/icons/ai.svg',
-                                text: context.t(
-                                  'premium.feature.daily.ai.recipe.suggestions',
-                                ),
-                              ),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(child: tiles[0]),
+                              SizedBox(width: tileGap),
+                              Expanded(child: tiles[1]),
+                            ],
                           ),
-                          SizedBox(width: tileGap),
-                          Expanded(
-                            child: AspectRatio(
-                              aspectRatio: tileAspect,
-                              child: _FeatureTile(
-                                scale: scale,
-                                background: tileBg,
-                                svgAsset: 'assets/icons/scan.svg',
-                                text: context.t(
-                                  'premium.feature.ingredient.based.cooking',
-                                ),
-                              ),
-                            ),
+                          SizedBox(height: tileGap),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(child: tiles[2]),
+                              SizedBox(width: tileGap),
+                              Expanded(child: tiles[3]),
+                            ],
                           ),
                         ],
-                      ),
-                      SizedBox(height: tileGap),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: AspectRatio(
-                              aspectRatio: tileAspect,
-                              child: _FeatureTile(
-                                scale: scale,
-                                background: tileBg,
-                                svgAsset: 'assets/icons/calender.svg',
-                                text: context.t(
-                                  'premium.feature.smart.meal.planning',
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: tileGap),
-                          Expanded(
-                            child: AspectRatio(
-                              aspectRatio: tileAspect,
-                              child: _FeatureTile(
-                                scale: scale,
-                                background: tileBg,
-                                svgAsset: 'assets/icons/stat.svg',
-                                text: context.t(
-                                  'premium.feature.nutrition.insights',
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ),

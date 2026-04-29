@@ -138,7 +138,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 shaderCallback: (bounds) => AppColors.gradientPrimary
                                     .createShader(bounds),
                                 child: Text(
-                                  'DishGenie',
+                                  'Smart Chef',
                                   style: TextStyle(
                                     fontSize: 32,
                                     fontWeight: FontWeight.bold,

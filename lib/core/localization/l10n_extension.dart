@@ -122,6 +122,7 @@ extension L10nExtension on BuildContext {
     'common.exit': (l) => l.commonExit,
     'common.favorites': (l) => l.commonFavorites,
     'common.get.started': (l) => l.commonGetStarted,
+    'common.gallery': (l) => l.commonGallery,
     'common.home': (l) => l.commonHome,
     'common.loading': (l) => l.commonLoading,
     'common.next': (l) => l.commonNext,
@@ -737,7 +738,7 @@ extension L10nExtension on BuildContext {
     'back.button.exit': (l) => l.backButtonExit,
     'app.header.title': (l) => l.appHeaderTitle,
     'premium.card.unlock': (l) => l.premiumCardUnlock,
-    'premium.card.dishgenie.pro': (l) => l.premiumCardDishGeniePro,
+    'premium.card.dishgenie.pro': (l) => l.premiumCardSmartChefPro,
     'premium.card.subtitle': (l) => l.premiumCardSubtitle,
     'premium.card.try.plus': (l) => l.premiumCardTryPlus,
     'premium.card.get.plus': (l) => l.premiumCardGetPlus,
@@ -772,7 +773,7 @@ extension L10nExtension on BuildContext {
     'landing.app.name': (l) => l.landingAppName,
     'landing.hero.title': (l) => l.landingHeroTitle,
     'landing.hero.subtitle': (l) => l.landingHeroSubtitle,
-    'landing.why.dishgenie': (l) => l.landingWhyDishGenie,
+    'landing.why.dishgenie': (l) => l.landingWhySmartChef,
     'landing.kitchen.supercharged': (l) => l.landingKitchenSupercharged,
     'landing.feature.recipe.builder.title': (l) =>
         l.landingFeatureRecipeBuilderTitle,
@@ -841,13 +842,15 @@ extension L10nExtension on BuildContext {
         l.premiumFeatureIngredientBasedCooking,
     'premium.feature.smart.meal.planning': (l) =>
         l.premiumFeatureSmartMealPlanning,
-    'premium.feature.nutrition.insights': (l) => l.premiumFeatureNutritionInsights,
+    'premium.feature.nutrition.insights': (l) =>
+        l.premiumFeatureNutritionInsights,
     'premium.choose.your.plan': (l) => l.premiumChooseYourPlanNew,
     'premium.unlimited.recipes': (l) => l.premiumUnlimitedRecipes,
     'premium.best.value': (l) => l.premiumBestValue,
     'premium.plan.weekly': (l) => l.premiumPlanWeekly,
     'premium.plan.yearly': (l) => l.premiumPlanYearly,
-    'premium.unlock.unlimited.recipes.now': (l) => l.premiumUnlockUnlimitedRecipesNow,
+    'premium.unlock.unlimited.recipes.now': (l) =>
+        l.premiumUnlockUnlimitedRecipesNow,
     'premium.best.value.ribbon': (l) => l.premiumBestValueRibbon,
     'discount.popup.title': (l) => l.discountPopupTitle,
     'discount.popup.per.month': (l) => l.discountPopupPerMonth,

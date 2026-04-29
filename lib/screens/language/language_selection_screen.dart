@@ -212,6 +212,11 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     const selectedFill = Color(0xFFD0E3FF);
     const selectedBorder = Color(0xFF5A98FD);
     const unselectedBorder = Color(0xFFBFCFE3);
+    final languageTextColor =
+        isDark ? Colors.white : const Color(0xFF111827);
+    final nativeLanguageTextColor = isDark
+        ? Colors.white.withOpacity(0.65)
+        : const Color(0xFF6B7280);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -257,20 +262,20 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                       children: [
                         TextSpan(
                           text: language.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF111827),
+                            color: languageTextColor,
                           ),
                         ),
                         if (language.nativeName.isNotEmpty &&
                             language.nativeName != language.name)
                           TextSpan(
                             text: '  (${language.nativeName})',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
-                              color: Color(0xFF6B7280),
+                              color: nativeLanguageTextColor,
                             ),
                           ),
                       ],

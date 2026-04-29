@@ -13,6 +13,7 @@ import '../../services/remote_config_service.dart';
 import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
 import '../../data/models/chat_message.dart';
+import '../../data/models/recipe.dart';
 import '../../providers/chat_provider.dart';
 import '../../providers/premium_provider.dart';
 import '../../widgets/voice/voice_input_dialog.dart';
@@ -23,7 +24,9 @@ import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/common/sticky_header.dart';
 
 class ChatAssistantScreen extends StatefulWidget {
-  const ChatAssistantScreen({super.key});
+  final Recipe? initialRecipe;
+
+  const ChatAssistantScreen({super.key, this.initialRecipe});
 
   @override
   State<ChatAssistantScreen> createState() => _ChatAssistantScreenState();
@@ -42,6 +45,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   int _previousMessageCount = 0;
+  bool _autoStartedFromRecipe = false;
 
   // Responsive helper methods
   double _getResponsivePadding(BuildContext context) {
@@ -78,7 +82,9 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     super.initState();
     _trackCardScreenOpen();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) context.read<ChatProvider>().ensureChatLoaded();
+      if (!mounted) return;
+      context.read<ChatProvider>().ensureChatLoaded();
+      _maybeAutoStartCookingFromRecipe();
     });
   }
 
@@ -142,6 +148,45 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
     });
+  }
+
+  String _buildCookingPromptFromRecipe(BuildContext context, Recipe recipe) {
+    final ingredients = recipe.ingredients
+        .take(24)
+        .map((i) => '- ${i.quantity} ${i.unit} ${i.name}'.trim())
+        .join('\n');
+    final steps = recipe.instructions
+        .take(20)
+        .map((s) => '${s.step}. ${s.text}')
+        .join('\n');
+
+    return [
+      'I want to cook "${recipe.title}".',
+      'Please guide me step-by-step like an AI chef.',
+      'Ingredients:\n$ingredients',
+      'Instructions:\n$steps',
+      'Start with step 1 and wait for my confirmation before moving on.',
+    ].join('\n\n');
+  }
+
+  Future<void> _maybeAutoStartCookingFromRecipe() async {
+    if (_autoStartedFromRecipe) return;
+    final recipe = widget.initialRecipe;
+    if (recipe == null) return;
+
+    final premiumProvider = Provider.of<PremiumProvider>(context, listen: false);
+    if (!premiumProvider.isPremium && !premiumProvider.canSendAiChefMessage()) {
+      // User hit free limit — don't auto-send anything.
+      return;
+    }
+
+    final chatProvider = context.read<ChatProvider>();
+    // Start a fresh chat for a recipe cooking session.
+    chatProvider.startNewChat();
+
+    final prompt = _buildCookingPromptFromRecipe(context, recipe);
+    _autoStartedFromRecipe = true;
+    await _proceedWithMessage(prompt);
   }
 
   Future<void> _handleBack() async {
@@ -409,7 +454,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                                   // Camera Button
                                   GestureDetector(
                                     onTap: canSendMessage
-                                        ? () => context.push('/scan')
+                                        ? () => context.push('/scan-camera')
                                         : null,
                                     child: Opacity(
                                       opacity: canSendMessage ? 1.0 : 0.4,

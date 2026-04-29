@@ -27,10 +27,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isExitSheetOpen = false;
 
-  bool get _shouldShowProButton =>
-      Platform.isIOS
-          ? RemoteConfigService.subProButtonIos
-          : RemoteConfigService.subProButton;
+  bool get _shouldShowProButton => Platform.isIOS
+      ? RemoteConfigService.subProButtonIos
+      : RemoteConfigService.subProButton;
 
   Future<void> _showExitConfirmation() async {
     if (!mounted) return;

@@ -167,7 +167,7 @@ abstract class AppLocalizations {
   /// No description provided for @commonShop.
   ///
   /// In en, this message translates to:
-  /// **'Shop'**
+  /// **'Grocery'**
   String get commonShop;
 
   /// No description provided for @commonChat.
@@ -235,6 +235,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search'**
   String get commonSearch;
+
+  /// No description provided for @commonGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get commonGallery;
 
   /// No description provided for @commonLoading.
   ///
@@ -575,13 +581,13 @@ abstract class AppLocalizations {
   /// No description provided for @authWelcomeBack.
   ///
   /// In en, this message translates to:
-  /// **'Welcome back to DishGenie!'**
+  /// **'Welcome back to Smart Chef!'**
   String get authWelcomeBack;
 
   /// No description provided for @authWelcomeNew.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to DishGenie! Your account has been created.'**
+  /// **'Welcome to Smart Chef! Your account has been created.'**
   String get authWelcomeNew;
 
   /// No description provided for @authInvalidCredentials.
@@ -757,6 +763,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Voice'**
   String get recipesVoice;
+
+  /// No description provided for @scannerCameraNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera not available'**
+  String get scannerCameraNotAvailable;
 
   /// No description provided for @smartChefTitle.
   ///
@@ -1985,7 +1997,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatTitle.
   ///
   /// In en, this message translates to:
-  /// **'DishGenie Chat'**
+  /// **'Smart Chef Chat'**
   String get chatTitle;
 
   /// No description provided for @chatSubtitle.
@@ -1997,7 +2009,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatGreeting.
   ///
   /// In en, this message translates to:
-  /// **'Hi, I\'m DishGenie!'**
+  /// **'Hi, I\'m Smart Chef!'**
   String get chatGreeting;
 
   /// No description provided for @chatGreetingSubtitle.
@@ -3221,7 +3233,7 @@ abstract class AppLocalizations {
   /// No description provided for @splashAppName.
   ///
   /// In en, this message translates to:
-  /// **'DishGenie'**
+  /// **'Smart Chef'**
   String get splashAppName;
 
   /// No description provided for @splashSubtitle.
@@ -3325,7 +3337,7 @@ abstract class AppLocalizations {
   /// No description provided for @landingAppName.
   ///
   /// In en, this message translates to:
-  /// **'DishGenie AI'**
+  /// **'Smart Chef AI'**
   String get landingAppName;
 
   /// No description provided for @landingDownloadForIOS.
@@ -3355,7 +3367,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumWelcomeMessage.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to DishGenie Pro! Enjoy all premium features.'**
+  /// **'Welcome to Smart Chef Pro! Enjoy all premium features.'**
   String get premiumWelcomeMessage;
 
   /// No description provided for @premiumPurchasesRestored.
@@ -3379,7 +3391,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumUnlockTitle.
   ///
   /// In en, this message translates to:
-  /// **'Unlock DishGenie Pro'**
+  /// **'Unlock Smart Chef Pro'**
   String get premiumUnlockTitle;
 
   /// No description provided for @premiumSubtitle.
@@ -3518,7 +3530,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'DishGenie'**
+  /// **'Smart Chef'**
   String get appTitle;
 
   /// No description provided for @searchTitle.
@@ -3764,7 +3776,7 @@ abstract class AppLocalizations {
   /// No description provided for @appHeaderTitle.
   ///
   /// In en, this message translates to:
-  /// **'DishGenie'**
+  /// **'Smart Chef'**
   String get appHeaderTitle;
 
   /// No description provided for @premiumCardUnlock.
@@ -3773,11 +3785,11 @@ abstract class AppLocalizations {
   /// **'Unlock '**
   String get premiumCardUnlock;
 
-  /// No description provided for @premiumCardDishGeniePro.
+  /// No description provided for @premiumCardSmartChefPro.
   ///
   /// In en, this message translates to:
-  /// **'DishGenie Pro'**
-  String get premiumCardDishGeniePro;
+  /// **'Smart Chef Pro'**
+  String get premiumCardSmartChefPro;
 
   /// No description provided for @premiumCardSubtitle.
   ///
@@ -3788,7 +3800,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumCardTryPlus.
   ///
   /// In en, this message translates to:
-  /// **'Try Dish Genie Plus'**
+  /// **'Try Smart Chef Plus'**
   String get premiumCardTryPlus;
 
   /// No description provided for @premiumCardGetPlus.
@@ -3953,11 +3965,11 @@ abstract class AppLocalizations {
   /// **'Your personal AI-powered kitchen assistant. Generate healthy recipes, plan meals for the week, and create smart grocery lists — all tailored to your taste, budget, and goals.'**
   String get landingHeroSubtitle;
 
-  /// No description provided for @landingWhyDishGenie.
+  /// No description provided for @landingWhySmartChef.
   ///
   /// In en, this message translates to:
-  /// **'Why DishGenie?'**
-  String get landingWhyDishGenie;
+  /// **'Why Smart Chef?'**
+  String get landingWhySmartChef;
 
   /// No description provided for @landingKitchenSupercharged.
   ///
@@ -4076,7 +4088,7 @@ abstract class AppLocalizations {
   /// No description provided for @landingTestimonial1Quote.
   ///
   /// In en, this message translates to:
-  /// **'DishGenie transformed my meal planning. I save 5+ hours every week!'**
+  /// **'Smart Chef transformed my meal planning. I save 5+ hours every week!'**
   String get landingTestimonial1Quote;
 
   /// No description provided for @landingTestimonial2Name.
@@ -4130,7 +4142,7 @@ abstract class AppLocalizations {
   /// No description provided for @landingCopyright.
   ///
   /// In en, this message translates to:
-  /// **'© 2024 DishGenie AI. All rights reserved.'**
+  /// **'© 2024 Smart Chef AI. All rights reserved.'**
   String get landingCopyright;
 
   /// No description provided for @recipesLimitReached.
@@ -4166,7 +4178,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumTitleLine2.
   ///
   /// In en, this message translates to:
-  /// **'Dish Genie Premium.'**
+  /// **'Smart Chef Premium.'**
   String get premiumTitleLine2;
 
   /// No description provided for @premiumSeeMorePlans.
@@ -4250,7 +4262,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumTestimonialQuote.
   ///
   /// In en, this message translates to:
-  /// **'I stopped wasting time searching recipes online. DishGenie instantly creates meals from what I have in my fridge.'**
+  /// **'I stopped wasting time searching recipes online. Smart Chef instantly creates meals from what I have in my fridge.'**
   String get premiumTestimonialQuote;
 
   /// No description provided for @premiumSocialStats.
@@ -4298,25 +4310,25 @@ abstract class AppLocalizations {
   /// No description provided for @premiumFeatureDailyAiRecipeSuggestions.
   ///
   /// In en, this message translates to:
-  /// **'Daily AI recipe\nsuggestions'**
+  /// **'Daily AI recipe suggestions'**
   String get premiumFeatureDailyAiRecipeSuggestions;
 
   /// No description provided for @premiumFeatureIngredientBasedCooking.
   ///
   /// In en, this message translates to:
-  /// **'Ingredient-\nbased cooking'**
+  /// **'Ingredient-based cooking'**
   String get premiumFeatureIngredientBasedCooking;
 
   /// No description provided for @premiumFeatureSmartMealPlanning.
   ///
   /// In en, this message translates to:
-  /// **'Smart meal\nplanning'**
+  /// **'Smart meal planning'**
   String get premiumFeatureSmartMealPlanning;
 
   /// No description provided for @premiumFeatureNutritionInsights.
   ///
   /// In en, this message translates to:
-  /// **'Nutrition\ninsights'**
+  /// **'Nutrition insights'**
   String get premiumFeatureNutritionInsights;
 
   /// No description provided for @premiumChooseYourPlanNew.
@@ -4370,7 +4382,7 @@ abstract class AppLocalizations {
   /// No description provided for @discountPopupTitle.
   ///
   /// In en, this message translates to:
-  /// **'🔥 Unlock Your\nDish Genie PRO'**
+  /// **'🔥 Unlock Your\nSmart Chef PRO'**
   String get discountPopupTitle;
 
   /// No description provided for @discountPopupPerMonth.

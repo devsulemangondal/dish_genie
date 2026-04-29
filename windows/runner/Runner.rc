@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.dishgenie" "\0"
-            VALUE "FileDescription", "dish_genie" "\0"
+            VALUE "FileDescription", "Smart Chef" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "dish_genie" "\0"
+            VALUE "InternalName", "smart_chef" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.dishgenie. All rights reserved." "\0"
-            VALUE "OriginalFilename", "dish_genie.exe" "\0"
-            VALUE "ProductName", "dish_genie" "\0"
+            VALUE "OriginalFilename", "smart_chef.exe" "\0"
+            VALUE "ProductName", "Smart Chef" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
