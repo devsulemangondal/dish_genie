@@ -1,4 +1,4 @@
-{
+﻿{
   "commonHome": "الرئيسية",
   "commonRecipes": "الوصفات",
   "commonPlan": "الخطة",
@@ -368,6 +368,12 @@
   "settingsFeedbackSubtitle": "أرسل لنا أفكارك",
   "settingsRateUs": "قيّمنا",
   "settingsRateUsSubtitle": "أحببت التطبيق؟ قيّمنا!",
+  "rateDialogTitle": "هل تستمتع بـ Smart Chef؟",
+  "rateDialogSubtitle": "ساعدنا على تحسين تجربة الطبخ لديك 🍳",
+  "rateDialogBody": "ملاحظاتك تساعدنا على إنشاء\nوصفات أفضل لك",
+  "rateDialogRateNow": "قيّم الآن",
+  "rateDialogFeedback": "ملاحظات",
+  "rateDialogMaybeLater": "ربما لاحقًا",
   "settingsShareApp": "مشاركة التطبيق",
   "settingsShareAppSubtitle": "أخبر أصدقاءك",
   "settingsHelpSupport": "المساعدة / الدعم",
@@ -786,6 +792,7 @@
   "premiumBestValue": "أفضل قيمة",
   "premiumPlanWeekly": "أسبوعي",
   "premiumPlanYearly": "سنوي",
+  "premiumStartFreeTrialTitle": "ابدأ تجربتك المجانية",
   "premiumStartFreeTrial": "ابدأ تجربة مجانية لمدة 3 أيام {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {

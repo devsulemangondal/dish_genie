@@ -226,15 +226,15 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           onTap: () {
             _selectLanguage(language.code);
           },
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(30),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 22),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
             decoration: BoxDecoration(
               color: isDark
                   ? Theme.of(context).colorScheme.surface.withOpacity(0.65)
                   : (isSelected ? selectedFill : Colors.white),
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: isSelected ? selectedBorder : unselectedBorder,
                 width: isSelected ? 1.6 : 1.1,

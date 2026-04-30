@@ -1161,6 +1161,26 @@ class AppLocalizationsKk extends AppLocalizations {
   String get settingsRateUsSubtitle => 'Қолданба ұнады ма? Бағалаңыз!';
 
   @override
+  String get rateDialogTitle => 'Smart Chef ұнай ма?';
+
+  @override
+  String get rateDialogSubtitle =>
+      'Пісіру тәжірибеңізді жақсартуға көмектесіңіз 🍳';
+
+  @override
+  String get rateDialogBody =>
+      'Пікіріңіз бізге\nсіз үшін жақсырақ рецепттер жасауға көмектеседі';
+
+  @override
+  String get rateDialogRateNow => 'Қазір бағалау';
+
+  @override
+  String get rateDialogFeedback => 'Кері байланыс';
+
+  @override
+  String get rateDialogMaybeLater => 'Кейінірек';
+
+  @override
   String get settingsShareApp => 'Қолданбаны Бөлісу';
 
   @override
@@ -2229,6 +2249,27 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get premiumPlanYearly => 'Жылдық';
+
+  @override
+  String get premiumPlanLifetime => 'Lifetime';
+
+  @override
+  String get premiumLifetimeFullAccessIncluded =>
+      'One-time purchase • Full access included';
+
+  @override
+  String get premiumStartFreeTrialTitle => 'Тегін сынақты бастаңыз';
+
+  @override
+  String premiumTrialThenPrice(String price) {
+    return '3-day trial, then $price';
+  }
+
+  @override
+  String get premiumUnlockNow => 'Unlock now';
+
+  @override
+  String get premiumBestOffer => 'Best offer';
 
   @override
   String premiumStartFreeTrial(String price) {

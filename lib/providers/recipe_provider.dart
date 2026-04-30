@@ -10,11 +10,13 @@ class RecipeProvider with ChangeNotifier {
   Recipe? _recipe;
   bool _isLoading = false;
   bool _cancelRequested = false;
+  String? _lastGenerateError;
   List<Recipe> _authenticRecipes = [];
   bool _recipesLoaded = false;
 
   Recipe? get recipe => _recipe;
   bool get isLoading => _isLoading;
+  String? get lastGenerateError => _lastGenerateError;
 
   /// Call to cancel an in-progress recipe generation.
   void cancelGeneration() {
@@ -355,9 +357,15 @@ class RecipeProvider with ChangeNotifier {
     _cancelRequested = false;
     _isLoading = true;
     _recipe = null;
+    _lastGenerateError = null;
     notifyListeners();
 
     try {
+      if (kDebugMode) {
+        debugPrint(
+          '[RecipeProvider] generateRecipe start ingredientsLen=${ingredients.length} cookingTime=$cookingTime targetCalories=$targetCalories cuisine=$cuisine diet=$dietType goal=$healthGoal mood=$mood lang=$language image=${imageBase64 != null ? 'yes' : 'no'}',
+        );
+      }
       final generated = await RecipeService.generateRecipe(
         ingredients: ingredients,
         cookingTime: cookingTime,
@@ -378,11 +386,21 @@ class RecipeProvider with ChangeNotifier {
       }
       _isLoading = false;
       _cancelRequested = false;
+      if (kDebugMode) {
+        debugPrint(
+          '[RecipeProvider] generateRecipe done cancelled=$wasCancelled recipe=${generated?.title}',
+        );
+      }
       notifyListeners();
       return wasCancelled ? null : generated;
-    } catch (e) {
+    } catch (e, st) {
       _isLoading = false;
       _cancelRequested = false;
+      _lastGenerateError = e.toString();
+      if (kDebugMode) {
+        debugPrint('[RecipeProvider] generateRecipe error: $e');
+        debugPrint('$st');
+      }
       notifyListeners();
       return null;
     }

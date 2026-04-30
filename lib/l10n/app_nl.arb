@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "Beste waarde",
   "premiumPlanWeekly": "Wekelijks",
   "premiumPlanYearly": "Jaarlijks",
+  "premiumStartFreeTrialTitle": "Start je gratis proefperiode",
   "premiumStartFreeTrial": "Start 3 dagen gratis proefperiode {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -736,7 +737,13 @@
   "settingsPreferencesSettings": "Voorkeuren en instellingen",
   "settingsPrivacyPolicy": "Privacybeleid",
   "settingsRateUs": "Beoordeel ons",
-  "settingsRateUsSubtitle": "Vind je de app leuk? Beoordeel!",
+  "settingsRateUsSubtitle": "Vind je de app leuk? Beoordeel!",
+  "rateDialogTitle": "Geniet je van Smart Chef?",
+  "rateDialogSubtitle": "Help ons je kookervaring te verbeteren 🍳",
+  "rateDialogBody": "Jouw feedback helpt ons\nbetere recepten voor jou te maken",
+  "rateDialogRateNow": "Nu beoordelen",
+  "rateDialogFeedback": "Feedback",
+  "rateDialogMaybeLater": "Misschien later",
   "settingsRatingThanks": "Bedankt! Beoordeling beschikbaar op mobiel.",
   "settingsSavedRecipes": "Opgeslagen recepten en favorieten",
   "settingsSendFeedback": "Feedback Sturen",
@@ -800,3 +807,4 @@
   "weeklyPlanView": "Bekijken",
   "weeklyPlanWed": "Wo"
 }
+

@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "En iyi değer",
   "premiumPlanWeekly": "Haftalık",
   "premiumPlanYearly": "Yıllık",
+  "premiumStartFreeTrialTitle": "Ücretsiz denemenizi başlatın",
   "premiumStartFreeTrial": "3 günlük ücretsiz denemeyi başlatın {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -736,7 +737,13 @@
   "settingsPreferencesSettings": "Tercihler ve ayarlar",
   "settingsPrivacyPolicy": "Gizlilik Politikası",
   "settingsRateUs": "Bizi Değerlendirin",
-  "settingsRateUsSubtitle": "Uygulamayı beğendiniz mi? Değerlendirin!",
+  "settingsRateUsSubtitle": "Uygulamayı beğendiniz mi? Değerlendirin!",
+  "rateDialogTitle": "Smart Chef'i seviyor musunuz?",
+  "rateDialogSubtitle": "Yemek yapma deneyiminizi geliştirmemize yardımcı olun 🍳",
+  "rateDialogBody": "Geri bildiriminiz, sizin için\ndaha iyi tarifler oluşturmamıza yardımcı olur",
+  "rateDialogRateNow": "Şimdi değerlendir",
+  "rateDialogFeedback": "Geri bildirim",
+  "rateDialogMaybeLater": "Belki sonra",
   "settingsRatingThanks": "İlginiz için teşekkürler! Değerlendirme mobilde mevcut.",
   "settingsSavedRecipes": "Kayıtlı tarifler ve favoriler",
   "settingsSendFeedback": "Geri Bildirim Gönder",
@@ -800,3 +807,4 @@
   "weeklyPlanView": "Görüntüle",
   "weeklyPlanWed": "Çar"
 }
+

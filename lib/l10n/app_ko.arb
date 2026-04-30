@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "최고의 가치",
   "premiumPlanWeekly": "주간",
   "premiumPlanYearly": "연간",
+  "premiumStartFreeTrialTitle": "무료 체험 시작하기",
   "premiumStartFreeTrial": "3일 무료 체험 시작 {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -736,7 +737,13 @@
   "settingsPreferencesSettings": "환경설정 및 설정",
   "settingsPrivacyPolicy": "개인정보 보호정책",
   "settingsRateUs": "평가하기",
-  "settingsRateUsSubtitle": "앱이 마음에 드시나요? 평가해 주세요!",
+  "settingsRateUsSubtitle": "앱이 마음에 드시나요? 평가해 주세요!",
+  "rateDialogTitle": "Smart Chef가 마음에 드시나요?",
+  "rateDialogSubtitle": "요리 경험을 개선할 수 있도록 도와주세요 🍳",
+  "rateDialogBody": "피드백은 더 나은 레시피를\n만드는 데 큰 도움이 됩니다",
+  "rateDialogRateNow": "지금 평가하기",
+  "rateDialogFeedback": "피드백",
+  "rateDialogMaybeLater": "나중에",
   "settingsRatingThanks": "관심 감사합니다! 평가는 모바일 기기에서 가능합니다.",
   "settingsSavedRecipes": "저장된 레시피 및 즐겨찾기",
   "settingsSendFeedback": "피드백 보내기",
@@ -800,3 +807,4 @@
   "weeklyPlanView": "보기",
   "weeklyPlanWed": "수"
 }
+

@@ -1163,6 +1163,26 @@ class AppLocalizationsUz extends AppLocalizations {
   String get settingsRateUsSubtitle => 'Ilova yoqdimi? Baholang!';
 
   @override
+  String get rateDialogTitle => 'Smart Chef yoqayaptimi?';
+
+  @override
+  String get rateDialogSubtitle =>
+      'Pishirish tajribangizni yaxshilashga yordam bering 🍳';
+
+  @override
+  String get rateDialogBody =>
+      'Fikringiz bizga\nsiz uchun yaxshiroq retseptlar yaratishga yordam beradi';
+
+  @override
+  String get rateDialogRateNow => 'Hozir baholang';
+
+  @override
+  String get rateDialogFeedback => 'Fikr bildirish';
+
+  @override
+  String get rateDialogMaybeLater => 'Balki keyinroq';
+
+  @override
   String get settingsShareApp => 'Ilovani ulashish';
 
   @override
@@ -2235,6 +2255,27 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get premiumPlanYearly => 'Yillik';
+
+  @override
+  String get premiumPlanLifetime => 'Lifetime';
+
+  @override
+  String get premiumLifetimeFullAccessIncluded =>
+      'One-time purchase • Full access included';
+
+  @override
+  String get premiumStartFreeTrialTitle => 'Bepul sinov davrini boshlang';
+
+  @override
+  String premiumTrialThenPrice(String price) {
+    return '3-day trial, then $price';
+  }
+
+  @override
+  String get premiumUnlockNow => 'Unlock now';
+
+  @override
+  String get premiumBestOffer => 'Best offer';
 
   @override
   String premiumStartFreeTrial(String price) {

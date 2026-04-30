@@ -52,7 +52,7 @@ class LandingScreen extends StatelessWidget {
         children: [
           const SizedBox(height: 60),
           Image.asset(
-            'assets/images/genie-mascot.png',
+            'assets/pro_top_new.png',
             width: 80,
             height: 80,
           ),
@@ -472,7 +472,7 @@ class LandingScreen extends StatelessWidget {
       child: Column(
         children: [
           Image.asset(
-            'assets/images/genie-mascot.png',
+            'assets/pro_top_new.png',
             width: 64,
             height: 64,
           ),
@@ -528,7 +528,7 @@ class LandingScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/genie-mascot.png',
+                'assets/pro_top_new.png',
                 width: 32,
                 height: 32,
               ),

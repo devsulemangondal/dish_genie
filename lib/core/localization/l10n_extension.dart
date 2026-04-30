@@ -591,6 +591,12 @@ extension L10nExtension on BuildContext {
     'settings.feedback': (l) => l.settingsFeedback,
     'settings.feedback.sent': (l) => l.settingsFeedbackSent,
     'settings.feedback.subtitle': (l) => l.settingsFeedbackSubtitle,
+    'rate.dialog.title': (l) => l.rateDialogTitle,
+    'rate.dialog.subtitle': (l) => l.rateDialogSubtitle,
+    'rate.dialog.body': (l) => l.rateDialogBody,
+    'rate.dialog.rate.now': (l) => l.rateDialogRateNow,
+    'rate.dialog.feedback': (l) => l.rateDialogFeedback,
+    'rate.dialog.maybe.later': (l) => l.rateDialogMaybeLater,
     'settings.grocery.lists': (l) => l.settingsGroceryLists,
     'settings.help.support': (l) => l.settingsHelpSupport,
     'settings.help.support.subtitle': (l) => l.settingsHelpSupportSubtitle,
@@ -849,6 +855,12 @@ extension L10nExtension on BuildContext {
     'premium.best.value': (l) => l.premiumBestValue,
     'premium.plan.weekly': (l) => l.premiumPlanWeekly,
     'premium.plan.yearly': (l) => l.premiumPlanYearly,
+    'premium.plan.lifetime': (l) => l.premiumPlanLifetime,
+    'premium.lifetime.full.access.included': (l) =>
+        l.premiumLifetimeFullAccessIncluded,
+    'premium.start.free.trial.title': (l) => l.premiumStartFreeTrialTitle,
+    'premium.unlock.now': (l) => l.premiumUnlockNow,
+    'premium.best.offer': (l) => l.premiumBestOffer,
     'premium.unlock.unlimited.recipes.now': (l) =>
         l.premiumUnlockUnlimitedRecipesNow,
     'premium.best.value.ribbon': (l) => l.premiumBestValueRibbon,
@@ -862,6 +874,8 @@ extension L10nExtension on BuildContext {
     String Function(AppLocalizations, Map<String, String>?)
   >
   _parameterizedMap = {
+    'premium.trial.then.price': (l, params) =>
+        l.premiumTrialThenPrice(params?['price'] ?? ''),
     'scanner.limit.reached': (l, params) =>
         l.scannerLimitReached(params?['limit'] ?? ''),
     'chat.limit.reached.message': (l, params) =>

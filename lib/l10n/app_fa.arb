@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "بهترین ارزش",
   "premiumPlanWeekly": "هفتگی",
   "premiumPlanYearly": "سالانه",
+  "premiumStartFreeTrialTitle": "دوره آزمایشی رایگان خود را شروع کنید",
   "premiumStartFreeTrial": "شروع آزمایشی رایگان ۳ روزه {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -746,7 +747,13 @@
   "settingsPreferencesSettings": "ترجیحات و تنظیمات",
   "settingsPrivacyPolicy": "سیاست حریم خصوصی",
   "settingsRateUs": "امتیاز دهید",
-  "settingsRateUsSubtitle": "برنامه را دوست دارید؟ امتیاز دهید!",
+  "settingsRateUsSubtitle": "برنامه را دوست دارید؟ امتیاز دهید!",
+  "rateDialogTitle": "از Smart Chef لذت می‌برید؟",
+  "rateDialogSubtitle": "به ما کمک کنید تجربه آشپزی‌تان را بهتر کنیم 🍳",
+  "rateDialogBody": "بازخورد شما به ما کمک می‌کند\nدستورهای بهتری برای شما بسازیم",
+  "rateDialogRateNow": "اکنون امتیاز دهید",
+  "rateDialogFeedback": "بازخورد",
+  "rateDialogMaybeLater": "شاید بعداً",
   "settingsRatingThanks": "از علاقه‌مندی شما متشکریم! امتیازدهی در دستگاه‌های موبایل در دسترس است.",
   "settingsSavedRecipes": "دستور پخت‌ها و علاقه‌مندی‌های ذخیره شده",
   "settingsSendFeedback": "ارسال بازخورد",
@@ -810,3 +817,4 @@
   "weeklyPlanView": "مشاهده",
   "weeklyPlanWed": "چهار"
 }
+

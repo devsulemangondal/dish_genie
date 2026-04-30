@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "Ең тиімді",
   "premiumPlanWeekly": "Апталық",
   "premiumPlanYearly": "Жылдық",
+  "premiumStartFreeTrialTitle": "Тегін сынақты бастаңыз",
   "premiumStartFreeTrial": "3 күндік тегін сынақты бастаңыз {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -746,7 +747,13 @@
   "settingsPreferencesSettings": "Қалаулар мен параметрлер",
   "settingsPrivacyPolicy": "Құпиялылық Саясаты",
   "settingsRateUs": "Бағалаңыз",
-  "settingsRateUsSubtitle": "Қолданба ұнады ма? Бағалаңыз!",
+  "settingsRateUsSubtitle": "Қолданба ұнады ма? Бағалаңыз!",
+  "rateDialogTitle": "Smart Chef ұнай ма?",
+  "rateDialogSubtitle": "Пісіру тәжірибеңізді жақсартуға көмектесіңіз 🍳",
+  "rateDialogBody": "Пікіріңіз бізге\nсіз үшін жақсырақ рецепттер жасауға көмектеседі",
+  "rateDialogRateNow": "Қазір бағалау",
+  "rateDialogFeedback": "Кері байланыс",
+  "rateDialogMaybeLater": "Кейінірек",
   "settingsRatingThanks": "Қызығушылығыңыз үшін рахмет! Бағалау мобильді құрылғыларда қол жетімді.",
   "settingsSavedRecipes": "Сақталған рецепттер мен таңдаулылар",
   "settingsSendFeedback": "Кері Байланыс Жіберу",
@@ -810,3 +817,4 @@
   "weeklyPlanView": "Көру",
   "weeklyPlanWed": "Ср"
 }
+

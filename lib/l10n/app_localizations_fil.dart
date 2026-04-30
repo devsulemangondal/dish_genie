@@ -1169,6 +1169,26 @@ class AppLocalizationsFil extends AppLocalizations {
   String get settingsRateUsSubtitle => 'Gusto mo ang app? I-rate kami!';
 
   @override
+  String get rateDialogTitle => 'Nag-e-enjoy ka ba sa Smart Chef?';
+
+  @override
+  String get rateDialogSubtitle =>
+      'Tulungan kaming pagandahin ang iyong cooking experience 🍳';
+
+  @override
+  String get rateDialogBody =>
+      'Ang feedback mo ay tumutulong sa amin\nna gumawa ng mas magagandang recipe para sa iyo';
+
+  @override
+  String get rateDialogRateNow => 'I-rate Ngayon';
+
+  @override
+  String get rateDialogFeedback => 'Feedback';
+
+  @override
+  String get rateDialogMaybeLater => 'Mamaya na lang';
+
+  @override
   String get settingsShareApp => 'Ibahagi ang App';
 
   @override
@@ -2240,6 +2260,27 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get premiumPlanYearly => 'Taunan';
+
+  @override
+  String get premiumPlanLifetime => 'Lifetime';
+
+  @override
+  String get premiumLifetimeFullAccessIncluded =>
+      'One-time purchase • Full access included';
+
+  @override
+  String get premiumStartFreeTrialTitle => 'Simulan ang iyong libreng trial';
+
+  @override
+  String premiumTrialThenPrice(String price) {
+    return '3-day trial, then $price';
+  }
+
+  @override
+  String get premiumUnlockNow => 'Unlock now';
+
+  @override
+  String get premiumBestOffer => 'Best offer';
 
   @override
   String premiumStartFreeTrial(String price) {

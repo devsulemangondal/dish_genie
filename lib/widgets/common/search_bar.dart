@@ -426,6 +426,14 @@ class _SearchBarState extends State<SearchBar>
   @override
   Widget build(BuildContext context) {
     final magicPhrases = _getMagicPhrases(context);
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark
+        ? Colors.white.withOpacity(0.92)
+        : Theme.of(context).colorScheme.onSurface.withOpacity(0.8);
+    final hintColor = isDark
+        ? Colors.white.withOpacity(0.65)
+        : Theme.of(context).colorScheme.onSurface.withOpacity(0.6);
     final currentPlaceholder =
         widget.placeholder ??
         (widget.placeholder == null &&
@@ -487,52 +495,63 @@ class _SearchBarState extends State<SearchBar>
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    focusNode: _focusNode,
-                    onSubmitted: _handleSubmit,
-                    onTap: () {},
-                    decoration: InputDecoration(
-                      hintText: currentPlaceholder,
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                      hintStyle: TextStyle(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(0.6),
-                        fontSize: 16,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      TextField(
+                        controller: _controller,
+                        focusNode: _focusNode,
+                        onSubmitted: _handleSubmit,
+                        onTap: () {},
+                        cursorColor: textColor,
+                        decoration: InputDecoration(
+                          hintText: currentPlaceholder,
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          // Reserve space so text never overlaps the mic.
+                          contentPadding: EdgeInsets.only(
+                            top: 12,
+                            bottom: 12,
+                            left: isRtl ? 44 : 0,
+                            right: isRtl ? 0 : 44,
+                          ),
+                          hintStyle: TextStyle(
+                            color: hintColor,
+                            fontSize: 16,
+                          ),
+                        ),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: textColor,
+                        ),
                       ),
-                    ),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.8),
-                    ),
-                  ),
-                ),
-                // Mic button
-                GestureDetector(
-                  onTap: _showVoiceInputDialog,
-                  child: Container(
-                    width: 36,
-                    height: 36,
-                    margin: RtlEdgeInsets.only(context: context, right: 8),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.mic,
-                      color: AppColors.genieLavender,
-                      size: 18,
-                    ),
+                      Positioned(
+                        bottom: 2,
+                        right: isRtl ? null : 0,
+                        left: isRtl ? 0 : null,
+                        child: GestureDetector(
+                          onTap: _showVoiceInputDialog,
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.mic,
+                              color: AppColors.genieLavender,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 8),

@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "Eng yaxshi qiymat",
   "premiumPlanWeekly": "Haftalik",
   "premiumPlanYearly": "Yillik",
+  "premiumStartFreeTrialTitle": "Bepul sinov davrini boshlang",
   "premiumStartFreeTrial": "3 kunlik bepul sinovni boshlang {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -736,7 +737,13 @@
   "settingsPreferencesSettings": "Sozlamalar va afzalliklar",
   "settingsPrivacyPolicy": "Maxfiylik siyosati",
   "settingsRateUs": "Baholang",
-  "settingsRateUsSubtitle": "Ilova yoqdimi? Baholang!",
+  "settingsRateUsSubtitle": "Ilova yoqdimi? Baholang!",
+  "rateDialogTitle": "Smart Chef yoqayaptimi?",
+  "rateDialogSubtitle": "Pishirish tajribangizni yaxshilashga yordam bering 🍳",
+  "rateDialogBody": "Fikringiz bizga\nsiz uchun yaxshiroq retseptlar yaratishga yordam beradi",
+  "rateDialogRateNow": "Hozir baholang",
+  "rateDialogFeedback": "Fikr bildirish",
+  "rateDialogMaybeLater": "Balki keyinroq",
   "settingsRatingThanks": "Qiziqishingiz uchun rahmat! Baholash mobil qurilmalarda mavjud.",
   "settingsSavedRecipes": "Saqlangan retseptlar va sevimlilar",
   "settingsSendFeedback": "Fikr yuborish",
@@ -800,3 +807,4 @@
   "weeklyPlanView": "Ko'rish",
   "weeklyPlanWed": "Cho"
 }
+

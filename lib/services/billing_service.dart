@@ -28,9 +28,13 @@ class BillingService {
   static const String weeklySubscriptionId = 'weekly_sub';
   static const String yearlySubscriptionId = 'yearly_sub';
 
+  /// One-time lifetime unlock. Must match Play Console / App Store Connect exactly.
+  static const String lifetimeSubscriptionId = 'lifetime_premium';
+
   static final List<String> _productIds = [
     weeklySubscriptionId,
     yearlySubscriptionId,
+    lifetimeSubscriptionId,
   ];
 
   static List<ProductDetails> _products = [];
@@ -47,7 +51,9 @@ class BillingService {
   static bool get hasPremiumEntitlement => _hasPremiumEntitlement;
   static bool get isLoadingProducts => _isLoadingProducts;
   static bool isPremiumProductId(String productId) =>
-      productId == weeklySubscriptionId || productId == yearlySubscriptionId;
+      productId == weeklySubscriptionId ||
+      productId == yearlySubscriptionId ||
+      productId == lifetimeSubscriptionId;
 
   static bool _isLoadingProducts = false;
   static String? _lastError;
@@ -209,7 +215,8 @@ class BillingService {
       // in Google Play Console (for Android) or App Store Connect (for iOS)
       // Subscriptions must be configured as subscription products in the store
       if (product.id == weeklySubscriptionId ||
-          product.id == yearlySubscriptionId) {
+          product.id == yearlySubscriptionId ||
+          product.id == lifetimeSubscriptionId) {
         await _iap.buyNonConsumable(purchaseParam: purchaseParam);
       } else {
         await _iap.buyConsumable(purchaseParam: purchaseParam);

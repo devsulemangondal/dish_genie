@@ -10,7 +10,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "ar": [
@@ -24,7 +29,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "bn": [
@@ -38,7 +48,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "de": [
@@ -52,7 +67,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "fa": [
@@ -66,7 +86,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "fil": [
@@ -80,7 +105,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "fr": [
@@ -94,7 +124,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "hi": [
@@ -108,7 +143,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "id": [
@@ -122,7 +162,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "it": [
@@ -136,7 +181,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "ja": [
@@ -150,7 +200,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "kk": [
@@ -164,7 +219,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "ko": [
@@ -178,7 +238,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "ms": [
@@ -192,7 +257,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "nl": [
@@ -206,7 +276,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "pl": [
@@ -220,7 +295,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "pt": [
@@ -234,7 +314,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "ru": [
@@ -248,7 +333,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "th": [
@@ -262,7 +352,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "tr": [
@@ -276,7 +371,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "uk": [
@@ -290,7 +390,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "ur": [
@@ -304,7 +409,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "uz": [
@@ -318,7 +428,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "vi": [
@@ -332,7 +447,12 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ],
 
   "zh": [
@@ -346,6 +466,11 @@
     "noInternetMessage",
     "permissionDeniedTitle",
     "permissionDeniedMessage",
-    "permissionOpenSettings"
+    "permissionOpenSettings",
+    "premiumPlanLifetime",
+    "premiumLifetimeFullAccessIncluded",
+    "premiumTrialThenPrice",
+    "premiumUnlockNow",
+    "premiumBestOffer"
   ]
 }

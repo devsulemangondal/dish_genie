@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "Лучшая выгода",
   "premiumPlanWeekly": "Еженедельно",
   "premiumPlanYearly": "Ежегодно",
+  "premiumStartFreeTrialTitle": "Начните бесплатный пробный период",
   "premiumStartFreeTrial": "Начните 3‑дневный бесплатный пробный период {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -746,7 +747,13 @@
   "settingsPreferencesSettings": "Настройки и предпочтения",
   "settingsPrivacyPolicy": "Политика конфиденциальности",
   "settingsRateUs": "Оценить",
-  "settingsRateUsSubtitle": "Нравится приложение? Оцените!",
+  "settingsRateUsSubtitle": "Нравится приложение? Оцените!",
+  "rateDialogTitle": "Нравится Smart Chef?",
+  "rateDialogSubtitle": "Помогите нам улучшить ваш опыт готовки 🍳",
+  "rateDialogBody": "Ваш отзыв помогает нам создавать\nдля вас лучшие рецепты",
+  "rateDialogRateNow": "Оценить сейчас",
+  "rateDialogFeedback": "Отзыв",
+  "rateDialogMaybeLater": "Может позже",
   "settingsRatingThanks": "Спасибо за интерес! Оценка доступна на мобильных устройствах.",
   "settingsSavedRecipes": "Сохранённые рецепты и избранное",
   "settingsSendFeedback": "Отправить отзыв",
@@ -810,3 +817,4 @@
   "weeklyPlanView": "Просмотр",
   "weeklyPlanWed": "Ср"
 }
+

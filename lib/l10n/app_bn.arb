@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "সেরা মূল্য",
   "premiumPlanWeekly": "সাপ্তাহিক",
   "premiumPlanYearly": "বার্ষিক",
+  "premiumStartFreeTrialTitle": "আপনার ফ্রি ট্রায়াল শুরু করুন",
   "premiumStartFreeTrial": "৩ দিনের ফ্রি ট্রায়াল শুরু করুন {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -747,6 +748,12 @@
   "settingsPrivacyPolicy": "গোপনীয়তা নীতি",
   "settingsRateUs": "রেটিং দিন",
   "settingsRateUsSubtitle": "অ্যাপটি পছন্দ হয়েছে? রেটিং দিন!",
+  "rateDialogTitle": "Smart Chef উপভোগ করছেন?",
+  "rateDialogSubtitle": "আপনার রান্নার অভিজ্ঞতা আরও ভালো করতে সাহায্য করুন 🍳",
+  "rateDialogBody": "আপনার মতামত আমাদের সাহায্য করে\nআপনার জন্য আরও ভালো রেসিপি তৈরি করতে",
+  "rateDialogRateNow": "এখনই রেট করুন",
+  "rateDialogFeedback": "মতামত",
+  "rateDialogMaybeLater": "পরে করব",
   "settingsRatingThanks": "আপনার আগ্রহের জন্য ধন্যবাদ! মোবাইল ডিভাইসে রেটিং পাওয়া যায়।",
   "settingsSavedRecipes": "সংরক্ষিত রেসিপি ও পছন্দ",
   "settingsSendFeedback": "ফিডব্যাক পাঠান",

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -312,6 +314,206 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  Future<void> _showRateUsDialog() async {
+    var rating = 5;
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) {
+        final theme = Theme.of(ctx);
+        final isDark = theme.brightness == Brightness.dark;
+
+        const gradientA = Color(0xFF40CFB2);
+        const gradientB = Color(0xFF57A2F3);
+        const textBody = Color(0xFF3E484D);
+        const maybeLaterColor = Color(0xFF6E797D);
+        const starOn = Color(0xFFFFC107);
+        const starOff = Color(0xFFD6D6D6);
+
+        TextStyle titleStyle() => GoogleFonts.plusJakartaSans(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+          height: 1.1,
+        );
+        TextStyle subtitleStyle() => GoogleFonts.plusJakartaSans(
+          fontSize: 12.5,
+          fontWeight: FontWeight.w400,
+          color: Colors.white.withOpacity(0.95),
+          height: 1.2,
+        );
+        TextStyle bodyStyle() => GoogleFonts.plusJakartaSans(
+          fontSize: 13,
+          fontWeight: FontWeight.w400,
+          color: textBody,
+          height: 1.25,
+        );
+
+        Future<void> handlePrimary(int currentRating) async {
+          Navigator.of(ctx).pop();
+          if (currentRating <= 3) {
+            if (kDebugMode) {
+              debugPrint('[Settings] Rate dialog -> feedback rating=$currentRating');
+            }
+            await _openFeedbackEmail();
+          } else {
+            if (kDebugMode) {
+              debugPrint('[Settings] Rate dialog -> store rating=$currentRating');
+            }
+            await _rateApp();
+          }
+        }
+
+        return StatefulBuilder(
+          builder: (context, setLocal) {
+            final primaryText = rating <= 3
+                ? ctx.t('rate.dialog.feedback')
+                : ctx.t('rate.dialog.rate.now');
+
+            return Dialog(
+              insetPadding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 24,
+              ),
+              backgroundColor: Colors.transparent,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(22),
+                child: Container(
+                  color: isDark ? theme.cardColor : Colors.white,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [gradientA, gradientB],
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.18),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.restaurant,
+                                  color: Colors.white,
+                                  size: 22,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              ctx.t('rate.dialog.title'),
+                              style: titleStyle(),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              ctx.t('rate.dialog.subtitle'),
+                              style: subtitleStyle(),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(18, 18, 18, 10),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(5, (i) {
+                                final idx = i + 1;
+                                final active = idx <= rating;
+                                return IconButton(
+                                  onPressed: () =>
+                                      setLocal(() => rating = idx),
+                                  splashRadius: 20,
+                                  icon: Icon(
+                                    active ? Icons.star : Icons.star_border,
+                                    color: active ? starOn : starOff,
+                                    size: 38,
+                                  ),
+                                );
+                              }),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              ctx.t('rate.dialog.body'),
+                              style: bodyStyle(),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: DecoratedBox(
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [gradientA, gradientB],
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(28),
+                                  ),
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: () => handlePrimary(rating),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(28),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    primaryText,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(),
+                              child: Text(
+                                ctx.t('rate.dialog.maybe.later'),
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 13.5,
+                                  fontWeight: FontWeight.w500,
+                                  color: maybeLaterColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -359,6 +561,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       const SizedBox(height: 8),
                     ],
+                    // Favorites / Favourite (navigate to saved items screen)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildSettingsItem(
+                        context,
+                        icon: Icons.favorite_border,
+                        title: context.t('common.favorites'),
+                        subtitle: context.t('favorites.subtitle'),
+                        onTap: () => context.push('/favorites'),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     // Language Section (first)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -474,7 +688,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         icon: Icons.star,
                         title: context.t('settings.rate.us'),
                         subtitle: context.t('settings.rate.us.subtitle'),
-                        onTap: _rateApp,
+                        onTap: _showRateUsDialog,
                       ),
                     ),
                     const SizedBox(height: 6),

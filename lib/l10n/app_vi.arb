@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "Giá trị tốt nhất",
   "premiumPlanWeekly": "Hàng tuần",
   "premiumPlanYearly": "Hàng năm",
+  "premiumStartFreeTrialTitle": "Bắt đầu dùng thử miễn phí",
   "premiumStartFreeTrial": "Bắt đầu dùng thử miễn phí 3 ngày {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -746,7 +747,13 @@
   "settingsPreferencesSettings": "Tùy chọn và cài đặt",
   "settingsPrivacyPolicy": "Chính Sách Bảo Mật",
   "settingsRateUs": "Đánh Giá Chúng Tôi",
-  "settingsRateUsSubtitle": "Thích ứng dụng? Đánh giá nhé!",
+  "settingsRateUsSubtitle": "Thích ứng dụng? Đánh giá nhé!",
+  "rateDialogTitle": "Bạn đang thích Smart Chef chứ?",
+  "rateDialogSubtitle": "Hãy giúp chúng tôi cải thiện trải nghiệm nấu ăn của bạn 🍳",
+  "rateDialogBody": "Phản hồi của bạn giúp chúng tôi\ntạo ra công thức tốt hơn cho bạn",
+  "rateDialogRateNow": "Đánh giá ngay",
+  "rateDialogFeedback": "Góp ý",
+  "rateDialogMaybeLater": "Để sau",
   "settingsRatingThanks": "Cảm ơn sự quan tâm! Đánh giá có sẵn trên thiết bị di động.",
   "settingsSavedRecipes": "Công thức và yêu thích đã lưu",
   "settingsSendFeedback": "Gửi Phản Hồi",
@@ -810,3 +817,4 @@
   "weeklyPlanView": "Xem",
   "weeklyPlanWed": "T4"
 }
+

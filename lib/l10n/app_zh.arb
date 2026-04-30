@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "超值之选",
   "premiumPlanWeekly": "每周",
   "premiumPlanYearly": "每年",
+  "premiumStartFreeTrialTitle": "开始免费试用",
   "premiumStartFreeTrial": "开始3天免费试用 {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -736,7 +737,13 @@
   "settingsPreferencesSettings": "偏好和设置",
   "settingsPrivacyPolicy": "隐私政策",
   "settingsRateUs": "给我们评分",
-  "settingsRateUsSubtitle": "喜欢这个应用？给我们评分！",
+  "settingsRateUsSubtitle": "喜欢这个应用？给我们评分！",
+  "rateDialogTitle": "喜欢 Smart Chef 吗？",
+  "rateDialogSubtitle": "帮助我们提升你的烹饪体验 🍳",
+  "rateDialogBody": "你的反馈将帮助我们\n为你打造更好的食谱",
+  "rateDialogRateNow": "立即评分",
+  "rateDialogFeedback": "反馈",
+  "rateDialogMaybeLater": "稍后再说",
   "settingsRatingThanks": "感谢您的关注！评分功能仅在移动设备上可用。",
   "settingsSavedRecipes": "保存的食谱和收藏",
   "settingsSendFeedback": "发送反馈",
@@ -800,3 +807,4 @@
   "weeklyPlanView": "查看",
   "weeklyPlanWed": "周三"
 }
+

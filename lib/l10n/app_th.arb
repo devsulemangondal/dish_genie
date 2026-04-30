@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "คุ้มค่าที่สุด",
   "premiumPlanWeekly": "รายสัปดาห์",
   "premiumPlanYearly": "รายปี",
+  "premiumStartFreeTrialTitle": "เริ่มทดลองใช้ฟรีของคุณ",
   "premiumStartFreeTrial": "เริ่มทดลองใช้งานฟรี 3 วัน {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -736,7 +737,13 @@
   "settingsPreferencesSettings": "การตั้งค่าและค่ากำหนด",
   "settingsPrivacyPolicy": "นโยบายความเป็นส่วนตัว",
   "settingsRateUs": "ให้คะแนนเรา",
-  "settingsRateUsSubtitle": "ชอบแอปไหม? ให้คะแนนเรา!",
+  "settingsRateUsSubtitle": "ชอบแอปไหม? ให้คะแนนเรา!",
+  "rateDialogTitle": "กำลังสนุกกับ Smart Chef อยู่ไหม?",
+  "rateDialogSubtitle": "ช่วยเราปรับปรุงประสบการณ์ทำอาหารของคุณ 🍳",
+  "rateDialogBody": "คำติชมของคุณช่วยให้เรา\nสร้างสูตรที่ดียิ่งขึ้นสำหรับคุณ",
+  "rateDialogRateNow": "ให้คะแนนตอนนี้",
+  "rateDialogFeedback": "ข้อเสนอแนะ",
+  "rateDialogMaybeLater": "ไว้ก่อน",
   "settingsRatingThanks": "ขอบคุณ! ให้คะแนนได้บนมือถือ",
   "settingsSavedRecipes": "สูตรอาหารและรายการโปรดที่บันทึก",
   "settingsSendFeedback": "ส่งความคิดเห็น",
@@ -800,3 +807,4 @@
   "weeklyPlanView": "ดู",
   "weeklyPlanWed": "พ"
 }
+

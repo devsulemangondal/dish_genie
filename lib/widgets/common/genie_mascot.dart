@@ -97,7 +97,7 @@ class _GenieMascotState extends State<GenieMascot>
               return Transform.translate(
                 offset: Offset(0, _floatAnimation.value),
                 child: Image.asset(
-                  'assets/images/genie-mascot.png',
+                  'assets/pro_top_new.png',
                   width: size,
                   height: size,
                   fit: BoxFit.contain,

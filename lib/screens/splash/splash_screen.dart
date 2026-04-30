@@ -461,7 +461,7 @@ class _SplashScreenState extends State<SplashScreen>
                                           : 0,
                                     ),
                                     child: Image.asset(
-                                      'assets/images/genie-mascot.png',
+                                      'assets/pro_top_new.png',
                                       width: 128,
                                       height: 128,
                                     ),

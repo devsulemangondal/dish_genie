@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "Pinakamagandang halaga",
   "premiumPlanWeekly": "Lingguhan",
   "premiumPlanYearly": "Taunan",
+  "premiumStartFreeTrialTitle": "Simulan ang iyong libreng trial",
   "premiumStartFreeTrial": "Simulan ang 3-araw na libreng trial {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -746,7 +747,13 @@
   "settingsPreferencesSettings": "Mga kagustuhan at setting",
   "settingsPrivacyPolicy": "Patakaran sa Privacy",
   "settingsRateUs": "I-rate Kami",
-  "settingsRateUsSubtitle": "Gusto mo ang app? I-rate kami!",
+  "settingsRateUsSubtitle": "Gusto mo ang app? I-rate kami!",
+  "rateDialogTitle": "Nag-e-enjoy ka ba sa Smart Chef?",
+  "rateDialogSubtitle": "Tulungan kaming pagandahin ang iyong cooking experience 🍳",
+  "rateDialogBody": "Ang feedback mo ay tumutulong sa amin\nna gumawa ng mas magagandang recipe para sa iyo",
+  "rateDialogRateNow": "I-rate Ngayon",
+  "rateDialogFeedback": "Feedback",
+  "rateDialogMaybeLater": "Mamaya na lang",
   "settingsRatingThanks": "Salamat sa iyong interes! Available ang rating sa mga mobile device.",
   "settingsSavedRecipes": "Mga na-save na resipe at paborito",
   "settingsSendFeedback": "Magpadala ng Feedback",
@@ -810,3 +817,4 @@
   "weeklyPlanView": "Tingnan",
   "weeklyPlanWed": "Miy"
 }
+

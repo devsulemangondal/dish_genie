@@ -38,7 +38,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
   bool _isBudgetMode = false;
   bool _isShoppingMode = false;
   String? _selectedCategory;
-  int _selectedTab = 0; // 0: List, 1: Add
+  int _selectedTab = 0; // 0: Add, 1: List
   final TextEditingController _quickAddController = TextEditingController();
   bool _isCategoryGridView = true;
   final Map<String, bool> _expandedCategories = {};
@@ -57,7 +57,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     super.initState();
     // If coming from meal plan, start on the List tab to show the generated items
     if (widget.fromPlan) {
-      _selectedTab = 0;
+      _selectedTab = 1;
     }
     // Defer heavy operations to after first frame to improve initial load time
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -238,7 +238,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     }
     // Switch to list tab after generating (matching web app)
     if (mounted) {
-      setState(() => _selectedTab = 0);
+      setState(() => _selectedTab = 1);
     }
   }
 
@@ -471,7 +471,14 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     final groceryProvider = context.watch<GroceryProvider>();
     final groceryList = groceryProvider.groceryList;
     final isLoading = groceryProvider.isLoading;
-    final cartCount = groceryList?.items.length ?? 0;
+    // Match what the List tab actually shows:
+    // - Shopping mode hides checked items, so count only unchecked.
+    // - Otherwise show total items.
+    final cartCount = groceryList == null
+        ? 0
+        : (_isShoppingMode
+              ? groceryList.items.where((i) => !i.checked).length
+              : groceryList.items.length);
 
     return PopScope(
       canPop: false,
@@ -619,9 +626,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                         Expanded(
                           child: _buildTabButton(
                             context,
-                            cartCount > 0
-                                ? '${context.t('grocery.list')} ($cartCount)'
-                                : context.t('grocery.list'),
+                            context.t('grocery.add'),
                             0,
                             null,
                           ),
@@ -629,7 +634,9 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                         Expanded(
                           child: _buildTabButton(
                             context,
-                            context.t('grocery.add'),
+                            cartCount > 0
+                                ? '${context.t('grocery.list')} ($cartCount)'
+                                : context.t('grocery.list'),
                             1,
                             null,
                           ),
@@ -641,13 +648,13 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                     child: IndexedStack(
                       index: _selectedTab,
                       children: [
+                        _buildAddTab(context, groceryProvider),
                         _buildListTab(
                           context,
                           groceryProvider,
                           groceryList,
                           isLoading,
                         ),
-                        _buildAddTab(context, groceryProvider),
                       ],
                     ),
                   ),
@@ -664,9 +671,9 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
   Widget _buildCartBadge(BuildContext context, int count) {
     return GestureDetector(
       onTap: () {
-        if (_selectedTab != 0) {
+        if (_selectedTab != 1) {
           setState(() {
-            _selectedTab = 0;
+            _selectedTab = 1;
           });
         }
       },
@@ -1808,7 +1815,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
         children: [
           // Quick Actions
           GroceryQuickActions(
-            onAddTap: () => setState(() => _selectedTab = 2),
+            onAddTap: () => setState(() => _selectedTab = 0),
             onWeeklyListTap: _handleQuickGenerate,
           ),
           const SizedBox(height: 24),
@@ -1875,7 +1882,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('produce'),
                   onTap: () => setState(() {
                     _selectedCategory = 'produce';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                 ),
                 _buildCategoryCard(
@@ -1885,7 +1892,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('protein'),
                   onTap: () => setState(() {
                     _selectedCategory = 'protein';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                 ),
                 _buildCategoryCard(
@@ -1895,7 +1902,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('dairy'),
                   onTap: () => setState(() {
                     _selectedCategory = 'dairy';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                 ),
                 _buildCategoryCard(
@@ -1905,7 +1912,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('pantry'),
                   onTap: () => setState(() {
                     _selectedCategory = 'pantry';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                 ),
                 _buildCategoryCard(
@@ -1915,7 +1922,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('frozen'),
                   onTap: () => setState(() {
                     _selectedCategory = 'frozen';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                 ),
                 _buildCategoryCard(
@@ -1925,7 +1932,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('other'),
                   onTap: () => setState(() {
                     _selectedCategory = 'other';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                 ),
               ],
@@ -1940,7 +1947,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('produce'),
                   onTap: () => setState(() {
                     _selectedCategory = 'produce';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                   color: _getCategoryColor('produce'),
                 ),
@@ -1952,7 +1959,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('protein'),
                   onTap: () => setState(() {
                     _selectedCategory = 'protein';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                   color: _getCategoryColor('protein'),
                 ),
@@ -1964,7 +1971,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('dairy'),
                   onTap: () => setState(() {
                     _selectedCategory = 'dairy';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                   color: _getCategoryColor('dairy'),
                 ),
@@ -1976,7 +1983,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('pantry'),
                   onTap: () => setState(() {
                     _selectedCategory = 'pantry';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                   color: _getCategoryColor('pantry'),
                 ),
@@ -1988,7 +1995,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('frozen'),
                   onTap: () => setState(() {
                     _selectedCategory = 'frozen';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                   color: _getCategoryColor('frozen'),
                 ),
@@ -2000,7 +2007,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   badgeCount: countFor('other'),
                   onTap: () => setState(() {
                     _selectedCategory = 'other';
-                    _selectedTab = 2;
+                    _selectedTab = 0;
                   }),
                   color: _getCategoryColor('other'),
                 ),
@@ -2594,7 +2601,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
               ),
               const Spacer(),
               TextButton(
-                onPressed: () => setState(() => _selectedTab = 0),
+                onPressed: () => setState(() => _selectedTab = 1),
                 style:
                     TextButton.styleFrom(
                       foregroundColor: Colors.white,
@@ -2953,7 +2960,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                           _itemNameController.clear();
                           _quantityController.clear();
                           _selectedCategory = null;
-                          setState(() => _selectedTab = 0);
+                          setState(() => _selectedTab = 1);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(context.t('grocery.item.added')),

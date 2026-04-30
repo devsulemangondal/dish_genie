@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "بہترین قیمت",
   "premiumPlanWeekly": "ہفتہ وار",
   "premiumPlanYearly": "سالانہ",
+  "premiumStartFreeTrialTitle": "اپنا مفت ٹرائل شروع کریں",
   "premiumStartFreeTrial": "3 دن کا مفت ٹرائل شروع کریں {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -736,7 +737,13 @@
   "settingsPreferencesSettings": "ترجیحات اور ترتیبات",
   "settingsPrivacyPolicy": "رازداری کی پالیسی",
   "settingsRateUs": "ہمیں ریٹ کریں",
-  "settingsRateUsSubtitle": "ایپ پسند آئی؟ ہمیں ریٹ کریں!",
+  "settingsRateUsSubtitle": "ایپ پسند آئی؟ ہمیں ریٹ کریں!",
+  "rateDialogTitle": "کیا آپ Smart Chef سے لطف اندوز ہو رہے ہیں؟",
+  "rateDialogSubtitle": "اپنے کھانا پکانے کے تجربے کو بہتر بنانے میں ہماری مدد کریں 🍳",
+  "rateDialogBody": "آپ کی رائے ہمیں\nآپ کے لیے بہتر ترکیبیں بنانے میں مدد دیتی ہے",
+  "rateDialogRateNow": "ابھی ریٹ کریں",
+  "rateDialogFeedback": "رائے دیں",
+  "rateDialogMaybeLater": "شاید بعد میں",
   "settingsRatingThanks": "آپ کی دلچسپی کا شکریہ! ریٹنگ موبائل ڈیوائسز پر دستیاب ہے۔",
   "settingsSavedRecipes": "محفوظ ترکیبیں اور پسندیدہ",
   "settingsSendFeedback": "فیڈ بیک بھیجیں",
@@ -800,3 +807,4 @@
   "weeklyPlanView": "دیکھیں",
   "weeklyPlanWed": "بدھ"
 }
+

@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "Nilai terbaik",
   "premiumPlanWeekly": "Mingguan",
   "premiumPlanYearly": "Tahunan",
+  "premiumStartFreeTrialTitle": "Mulai uji coba gratis Anda",
   "premiumStartFreeTrial": "Mulai uji coba gratis 3 hari {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -746,7 +747,13 @@
   "settingsPreferencesSettings": "Preferensi dan pengaturan",
   "settingsPrivacyPolicy": "Kebijakan Privasi",
   "settingsRateUs": "Beri Rating",
-  "settingsRateUsSubtitle": "Suka aplikasinya? Beri rating!",
+  "settingsRateUsSubtitle": "Suka aplikasinya? Beri rating!",
+  "rateDialogTitle": "Menikmati Smart Chef?",
+  "rateDialogSubtitle": "Bantu kami meningkatkan pengalaman memasakmu 🍳",
+  "rateDialogBody": "Masukanmu membantu kami membuat\nresep yang lebih baik untukmu",
+  "rateDialogRateNow": "Beri Nilai Sekarang",
+  "rateDialogFeedback": "Masukan",
+  "rateDialogMaybeLater": "Mungkin Nanti",
   "settingsRatingThanks": "Terima kasih atas minat Anda! Rating tersedia di perangkat seluler.",
   "settingsSavedRecipes": "Resep dan favorit tersimpan",
   "settingsSendFeedback": "Kirim Umpan Balik",
@@ -810,3 +817,4 @@
   "weeklyPlanView": "Lihat",
   "weeklyPlanWed": "Rab"
 }
+

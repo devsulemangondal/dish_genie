@@ -41,6 +41,9 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   bool _isLoading = false;
   bool _isLoadingProducts = false;
   ProductDetails? _selectedProduct;
+
+  /// Which product the user tapped; drives per-card loaders (not all buttons at once).
+  String? _loadingProductId;
   bool _wasInBackgroundForPurchase = false;
 
   /// On first launch, user must see Pro screen for minimum duration before exiting
@@ -203,6 +206,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
 
   Future<void> _exitProFlow() async {
     if (!_canExitProScreen) return;
+    if (_isLoading || _loadingProductId != null) return;
     final canPop = context.canPop();
     final source = _getOpenSource();
 
@@ -440,6 +444,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
       setState(() {
         _isLoading = false;
         _selectedProduct = null;
+        _loadingProductId = null;
       });
     }
   }
@@ -537,12 +542,40 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     }
   }
 
+  /// Loads [productId] from the store (with retry) and starts the purchase flow.
+  Future<void> _purchaseByProductId(String productId) async {
+    if (_isLoading || _loadingProductId != null) return;
+
+    setState(() => _loadingProductId = productId);
+
+    await BillingService.initialize();
+    var product = BillingService.getProduct(productId);
+    if (product == null) {
+      setState(() => _isLoadingProducts = true);
+      try {
+        final ok = await BillingService.loadProducts(retry: true);
+        if (mounted && ok) {
+          product = BillingService.getProduct(productId);
+        }
+      } finally {
+        if (mounted) setState(() => _isLoadingProducts = false);
+      }
+    }
+    if (product != null) {
+      await _purchaseProduct(product);
+    } else if (mounted) {
+      setState(() => _loadingProductId = null);
+      _showErrorDialog(context.t('premium.failed.to.initiate.purchase'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isPremium = context.watch<PremiumProvider>().isPremium;
     final products = BillingService.products;
     ProductDetails? weeklyProduct;
     ProductDetails? annualProduct;
+    ProductDetails? lifetimeProduct;
 
     // Get subscription products from Play Store
     try {
@@ -561,13 +594,17 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     } catch (e) {
       annualProduct = null;
     }
+    try {
+      lifetimeProduct = products.firstWhere(
+        (p) => p.id == BillingService.lifetimeSubscriptionId,
+      );
+    } catch (e) {
+      lifetimeProduct = null;
+    }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bg = isDark ? AppColors.backgroundDark : const Color(0xFFF9F6F1);
-
-    final selectedProduct = _selectedPlanId == 'yearly'
-        ? annualProduct
-        : weeklyProduct;
+    final blockExitDuringPurchase = _isLoading || _loadingProductId != null;
 
     return PopScope(
       canPop: false,
@@ -614,27 +651,29 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              const SizedBox(height: 6),
+                              const SizedBox(height: 4),
                               _buildTopHeroImage(),
-                              const SizedBox(height: 14),
+                              const SizedBox(height: 10),
                               _buildScreenshotTitle(),
                               const SizedBox(height: 14),
                               _buildScreenshotFeatures(),
                               const SizedBox(height: 18),
                               if (!isPremium) ...[
-                                _buildCtaWithSubtitle(
-                                  selectedProduct,
-                                  weeklyProduct,
+                                _buildPaywallThreeCards(
+                                  weeklyProduct: weeklyProduct,
+                                  annualProduct: annualProduct,
+                                  lifetimeProduct: lifetimeProduct,
                                 ),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 16),
                               ],
-                              _buildScreenshotPlanCards(
-                                isDark: isDark,
-                                annualProduct: annualProduct,
-                                weeklyProduct: weeklyProduct,
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).padding.bottom +
+                                      12,
+                                ),
+                                child: _buildCancelTermsPrivacyLine(designW),
                               ),
-                              const SizedBox(height: 16),
-                              _buildCancelTermsPrivacyLine(designW),
                               const Spacer(),
                             ],
                           ),
@@ -652,9 +691,13 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                     child: Material(
                       color: Colors.transparent,
                       child: Opacity(
-                        opacity: _canExitProScreen ? 1.0 : 0.4,
+                        opacity: (_canExitProScreen && !blockExitDuringPurchase)
+                            ? 1.0
+                            : 0.4,
                         child: InkWell(
-                          onTap: _canExitProScreen ? _exitProFlow : null,
+                          onTap: (_canExitProScreen && !blockExitDuringPurchase)
+                              ? _exitProFlow
+                              : null,
                           customBorder: const CircleBorder(),
                           child: const Center(child: _ScreenshotCloseButton()),
                         ),
@@ -675,27 +718,35 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   static const double _kCloseStroke = 2.5;
   static const double _kCloseSize = 17;
 
+  /// Scales the whole asset down uniformly (no cropping). Nudge toward 1.0 for larger art.
+  static const double _kHeroImageScale = 0.92;
+
   Widget _buildTopHeroImage() {
-    // Screenshot shows a large character image on a light background, not cropped.
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return SizedBox(
-      height: 238,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: isDark
-              ? Theme.of(context).scaffoldBackgroundColor
-              : const Color(0xFFF5FAFF),
+    final bg = isDark
+        ? Theme.of(context).scaffoldBackgroundColor
+        : const Color(0xFFF5FAFF);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.maxWidth;
+        final imgW = w * _kHeroImageScale;
+        return ClipRRect(
           borderRadius: BorderRadius.circular(18),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child: Image.asset(
-            'assets/pro_top_new.png',
-            fit: BoxFit.contain,
-            alignment: Alignment.topCenter,
+          child: ColoredBox(
+            color: bg,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Image.asset(
+                'assets/pro_top_new.png',
+                width: imgW,
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.topCenter,
+                filterQuality: FilterQuality.medium,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -847,75 +898,59 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   //   );
   // }
 
-  Widget _buildCtaWithSubtitle(
-    ProductDetails? selectedProduct,
-    ProductDetails? weeklyProduct,
-  ) {
-    final isWeeklySelected = _selectedPlanId == 'weekly';
-    final weeklyPrice = weeklyProduct?.price ?? 'Rs 2,250';
-    final subtitle = isWeeklySelected
-        ? '${context.t('premium.three.days.free.trial')} • $weeklyPrice${context.t('premium.per.week')}'
-        : null;
-
-    return _ScreenshotCtaButton(
-      enabled: selectedProduct != null && !_isLoading,
-      isLoading: _isLoadingProducts || (_isLoading && selectedProduct != null),
-      title: isWeeklySelected
-          ? context.t('premium.three.days.free.trial')
-          : context.t('premium.subscribe.now'),
-      subtitle: subtitle,
-      onTap: (selectedProduct != null && !_isLoading)
-          ? () => _purchaseProduct(selectedProduct)
-          : _isLoadingProducts
-          ? null
-          : () async {
-              setState(() => _isLoadingProducts = true);
-              try {
-                final ok = await BillingService.loadProducts(retry: true);
-                if (mounted && ok) {
-                  final p = BillingService.products;
-                  final targetId = _selectedPlanId == 'yearly'
-                      ? BillingService.yearlySubscriptionId
-                      : BillingService.weeklySubscriptionId;
-                  ProductDetails? product;
-                  try {
-                    product = p.firstWhere((x) => x.id == targetId);
-                  } catch (_) {
-                    if (p.isNotEmpty) product = p.first;
-                  }
-                  if (product != null) await _purchaseProduct(product);
-                }
-              } finally {
-                if (mounted) setState(() => _isLoadingProducts = false);
-              }
-            },
-    );
-  }
-
-  Widget _buildScreenshotPlanCards({
-    required bool isDark,
-    required ProductDetails? annualProduct,
+  /// Trial (weekly + store trial), yearly, and lifetime — each starts its own purchase.
+  Widget _buildPaywallThreeCards({
     required ProductDetails? weeklyProduct,
+    required ProductDetails? annualProduct,
+    required ProductDetails? lifetimeProduct,
   }) {
+    final weeklyLine = weeklyProduct != null
+        ? '${weeklyProduct.price}${context.t('premium.per.week')}'
+        : '';
+    final trialSubtitle = weeklyLine.isNotEmpty
+        ? context.t('premium.trial.then.price', {'price': weeklyLine})
+        : context.t('premium.subscription.loading');
+
+    final wId = BillingService.weeklySubscriptionId;
+    final yId = BillingService.yearlySubscriptionId;
+    final lId = BillingService.lifetimeSubscriptionId;
+    final purchasing = _isLoading || _loadingProductId != null;
+
+    /// Spinner only on the row whose product id matches the active tap.
+    bool cardBusy(String id) => _loadingProductId == id;
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        _ScreenshotCtaButton(
+          enabled: !purchasing,
+          isLoading: cardBusy(wId),
+          title: context.t('premium.start.free.trial.title'),
+          subtitle: trialSubtitle,
+          onTap: () => _purchaseByProductId(wId),
+        ),
+        const SizedBox(height: 22),
         _ScreenshotPlanCard.yearly(
+          enabled: !purchasing,
+          isLoading: cardBusy(yId),
           title: context.t('premium.plan.yearly'),
           leftSubtitle:
               '${annualProduct?.price ?? context.t('premium.annual.price')}${context.t('premium.per.year')}',
           rightPrice: annualProduct?.price ?? context.t('premium.annual.price'),
           rightSuffix: context.t('premium.per.year'),
-          isSelected: _selectedPlanId == 'yearly',
-          onTap: () => setState(() => _selectedPlanId = 'yearly'),
+          isSelected: true,
+          onTap: () => _purchaseByProductId(yId),
         ),
         const SizedBox(height: 14),
-        _ScreenshotPlanCard.weekly(
-          title: context.t('premium.plan.weekly'),
-          leftSubtitle: context.t('premium.full.access'),
-          rightPrice: weeklyProduct?.price ?? '',
-          rightSuffix: context.t('premium.per.week'),
-          isSelected: _selectedPlanId == 'weekly',
-          onTap: () => setState(() => _selectedPlanId = 'weekly'),
+        _ScreenshotPlanCard.lifetimeStyle(
+          enabled: !purchasing,
+          isLoading: cardBusy(lId),
+          title: context.t('premium.plan.lifetime'),
+          leftSubtitle: context.t('premium.lifetime.full.access.included'),
+          rightPrice: lifetimeProduct?.price ?? '—',
+          actionText: context.t('premium.unlock.now'),
+          isSelected: false,
+          onTap: () => _purchaseByProductId(lId),
         ),
       ],
     );
@@ -2153,7 +2188,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   /// Continue with ad button - same functionality as close (X) button
   Widget _buildContinueWithAdButton() {
     return TextButton(
-      onPressed: (_isLoading || !_canExitProScreen)
+      onPressed: (_isLoading || _loadingProductId != null || !_canExitProScreen)
           ? null
           : () async => await _exitProFlow(),
       style: TextButton.styleFrom(
@@ -2731,6 +2766,8 @@ class _ScreenshotPlanCard extends StatelessWidget {
   final String? actionText;
   final bool isSelected;
   final bool isYearly;
+  final bool enabled;
+  final bool isLoading;
   final VoidCallback onTap;
 
   const _ScreenshotPlanCard._({
@@ -2740,6 +2777,8 @@ class _ScreenshotPlanCard extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     required this.isYearly,
+    this.enabled = true,
+    this.isLoading = false,
     this.rightSuffix,
     this.actionText,
   });
@@ -2751,6 +2790,8 @@ class _ScreenshotPlanCard extends StatelessWidget {
     required String rightSuffix,
     required bool isSelected,
     required VoidCallback onTap,
+    bool enabled = true,
+    bool isLoading = false,
   }) {
     return _ScreenshotPlanCard._(
       title: title,
@@ -2761,6 +2802,8 @@ class _ScreenshotPlanCard extends StatelessWidget {
       isSelected: isSelected,
       onTap: onTap,
       isYearly: true,
+      enabled: enabled,
+      isLoading: isLoading,
     );
   }
 
@@ -2771,6 +2814,8 @@ class _ScreenshotPlanCard extends StatelessWidget {
     required String actionText,
     required bool isSelected,
     required VoidCallback onTap,
+    bool enabled = true,
+    bool isLoading = false,
   }) {
     return _ScreenshotPlanCard._(
       title: title,
@@ -2781,6 +2826,8 @@ class _ScreenshotPlanCard extends StatelessWidget {
       isSelected: isSelected,
       onTap: onTap,
       isYearly: false,
+      enabled: enabled,
+      isLoading: isLoading,
     );
   }
 
@@ -2791,6 +2838,8 @@ class _ScreenshotPlanCard extends StatelessWidget {
     required String rightSuffix,
     required bool isSelected,
     required VoidCallback onTap,
+    bool enabled = true,
+    bool isLoading = false,
   }) {
     return _ScreenshotPlanCard._(
       title: title,
@@ -2801,6 +2850,8 @@ class _ScreenshotPlanCard extends StatelessWidget {
       isSelected: isSelected,
       onTap: onTap,
       isYearly: false,
+      enabled: enabled,
+      isLoading: isLoading,
     );
   }
 
@@ -2813,115 +2864,138 @@ class _ScreenshotPlanCard extends StatelessWidget {
 
     final border = isSelected ? selectedBorder : unselectedBorder;
     final bg = isSelected ? selectedBg : unselectedBg;
+    final tappable = enabled && !isLoading;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: bg,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: border, width: isSelected ? 1.6 : 1),
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            if (isYearly)
-              Positioned(
-                // Screenshot: badge overlaps the border line and is pulled
-                // inward from the top-right corner.
-                top: -16,
-                right: 18,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [Color(0xFFFD5C17), Color(0xFFFFB301)],
+    return Opacity(
+      opacity: enabled ? 1.0 : 0.55,
+      child: GestureDetector(
+        onTap: tappable ? onTap : null,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: bg,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: border, width: isSelected ? 1.6 : 1),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              if (isYearly)
+                Positioned(
+                  // Screenshot: badge overlaps the border line and is pulled
+                  // inward from the top-right corner.
+                  top: -16,
+                  right: 18,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
                     ),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    'Best Offer',
-                    style: GoogleFonts.poppins(
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      height: 1.0,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [Color(0xFFFD5C17), Color(0xFFFFB301)],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Text(
+                      context.t('premium.best.offer'),
+                      style: GoogleFonts.poppins(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 1.0,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF111827),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            leftSubtitle,
+                            style: GoogleFonts.poppins(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF111827),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          title,
+                          rightPrice,
                           style: GoogleFonts.poppins(
-                            fontSize: 14,
+                            fontSize: 13.5,
                             fontWeight: FontWeight.w600,
                             color: const Color(0xFF111827),
+                            height: 1.0,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 4),
                         Text(
-                          leftSubtitle,
+                          actionText ?? (rightSuffix ?? ''),
                           style: GoogleFonts.poppins(
                             fontSize: 10.5,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF111827),
+                            color: const Color(0xFF6B7280),
+                            height: 1.0,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        rightPrice,
-                        style: GoogleFonts.poppins(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF111827),
-                          height: 1.0,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        actionText ?? (rightSuffix ?? ''),
-                        style: GoogleFonts.poppins(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xFF6B7280),
-                          height: 1.0,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+              if (isLoading)
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: ColoredBox(
+                      color: Colors.white.withOpacity(0.72),
+                      child: const Center(
+                        child: SizedBox(
+                          width: 26,
+                          height: 26,
+                          child: CircularProgressIndicator(strokeWidth: 2.5),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

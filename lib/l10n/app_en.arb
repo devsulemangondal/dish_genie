@@ -380,6 +380,12 @@
   "settingsFeedbackSubtitle": "Send us your thoughts",
   "settingsRateUs": "Rate Us",
   "settingsRateUsSubtitle": "Love the app? Rate us!",
+  "rateDialogTitle": "Enjoying Smart Chef?",
+  "rateDialogSubtitle": "Help us improve your cooking experience 🍳",
+  "rateDialogBody": "Your feedback helps us create\nbetter recipes for you",
+  "rateDialogRateNow": "Rate Now",
+  "rateDialogFeedback": "Feedback",
+  "rateDialogMaybeLater": "Maybe Later",
   "settingsShareApp": "Share App",
   "settingsShareAppSubtitle": "Tell your friends",
   "settingsHelpSupport": "Help / Support",
@@ -800,6 +806,20 @@
   "premiumBestValue": "Best value",
   "premiumPlanWeekly": "Weekly",
   "premiumPlanYearly": "Yearly",
+  "premiumPlanLifetime": "Lifetime",
+  "premiumLifetimeFullAccessIncluded": "One-time purchase • Full access included",
+  "premiumStartFreeTrialTitle": "Start your free trial",
+  "premiumTrialThenPrice": "3-day trial, then {price}",
+  "@premiumTrialThenPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "format": "none"
+      }
+    }
+  },
+  "premiumUnlockNow": "Unlock now",
+  "premiumBestOffer": "Best offer",
   "premiumStartFreeTrial": "Start 3-days free trial {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {

@@ -145,7 +145,10 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/genie-mascot-padded.png"
+  # macos: true
+  # windows: true
+  # web: true
+  image_path: "assets/new_app_ic.jpeg"
   # Use padded version to ensure complete logo is visible without zooming/cropping
   remove_alpha_ios: false
   # Note: Not specifying adaptive_icon_* will use regular icons

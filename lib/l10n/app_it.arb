@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "Miglior valore",
   "premiumPlanWeekly": "Settimanale",
   "premiumPlanYearly": "Annuale",
+  "premiumStartFreeTrialTitle": "Inizia la tua prova gratuita",
   "premiumStartFreeTrial": "Inizia la prova gratuita di 3 giorni {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -746,7 +747,13 @@
   "settingsPreferencesSettings": "Preferenze e impostazioni",
   "settingsPrivacyPolicy": "politica sulla riservatezza",
   "settingsRateUs": "Valutaci",
-  "settingsRateUsSubtitle": "Ti piace l'app? Valutaci!",
+  "settingsRateUsSubtitle": "Ti piace l'app? Valutaci!",
+  "rateDialogTitle": "Ti piace Smart Chef?",
+  "rateDialogSubtitle": "Aiutaci a migliorare la tua esperienza in cucina 🍳",
+  "rateDialogBody": "Il tuo feedback ci aiuta a creare\nricette migliori per te",
+  "rateDialogRateNow": "Valuta ora",
+  "rateDialogFeedback": "Feedback",
+  "rateDialogMaybeLater": "Forse più tardi",
   "settingsRatingThanks": "Grazie per il tuo interesse! Valutazione disponibile su dispositivi mobili.",
   "settingsSavedRecipes": "Ricette salvate e preferiti",
   "settingsSendFeedback": "Invia Feedback",
@@ -810,3 +817,4 @@
   "weeklyPlanView": "Visualizza",
   "weeklyPlanWed": "Mer"
 }
+

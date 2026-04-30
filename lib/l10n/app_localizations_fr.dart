@@ -1155,6 +1155,26 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsRateUsSubtitle => 'Vous aimez l\'app? Notez-nous!';
 
   @override
+  String get rateDialogTitle => 'Vous aimez Smart Chef ?';
+
+  @override
+  String get rateDialogSubtitle =>
+      'Aidez-nous à améliorer votre expérience de cuisine 🍳';
+
+  @override
+  String get rateDialogBody =>
+      'Vos retours nous aident à créer\nde meilleures recettes pour vous';
+
+  @override
+  String get rateDialogRateNow => 'Noter maintenant';
+
+  @override
+  String get rateDialogFeedback => 'Avis';
+
+  @override
+  String get rateDialogMaybeLater => 'Plus tard';
+
+  @override
   String get settingsShareApp => 'Partager l\'app';
 
   @override
@@ -2222,6 +2242,27 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get premiumPlanYearly => 'Annuel';
+
+  @override
+  String get premiumPlanLifetime => 'Lifetime';
+
+  @override
+  String get premiumLifetimeFullAccessIncluded =>
+      'One-time purchase • Full access included';
+
+  @override
+  String get premiumStartFreeTrialTitle => 'Commencez votre essai gratuit';
+
+  @override
+  String premiumTrialThenPrice(String price) {
+    return '3-day trial, then $price';
+  }
+
+  @override
+  String get premiumUnlockNow => 'Unlock now';
+
+  @override
+  String get premiumBestOffer => 'Best offer';
 
   @override
   String premiumStartFreeTrial(String price) {

@@ -1,4 +1,4 @@
-{
+﻿{
   "@chatLimitReachedMessage": {
     "placeholders": {
       "limit": {
@@ -478,6 +478,7 @@
   "premiumBestValue": "Найкраща вигода",
   "premiumPlanWeekly": "Щотижня",
   "premiumPlanYearly": "Щороку",
+  "premiumStartFreeTrialTitle": "Почніть безкоштовну пробну версію",
   "premiumStartFreeTrial": "Почніть 3-денний безкоштовний пробний період {price}",
   "@premiumStartFreeTrial": {
     "placeholders": {
@@ -736,7 +737,13 @@
   "settingsPreferencesSettings": "Налаштування та вподобання",
   "settingsPrivacyPolicy": "Політика конфіденційності",
   "settingsRateUs": "Оцінити",
-  "settingsRateUsSubtitle": "Подобається додаток? Оцініть!",
+  "settingsRateUsSubtitle": "Подобається додаток? Оцініть!",
+  "rateDialogTitle": "Подобається Smart Chef?",
+  "rateDialogSubtitle": "Допоможіть нам покращити ваш досвід готування 🍳",
+  "rateDialogBody": "Ваш відгук допомагає нам\nстворювати кращі рецепти для вас",
+  "rateDialogRateNow": "Оцінити зараз",
+  "rateDialogFeedback": "Відгук",
+  "rateDialogMaybeLater": "Можливо пізніше",
   "settingsRatingThanks": "Дякуємо за інтерес! Оцінка доступна на мобільних пристроях.",
   "settingsSavedRecipes": "Збережені рецепти та обране",
   "settingsSendFeedback": "Надіслати відгук",
@@ -800,3 +807,4 @@
   "weeklyPlanView": "Переглянути",
   "weeklyPlanWed": "Ср"
 }
+

@@ -2384,6 +2384,42 @@ abstract class AppLocalizations {
   /// **'Love the app? Rate us!'**
   String get settingsRateUsSubtitle;
 
+  /// No description provided for @rateDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoying Smart Chef?'**
+  String get rateDialogTitle;
+
+  /// No description provided for @rateDialogSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help us improve your cooking experience 🍳'**
+  String get rateDialogSubtitle;
+
+  /// No description provided for @rateDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your feedback helps us create\nbetter recipes for you'**
+  String get rateDialogBody;
+
+  /// No description provided for @rateDialogRateNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Now'**
+  String get rateDialogRateNow;
+
+  /// No description provided for @rateDialogFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get rateDialogFeedback;
+
+  /// No description provided for @rateDialogMaybeLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe Later'**
+  String get rateDialogMaybeLater;
+
   /// No description provided for @settingsShareApp.
   ///
   /// In en, this message translates to:
@@ -4360,6 +4396,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yearly'**
   String get premiumPlanYearly;
+
+  /// No description provided for @premiumPlanLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime'**
+  String get premiumPlanLifetime;
+
+  /// No description provided for @premiumLifetimeFullAccessIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time purchase • Full access included'**
+  String get premiumLifetimeFullAccessIncluded;
+
+  /// No description provided for @premiumStartFreeTrialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start your free trial'**
+  String get premiumStartFreeTrialTitle;
+
+  /// No description provided for @premiumTrialThenPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'3-day trial, then {price}'**
+  String premiumTrialThenPrice(String price);
+
+  /// No description provided for @premiumUnlockNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock now'**
+  String get premiumUnlockNow;
+
+  /// No description provided for @premiumBestOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Best offer'**
+  String get premiumBestOffer;
 
   /// No description provided for @premiumStartFreeTrial.
   ///

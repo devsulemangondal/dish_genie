@@ -1134,6 +1134,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsRateUsSubtitle => '喜欢这个应用？给我们评分！';
 
   @override
+  String get rateDialogTitle => '喜欢 Smart Chef 吗？';
+
+  @override
+  String get rateDialogSubtitle => '帮助我们提升你的烹饪体验 🍳';
+
+  @override
+  String get rateDialogBody => '你的反馈将帮助我们\n为你打造更好的食谱';
+
+  @override
+  String get rateDialogRateNow => '立即评分';
+
+  @override
+  String get rateDialogFeedback => '反馈';
+
+  @override
+  String get rateDialogMaybeLater => '稍后再说';
+
+  @override
   String get settingsShareApp => '分享应用';
 
   @override
@@ -2158,6 +2176,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get premiumPlanYearly => '每年';
+
+  @override
+  String get premiumPlanLifetime => 'Lifetime';
+
+  @override
+  String get premiumLifetimeFullAccessIncluded =>
+      'One-time purchase • Full access included';
+
+  @override
+  String get premiumStartFreeTrialTitle => '开始免费试用';
+
+  @override
+  String premiumTrialThenPrice(String price) {
+    return '3-day trial, then $price';
+  }
+
+  @override
+  String get premiumUnlockNow => 'Unlock now';
+
+  @override
+  String get premiumBestOffer => 'Best offer';
 
   @override
   String premiumStartFreeTrial(String price) {
