@@ -331,6 +331,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get smartChefTitle => 'Розумний шеф';
 
   @override
+  String get smartGroceryTitle => 'Розумні покупки';
+
+  @override
   String get smartChefPro => 'Про';
 
   @override
@@ -408,6 +411,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Новий рецепт';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'Натисніть на картку, щоб побачити повний рецепт.';
 
   @override
   String get recipesWhatCraving => 'Чого вам хочеться?';
@@ -761,7 +768,35 @@ class AppLocalizationsUk extends AppLocalizations {
   String get groceryBudgetMode => 'Бюджетний режим';
 
   @override
-  String get groceryBudgetPlaceholder => 'Введіть бюджет (наприклад, 2000 PKR)';
+  String get groceryBudgetPlaceholder => 'Введіть бюджет (наприклад, 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Орієнтовна сума списку — $total. Збільшіть бюджет хоча б до цієї суми або видаліть позиції.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Бюджет нижче за список';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Оцінка списку — $total. Режим бюджета лишається увімкненим — збільшіть суму в полі нижче або видаліть позиції.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Змінити бюджет';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'Список близько $total, вище цього бюджета. Збільшіть суму вище або видаліть позиції — можна редагувати з увімкненим режимом бюджета.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Введіть бюджет вище, щоб відстежувати витрати.';
 
   @override
   String get groceryOn => 'УВІМКНЕНО';
@@ -789,6 +824,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Назва товару обов\'язкова';
+
+  @override
+  String get groceryQuantityRequired => 'Введіть кількість для цього товару';
 
   @override
   String get groceryCreateMealPlanFirst => 'Спочатку створіть план харчування';
@@ -993,11 +1031,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chatNewChat => 'Новий чат';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Нова розмова?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Почати нову розмову? Поточний чат буде збережено.';
 
   @override
   String get chatCopy => 'Копіювати';
@@ -1322,11 +1360,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get scannerAnalyzing => 'Аналіз інгредієнтів...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Скасувати аналіз?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Інгредієнти аналізуються. Ви впевнені, що хочете скасувати та повернутися назад?';
 
   @override
   String get scannerDetected => 'Виявлені інгредієнти';
@@ -1843,6 +1881,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Вибачте, я не зміг обробити ваш запит. Спробуйте ще раз.';
 
   @override
+  String get errorNoInternet =>
+      'Немає підключення до інтернету. Перевірте з’єднання та спробуйте ще раз.';
+
+  @override
   String get premiumPurchaseFailed => 'Покупка не здійснена';
 
   @override
@@ -2246,11 +2288,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get premiumPlanYearly => 'Щороку';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Назавжди';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Одноразова покупка • Повний доступ включено';
 
   @override
   String get premiumStartFreeTrialTitle => 'Почніть безкоштовну пробну версію';
@@ -2261,7 +2303,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'Розблокувати зараз';
 
   @override
   String get premiumBestOffer => 'Best offer';

@@ -122,6 +122,7 @@
   "chatCopy": "Копіювати",
   "chatEdit": "Редагувати",
   "chatErrorGeneric": "Вибачте, я не зміг обробити ваш запит. Спробуйте ще раз.",
+  "errorNoInternet": "Немає підключення до інтернету. Перевірте з’єднання та спробуйте ще раз.",
   "chatErrorNotConfigured": "API чату не налаштовано. Зверніться до служби підтримки або перевірте налаштування програми.",
   "chatErrorRateLimit": "Ліміт швидкості перевищено. Спробуйте пізніше.",
   "chatGreeting": "Привіт, я Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "Слухаю...",
   "chatMessageCopied": "Повідомлення скопійовано",
   "chatNewChat": "Новий чат",
+  "chatNewChatConfirmTitle": "Нова розмова?",
+  "chatNewChatConfirmMessage": "Почати нову розмову? Поточний чат буде збережено.",
   "chatPlaceholder": "Запитайте мене про що завгодно...",
   "chatSubtitle": "Ваш ШІ-помічник з кулінарії",
   "chatSuggestion1": "Що можна приготувати з курки та рису?",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "Додано",
   "groceryBought": "Куплено",
   "groceryBudgetMode": "Бюджетний режим",
-  "groceryBudgetPlaceholder": "Введіть бюджет (наприклад, 2000 PKR)",
+  "groceryBudgetPlaceholder": "Введіть бюджет (наприклад, 2000)",
+  "groceryBudgetMustCoverEstimate": "Орієнтовна сума списку — {total}. Збільшіть бюджет хоча б до цієї суми або видаліть позиції.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Бюджет нижче за список",
+  "groceryBudgetLowBody": "Оцінка списку — {total}. Режим бюджета лишається увімкненим — збільшіть суму в полі нижче або видаліть позиції.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "Змінити бюджет",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "Список близько {total}, вище цього бюджета. Збільшіть суму вище або видаліть позиції — можна редагувати з увімкненим режимом бюджета.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Введіть бюджет вище, щоб відстежувати витрати.",
+
   "groceryCategories": "Категорії",
   "groceryCategory": "Категорія",
   "groceryCreateMealPlanFirst": "Спочатку створіть план харчування",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "Товар додано!",
   "groceryItemName": "Назва товару",
   "groceryItemRequired": "Назва товару обов'язкова",
+  "groceryQuantityRequired": "Введіть кількість для цього товару",
   "groceryItems": "товарів",
   "groceryItemsIn": "Предмети в",
   "groceryList": "Список",
@@ -478,6 +511,9 @@
   "premiumBestValue": "Найкраща вигода",
   "premiumPlanWeekly": "Щотижня",
   "premiumPlanYearly": "Щороку",
+  "premiumPlanLifetime": "Назавжди",
+  "premiumLifetimeFullAccessIncluded": "Одноразова покупка • Повний доступ включено",
+  "premiumUnlockNow": "Розблокувати зараз",
   "premiumStartFreeTrialTitle": "Почніть безкоштовну пробну версію",
   "premiumStartFreeTrial": "Почніть 3-денний безкоштовний пробний період {price}",
   "@premiumStartFreeTrial": {
@@ -583,6 +619,7 @@
   "recipesMoodsSpicyFix": "Гостре",
   "recipesMoodsSweetCravings": "Солодке",
   "recipesNewRecipe": "Новий рецепт",
+  "recipesGeneratedTapForDetails": "Натисніть на картку, щоб побачити повний рецепт.",
   "recipesNoResults": "Рецепти не знайдено",
   "recipesQuick": "Швидкі",
   "recipesResultsFor": "Результати для",
@@ -600,6 +637,7 @@
   "recipesVoice": "Голос",
   "scannerCameraNotAvailable": "Камера недоступна",
   "smartChefTitle": "Розумний шеф",
+  "smartGroceryTitle": "Розумні покупки",
   "smartChefPro": "Про",
   "smartChefWhatIngredientsLine1": "Які інгредієнти",
   "smartChefWhatIngredientsLine2": "у вас є?",
@@ -637,6 +675,8 @@
   "scannerAiDisabled": "Генерація рецептів AI наразі вимкнена. Перейдіть на преміум для необмеженого доступу!",
   "scannerAiIngredientScanner": "ШІ-сканер інгредієнтів",
   "scannerAnalyzing": "Аналіз інгредієнтів...",
+  "scannerCancelAnalysisTitle": "Скасувати аналіз?",
+  "scannerCancelAnalysisMessage": "Інгредієнти аналізуються. Ви впевнені, що хочете скасувати та повернутися назад?",
   "scannerCalories": "Калорії",
   "scannerCaptureOrUpload": "Зробіть або завантажте фотографію ваших інгредієнтів",
   "scannerCategory": "Категорія",
@@ -737,7 +777,7 @@
   "settingsPreferencesSettings": "Налаштування та вподобання",
   "settingsPrivacyPolicy": "Політика конфіденційності",
   "settingsRateUs": "Оцінити",
-  "settingsRateUsSubtitle": "Подобається додаток? Оцініть!",
+  "settingsRateUsSubtitle": "Подобається додаток? Оцініть!",
   "rateDialogTitle": "Подобається Smart Chef?",
   "rateDialogSubtitle": "Допоможіть нам покращити ваш досвід готування 🍳",
   "rateDialogBody": "Ваш відгук допомагає нам\nстворювати кращі рецепти для вас",

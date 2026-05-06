@@ -332,6 +332,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get smartChefTitle => 'স্মার্ট শেফ';
 
   @override
+  String get smartGroceryTitle => 'স্মার্ট মুদি';
+
+  @override
   String get smartChefPro => 'প্রো';
 
   @override
@@ -409,6 +412,10 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'নতুন রেসিপি';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'সম্পূর্ণ রেসিপি দেখতে কার্ডে ট্যাপ করুন।';
 
   @override
   String get recipesWhatCraving => 'কী খেতে মন চাইছে?';
@@ -762,7 +769,35 @@ class AppLocalizationsBn extends AppLocalizations {
   String get groceryBudgetMode => 'বাজেট মোড';
 
   @override
-  String get groceryBudgetPlaceholder => 'বাজেট লিখুন (যেমন, 2000 PKR)';
+  String get groceryBudgetPlaceholder => 'বাজেট লিখুন (যেমন, 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'আপনার তালিকার আনুমানিক খরচ $total। কমপক্ষে এত বাজেট বাড়ান, অথবা আইটেম সরান।';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'বাজেট তালিকার চেয়ে কম';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'আপনার তালিকার আনুমানিক মূল্য $total। বাজেট মোড চালু থাকবে — নিচের ঘরে পরিমাণ বাড়ান বা আইটেম সরান।';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'বাজেট সম্পাদনা';
+
+  @override
+  String get groceryBudgetLowOk => 'ঠিক আছে';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'তালিকা প্রায় $total, এই বাজেটের উপরে। উপরে পরিমাণ বাড়ান বা আইটেম সরান — বাজেট মোড চালু রেখে সম্পাদনা করতে পারবেন।';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'খরচ ট্র্যাক করতে উপরে একটি বাজেট লিখুন।';
 
   @override
   String get groceryOn => 'চালু';
@@ -790,6 +825,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'আইটেমের নাম প্রয়োজন';
+
+  @override
+  String get groceryQuantityRequired => 'এই আইটেমের জন্য পরিমাণ লিখুন';
 
   @override
   String get groceryCreateMealPlanFirst => 'প্রথমে একটি মিল প্ল্যান তৈরি করুন';
@@ -992,11 +1030,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get chatNewChat => 'নতুন চ্যাট';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'নতুন কথোপকথন?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'একটি নতুন কথোপকথন শুরু করবেন? আপনার বর্তমান চ্যাট সংরক্ষিত হবে।';
 
   @override
   String get chatCopy => 'অনুলিপি করুন';
@@ -1323,11 +1361,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get scannerAnalyzing => 'আপনার উপকরণ বিশ্লেষণ করা হচ্ছে...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'বিশ্লেষণ বাতিল করবেন?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'উপকরণ বিশ্লেষণ করা হচ্ছে। আপনি কি নিশ্চিত যে বাতিল করে ফিরে যেতে চান?';
 
   @override
   String get scannerDetected => 'শনাক্তকৃত উপকরণ';
@@ -1844,6 +1882,10 @@ class AppLocalizationsBn extends AppLocalizations {
       'দুঃখিত, আমি আপনার অনুরোধ প্রক্রিয়া করতে পারিনি. আবার চেষ্টা করুন.';
 
   @override
+  String get errorNoInternet =>
+      'ইন্টারনেট সংযোগ নেই। দয়া করে আপনার ইন্টারনেট চেক করে আবার চেষ্টা করুন।';
+
+  @override
   String get premiumPurchaseFailed => 'ক্রয় ব্যর্থ হয়েছে';
 
   @override
@@ -2243,11 +2285,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get premiumPlanYearly => 'বার্ষিক';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'আজীবন';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'এককালীন কেনাকাটা • সম্পূর্ণ অ্যাক্সেস অন্তর্ভুক্ত';
 
   @override
   String get premiumStartFreeTrialTitle => 'আপনার ফ্রি ট্রায়াল শুরু করুন';
@@ -2258,7 +2300,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'এখনই আনলক করুন';
 
   @override
   String get premiumBestOffer => 'Best offer';

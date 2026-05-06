@@ -332,6 +332,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get smartChefTitle => 'Akıllı Şef';
 
   @override
+  String get smartGroceryTitle => 'Akıllı market';
+
+  @override
   String get smartChefPro => 'Pro';
 
   @override
@@ -409,6 +412,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Yeni Tarif';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'Tam tarifi görmek için karta dokunun.';
 
   @override
   String get recipesWhatCraving => 'Ne yemek istersiniz?';
@@ -762,7 +769,35 @@ class AppLocalizationsTr extends AppLocalizations {
   String get groceryBudgetMode => 'Bütçe Modu';
 
   @override
-  String get groceryBudgetPlaceholder => 'Bütçeyi girin (ör. 2000 PKR)';
+  String get groceryBudgetPlaceholder => 'Bütçeyi girin (ör. 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Listenizin tahmini tutarı $total. Bütçenizi en az bu kadara yükseltin veya öğeleri kaldırın.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Bütçe listenizin altında';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Listenizin tahmini $total. Bütçe modu açık kalır — aşağıdaki alanda tutarı artırın veya ürünleri kaldırın.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Bütçeyi düzenle';
+
+  @override
+  String get groceryBudgetLowOk => 'Tamam';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'Liste yaklaşık $total, bu bütçenin üzerinde. Yukarıdaki tutarı artırın veya ürünleri kaldırın — bütçe modu açıkken düzenleyebilirsiniz.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Harcamaları takip etmek için yukarıya bir bütçe girin.';
 
   @override
   String get groceryOn => 'AÇIK';
@@ -790,6 +825,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Ürün adı gerekli';
+
+  @override
+  String get groceryQuantityRequired => 'Lütfen bu ürün için miktar girin';
 
   @override
   String get groceryCreateMealPlanFirst =>
@@ -994,11 +1032,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get chatNewChat => 'Yeni sohbet';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Yeni sohbet?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Yeni bir sohbet başlatılsın mı? Mevcut sohbetiniz kaydedilecek.';
 
   @override
   String get chatCopy => 'Kopyala';
@@ -1324,11 +1362,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get scannerAnalyzing => 'Malzemeleriniz analiz ediliyor...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Analizi iptal et?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Malzemeler analiz ediliyor. İptal edip geri dönmek istediğinize emin misiniz?';
 
   @override
   String get scannerDetected => 'Tespit Edilen Malzemeler';
@@ -1844,6 +1882,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Üzgünüm, isteğinizi işleme koyamadım. Lütfen tekrar deneyin.';
 
   @override
+  String get errorNoInternet =>
+      'İnternet bağlantısı yok. Lütfen bağlantınızı kontrol edip tekrar deneyin.';
+
+  @override
   String get premiumPurchaseFailed => 'Satın alma işlemi başarısız oldu';
 
   @override
@@ -2244,11 +2286,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumPlanYearly => 'Yıllık';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Ömür boyu';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Tek seferlik satın alma • Tam erişim dahil';
 
   @override
   String get premiumStartFreeTrialTitle => 'Ücretsiz denemenizi başlatın';
@@ -2259,7 +2301,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'Şimdi aç';
 
   @override
   String get premiumBestOffer => 'Best offer';

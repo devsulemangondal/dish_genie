@@ -27,6 +27,17 @@ class StickyHeader extends StatelessWidget {
     this.titleStyle,
   });
 
+  /// Larger title for main bottom-nav tabs (Recipes, Plan, Grocery, Chat).
+  static TextStyle shellTabTitleStyle(BuildContext context) {
+    final theme = Theme.of(context);
+    return TextStyle(
+      fontSize: 23,
+      height: 1.2,
+      fontWeight: FontWeight.w800,
+      color: theme.colorScheme.onSurface,
+    );
+  }
+
   bool _isAndroid() {
     return Platform.isAndroid;
   }

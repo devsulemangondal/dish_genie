@@ -328,6 +328,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get smartChefTitle => 'スマートシェフ';
 
   @override
+  String get smartGroceryTitle => 'スマート食材';
+
+  @override
   String get smartChefPro => 'プロ';
 
   @override
@@ -404,6 +407,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => '新しいレシピ';
+
+  @override
+  String get recipesGeneratedTapForDetails => 'カードをタップするとレシピ全文が表示されます。';
 
   @override
   String get recipesWhatCraving => '何が食べたいですか？';
@@ -753,7 +759,34 @@ class AppLocalizationsJa extends AppLocalizations {
   String get groceryBudgetMode => '予算モード';
 
   @override
-  String get groceryBudgetPlaceholder => '予算を入力してください (例: 2000 PKR)';
+  String get groceryBudgetPlaceholder => '予算を入力してください (例: 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'リストの見積もり合計は$totalです。予算を少なくともその金額まで上げるか、項目を削除してください。';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => '予算がリストより少ないです';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'リストの見積もりは $total です。予算モードはオンのままです — 下の欄で金額を上げるか、項目を削除してください。';
+  }
+
+  @override
+  String get groceryBudgetEditField => '予算を編集';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'リストは約 $total で、この予算を超えています。上の金額を上げるか項目を削除してください — 予算モードをオンにしたまま編集できます。';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint => '支出を追跡するには、上に予算額を入力してください。';
 
   @override
   String get groceryOn => 'オン';
@@ -781,6 +814,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'アイテム名は必須です';
+
+  @override
+  String get groceryQuantityRequired => 'この商品の数量を入力してください';
 
   @override
   String get groceryCreateMealPlanFirst => '先に食事プランを作成してください';
@@ -979,11 +1015,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get chatNewChat => '新しいチャット';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => '新しい会話？';
 
   @override
-  String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+  String get chatNewChatConfirmMessage => '新しい会話を始めますか？現在のチャットは保存されます。';
 
   @override
   String get chatCopy => 'コピー';
@@ -1297,11 +1332,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get scannerAnalyzing => '食材を分析中...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => '分析をキャンセルしますか？';
 
   @override
-  String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+  String get scannerCancelAnalysisMessage => '食材を分析中です。キャンセルして戻りますか？';
 
   @override
   String get scannerDetected => '検出された食材';
@@ -1807,6 +1841,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get chatErrorGeneric => '申し訳ありませんが、リクエストを処理できませんでした。もう一度試してください。';
 
   @override
+  String get errorNoInternet => 'インターネット接続がありません。接続を確認してもう一度お試しください。';
+
+  @override
   String get premiumPurchaseFailed => '購入に失敗しました';
 
   @override
@@ -2194,11 +2231,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumPlanYearly => '年間';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => '買い切り';
 
   @override
-  String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+  String get premiumLifetimeFullAccessIncluded => '一度の購入・フルアクセス込み';
 
   @override
   String get premiumStartFreeTrialTitle => '無料トライアルを開始';
@@ -2209,7 +2245,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => '今すぐ解除';
 
   @override
   String get premiumBestOffer => 'Best offer';

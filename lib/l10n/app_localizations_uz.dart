@@ -331,6 +331,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get smartChefTitle => 'Aqlli oshpaz';
 
   @override
+  String get smartGroceryTitle => 'Aqlli oziq-ovqat';
+
+  @override
   String get smartChefPro => 'Pro';
 
   @override
@@ -409,6 +412,10 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Yangi Retsept';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'To\'liq retseptni ko\'rish uchun kartani bosing.';
 
   @override
   String get recipesWhatCraving => 'Nima yegingiz keladi?';
@@ -762,8 +769,35 @@ class AppLocalizationsUz extends AppLocalizations {
   String get groceryBudgetMode => 'Byudjet rejimi';
 
   @override
-  String get groceryBudgetPlaceholder =>
-      'Byudjetni kiriting (masalan, 2000 PKR)';
+  String get groceryBudgetPlaceholder => 'Byudjetni kiriting (masalan, 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Ro\'yxatingizning taxminiy summasi $total. Byudjetni kamida shunchaga oshiring yoki elementlarni olib tashlang.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Byudjet roʻyxatdan past';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Roʻyxatingiz taxminan $total. Byudjet rejimi yoqilgan holda qoladi — pastdagi maydonda summani oshiring yoki elementlarni olib tashlang.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Byudjetni tahrirlash';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'Roʻyxat taxminan $total, ushbu byudjetdan yuqori. Yuqoridagi summani oshiring yoki elementlarni olib tashlang — byudjet rejimi yoqilganda tahrirlash mumkin.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Xarajatlarni kuzatish uchun yuqoriga byudjet kiriting.';
 
   @override
   String get groceryOn => 'YOQILGAN';
@@ -791,6 +825,10 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Mahsulot nomi kerak';
+
+  @override
+  String get groceryQuantityRequired =>
+      'Ushbu mahsulot uchun miqdorni kiriting';
 
   @override
   String get groceryCreateMealPlanFirst => 'Avval ovqatlanish rejasi yarating';
@@ -996,11 +1034,11 @@ class AppLocalizationsUz extends AppLocalizations {
   String get chatNewChat => 'Yangi chat';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Yangi suhbat?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Yangi suhbat boshlansinmi? Joriy chatingiz saqlanadi.';
 
   @override
   String get chatCopy => 'Nusxalash';
@@ -1326,11 +1364,11 @@ class AppLocalizationsUz extends AppLocalizations {
   String get scannerAnalyzing => 'Mahsulotlar tahlil qilinmoqda...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Tahlilni bekor qilasizmi?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Ingredientlar tahlil qilinmoqda. Bekor qilib, ortga qaytmoqchimisiz?';
 
   @override
   String get scannerDetected => 'Aniqlangan mahsulotlar';
@@ -1851,6 +1889,10 @@ class AppLocalizationsUz extends AppLocalizations {
       'Kechirasiz, so‘rovingizni ko‘rib chiqa olmadim. Iltimos, qayta urinib koʻring.';
 
   @override
+  String get errorNoInternet =>
+      'Internetga ulanish yo‘q. Ulanishni tekshirib, qayta urinib ko‘ring.';
+
+  @override
   String get premiumPurchaseFailed => 'Xarid amalga oshmadi';
 
   @override
@@ -2257,11 +2299,11 @@ class AppLocalizationsUz extends AppLocalizations {
   String get premiumPlanYearly => 'Yillik';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Umrbod';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Bir martalik xarid • To‘liq kirish kiritilgan';
 
   @override
   String get premiumStartFreeTrialTitle => 'Bepul sinov davrini boshlang';
@@ -2272,7 +2314,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'Hozir ochish';
 
   @override
   String get premiumBestOffer => 'Best offer';

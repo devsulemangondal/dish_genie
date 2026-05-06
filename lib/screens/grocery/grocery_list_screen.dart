@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/localization/l10n_extension.dart';
-import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
 import '../../data/models/grocery_item.dart';
 import '../../data/models/grocery_list.dart';
 import '../../providers/grocery_provider.dart';
 import '../../providers/meal_plan_provider.dart';
 import '../../services/grocery_service.dart';
+import '../../services/interstitial_ad_helper.dart';
+import '../../services/storage_service.dart';
 import '../../widgets/voice/voice_input_dialog.dart';
-import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/loading_genie.dart';
 import '../../widgets/common/sticky_header.dart';
@@ -44,6 +43,8 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
   final Map<String, bool> _expandedCategories = {};
   final Set<String> _dismissedSmartSuggestions = {};
 
+  final FocusNode _budgetFocusNode = FocusNode();
+
   bool _hasLoadedSavedLists = false;
 
   /// True after user saves the current list; cleared when list is modified.
@@ -55,6 +56,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
   @override
   void initState() {
     super.initState();
+    Future.microtask(_restoreBudgetPrefs);
     // If coming from meal plan, start on the List tab to show the generated items
     if (widget.fromPlan) {
       _selectedTab = 1;
@@ -73,6 +75,20 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     });
   }
 
+  Future<void> _restoreBudgetPrefs() async {
+    try {
+      final enabled = await StorageService.getGroceryBudgetMode();
+      final value = await StorageService.getGroceryBudgetValue();
+      if (!mounted) return;
+      setState(() {
+        _isBudgetMode = enabled;
+      });
+      if (value != null) {
+        _budgetController.text = value;
+      }
+    } catch (_) {}
+  }
+
   /// Track when card screen is opened (ads removed - reserved for future ad plan)
   Future<void> _trackCardScreenOpen() async {}
 
@@ -82,43 +98,149 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     _itemNameController.dispose();
     _quantityController.dispose();
     _budgetController.dispose();
+    _budgetFocusNode.dispose();
     _quickAddController.dispose();
     super.dispose();
   }
 
-  Future<void> _handleBack() async {
-    // If generating grocery list (e.g. from Weekly List), show confirmation before going back.
-    final groceryProvider = Provider.of<GroceryProvider>(context, listen: false);
-    if (groceryProvider.isLoading) {
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(context.t('grocery.cancel.generation.title')),
-          content: Text(context.t('grocery.cancel.generation.message')),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: Text(context.t('common.cancel')),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              child: Text(context.t('common.confirm')),
-            ),
-          ],
-        ),
-      );
-      if (confirmed == true && mounted) {
-        groceryProvider.cancelGroceryGeneration();
-      }
+  double? _parseBudgetValue() {
+    if (!_isBudgetMode) return null;
+    final raw = _budgetController.text.trim();
+    if (raw.isEmpty) return null;
+    final cleaned = raw.replaceAll(RegExp(r'[^\d.]'), '');
+    if (cleaned.isEmpty) return null;
+    return double.tryParse(cleaned);
+  }
+
+  /// Parsed budget from raw text (used while toggling mode before `_isBudgetMode` flips).
+  double? _parseBudgetFromText(String text) {
+    final raw = text.trim();
+    if (raw.isEmpty) return null;
+    final cleaned = raw.replaceAll(RegExp(r'[^\d.]'), '');
+    if (cleaned.isEmpty) return null;
+    return double.tryParse(cleaned);
+  }
+
+  bool _shouldShowBudgetShortfallBanner(GroceryProvider groceryProvider) {
+    if (!_isBudgetMode) return false;
+    final list = groceryProvider.groceryList;
+    if (list == null || list.items.isEmpty) return false;
+    final total = groceryProvider.calculatedTotal;
+    if (total <= 0) return false;
+    final cap = _parseBudgetFromText(_budgetController.text);
+    if (cap == null) return true;
+    return cap < total - 1e-9;
+  }
+
+  String? _budgetShortfallBannerText(
+    BuildContext context,
+    GroceryProvider groceryProvider,
+  ) {
+    if (!_shouldShowBudgetShortfallBanner(groceryProvider)) return null;
+    final total = groceryProvider.calculatedTotal;
+    final formatted = '\$${total.toStringAsFixed(2)}';
+    final cap = _parseBudgetFromText(_budgetController.text);
+    if (cap == null) {
+      return context.l10n.groceryBudgetEnterAmountHint;
+    }
+    return context.l10n.groceryBudgetInlineOverHint(formatted);
+  }
+
+  Future<void> _showBudgetBelowListDialog(double listTotal) async {
+    if (!mounted) return;
+    final formatted = '\$${listTotal.toStringAsFixed(2)}';
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(ctx.l10n.groceryBudgetLowTitle),
+        content: Text(ctx.l10n.groceryBudgetLowBody(formatted)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(ctx.l10n.groceryBudgetLowOk),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                _budgetFocusNode.requestFocus();
+                final len = _budgetController.text.length;
+                if (len > 0) {
+                  _budgetController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: len,
+                  );
+                }
+              });
+            },
+            child: Text(ctx.l10n.groceryBudgetEditField),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showBudgetBlockedSnackBar() {
+    final budget = _budgetController.text.trim();
+    final msg = budget.isEmpty
+        ? 'Please enter a budget first.'
+        : 'Budget limit reached. Increase budget to add more items.';
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: AppColors.destructive),
+    );
+  }
+
+  /// Add item from smart suggestion row (after optional interstitial).
+  Future<void> _addSuggestedGroceryItem(
+    GroceryProvider provider,
+    String itemName,
+  ) async {
+    final maxBudget = _parseBudgetValue();
+    if (_isBudgetMode && maxBudget == null) {
+      _showBudgetBlockedSnackBar();
       return;
     }
+    final ok = await provider.addItemsByName([itemName], maxBudget: maxBudget);
+    if (!ok) {
+      if (mounted) _showBudgetBlockedSnackBar();
+      return;
+    }
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$itemName ${context.t('grocery.added')}'),
+        backgroundColor: AppColors.primary,
+        duration: const Duration(seconds: 1),
+      ),
+    );
+    setState(() {});
+  }
 
-    if (mounted) {
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/');
-      }
+  /// While AI is generating a list, system back should confirm cancel (shell handles other backs).
+  Future<void> _maybeConfirmCancelGenerationOnPop() async {
+    final groceryProvider = Provider.of<GroceryProvider>(context, listen: false);
+    if (!groceryProvider.isLoading) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(ctx.t('grocery.cancel.generation.title')),
+        content: Text(ctx.t('grocery.cancel.generation.message')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(ctx.t('common.cancel')),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(ctx.t('common.confirm')),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && mounted) {
+      groceryProvider.cancelGroceryGeneration();
     }
   }
 
@@ -340,8 +462,8 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     }
   }
 
-  void _showAddItemDialog() {
-    _itemNameController.clear();
+  void _showAddItemDialog({String? prefillItemName}) {
+    _itemNameController.text = (prefillItemName ?? '').trim();
     _quantityController.clear();
     _selectedCategory = null;
 
@@ -417,6 +539,15 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                 );
                 return;
               }
+              if (_quantityController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(context.t('grocery.quantity.required')),
+                    backgroundColor: AppColors.destructive,
+                  ),
+                );
+                return;
+              }
 
               final provider = context.read<GroceryProvider>();
               if (provider.groceryList == null) {
@@ -436,9 +567,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
               final item = GroceryItem(
                 id: DateTime.now().millisecondsSinceEpoch.toString(),
                 name: _itemNameController.text.trim(),
-                quantity: _quantityController.text.trim().isEmpty
-                    ? '1'
-                    : _quantityController.text.trim(),
+                quantity: _quantityController.text.trim(),
                 unit: '',
                 category:
                     _selectedCategory ??
@@ -448,7 +577,16 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                 checked: false,
               );
 
-              await provider.addItem(item);
+              final maxBudget = _parseBudgetValue();
+              if (_isBudgetMode && maxBudget == null) {
+                _showBudgetBlockedSnackBar();
+                return;
+              }
+              final ok = await provider.addItem(item, maxBudget: maxBudget);
+              if (!ok) {
+                if (context.mounted) _showBudgetBlockedSnackBar();
+                return;
+              }
               if (context.mounted) {
                 Navigator.pop(context);
               }
@@ -480,42 +618,9 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
               ? groceryList.items.where((i) => !i.checked).length
               : groceryList.items.length);
 
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) async {
-        if (!didPop) {
-          // Check if we're actually on the grocery route before handling
-          // This prevents interference when navigating away
-          final router = GoRouter.maybeOf(context);
-          if (router != null) {
-            String? currentPath;
-            try {
-              final routerState = GoRouterState.of(context);
-              currentPath = routerState.uri.path;
-            } catch (_) {
-              try {
-                currentPath =
-                    router.routerDelegate.currentConfiguration.uri.path;
-              } catch (_) {
-                currentPath = null;
-              }
-            }
-
-            // Only handle back if we're actually on a grocery route
-            if (currentPath != null && currentPath.startsWith('/grocery')) {
-              await _handleBack();
-            }
-            // If not on grocery route, let BackButtonHandler handle it
-          } else {
-            // If no router, handle it anyway (fallback)
-            await _handleBack();
-          }
-        }
-      },
-      child: Scaffold(
-        bottomNavigationBar: const BottomNav(activeTab: 'grocery'),
-        body: Stack(
-          children: [
+    final scaffold = Scaffold(
+      body: Stack(
+        children: [
             Container(
               decoration: BoxDecoration(
                 gradient: Theme.of(context).brightness == Brightness.dark
@@ -528,84 +633,15 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
               child: Column(
                 children: [
                   StickyHeader(
-                    title: context.t('smartChefTitle'),
-                    titleStyle: GoogleFonts.inter(
-                      fontSize: 26,
-                      height: 34 / 26,
-                      fontWeight: FontWeight.w700,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : const Color(0xFF1E2945),
-                    ),
+                    title: context.t('smartGroceryTitle'),
+                    titleStyle: StickyHeader.shellTabTitleStyle(context),
                     showBack: false,
                     onBack: null,
-                    rightContent: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          onTap: () => ProNavigation.tryOpen(
-                            context,
-                            replace: false,
-                          ),
-                          child: SizedBox(
-                            width: 70,
-                            height: 32,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                  colors: [
-                                    Color(0xFFFFB301),
-                                    Color(0xFFFD5C17),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Center(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.auto_awesome,
-                                      size: 14,
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      context.t('smartChefPro'),
-                                      style: GoogleFonts.inter(
-                                        fontSize: 12.5,
-                                        height: 1.0,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 2),
-                        IconButton(
-                          onPressed: () => context.push('/settings'),
-                          icon: const Icon(Icons.settings),
-                          iconSize: 24,
-                          color: const Color(0xFF5A6A7C),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints.tightFor(
-                            width: 36,
-                            height: 36,
-                          ),
-                        ),
-                      ],
-                    ),
                     backgroundColor: Colors.transparent,
                     statusBarColor:
                         Theme.of(context).brightness == Brightness.dark
                         ? const Color(0xFF1A1F35)
-                        : const Color(0xFFEAF4FF),
+                        : AppColors.genieBlush,
                   ),
                   // Tab Navigation
                   Container(
@@ -661,9 +697,21 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                 ],
               ),
             ),
-          ],
-        ),
+        ],
       ),
+    );
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        if (didPop) return;
+        if (isLoading) {
+          await _maybeConfirmCancelGenerationOnPop();
+        } else if (mounted) {
+          context.go('/');
+        }
+      },
+      child: scaffold,
     );
   }
 
@@ -969,8 +1017,35 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () =>
-                            setState(() => _isBudgetMode = !_isBudgetMode),
+                        onTap: () {
+                          final turningOn = !_isBudgetMode;
+                          if (turningOn) {
+                            setState(() => _isBudgetMode = true);
+                            StorageService.setGroceryBudgetMode(true);
+                            final groceryProvider =
+                                context.read<GroceryProvider>();
+                            final gList = groceryProvider.groceryList;
+                            final total = groceryProvider.calculatedTotal;
+                            final cap =
+                                _parseBudgetFromText(_budgetController.text);
+                            final showLowBudgetDialog = gList != null &&
+                                gList.items.isNotEmpty &&
+                                total > 0 &&
+                                (cap == null || cap < total - 1e-9);
+                            if (showLowBudgetDialog) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (mounted) {
+                                  _showBudgetBelowListDialog(total);
+                                }
+                              });
+                            }
+                          } else {
+                            setState(() => _isBudgetMode = false);
+                            StorageService.setGroceryBudgetMode(false);
+                          }
+                          // If user turned it off, keep the entered value persisted
+                          // (so turning it on again restores it).
+                        },
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -1009,7 +1084,12 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                   const SizedBox(height: 12),
                   TextField(
                     controller: _budgetController,
+                    focusNode: _budgetFocusNode,
                     keyboardType: TextInputType.number,
+                    onChanged: (v) {
+                      StorageService.setGroceryBudgetValue(v);
+                      if (mounted) setState(() {});
+                    },
                     decoration: InputDecoration(
                       hintText: context.t('grocery.budget.placeholder'),
                       border: OutlineInputBorder(
@@ -1037,6 +1117,69 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                         size: 20,
                       ),
                     ),
+                  ),
+                  Builder(
+                    builder: (context) {
+                      final banner = _budgetShortfallBannerText(context, provider);
+                      if (banner == null) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Material(
+                          color: AppColors.destructive.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () {
+                              _budgetFocusNode.requestFocus();
+                              final len = _budgetController.text.length;
+                              if (len > 0) {
+                                _budgetController.selection = TextSelection(
+                                  baseOffset: 0,
+                                  extentOffset: len,
+                                );
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 10,
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.info_outline,
+                                    size: 20,
+                                    color: AppColors.destructive,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      banner,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        height: 1.35,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    context.l10n.groceryBudgetEditField,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
                 // Budget Tips
@@ -1111,7 +1254,17 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                     ),
                     onSubmitted: (value) {
                       if (value.trim().isNotEmpty) {
-                        provider.addItemsByName([value.trim()]);
+                        final maxBudget = _parseBudgetValue();
+                        if (_isBudgetMode && maxBudget == null) {
+                          _showBudgetBlockedSnackBar();
+                          return;
+                        }
+                        provider.addItemsByName(
+                          [value.trim()],
+                          maxBudget: maxBudget,
+                        ).then((ok) {
+                          if (!ok && mounted) _showBudgetBlockedSnackBar();
+                        });
                         _quickAddController.clear();
                       }
                     },
@@ -1130,9 +1283,21 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                     child: InkWell(
                       onTap: () {
                         if (_quickAddController.text.trim().isNotEmpty) {
-                          provider.addItemsByName([
-                            _quickAddController.text.trim(),
-                          ]);
+                          final maxBudget = _parseBudgetValue();
+                          if (_isBudgetMode && maxBudget == null) {
+                            _showBudgetBlockedSnackBar();
+                            return;
+                          }
+                          provider
+                              .addItemsByName(
+                                [_quickAddController.text.trim()],
+                                maxBudget: maxBudget,
+                              )
+                              .then((ok) {
+                                if (!ok && mounted) {
+                                  _showBudgetBlockedSnackBar();
+                                }
+                              });
                           _quickAddController.clear();
                         }
                       },
@@ -1633,16 +1798,10 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     }
 
     Future<void> addSuggestion(String itemName) async {
-      provider.addItemsByName([itemName]);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('$itemName ${context.t('grocery.added')}'),
-          backgroundColor: AppColors.primary,
-          duration: const Duration(seconds: 1),
-        ),
+      await InterstitialAdHelper.showGrocerySmartSuggestionAddInterstitial(
+        context: context,
+        afterAdOrSkip: () => _addSuggestedGroceryItem(provider, itemName),
       );
-      setState(() {});
     }
 
     return Column(
@@ -1796,16 +1955,10 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     }
 
     Future<void> addSuggestion(String itemName) async {
-      provider.addItemsByName([itemName]);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('$itemName ${context.t('grocery.added')}'),
-          backgroundColor: AppColors.primary,
-          duration: const Duration(seconds: 1),
-        ),
+      await InterstitialAdHelper.showGrocerySmartSuggestionAddInterstitial(
+        context: context,
+        afterAdOrSkip: () => _addSuggestedGroceryItem(provider, itemName),
       );
-      setState(() {});
     }
 
     return SingleChildScrollView(
@@ -2215,22 +2368,20 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
     final text = await showVoiceInputDialog(context);
     if (text == null || text.trim().isEmpty || !mounted) return;
 
-    final items = text
+    // Voice input should only fill the existing item name field (no extra dialog).
+    // If multiple items were spoken, take the first as the initial draft name.
+    final first = text
         .split(',')
         .map((e) => e.trim())
-        .where((e) => e.isNotEmpty)
-        .toList();
-    if (items.isEmpty) return;
-
-    context.read<GroceryProvider>().addItemsByName(items);
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${items.length} ${context.t('grocery.added')}'),
-          backgroundColor: AppColors.primary,
-        ),
+        .firstWhere((e) => e.isNotEmpty, orElse: () => '');
+    if (first.isEmpty) return;
+    setState(() {
+      _itemNameController.text = first;
+      _itemNameController.selection = TextSelection.collapsed(
+        offset: _itemNameController.text.length,
       );
-    }
+      if (_selectedTab != 0) _selectedTab = 0; // ensure Add tab is visible
+    });
   }
 
   Future<void> _showVoiceSearchDialog() async {
@@ -2720,6 +2871,15 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
   }
 
   Widget _buildAddTab(BuildContext context, GroceryProvider provider) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final onSurfaceMuted = theme.colorScheme.onSurface.withOpacity(0.55);
+
+    final searchFill = isDark ? const Color(0xFF1C2433) : const Color(0xFFF3F6F9);
+    final searchBorder = isDark ? const Color(0xFF2A3446) : const Color(0xFFE6EEF6);
+    final searchFocused = isDark ? const Color(0xFF4B8BFF) : const Color(0xFFBEDAFE);
+    final micBg = isDark ? const Color(0xFF111827) : Colors.white;
+
     final groceryList = provider.groceryList;
     final allCurrentItems = groceryList?.items ?? [];
     final allQuickAddItems = [
@@ -2758,85 +2918,63 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Search Bar
-          Container(
-            margin: const EdgeInsets.only(bottom: 24),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: const Color(0xFFBEDAFE)),
-              boxShadow: AppColors.getCardShadow(context),
-            ),
-            child: Row(
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Icon(
-                      Icons.search,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.55),
-                      size: 20,
-                    ),
-                    Positioned(
-                      left: 13,
-                      top: 2,
+          SizedBox(
+            height: 52,
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: context.t('grocery.search.items'),
+                filled: true,
+                fillColor: searchFill,
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 14,
+                ),
+                prefixIcon: Icon(
+                  Icons.search,
+                  size: 20,
+                  color: onSurfaceMuted,
+                ),
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: _showVoiceSearchDialog,
+                      customBorder: const CircleBorder(),
                       child: Container(
-                        width: 6,
-                        height: 6,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFFF6A3D),
+                        decoration: BoxDecoration(
+                          color: micBg,
                           shape: BoxShape.circle,
+                          border: Border.all(color: searchBorder),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: context.t('grocery.search.items'),
-                      border: InputBorder.none,
-                      isDense: true,
-                      hintStyle: TextStyle(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(0.6),
-                      ),
-                    ),
-                    onChanged: (value) => setState(() => _searchQuery = value),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: _showVoiceSearchDialog,
-                    borderRadius: BorderRadius.circular(999),
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFFBEDAFE),
+                        child: const Icon(
+                          Icons.mic,
+                          size: 18,
+                          color: Color(0xFF2F80FF),
                         ),
-                      ),
-                      child: const Icon(
-                        Icons.mic,
-                        size: 18,
-                        color: Color(0xFF2F80FF),
                       ),
                     ),
                   ),
                 ),
-              ],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(26),
+                  borderSide: BorderSide(color: searchBorder),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(26),
+                  borderSide: BorderSide(color: searchBorder),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(26),
+                  borderSide: BorderSide(color: searchFocused, width: 1.2),
+                ),
+              ),
+              onChanged: (value) => setState(() => _searchQuery = value),
             ),
           ),
+          const SizedBox(height: 24),
           // Add Item Section
           Text(
             context.t('grocery.add.item'),
@@ -2942,12 +3080,21 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                             );
                             return;
                           }
+                          if (_quantityController.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  context.t('grocery.quantity.required'),
+                                ),
+                                backgroundColor: AppColors.destructive,
+                              ),
+                            );
+                            return;
+                          }
                           final item = GroceryItem(
                             id: const Uuid().v4(),
                             name: _itemNameController.text.trim(),
-                            quantity: _quantityController.text.trim().isEmpty
-                                ? '1'
-                                : _quantityController.text.trim(),
+                            quantity: _quantityController.text.trim(),
                             unit: '',
                             category:
                                 _selectedCategory ??
@@ -2956,7 +3103,18 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                                 ),
                             checked: false,
                           );
-                          provider.addItem(item);
+                          final maxBudget = _parseBudgetValue();
+                          if (_isBudgetMode && maxBudget == null) {
+                            _showBudgetBlockedSnackBar();
+                            return;
+                          }
+                          provider
+                              .addItem(item, maxBudget: maxBudget)
+                              .then((ok) {
+                                if (!ok && mounted) {
+                                  _showBudgetBlockedSnackBar();
+                                }
+                              });
                           _itemNameController.clear();
                           _quantityController.clear();
                           _selectedCategory = null;
@@ -3156,17 +3314,30 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                 final isAlreadyAdded = hasItemNamed(itemName);
                 return ElevatedButton(
                   onPressed: () {
-                    provider.addItemsByName([itemName]);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          '$itemName ${context.t('grocery.added')}',
-                        ),
-                        backgroundColor: AppColors.primary,
-                        duration: const Duration(seconds: 1),
-                      ),
-                    );
-                    setState(() {}); // Refresh to update button state
+                    final maxBudget = _parseBudgetValue();
+                    if (_isBudgetMode && maxBudget == null) {
+                      _showBudgetBlockedSnackBar();
+                      return;
+                    }
+                    provider
+                        .addItemsByName([itemName], maxBudget: maxBudget)
+                        .then((ok) {
+                          if (!ok && mounted) {
+                            _showBudgetBlockedSnackBar();
+                            return;
+                          }
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '$itemName ${context.t('grocery.added')}',
+                              ),
+                              backgroundColor: AppColors.primary,
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                          setState(() {}); // Refresh to update button state
+                        });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isAlreadyAdded

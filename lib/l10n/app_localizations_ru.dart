@@ -331,6 +331,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get smartChefTitle => 'Умный шеф';
 
   @override
+  String get smartGroceryTitle => 'Умные покупки';
+
+  @override
   String get smartChefPro => 'ПРО';
 
   @override
@@ -408,6 +411,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Новый рецепт';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'Нажмите на карточку, чтобы увидеть полный рецепт.';
 
   @override
   String get recipesWhatCraving => 'Чего вам хочется?';
@@ -765,6 +772,34 @@ class AppLocalizationsRu extends AppLocalizations {
       'Введите бюджет (например, 2000 рупий)';
 
   @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Ориентировочная сумма списка — $total. Увеличьте бюджет как минимум до этой суммы или удалите позиции.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Бюджет ниже суммы списка';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Оценка списка — $total. Режим бюджета остаётся включённым — увеличьте сумму в поле ниже или удалите позиции.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Изменить бюджет';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'Список около $total, выше этого бюджета. Увеличьте сумму выше или удалите позиции — можно редактировать при включённом режиме бюджета.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Введите бюджет выше, чтобы отслеживать расходы.';
+
+  @override
   String get groceryOn => 'ВКЛ';
 
   @override
@@ -790,6 +825,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Название товара обязательно';
+
+  @override
+  String get groceryQuantityRequired => 'Укажите количество для этого товара';
 
   @override
   String get groceryCreateMealPlanFirst => 'Сначала создайте план питания';
@@ -993,11 +1031,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get chatNewChat => 'Новый чат';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Новый разговор?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Начать новый разговор? Текущий чат будет сохранён.';
 
   @override
   String get chatCopy => 'Копировать';
@@ -1322,11 +1360,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get scannerAnalyzing => 'Анализ ингредиентов...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Отменить анализ?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Ингредиенты анализируются. Вы уверены, что хотите отменить и вернуться назад?';
 
   @override
   String get scannerDetected => 'Обнаруженные ингредиенты';
@@ -1843,6 +1881,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Извините, я не смог обработать ваш запрос. Пожалуйста, попробуйте еще раз.';
 
   @override
+  String get errorNoInternet =>
+      'Нет подключения к интернету. Проверьте соединение и попробуйте снова.';
+
+  @override
   String get premiumPurchaseFailed => 'Покупка не удалась';
 
   @override
@@ -2243,11 +2285,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get premiumPlanYearly => 'Ежегодно';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Навсегда';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Разовая покупка • Полный доступ включён';
 
   @override
   String get premiumStartFreeTrialTitle => 'Начните бесплатный пробный период';
@@ -2258,7 +2300,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'Открыть сейчас';
 
   @override
   String get premiumBestOffer => 'Best offer';

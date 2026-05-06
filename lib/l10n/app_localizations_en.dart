@@ -331,6 +331,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get smartChefTitle => 'Smart Chef';
 
   @override
+  String get smartGroceryTitle => 'Smart Grocery';
+
+  @override
   String get smartChefPro => 'Pro';
 
   @override
@@ -372,7 +375,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recipesGenerateRecipe => 'Generate Recipe';
 
   @override
-  String get recipesCreatingRecipe => 'Creating Your Recipe...';
+  String get recipesCreatingRecipe => 'Generating Recipe';
 
   @override
   String recipesCreatingRecipeWith(String ingredients) {
@@ -409,6 +412,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'New Recipe';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'Tap the card to see the full recipe.';
 
   @override
   String get recipesWhatCraving => 'What are you craving?';
@@ -759,7 +766,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get groceryBudgetMode => 'Budget Mode';
 
   @override
-  String get groceryBudgetPlaceholder => 'Enter budget (e.g., 2000 PKR)';
+  String get groceryBudgetPlaceholder => 'Enter budget (e.g., 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Your list is estimated at $total. Increase your budget to at least that amount, or remove items.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Budget is below your list';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Your list is estimated at $total. Budget mode stays on — raise the amount in the field below or remove items.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Edit budget';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'List is about $total, above this budget. Increase the amount above or remove items — you can edit with budget mode on.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Enter a budget amount above to track spending.';
 
   @override
   String get groceryOn => 'ON';
@@ -787,6 +822,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Item name is required';
+
+  @override
+  String get groceryQuantityRequired => 'Please enter a quantity for this item';
 
   @override
   String get groceryCreateMealPlanFirst => 'Please create a meal plan first';
@@ -1028,7 +1066,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatHistoryTryDifferent => 'Try a different search term';
 
   @override
-  String get chatHistoryStartChatting => 'Start Chatting';
+  String get chatHistoryStartChatting => 'Start Chating';
 
   @override
   String get chatHistoryToday => 'Today';
@@ -1832,6 +1870,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get chatErrorGeneric =>
       'Sorry, I couldn\'t process your request. Please try again.';
+
+  @override
+  String get errorNoInternet =>
+      'No internet connection. Please check your connection and try again.';
 
   @override
   String get premiumPurchaseFailed => 'Purchase failed';

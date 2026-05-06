@@ -122,6 +122,7 @@
   "chatCopy": "कॉपी करें",
   "chatEdit": "संपादित करें",
   "chatErrorGeneric": "क्षमा करें, मैं आपका अनुरोध संसाधित नहीं कर सका। कृपया पुन: प्रयास करें।",
+  "errorNoInternet": "इंटरनेट कनेक्शन नहीं है। कृपया अपना इंटरनेट जांचें और फिर से कोशिश करें।",
   "chatErrorNotConfigured": "चैट एपीआई कॉन्फ़िगर नहीं है. कृपया सहायता से संपर्क करें या अपनी ऐप सेटिंग जांचें।",
   "chatErrorRateLimit": "दर सीमा पार हो गई. कृपया बाद में पुन: प्रयास करें।",
   "chatGreeting": "नमस्ते, मैं Smart Chef हूं!",
@@ -154,6 +155,8 @@
   "chatListening": "सुन रहा है...",
   "chatMessageCopied": "संदेश कॉपी किया गया",
   "chatNewChat": "नई चैट",
+  "chatNewChatConfirmTitle": "नई बातचीत?",
+  "chatNewChatConfirmMessage": "नई बातचीत शुरू करें? आपकी वर्तमान चैट सहेज ली जाएगी।",
   "chatPlaceholder": "मुझसे कुछ भी पूछें...",
   "chatSubtitle": "आपका AI कुकिंग सहायक",
   "chatSuggestion1": "चिकन और चावल से क्या बना सकता हूं?",
@@ -231,6 +234,35 @@
   "groceryBought": "खरीदा",
   "groceryBudgetMode": "बजट मोड",
   "groceryBudgetPlaceholder": "बजट दर्ज करें (उदाहरण के लिए, 2000 पीकेआर)",
+  "groceryBudgetMustCoverEstimate": "आपकी सूची का अनुमानित कुल {total} है। बजट कम से कम इतना बढ़ाएं या आइटम हटाएं।",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "बजट आपकी सूची से कम है",
+  "groceryBudgetLowBody": "आपकी सूची का अनुमान {total} है। बजट मोड चालू रहेगा — नीचे राशि बढ़ाएँ या आइटम हटाएँ।",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "बजट संपादित करें",
+  "groceryBudgetLowOk": "ठीक है",
+  "groceryBudgetInlineOverHint": "सूची लगभग {total} है, इस बजट से ऊपर। ऊपर राशि बढ़ाएँ या आइटम हटाएँ — बजट मोड चालू रहते ही संपादन कर सकते हैं।",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "खर्च ट्रैक करने के लिए ऊपर बजट राशि दर्ज करें।",
+
   "groceryCategories": "श्रेणियां",
   "groceryCategory": "श्रेणी",
   "groceryCreateMealPlanFirst": "कृपया पहले भोजन योजना बनाएं",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "आइटम जोड़ा गया!",
   "groceryItemName": "आइटम का नाम",
   "groceryItemRequired": "आइटम का नाम आवश्यक है",
+  "groceryQuantityRequired": "कृपया इस आइटम की मात्रा दर्ज करें",
   "groceryItems": "आइटम",
   "groceryItemsIn": "आइटम में",
   "groceryList": "सूची",
@@ -478,6 +511,9 @@
   "premiumBestValue": "सबसे अच्छा मूल्य",
   "premiumPlanWeekly": "साप्ताहिक",
   "premiumPlanYearly": "वार्षिक",
+  "premiumPlanLifetime": "आजीवन",
+  "premiumLifetimeFullAccessIncluded": "एक बार की खरीद • पूर्ण एक्सेस शामिल",
+  "premiumUnlockNow": "अभी अनलॉक करें",
   "premiumStartFreeTrialTitle": "अपना मुफ्त ट्रायल शुरू करें",
   "premiumStartFreeTrial": "3-दिन का मुफ्त ट्रायल शुरू करें {price}",
   "@premiumStartFreeTrial": {
@@ -583,6 +619,7 @@
   "recipesMoodsSpicyFix": "तीखा",
   "recipesMoodsSweetCravings": "मीठा",
   "recipesNewRecipe": "नई रेसिपी",
+  "recipesGeneratedTapForDetails": "पूरी रेसिपी देखने के लिए कार्ड पर टैप करें।",
   "recipesNoResults": "कोई रेसिपी नहीं मिली",
   "recipesQuick": "त्वरित",
   "recipesResultsFor": "परिणाम",
@@ -600,6 +637,7 @@
   "recipesVoice": "आवाज",
   "scannerCameraNotAvailable": "कैमरा उपलब्ध नहीं है",
   "smartChefTitle": "स्मार्ट शेफ",
+  "smartGroceryTitle": "स्मार्ट किराना",
   "smartChefPro": "प्रो",
   "smartChefWhatIngredientsLine1": "आपके पास कौन से",
   "smartChefWhatIngredientsLine2": "सामग्री हैं?",
@@ -637,6 +675,8 @@
   "scannerAiDisabled": "एआई रेसिपी पीढ़ी वर्तमान में अक्षम है। असीमित एक्सेस के लिए प्रीमियम में अपग्रेड करें!",
   "scannerAiIngredientScanner": "एआई संघटक स्कैनर",
   "scannerAnalyzing": "आपकी सामग्री का विश्लेषण हो रहा है...",
+  "scannerCancelAnalysisTitle": "विश्लेषण रद्द करें?",
+  "scannerCancelAnalysisMessage": "सामग्री का विश्लेषण हो रहा है। क्या आप रद्द करके वापस जाना चाहते हैं?",
   "scannerCalories": "कैलोरी",
   "scannerCaptureOrUpload": "अपनी सामग्री की फ़ोटो खींचें या अपलोड करें",
   "scannerCategory": "वर्ग",
@@ -737,7 +777,7 @@
   "settingsPreferencesSettings": "प्राथमिकताएं और सेटिंग्स",
   "settingsPrivacyPolicy": "गोपनीयता नीति",
   "settingsRateUs": "हमें रेट करें",
-  "settingsRateUsSubtitle": "ऐप पसंद है? हमें रेट करें!",
+  "settingsRateUsSubtitle": "ऐप पसंद है? हमें रेट करें!",
   "rateDialogTitle": "Smart Chef पसंद आया?",
   "rateDialogSubtitle": "अपने कुकिंग अनुभव को बेहतर बनाने में हमारी मदद करें 🍳",
   "rateDialogBody": "आपका फीडबैक हमें\nआपके लिए बेहतर रेसिपी बनाने में मदद करता है",

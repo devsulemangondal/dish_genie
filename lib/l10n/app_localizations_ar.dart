@@ -329,6 +329,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get smartChefTitle => 'الشيف الذكي';
 
   @override
+  String get smartGroceryTitle => 'البقالة الذكية';
+
+  @override
   String get smartChefPro => 'احترافي';
 
   @override
@@ -405,6 +408,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'وصفة جديدة';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'انقر على البطاقة لرؤية الوصفة كاملة.';
 
   @override
   String get recipesWhatCraving => 'ماذا تشتهي؟';
@@ -760,6 +767,34 @@ class AppLocalizationsAr extends AppLocalizations {
       'أدخل الميزانية (على سبيل المثال، 2000 روبية باكستانية)';
 
   @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'تُقدَّر قائمتك بـ $total. زِد ميزانيتك لتصل على الأقل إلى هذا المبلغ، أو احذف بعض العناصر.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'الميزانية أقل من قائمتك';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'تُقدَّر قائمتك بـ $total. يبقى وضع الميزانية مفعّلاً — زِد المبلغ في الحقل أدناه أو أزل عناصر.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'تعديل الميزانية';
+
+  @override
+  String get groceryBudgetLowOk => 'حسناً';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'القائمة نحو $total، أعلى من هذه الميزانية. زِد المبلغ أعلاه أو أزل عناصر — يمكنك التعديل مع بقاء وضع الميزانية.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'أدخل ميزانية في الحقل أعلاه لتتبع الإنفاق.';
+
+  @override
   String get groceryOn => 'تشغيل';
 
   @override
@@ -785,6 +820,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'اسم العنصر مطلوب';
+
+  @override
+  String get groceryQuantityRequired => 'يُرجى إدخال الكمية لهذا العنصر';
 
   @override
   String get groceryCreateMealPlanFirst => 'الرجاء إنشاء خطة وجبات أولاً';
@@ -985,11 +1023,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatNewChat => 'محادثة جديدة';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'محادثة جديدة؟';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'بدء محادثة جديدة؟ سيتم حفظ محادثتك الحالية.';
 
   @override
   String get chatCopy => 'نسخ';
@@ -1312,11 +1350,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get scannerAnalyzing => 'جاري تحليل مكوناتك...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'إلغاء التحليل؟';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'يتم تحليل المكونات الآن. هل تريد الإلغاء والعودة؟';
 
   @override
   String get scannerDetected => 'المكونات المكتشفة';
@@ -1828,6 +1866,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'عذراً، لم أتمكن من معالجة طلبك. يرجى المحاولة مرة أخرى.';
 
   @override
+  String get errorNoInternet =>
+      'لا يوجد اتصال بالإنترنت. يرجى التحقق من اتصالك والمحاولة مرة أخرى.';
+
+  @override
   String get premiumPurchaseFailed => 'فشل الشراء';
 
   @override
@@ -2224,11 +2266,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumPlanYearly => 'سنوي';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'مدى الحياة';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'شراء لمرة واحدة • وصول كامل مضمن';
 
   @override
   String get premiumStartFreeTrialTitle => 'ابدأ تجربتك المجانية';
@@ -2239,7 +2281,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'افتح الآن';
 
   @override
   String get premiumBestOffer => 'Best offer';

@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,9 +15,6 @@ import '../../core/theme/colors.dart';
 import '../../data/models/recipe.dart';
 import '../../providers/premium_provider.dart';
 import '../../providers/recipe_provider.dart';
-import '../../services/ad_service.dart';
-import '../../services/remote_config_service.dart';
-import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/common/loading_genie.dart';
@@ -34,6 +30,9 @@ class RecipeGeneratorScreen extends StatefulWidget {
   final bool lockToAiGenerateTab;
   final bool showAsHomeTab;
 
+  /// Main bottom-nav shell route: no header back (browse tab stays browse UI).
+  final bool isBottomTabRoot;
+
   const RecipeGeneratorScreen({
     super.key,
     this.searchQuery,
@@ -41,6 +40,7 @@ class RecipeGeneratorScreen extends StatefulWidget {
     this.initialTabIndex = 0,
     this.lockToAiGenerateTab = false,
     this.showAsHomeTab = false,
+    this.isBottomTabRoot = false,
   });
 
   @override
@@ -52,7 +52,6 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _ingredientsController = TextEditingController();
   final ImagePicker _imagePicker = ImagePicker();
-  bool _isExitSheetOpen = false;
   String _searchText = '';
   String? _selectedCategory;
   String? _selectedCuisine;
@@ -208,152 +207,29 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
     }
   }
 
-  Future<void> _showExitConfirmation(BuildContext context) async {
-    if (!mounted) return;
-    if (_isExitSheetOpen) return;
+  Future<void> _maybeConfirmCancelRecipeGenerationOnPop() async {
+    final recipeProvider = context.read<RecipeProvider>();
+    if (!recipeProvider.isLoading) return;
 
-    _isExitSheetOpen = true;
-    try {
-      await showModalBottomSheet<void>(
-        context: context,
-        useRootNavigator: true,
-        isDismissible: true,
-        enableDrag: true,
-        backgroundColor: Colors.transparent,
-        isScrollControlled: false,
-        builder: (ctx) {
-          final theme = Theme.of(ctx);
-          return Container(
-            decoration: BoxDecoration(
-              color: theme.scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(24),
-              ),
-            ),
-            padding: const EdgeInsets.all(24),
-            child: SafeArea(
-              bottom: false,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    width: 40,
-                    height: 4,
-                    margin: const EdgeInsets.only(bottom: 24),
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: theme.dividerColor.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    ctx.t('exit.dialog.title'),
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    ctx.t('exit.dialog.message'),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => Navigator.of(ctx).pop(),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            side: BorderSide(
-                              color: theme.dividerColor.withOpacity(0.5),
-                            ),
-                          ),
-                          child: Text(
-                            ctx.t('exit.dialog.cancel'),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onSurface,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            try {
-                              await RemoteConfigService.initialize();
-                              await RemoteConfigService.fetchAndActivate();
-                            } catch (_) {}
-
-                            final shouldShowExitAd =
-                                RemoteConfigService.exitInter;
-                            if (shouldShowExitAd) {
-                              try {
-                                if (ctx.mounted) {
-                                  await AdService.showInterstitialAdForType(
-                                    adType: 'exit',
-                                    context: ctx,
-                                    loadAdFunction: () =>
-                                        AdService.loadExitInterstitialAd(),
-                                    onAdDismissed: () {
-                                      if (ctx.mounted) {
-                                        Navigator.of(ctx).pop();
-                                      }
-                                      SystemNavigator.pop();
-                                    },
-                                    onAdFailedToShow: (_) {
-                                      if (ctx.mounted) {
-                                        Navigator.of(ctx).pop();
-                                      }
-                                      SystemNavigator.pop();
-                                    },
-                                  );
-                                  return;
-                                }
-                              } catch (_) {}
-                            }
-
-                            if (ctx.mounted) Navigator.of(ctx).pop();
-                            SystemNavigator.pop();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: Text(
-                            ctx.t('exit.dialog.exit'),
-                            style: const TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    } finally {
-      if (mounted) _isExitSheetOpen = false;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(ctx.t('recipes.cancel.generation.title')),
+        content: Text(ctx.t('recipes.cancel.generation.message')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(ctx.t('common.cancel')),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(ctx.t('common.confirm')),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && mounted) {
+      recipeProvider.cancelGeneration();
     }
   }
 
@@ -362,163 +238,183 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
     final recipeProvider = context.watch<RecipeProvider>();
     final premiumProvider = context.watch<PremiumProvider>();
 
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) async {
-        if (didPop) return;
-
-        // If user is viewing the generated-only result, first back returns to form.
-        if (_showGeneratedOnly && mounted) {
-          setState(() => _showGeneratedOnly = false);
-          return;
-        }
-
-        // Home tab (route "/") => confirm exit instead of doing nothing.
-        if (widget.showAsHomeTab) {
-          if (_isExitSheetOpen) {
-            Navigator.of(context, rootNavigator: true).maybePop();
-            return;
-          }
-          await _showExitConfirmation(context);
-          return;
-        }
-
-        // Otherwise, go to Home (bottom nav index 0).
-        context.go('/');
-      },
-      child: Scaffold(
-        bottomNavigationBar: BottomNav(
-          activeTab: widget.showAsHomeTab ? 'home' : 'recipes',
-        ),
-        body: Stack(
-          children: [
-            // Background
-            Container(
-              decoration: BoxDecoration(
-                gradient: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.gradientHeroDark
-                    : (widget.showAsHomeTab
-                          ? const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Color(0xFFEAF4FF), Color(0xFFFFFFFF)],
-                            )
-                          : AppColors.gradientHero),
-              ),
-            ),
-            // Floating elements
-            const FloatingSparkles(),
-            // Main content with safe area handling
-            SafeArea(
-              child: Column(
-                children: [
-                  // Sticky Header
-                  StickyHeader(
-                    title: widget.showAsHomeTab
-                        ? context.t('smartChefTitle')
-                        : context.t('recipes.title'),
-                    titleStyle: widget.showAsHomeTab
-                        ? GoogleFonts.inter(
-                            fontSize: 26,
-                            height: 34 / 26,
-                            fontWeight: FontWeight.w700,
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white
-                                : const Color(0xFF1E2945),
+    final scaffold = Scaffold(
+      body: Stack(
+        children: [
+          // Background
+          Container(
+            decoration: BoxDecoration(
+              gradient: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.gradientHeroDark
+                  : (widget.showAsHomeTab
+                        ? const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0xFFEAF4FF), Color(0xFFFFFFFF)],
                           )
-                        : null,
-                    showBack: !widget.showAsHomeTab,
-                    onBack: widget.showAsHomeTab
-                        ? null
-                        : () => _handleBack(context),
-                    backgroundColor: Colors.transparent,
-                    statusBarColor:
-                        Theme.of(context).brightness == Brightness.dark
-                        ? const Color(0xFF1A1F35)
-                        : const Color(0xFFEAF4FF),
-                    rightContent: widget.showAsHomeTab
-                        ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              GestureDetector(
-                                onTap: () => ProNavigation.tryOpen(
-                                  context,
-                                  replace: false,
-                                ),
-                                child: SizedBox(
-                                  width: 70,
-                                  height: 32,
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
-                                        colors: [
-                                          Color(0xFFFFB301),
-                                          Color(0xFFFD5C17),
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(16),
+                        : AppColors.gradientHero),
+            ),
+          ),
+          // Floating elements
+          const FloatingSparkles(),
+          // Main content with safe area handling
+          SafeArea(
+            child: Column(
+              children: [
+                // Sticky Header
+                StickyHeader(
+                  title: widget.showAsHomeTab
+                      ? context.t('smartChefTitle')
+                      : context.t('recipes.title'),
+                  titleStyle: widget.showAsHomeTab
+                      ? GoogleFonts.inter(
+                          fontSize: 26,
+                          height: 34 / 26,
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : const Color(0xFF1E2945),
+                        )
+                      : (widget.isBottomTabRoot
+                            ? StickyHeader.shellTabTitleStyle(context)
+                            : null),
+                  showBack: !(widget.showAsHomeTab || widget.isBottomTabRoot),
+                  onBack: (widget.showAsHomeTab || widget.isBottomTabRoot)
+                      ? null
+                      : () => _handleBack(context),
+                  backgroundColor: Colors.transparent,
+                  statusBarColor:
+                      Theme.of(context).brightness == Brightness.dark
+                      ? const Color(0xFF1A1F35)
+                      : const Color(0xFFEAF4FF),
+                  rightContent: widget.showAsHomeTab
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onTap: () => ProNavigation.tryOpen(
+                                context,
+                                replace: false,
+                              ),
+                              child: SizedBox(
+                                width: 70,
+                                height: 32,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFFFFB301),
+                                        Color(0xFFFD5C17),
+                                      ],
                                     ),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Icon(
-                                            Icons.auto_awesome,
-                                            size: 14,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.auto_awesome,
+                                          size: 14,
+                                          color: Colors.white,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          context.t('smartChefPro'),
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12.5,
+                                            height: 1.0,
+                                            fontWeight: FontWeight.w700,
                                             color: Colors.white,
                                           ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            context.t('smartChefPro'),
-                                            style: GoogleFonts.inter(
-                                              fontSize: 12.5,
-                                              height: 1.0,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 2),
-                              IconButton(
-                                onPressed: () => context.push('/settings'),
-                                icon: const Icon(Icons.settings),
-                                iconSize: 24,
-                                color: const Color(0xFF5A6A7C),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints.tightFor(
-                                  width: 36,
-                                  height: 36,
-                                ),
-                                splashRadius: 16,
+                            ),
+                            const SizedBox(width: 2),
+                            IconButton(
+                              onPressed: () => context.push('/settings'),
+                              icon: const Icon(Icons.settings),
+                              iconSize: 24,
+                              color: const Color(0xFF5A6A7C),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints.tightFor(
+                                width: 36,
+                                height: 36,
                               ),
-                            ],
-                          )
-                        : null,
-                  ),
-                  Expanded(
-                    child: widget.showAsHomeTab
-                        ? _buildAiHomeTab(
-                            context,
-                            recipeProvider,
-                            premiumProvider,
-                          )
-                        : _buildBrowseTab(context, recipeProvider),
-                  ),
-                ],
-              ),
+                              splashRadius: 16,
+                            ),
+                          ],
+                        )
+                      : null,
+                ),
+                Expanded(
+                  child: widget.showAsHomeTab
+                      ? _buildAiHomeTab(
+                          context,
+                          recipeProvider,
+                          premiumProvider,
+                        )
+                      : _buildBrowseTab(context, recipeProvider),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+
+    if (widget.isBottomTabRoot && !widget.showAsHomeTab) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, dynamic result) {
+          if (didPop) return;
+          if (!mounted) return;
+          if (_showGeneratedOnly) {
+            setState(() => _showGeneratedOnly = false);
+          } else {
+            context.go('/');
+          }
+        },
+        child: scaffold,
+      );
+    }
+    if (widget.showAsHomeTab) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, dynamic result) async {
+          if (didPop) return;
+          if (!mounted) return;
+          final rp = context.read<RecipeProvider>();
+          if (rp.isLoading) {
+            await _maybeConfirmCancelRecipeGenerationOnPop();
+            return;
+          }
+          if (_showGeneratedOnly) {
+            setState(() => _showGeneratedOnly = false);
+          }
+        },
+        child: scaffold,
+      );
+    }
+    if (_showGeneratedOnly) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, dynamic result) {
+          if (didPop) return;
+          if (_showGeneratedOnly && mounted) {
+            setState(() => _showGeneratedOnly = false);
+          }
+        },
+        child: scaffold,
+      );
+    }
+    return scaffold;
   }
 
   Widget _buildBrowseTab(BuildContext context, RecipeProvider recipeProvider) {
@@ -696,7 +592,8 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                 crossAxisCount: 3,
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
-                childAspectRatio: 3.2,
+                // Compact row height; long labels use a single line + ellipsis.
+                childAspectRatio: 2.9,
                 children: [
                   _CategoryChip(
                     emoji: '⚡',
@@ -869,10 +766,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
         : theme.colorScheme.onSurface.withOpacity(0.6);
     final showClear = _searchText.trim().isNotEmpty;
 
-    final hint =
-        context.t('recipes.search.placeholder') != 'recipes.search.placeholder'
-        ? context.t('recipes.search.placeholder')
-        : 'Search recipes, ingredients...';
+    final hint = context.t('home.search.placeholder');
 
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(14),
@@ -984,31 +878,98 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
     final aiRecipeCount = premiumProvider.aiRecipeCount;
 
     if (isLoading) {
-      return const Center(child: LoadingGenie());
+      return Center(
+        child: LoadingGenie(message: context.t('recipes.creating.recipe')),
+      );
     }
 
-    // Old behavior: after generating, show ONLY the generated recipe.
+    // After generating: show the recipe plus a clear way back to the generator.
     if (_showGeneratedOnly && recipe != null) {
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: RecipeCard(
-                  title: recipe.title,
-                  image: recipe.image,
-                  time: recipe.time,
-                  servings: recipe.servings,
-                  calories: recipe.calories,
-                  tags: recipe.tags,
-                  hideImage: true,
-                  onTap: () => context.push('/ai-recipe', extra: recipe),
+      return Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  RecipeCard(
+                    title: recipe.title,
+                    image: recipe.image,
+                    time: recipe.time,
+                    servings: recipe.servings,
+                    calories: recipe.calories,
+                    tags: recipe.tags,
+                    hideImage: true,
+                    onTap: () => context.push('/ai-recipe', extra: recipe),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    context.t('recipes.generated.tap.for.details'),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.65),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: SafeArea(
+              top: false,
+              child: Align(
+                alignment: Alignment.center,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 320),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: AppColors.gradientPrimary,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () {
+                          setState(() => _showGeneratedOnly = false);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.auto_awesome,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                context.t('recipes.new.recipe'),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 
@@ -1610,14 +1571,20 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
               ),
             ),
             Positioned(
-              right: 0,
+              left: dir == TextDirection.rtl ? 0 : null,
+              right: dir == TextDirection.rtl ? null : 0,
               top: 0,
               child: IgnorePointer(
-                child: Image.asset(
-                  'assets/home_corner.png',
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.contain,
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.identity()
+                    ..scale(dir == TextDirection.rtl ? -1.0 : 1.0, 1.0),
+                  child: Image.asset(
+                    'assets/home_corner.png',
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
@@ -1625,11 +1592,14 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
               padding: const EdgeInsets.fromLTRB(17.46, 27.19, 17.46, 16),
               child: LayoutBuilder(
                 builder: (context, constraints) {
+                  final isRtl = dir == TextDirection.rtl;
                   // On small widths, reduce the reserved space for the corner art
                   // and allow the title to scale down instead of truncating.
                   final reserve = (constraints.maxWidth < 360
                       ? 106.0
                       : rightImageReserve);
+                  final effectiveReserveLeft = isRtl ? reserve : 0.0;
+                  final effectiveReserveRight = isRtl ? 0.0 : reserve;
 
                   Widget titleLine(String text, TextStyle style) => FittedBox(
                     fit: BoxFit.scaleDown,
@@ -1639,9 +1609,7 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                       maxLines: 1,
                       softWrap: false,
                       overflow: TextOverflow.visible,
-                      textAlign: dir == TextDirection.rtl
-                          ? TextAlign.right
-                          : TextAlign.left,
+                      textAlign: isRtl ? TextAlign.right : TextAlign.left,
                       style: style,
                     ),
                   );
@@ -1650,7 +1618,11 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.only(end: reserve),
+                        // Reserve space for the corner art: right in LTR, left in RTL.
+                        padding: EdgeInsets.only(
+                          left: effectiveReserveLeft,
+                          right: effectiveReserveRight,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -1683,12 +1655,14 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                       ),
                       const SizedBox(height: 6),
                       Padding(
-                        padding: EdgeInsetsDirectional.only(end: reserve),
+                        // Reserve space for the corner art: right in LTR, left in RTL.
+                        padding: EdgeInsets.only(
+                          left: effectiveReserveLeft,
+                          right: effectiveReserveRight,
+                        ),
                         child: Text(
                           context.t('smartChefSubtitle'),
-                          textAlign: dir == TextDirection.rtl
-                              ? TextAlign.left
-                              : TextAlign.left,
+                          textAlign: isRtl ? TextAlign.right : TextAlign.left,
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -1708,7 +1682,9 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                           height: 96.95,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: const Color(0xB3FFFFFF),
+                              color: isDark
+                                  ? const Color(0xFF1F2937)
+                                  : const Color(0xB3FFFFFF),
                               borderRadius: BorderRadius.circular(19.55),
                               boxShadow: const [
                                 BoxShadow(
@@ -1721,7 +1697,9 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                             foregroundDecoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(19.55),
                               border: Border.all(
-                                color: const Color(0xFFB8D7FF),
+                                color: isDark
+                                    ? const Color(0xFF334155)
+                                    : const Color(0xFFB8D7FF),
                                 width: 3,
                               ),
                             ),
@@ -2082,24 +2060,18 @@ class _CategoryChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.sizeOf(context).width;
     final isSmallScreen = screenWidth < 360;
 
-    // Responsive font sizes
-    final emojiSize = isSmallScreen ? 11.0 : 11.0;
-    final labelFontSize = isSmallScreen ? 11.0 : 12.0;
+    final labelFontSize = isSmallScreen ? 10.0 : 11.0;
     final countFontSize = isSmallScreen ? 10.0 : 11.0;
     final horizontalPadding = isSmallScreen ? 7.0 : 8.0;
-    // Slightly taller to avoid emoji clipping on some devices.
     final verticalPadding = isSmallScreen ? 11.0 : 12.0;
+    final gapAfterEmoji = isSmallScreen ? 6.0 : 7.0;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: horizontalPadding,
-          vertical: verticalPadding,
-        ),
         decoration: BoxDecoration(
           gradient: isSelected
               ? LinearGradient(
@@ -2112,52 +2084,92 @@ class _CategoryChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: AppColors.getCardShadow(context),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (emoji != null) ...[
-              SizedBox(
-                height: 27,
-                child: Text(
-                  emoji!,
-                  style: TextStyle(fontSize: emojiSize, height: 1),
+        clipBehavior: Clip.none,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final chipH =
+                constraints.maxHeight.isFinite && constraints.maxHeight > 0
+                ? constraints.maxHeight
+                : (isSmallScreen ? 44.0 : 46.0);
+            final emojiFont = (chipH * 0.42).clamp(12.0, 18.0);
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (emoji != null) ...[
+                  Padding(
+                    padding: EdgeInsets.only(left: horizontalPadding),
+                    child: Center(
+                      child: Text(
+                        emoji!,
+                        textAlign: TextAlign.center,
+                        strutStyle: StrutStyle(
+                          fontSize: emojiFont,
+                          height: 1,
+                          forceStrutHeight: true,
+                          leading: 0,
+                        ),
+                        style: TextStyle(
+                          fontSize: emojiFont,
+                          height: 1,
+                          leadingDistribution: TextLeadingDistribution.even,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: gapAfterEmoji),
+                ],
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      emoji != null ? 0 : horizontalPadding,
+                      verticalPadding,
+                      horizontalPadding,
+                      verticalPadding,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            label,
+                            style: TextStyle(
+                              fontSize: labelFontSize,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected
+                                  ? colorScheme.onPrimary
+                                  : colorScheme.onSurface,
+                              height: 1.2,
+                            ),
+                            maxLines: 1,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (count != null) ...[
+                          SizedBox(width: isSmallScreen ? 4 : 5),
+                          Text(
+                            '($count)',
+                            style: TextStyle(
+                              fontSize: countFontSize,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected
+                                  ? colorScheme.onPrimary.withValues(
+                                      alpha: 0.85,
+                                    )
+                                  : colorScheme.onSurface.withValues(
+                                      alpha: 0.7,
+                                    ),
+                              height: 1.2,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(width: isSmallScreen ? 6 : 7),
-            ],
-            Flexible(
-              fit: FlexFit.loose,
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: labelFontSize,
-                  fontWeight: FontWeight.w600,
-                  color: isSelected
-                      ? colorScheme.onPrimary
-                      : colorScheme.onSurface,
-                  height: 1.2,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            if (count != null) ...[
-              SizedBox(width: isSmallScreen ? 4 : 5),
-              Text(
-                '($count)',
-                style: TextStyle(
-                  fontSize: countFontSize,
-                  fontWeight: FontWeight.w600,
-                  color: isSelected
-                      ? colorScheme.onPrimary
-                      : colorScheme.onSurface.withOpacity(0.7),
-                  height: 1.2,
-                ),
-              ),
-            ],
-          ],
+              ],
+            );
+          },
         ),
       ),
     );

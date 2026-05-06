@@ -23,6 +23,9 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   static const Duration _minSplashDuration = Duration(milliseconds: 2500);
+  // Testing helper: when true, always reopen onboarding as a first-launch flow.
+  // Keep false for production behavior.
+  static const bool _forceShowOnboardingAsFirstLaunch = false;
 
   late AnimationController _stageController;
   late AnimationController _bounceController;
@@ -113,6 +116,10 @@ class _SplashScreenState extends State<SplashScreen>
     // Initialize StorageService first to ensure SharedPreferences is ready
     await StorageService.initialize();
 
+    // GDPR/UMP consent MUST complete before leaving splash.
+    // Start gathering immediately (runs in parallel with other startup work).
+    final consentFuture = AdService.initialize();
+
     // Start all async operations in parallel
     final firstLaunchCheck = StorageService.isFirstLaunch()
         .then((v) {
@@ -154,6 +161,10 @@ class _SplashScreenState extends State<SplashScreen>
       ]),
     ]);
 
+    // Block navigation until consent form is completed/dismissed.
+    // This prevents user from reaching next screens (and seeing ads) before consenting.
+    await consentFuture;
+
     // Calculate elapsed time and ensure we've waited at least the minimum
     final elapsed = DateTime.now().difference(startTime);
     if (elapsed < minSplash) {
@@ -187,7 +198,7 @@ class _SplashScreenState extends State<SplashScreen>
     final sessionCount = await StorageService.incrementAppSessionCount();
     if (!mounted) return;
 
-    // First launch flow: Splash → Pro → Inter Ad → Language
+    // First launch flow: Splash → (1st-time ad if RC) → Language → Onboarding → (Pro if splash_sub*) → Home
     final isFirstLaunch =
         isFirstLaunchResult ?? true; // Default to true for first launch
     debugPrint(
@@ -195,6 +206,14 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     if (!mounted) return;
+
+    if (_forceShowOnboardingAsFirstLaunch) {
+      debugPrint(
+        '[SplashScreen] 🧪 Forced first-launch onboarding for testing',
+      );
+      await _showSplashFirstTimeAppOpenThenGo('/onboarding');
+      return;
+    }
 
     if (isFirstLaunch) {
       // First launch: Splash → (App Open Ad if RC) → Language → Onboarding
@@ -323,7 +342,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   // _navigateAfterAd removed: interstitial is now after Pro, not on splash.
 
-  /// Show Pro after splash app open based on sub_splash: 0/off=always, N=every Nth session (3,6,9...).
+  /// Show Pro after splash when [RemoteConfigService.splashSub] / [splashSubIos] is true,
+  /// plus [weekly_sub] and [sub_splash] / [sub_splash_ios] session rules.
   Future<bool> _shouldOpenProAfterSplash(int sessionCount) async {
     try {
       final ok = await RemoteConfigService.initialize().timeout(
@@ -339,11 +359,17 @@ class _SplashScreenState extends State<SplashScreen>
 
       if (!RemoteConfigService.weeklySub) return false;
 
-      final config = (Platform.isIOS
-          ? RemoteConfigService.subSplashIos
-          : RemoteConfigService.subSplash)
-          .trim()
-          .toLowerCase();
+      final splashSubOk = Platform.isIOS
+          ? RemoteConfigService.splashSubIos
+          : RemoteConfigService.splashSub;
+      if (!splashSubOk) return false;
+
+      final config =
+          (Platform.isIOS
+                  ? RemoteConfigService.subSplashIos
+                  : RemoteConfigService.subSplash)
+              .trim()
+              .toLowerCase();
       if (config == 'off' || config.isEmpty) return true;
       if (config == '0') return true;
 
@@ -427,8 +453,8 @@ class _SplashScreenState extends State<SplashScreen>
                                     animation: _glowAnimation,
                                     builder: (context, child) {
                                       return Container(
-                                        width: 200,
-                                        height: 200,
+                                        width: 256,
+                                        height: 256,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           boxShadow: [
@@ -437,9 +463,9 @@ class _SplashScreenState extends State<SplashScreen>
                                                   .withOpacity(
                                                     _stage >= 2 ? 0.6 : 0.0,
                                                   ),
-                                              blurRadius: 60,
+                                              blurRadius: 72,
                                               spreadRadius: _stage >= 2
-                                                  ? 30
+                                                  ? 36
                                                   : 0,
                                             ),
                                           ],
@@ -462,8 +488,8 @@ class _SplashScreenState extends State<SplashScreen>
                                     ),
                                     child: Image.asset(
                                       'assets/pro_top_new.png',
-                                      width: 128,
-                                      height: 128,
+                                      width: 176,
+                                      height: 176,
                                     ),
                                   ),
                                 ],
@@ -621,10 +647,7 @@ class _SplashScreenState extends State<SplashScreen>
                     child: Center(
                       child: Text(
                         context.t('splashActionMayContainAd'),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                         textDirection: Directionality.of(context),
                       ),
                     ),

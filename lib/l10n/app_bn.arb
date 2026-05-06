@@ -122,6 +122,7 @@
   "chatCopy": "অনুলিপি করুন",
   "chatEdit": "সম্পাদনা করুন",
   "chatErrorGeneric": "দুঃখিত, আমি আপনার অনুরোধ প্রক্রিয়া করতে পারিনি. আবার চেষ্টা করুন.",
+  "errorNoInternet": "ইন্টারনেট সংযোগ নেই। দয়া করে আপনার ইন্টারনেট চেক করে আবার চেষ্টা করুন।",
   "chatErrorNotConfigured": "চ্যাট API কনফিগার করা নেই। অনুগ্রহ করে সহায়তার সাথে যোগাযোগ করুন বা আপনার অ্যাপ সেটিংস চেক করুন।",
   "chatErrorRateLimit": "হার সীমা অতিক্রম করেছে. পরে আবার চেষ্টা করুন.",
   "chatGreeting": "হাই, আমি Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "শুনছি...",
   "chatMessageCopied": "বার্তা অনুলিপি করা হয়েছে",
   "chatNewChat": "নতুন চ্যাট",
+  "chatNewChatConfirmTitle": "নতুন কথোপকথন?",
+  "chatNewChatConfirmMessage": "একটি নতুন কথোপকথন শুরু করবেন? আপনার বর্তমান চ্যাট সংরক্ষিত হবে।",
   "chatPlaceholder": "আমাকে কিছু জিজ্ঞাসা করুন...",
   "chatSubtitle": "আপনার AI রান্নার সহকারী",
   "chatSuggestion1": "মুরগি এবং চাল দিয়ে কী বানাতে পারি?",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "যোগ করা হয়েছে",
   "groceryBought": "কেনা হয়েছে",
   "groceryBudgetMode": "বাজেট মোড",
-  "groceryBudgetPlaceholder": "বাজেট লিখুন (যেমন, 2000 PKR)",
+  "groceryBudgetPlaceholder": "বাজেট লিখুন (যেমন, 2000)",
+  "groceryBudgetMustCoverEstimate": "আপনার তালিকার আনুমানিক খরচ {total}। কমপক্ষে এত বাজেট বাড়ান, অথবা আইটেম সরান।",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "বাজেট তালিকার চেয়ে কম",
+  "groceryBudgetLowBody": "আপনার তালিকার আনুমানিক মূল্য {total}। বাজেট মোড চালু থাকবে — নিচের ঘরে পরিমাণ বাড়ান বা আইটেম সরান।",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "বাজেট সম্পাদনা",
+  "groceryBudgetLowOk": "ঠিক আছে",
+  "groceryBudgetInlineOverHint": "তালিকা প্রায় {total}, এই বাজেটের উপরে। উপরে পরিমাণ বাড়ান বা আইটেম সরান — বাজেট মোড চালু রেখে সম্পাদনা করতে পারবেন।",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "খরচ ট্র্যাক করতে উপরে একটি বাজেট লিখুন।",
+
   "groceryCategories": "বিভাগ",
   "groceryCategory": "বিভাগ",
   "groceryCreateMealPlanFirst": "প্রথমে একটি মিল প্ল্যান তৈরি করুন",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "আইটেম যোগ হয়েছে!",
   "groceryItemName": "আইটেমের নাম",
   "groceryItemRequired": "আইটেমের নাম প্রয়োজন",
+  "groceryQuantityRequired": "এই আইটেমের জন্য পরিমাণ লিখুন",
   "groceryItems": "আইটেম",
   "groceryItemsIn": "আইটেম",
   "groceryList": "তালিকা",
@@ -478,6 +511,9 @@
   "premiumBestValue": "সেরা মূল্য",
   "premiumPlanWeekly": "সাপ্তাহিক",
   "premiumPlanYearly": "বার্ষিক",
+  "premiumPlanLifetime": "আজীবন",
+  "premiumLifetimeFullAccessIncluded": "এককালীন কেনাকাটা • সম্পূর্ণ অ্যাক্সেস অন্তর্ভুক্ত",
+  "premiumUnlockNow": "এখনই আনলক করুন",
   "premiumStartFreeTrialTitle": "আপনার ফ্রি ট্রায়াল শুরু করুন",
   "premiumStartFreeTrial": "৩ দিনের ফ্রি ট্রায়াল শুরু করুন {price}",
   "@premiumStartFreeTrial": {
@@ -593,6 +629,7 @@
   "recipesMoodsSpicyFix": "ঝাল",
   "recipesMoodsSweetCravings": "মিষ্টি",
   "recipesNewRecipe": "নতুন রেসিপি",
+  "recipesGeneratedTapForDetails": "সম্পূর্ণ রেসিপি দেখতে কার্ডে ট্যাপ করুন।",
   "recipesNoResults": "কোন রেসিপি পাওয়া যায়নি",
   "recipesQuick": "দ্রুত",
   "recipesResultsFor": "ফলাফল",
@@ -610,6 +647,7 @@
   "recipesVoice": "ভয়েস",
   "scannerCameraNotAvailable": "ক্যামেরা উপলব্ধ নয়",
   "smartChefTitle": "স্মার্ট শেফ",
+  "smartGroceryTitle": "স্মার্ট মুদি",
   "smartChefPro": "প্রো",
   "smartChefWhatIngredientsLine1": "আপনার কাছে কোন কোন",
   "smartChefWhatIngredientsLine2": "উপকরণ আছে?",
@@ -647,6 +685,8 @@
   "scannerAiDisabled": "AI রেসিপি জেনারেশন বর্তমানে অক্ষম। সীমাহীন অ্যাক্সেসের জন্য প্রিমিয়ামে আপগ্রেড করুন!",
   "scannerAiIngredientScanner": "এআই উপাদান স্ক্যানার",
   "scannerAnalyzing": "আপনার উপকরণ বিশ্লেষণ করা হচ্ছে...",
+  "scannerCancelAnalysisTitle": "বিশ্লেষণ বাতিল করবেন?",
+  "scannerCancelAnalysisMessage": "উপকরণ বিশ্লেষণ করা হচ্ছে। আপনি কি নিশ্চিত যে বাতিল করে ফিরে যেতে চান?",
   "scannerCalories": "ক্যালরি",
   "scannerCaptureOrUpload": "আপনার উপাদানের একটি ফটো ক্যাপচার বা আপলোড করুন",
   "scannerCategory": "শ্রেণী",

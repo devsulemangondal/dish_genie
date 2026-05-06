@@ -330,6 +330,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get smartChefTitle => 'Đầu bếp thông minh';
 
   @override
+  String get smartGroceryTitle => 'Tạp hóa thông minh';
+
+  @override
   String get smartChefPro => 'Pro';
 
   @override
@@ -407,6 +410,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Công Thức Mới';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'Chạm vào thẻ để xem công thức đầy đủ.';
 
   @override
   String get recipesWhatCraving => 'Bạn muốn ăn gì?';
@@ -758,7 +765,35 @@ class AppLocalizationsVi extends AppLocalizations {
   String get groceryBudgetMode => 'Chế độ ngân sách';
 
   @override
-  String get groceryBudgetPlaceholder => 'Nhập ngân sách (ví dụ: 2000 PKR)';
+  String get groceryBudgetPlaceholder => 'Nhập ngân sách (ví dụ: 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Tổng ước tính danh sách của bạn là $total. Tăng ngân sách ít nhất bằng mức đó hoặc xóa món.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Ngân sách thấp hơn danh sách';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Danh sách ước tính khoảng $total. Chế độ ngân sách vẫn bật — tăng số tiền ở ô bên dưới hoặc xóa mặt hàng.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Sửa ngân sách';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'Danh sách khoảng $total, vượt ngân sách này. Tăng số tiền phía trên hoặc xóa mặt hàng — có thể chỉnh khi chế độ ngân sách vẫn bật.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Nhập ngân sách phía trên để theo dõi chi tiêu.';
 
   @override
   String get groceryOn => 'BẬT';
@@ -786,6 +821,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Cần có tên món';
+
+  @override
+  String get groceryQuantityRequired => 'Vui lòng nhập số lượng cho mục này';
 
   @override
   String get groceryCreateMealPlanFirst => 'Vui lòng tạo kế hoạch bữa ăn trước';
@@ -987,11 +1025,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get chatNewChat => 'Cuộc trò chuyện mới';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Cuộc trò chuyện mới?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Bắt đầu cuộc trò chuyện mới? Cuộc trò chuyện hiện tại của bạn sẽ được lưu.';
 
   @override
   String get chatCopy => 'Sao chép';
@@ -1319,11 +1357,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get scannerAnalyzing => 'Đang phân tích nguyên liệu...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Hủy phân tích?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Nguyên liệu đang được phân tích. Bạn có chắc muốn hủy và quay lại không?';
 
   @override
   String get scannerDetected => 'Nguyên Liệu Phát Hiện';
@@ -1839,6 +1877,10 @@ class AppLocalizationsVi extends AppLocalizations {
       'Xin lỗi, tôi không thể xử lý yêu cầu của bạn. Vui lòng thử lại.';
 
   @override
+  String get errorNoInternet =>
+      'Không có kết nối internet. Vui lòng kiểm tra kết nối và thử lại.';
+
+  @override
   String get premiumPurchaseFailed => 'Mua hàng không thành công';
 
   @override
@@ -2244,11 +2286,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumPlanYearly => 'Hàng năm';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Trọn đời';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Mua một lần • Bao gồm đầy đủ quyền truy cập';
 
   @override
   String get premiumStartFreeTrialTitle => 'Bắt đầu dùng thử miễn phí';
@@ -2259,7 +2301,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'Mở khóa ngay';
 
   @override
   String get premiumBestOffer => 'Best offer';

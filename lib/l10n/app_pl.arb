@@ -122,6 +122,7 @@
   "chatCopy": "Kopiuj",
   "chatEdit": "Edytuj",
   "chatErrorGeneric": "Przepraszamy, nie udało mi się przetworzyć Twojej prośby. Spróbuj ponownie.",
+  "errorNoInternet": "Brak połączenia z internetem. Sprawdź połączenie i spróbuj ponownie.",
   "chatErrorNotConfigured": "Interfejs API czatu nie jest skonfigurowany. Skontaktuj się z pomocą techniczną lub sprawdź ustawienia aplikacji.",
   "chatErrorRateLimit": "Przekroczono limit stawki. Spróbuj ponownie później.",
   "chatGreeting": "Cześć, jestem Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "Słucham...",
   "chatMessageCopied": "Wiadomość skopiowana",
   "chatNewChat": "Nowy czat",
+  "chatNewChatConfirmTitle": "Nowa rozmowa?",
+  "chatNewChatConfirmMessage": "Rozpocząć nową rozmowę? Obecny czat zostanie zapisany.",
   "chatPlaceholder": "Zapytaj mnie o cokolwiek...",
   "chatSubtitle": "Twój asystent kulinarny AI",
   "chatSuggestion1": "Co mogę zrobić z kurczaka i ryżu?",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "Dodano",
   "groceryBought": "Kupione",
   "groceryBudgetMode": "Tryb budżetowy",
-  "groceryBudgetPlaceholder": "Wpisz budżet (np. 2000 PKR)",
+  "groceryBudgetPlaceholder": "Wpisz budżet (np. 2000)",
+  "groceryBudgetMustCoverEstimate": "Szacunkowa wartość listy to {total}. Zwiększ budżet co najmniej do tej kwoty lub usuń produkty.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Budżet poniżej wartości listy",
+  "groceryBudgetLowBody": "Szacunkowa wartość listy to {total}. Tryb budżetu pozostaje włączony — zwiększ kwotę w polu poniżej lub usuń pozycje.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "Edytuj budżet",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "Lista to ok. {total}, powyżej tego budżetu. Zwiększ kwotę powyżej lub usuń pozycje — możesz edytować przy włączonym trybie budżetu.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Wpisz budżet powyżej, aby śledzić wydatki.",
+
   "groceryCategories": "Kategorie",
   "groceryCategory": "Kategoria",
   "groceryCreateMealPlanFirst": "Najpierw utwórz plan posiłków",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "Produkt dodany!",
   "groceryItemName": "Nazwa produktu",
   "groceryItemRequired": "Nazwa produktu jest wymagana",
+  "groceryQuantityRequired": "Podaj ilość dla tego produktu",
   "groceryItems": "produkty",
   "groceryItemsIn": "Przedmioty w",
   "groceryList": "Lista",
@@ -478,6 +511,9 @@
   "premiumBestValue": "Najlepsza wartość",
   "premiumPlanWeekly": "Tygodniowy",
   "premiumPlanYearly": "Roczny",
+  "premiumPlanLifetime": "Na zawsze",
+  "premiumLifetimeFullAccessIncluded": "Jednorazowy zakup • Pełny dostęp w cenie",
+  "premiumUnlockNow": "Odblokuj teraz",
   "premiumStartFreeTrialTitle": "Rozpocznij bezpłatny okres próbny",
   "premiumStartFreeTrial": "Rozpocznij 3-dniowy darmowy okres próbny {price}",
   "@premiumStartFreeTrial": {
@@ -593,6 +629,7 @@
   "recipesMoodsSpicyFix": "Pikantne",
   "recipesMoodsSweetCravings": "Słodkie",
   "recipesNewRecipe": "Nowy Przepis",
+  "recipesGeneratedTapForDetails": "Stuknij kartę, aby zobaczyć pełny przepis.",
   "recipesNoResults": "Nie znaleziono przepisów",
   "recipesQuick": "Szybkie",
   "recipesResultsFor": "Wyniki dla",
@@ -610,6 +647,7 @@
   "recipesVoice": "Głos",
   "scannerCameraNotAvailable": "Aparat niedostępny",
   "smartChefTitle": "Smart Chef",
+  "smartGroceryTitle": "Inteligentne zakupy",
   "smartChefPro": "Pro",
   "smartChefWhatIngredientsLine1": "Jakie składniki",
   "smartChefWhatIngredientsLine2": "masz?",
@@ -647,6 +685,8 @@
   "scannerAiDisabled": "Generowanie receptur AI jest obecnie wyłączone. Przejdź na wersję premium, aby uzyskać nieograniczony dostęp!",
   "scannerAiIngredientScanner": "Skaner składników AI",
   "scannerAnalyzing": "Analizowanie składników...",
+  "scannerCancelAnalysisTitle": "Anulować analizę?",
+  "scannerCancelAnalysisMessage": "Składniki są analizowane. Czy na pewno chcesz anulować i wrócić?",
   "scannerCalories": "Kalorie",
   "scannerCaptureOrUpload": "Zrób lub prześlij zdjęcie swoich składników",
   "scannerCategory": "Kategoria",
@@ -747,7 +787,7 @@
   "settingsPreferencesSettings": "Preferencje i ustawienia",
   "settingsPrivacyPolicy": "Polityka prywatności",
   "settingsRateUs": "Oceń nas",
-  "settingsRateUsSubtitle": "Podoba Ci się aplikacja? Oceń nas!",
+  "settingsRateUsSubtitle": "Podoba Ci się aplikacja? Oceń nas!",
   "rateDialogTitle": "Podoba Ci się Smart Chef?",
   "rateDialogSubtitle": "Pomóż nam ulepszyć Twoje gotowanie 🍳",
   "rateDialogBody": "Twoja opinia pomaga nam\ntworzyć lepsze przepisy dla Ciebie",

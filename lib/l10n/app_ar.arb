@@ -101,6 +101,7 @@
   "recipesVoice": "صوت",
   "scannerCameraNotAvailable": "الكاميرا غير متاحة",
   "smartChefTitle": "الشيف الذكي",
+  "smartGroceryTitle": "البقالة الذكية",
   "smartChefPro": "احترافي",
   "smartChefWhatIngredientsLine1": "ما المكوّنات",
   "smartChefWhatIngredientsLine2": "التي لديك؟",
@@ -134,6 +135,7 @@
   "recipesCancelGenerationTitle": "إلغاء الإنشاء؟",
   "recipesCancelGenerationMessage": "يتم إنشاء وصفة. هل أنت متأكد أنك تريد الإلغاء والرجوع؟",
   "recipesNewRecipe": "وصفة جديدة",
+  "recipesGeneratedTapForDetails": "انقر على البطاقة لرؤية الوصفة كاملة.",
   "recipesWhatCraving": "ماذا تشتهي؟",
   "recipesMoodsComfortFood": "طعام مريح",
   "recipesMoodsLightFresh": "خفيف وطازج",
@@ -250,6 +252,35 @@
   "groceryShopMode": "وضع التسوق",
   "groceryBudgetMode": "وضع الميزانية",
   "groceryBudgetPlaceholder": "أدخل الميزانية (على سبيل المثال، 2000 روبية باكستانية)",
+  "groceryBudgetMustCoverEstimate": "تُقدَّر قائمتك بـ {total}. زِد ميزانيتك لتصل على الأقل إلى هذا المبلغ، أو احذف بعض العناصر.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "الميزانية أقل من قائمتك",
+  "groceryBudgetLowBody": "تُقدَّر قائمتك بـ {total}. يبقى وضع الميزانية مفعّلاً — زِد المبلغ في الحقل أدناه أو أزل عناصر.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "تعديل الميزانية",
+  "groceryBudgetLowOk": "حسناً",
+  "groceryBudgetInlineOverHint": "القائمة نحو {total}، أعلى من هذه الميزانية. زِد المبلغ أعلاه أو أزل عناصر — يمكنك التعديل مع بقاء وضع الميزانية.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "أدخل ميزانية في الحقل أعلاه لتتبع الإنفاق.",
+
   "groceryOn": "تشغيل",
   "groceryOff": "إيقاف",
   "groceryAddItemPlaceholder": "إضافة عنصر...",
@@ -259,6 +290,7 @@
   "groceryAddToList": "أضف إلى القائمة",
   "groceryItemAdded": "تمت إضافة العنصر!",
   "groceryItemRequired": "اسم العنصر مطلوب",
+  "groceryQuantityRequired": "يُرجى إدخال الكمية لهذا العنصر",
   "groceryCreateMealPlanFirst": "الرجاء إنشاء خطة وجبات أولاً",
   "groceryItems": "عناصر",
   "groceryNoItemsYet": "لا توجد عناصر بعد",
@@ -317,6 +349,8 @@
   "chatSuggestion3": "كيف أستبدل البيض في الخبز؟",
   "chatSuggestion4": "ما هو عشاء سريع في 15 دقيقة؟",
   "chatNewChat": "محادثة جديدة",
+  "chatNewChatConfirmTitle": "محادثة جديدة؟",
+  "chatNewChatConfirmMessage": "بدء محادثة جديدة؟ سيتم حفظ محادثتك الحالية.",
   "chatCopy": "نسخ",
   "chatMessageCopied": "تم نسخ الرسالة",
   "chatEdit": "تحرير",
@@ -420,6 +454,8 @@
   "scannerSubtitle": "امسح مكوناتك",
   "scannerTakePhoto": "التقاط صورة",
   "scannerAnalyzing": "جاري تحليل مكوناتك...",
+  "scannerCancelAnalysisTitle": "إلغاء التحليل؟",
+  "scannerCancelAnalysisMessage": "يتم تحليل المكونات الآن. هل تريد الإلغاء والعودة؟",
   "scannerDetected": "المكونات المكتشفة",
   "scannerAddAll": "إضافة الكل للوصفة",
   "scannerUseIngredients": "استخدام المكونات",
@@ -644,6 +680,7 @@
   "chatErrorNotConfigured": "واجهة برمجة تطبيقات الدردشة غير مُعدة. يرجى الاتصال بالدعم أو التحقق من إعدادات التطبيق.",
   "chatErrorRateLimit": "تم تجاوز حد المعدل. يرجى المحاولة مرة أخرى لاحقاً.",
   "chatErrorGeneric": "عذراً، لم أتمكن من معالجة طلبك. يرجى المحاولة مرة أخرى.",
+  "errorNoInternet": "لا يوجد اتصال بالإنترنت. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
   "premiumPurchaseFailed": "فشل الشراء",
   "premiumUpgrade": "يرقي",
   "scannerLimitReached": "لقد وصلت إلى الحد الأقصى المسموح به لعدد {limit} من أجيال الوصفات المجانية. الترقية إلى الإصدار المميز للوصول غير المحدود!",
@@ -792,6 +829,9 @@
   "premiumBestValue": "أفضل قيمة",
   "premiumPlanWeekly": "أسبوعي",
   "premiumPlanYearly": "سنوي",
+  "premiumPlanLifetime": "مدى الحياة",
+  "premiumLifetimeFullAccessIncluded": "شراء لمرة واحدة • وصول كامل مضمن",
+  "premiumUnlockNow": "افتح الآن",
   "premiumStartFreeTrialTitle": "ابدأ تجربتك المجانية",
   "premiumStartFreeTrial": "ابدأ تجربة مجانية لمدة 3 أيام {price}",
   "@premiumStartFreeTrial": {

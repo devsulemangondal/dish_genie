@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/localization/language_config.dart';
 import '../../core/theme/colors.dart';
 import '../../providers/language_provider.dart';
+import '../../services/splash_sub_iap_gate.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/ads/custom_native_ad_widget.dart';
 import '../../widgets/ads/screen_native_ad_widget.dart';
@@ -79,11 +80,15 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         }
         return;
       }
-      // First-time: show onboarding if not yet complete, else go to home
+      // First-time: onboarding if needed; else home or Pro when splash_sub RC allows
       final onboardingComplete = await StorageService.isOnboardingComplete();
-      if (mounted) {
-        context.go(onboardingComplete ? '/' : '/onboarding');
+      if (!mounted) return;
+      if (!onboardingComplete) {
+        context.go('/onboarding');
+        return;
       }
+      final proRoute = await splashSubProRouteBeforeHomeIfNeeded();
+      if (mounted) context.go(proRoute ?? '/');
     });
   }
 

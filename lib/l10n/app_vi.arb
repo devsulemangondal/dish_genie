@@ -122,6 +122,7 @@
   "chatCopy": "Sao chép",
   "chatEdit": "Chỉnh sửa",
   "chatErrorGeneric": "Xin lỗi, tôi không thể xử lý yêu cầu của bạn. Vui lòng thử lại.",
+  "errorNoInternet": "Không có kết nối internet. Vui lòng kiểm tra kết nối và thử lại.",
   "chatErrorNotConfigured": "API trò chuyện chưa được định cấu hình. Vui lòng liên hệ với bộ phận hỗ trợ hoặc kiểm tra cài đặt ứng dụng của bạn.",
   "chatErrorRateLimit": "Đã vượt quá giới hạn tỷ lệ. Vui lòng thử lại sau.",
   "chatGreeting": "Xin chào, tôi là Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "Đang nghe...",
   "chatMessageCopied": "Đã sao chép tin nhắn",
   "chatNewChat": "Cuộc trò chuyện mới",
+  "chatNewChatConfirmTitle": "Cuộc trò chuyện mới?",
+  "chatNewChatConfirmMessage": "Bắt đầu cuộc trò chuyện mới? Cuộc trò chuyện hiện tại của bạn sẽ được lưu.",
   "chatPlaceholder": "Hỏi tôi bất cứ điều gì...",
   "chatSubtitle": "Trợ lý nấu ăn AI của bạn",
   "chatSuggestion1": "Tôi có thể nấu gì với gà và cơm?",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "Đã thêm",
   "groceryBought": "Đã Mua",
   "groceryBudgetMode": "Chế độ ngân sách",
-  "groceryBudgetPlaceholder": "Nhập ngân sách (ví dụ: 2000 PKR)",
+  "groceryBudgetPlaceholder": "Nhập ngân sách (ví dụ: 2000)",
+  "groceryBudgetMustCoverEstimate": "Tổng ước tính danh sách của bạn là {total}. Tăng ngân sách ít nhất bằng mức đó hoặc xóa món.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Ngân sách thấp hơn danh sách",
+  "groceryBudgetLowBody": "Danh sách ước tính khoảng {total}. Chế độ ngân sách vẫn bật — tăng số tiền ở ô bên dưới hoặc xóa mặt hàng.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "Sửa ngân sách",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "Danh sách khoảng {total}, vượt ngân sách này. Tăng số tiền phía trên hoặc xóa mặt hàng — có thể chỉnh khi chế độ ngân sách vẫn bật.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Nhập ngân sách phía trên để theo dõi chi tiêu.",
+
   "groceryCategories": "Danh Mục",
   "groceryCategory": "Danh mục",
   "groceryCreateMealPlanFirst": "Vui lòng tạo kế hoạch bữa ăn trước",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "Đã thêm món!",
   "groceryItemName": "Tên món",
   "groceryItemRequired": "Cần có tên món",
+  "groceryQuantityRequired": "Vui lòng nhập số lượng cho mục này",
   "groceryItems": "món",
   "groceryItemsIn": "Mặt hàng trong",
   "groceryList": "Danh sách",
@@ -478,6 +511,9 @@
   "premiumBestValue": "Giá trị tốt nhất",
   "premiumPlanWeekly": "Hàng tuần",
   "premiumPlanYearly": "Hàng năm",
+  "premiumPlanLifetime": "Trọn đời",
+  "premiumLifetimeFullAccessIncluded": "Mua một lần • Bao gồm đầy đủ quyền truy cập",
+  "premiumUnlockNow": "Mở khóa ngay",
   "premiumStartFreeTrialTitle": "Bắt đầu dùng thử miễn phí",
   "premiumStartFreeTrial": "Bắt đầu dùng thử miễn phí 3 ngày {price}",
   "@premiumStartFreeTrial": {
@@ -593,6 +629,7 @@
   "recipesMoodsSpicyFix": "Cay",
   "recipesMoodsSweetCravings": "Ngọt",
   "recipesNewRecipe": "Công Thức Mới",
+  "recipesGeneratedTapForDetails": "Chạm vào thẻ để xem công thức đầy đủ.",
   "recipesNoResults": "Không tìm thấy công thức",
   "recipesQuick": "Nhanh",
   "recipesResultsFor": "Kết quả cho",
@@ -610,6 +647,7 @@
   "recipesVoice": "Giọng nói",
   "scannerCameraNotAvailable": "Không khả dụng camera",
   "smartChefTitle": "Đầu bếp thông minh",
+  "smartGroceryTitle": "Tạp hóa thông minh",
   "smartChefPro": "Pro",
   "smartChefWhatIngredientsLine1": "Bạn có những",
   "smartChefWhatIngredientsLine2": "nguyên liệu nào?",
@@ -647,6 +685,8 @@
   "scannerAiDisabled": "Việc tạo công thức AI hiện bị vô hiệu hóa. Nâng cấp lên cao cấp để truy cập không giới hạn!",
   "scannerAiIngredientScanner": "Máy quét thành phần AI",
   "scannerAnalyzing": "Đang phân tích nguyên liệu...",
+  "scannerCancelAnalysisTitle": "Hủy phân tích?",
+  "scannerCancelAnalysisMessage": "Nguyên liệu đang được phân tích. Bạn có chắc muốn hủy và quay lại không?",
   "scannerCalories": "Calo",
   "scannerCaptureOrUpload": "Chụp hoặc tải lên ảnh thành phần của bạn",
   "scannerCategory": "Loại",
@@ -747,7 +787,7 @@
   "settingsPreferencesSettings": "Tùy chọn và cài đặt",
   "settingsPrivacyPolicy": "Chính Sách Bảo Mật",
   "settingsRateUs": "Đánh Giá Chúng Tôi",
-  "settingsRateUsSubtitle": "Thích ứng dụng? Đánh giá nhé!",
+  "settingsRateUsSubtitle": "Thích ứng dụng? Đánh giá nhé!",
   "rateDialogTitle": "Bạn đang thích Smart Chef chứ?",
   "rateDialogSubtitle": "Hãy giúp chúng tôi cải thiện trải nghiệm nấu ăn của bạn 🍳",
   "rateDialogBody": "Phản hồi của bạn giúp chúng tôi\ntạo ra công thức tốt hơn cho bạn",

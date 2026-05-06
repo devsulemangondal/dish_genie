@@ -221,6 +221,7 @@ class AppOpenAdManager {
   /// Load app open ad (only if internet is available)
   Future<void> _loadAd() async {
     if (Platform.isIOS && !AdConfig.showAdsOnIos) return;
+    if (!AdService.gdprAllowsAds) return;
 
     // Don't load if already loading or ad is available
     if (_isLoadingAd || _isAdAvailable) return;
@@ -248,6 +249,11 @@ class AppOpenAdManager {
     try {
       // Ensure AdMob is fully initialized
       await AdService.initialize();
+      if (!AdService.gdprAllowsAds) {
+        _isLoadingAd = false;
+        _isAdAvailable = false;
+        return;
+      }
 
       // Add a small delay to ensure AdMob SDK is fully ready
       // This helps prevent "Ad unit doesn't match format" errors
@@ -778,6 +784,9 @@ class AppOpenAdManager {
   Future<bool> _shouldShowLoader() async {
     try {
       if (Platform.isIOS && !AdConfig.showAdsOnIos) return false;
+      // Ensure consent is gathered before attempting any app-open flow.
+      await AdService.initialize();
+      if (!AdService.gdprAllowsAds) return false;
 
       if (kDebugMode) {
         print('🔍 [AppOpenAdManager] Checking if loader should be shown...');
@@ -931,6 +940,9 @@ class AppOpenAdManager {
     if (Platform.isIOS && !AdConfig.showAdsOnIos) {
       return null;
     }
+    if (!AdService.gdprAllowsAds) {
+      return null;
+    }
     if (kDebugMode) {
       print(
         '📥 [AppOpenAdManager] loadAd() called (attempt ${retryCount + 1})',
@@ -974,6 +986,10 @@ class AppOpenAdManager {
 
       // Ensure AdMob is fully initialized before loading
       await AdService.initialize();
+      if (!AdService.gdprAllowsAds) {
+        completer.complete(null);
+        return completer.future;
+      }
 
       // Add a longer delay to ensure AdMob SDK is fully ready
       // Error code 3 (ad unit format mismatch) often occurs when SDK isn't fully initialized

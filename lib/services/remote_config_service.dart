@@ -51,10 +51,19 @@ class RemoteConfigService {
     'reciepedetaile_native': true,
     'camera_native': true,
     // Onboarding native ad (Android / iOS separate keys)
-    'onboarding_native': false,
-    'onboarding_native_ios': false,
+    'onboarding_native': true,
+    'onboarding_native_ios': true,
     // Interstitial ad configuration
     'bottom_inter': '5',
+    // Bottom tab switch interstitial: string 'off' / '' = none; '3' = every 3rd tab change (3, 6, 9…)
+    'bottom_tab_inter': 'off',
+    'bottom_tab_inter_ios': 'off',
+    // Recipe detail back (system / app bar): 'off' / '1' / '2' / '3' (same rules as [shouldShowInterstitial])
+    'recipe_backpress_inter': 'off',
+    'recipe_backpress_inter_ios': 'off',
+    // Grocery smart suggestion "Add" tap: 'off' / '1' / '2' / '3' ([shouldShowInterstitial])
+    'add_sug_inter': 'off',
+    'add_sug_inter_ios': 'off',
     'card_inter': 'open5',
     'generateplan_inter': '5',
     'cookingai_inter': 'off',
@@ -88,12 +97,17 @@ class RemoteConfigService {
     // Show subscription screen after splash app open: 'off'/'0'=always, N=every Nth session (3,6,9...)
     'sub_splash': 'off',
     'sub_splash_ios': 'off',
+    // Show IAP (Pro) after splash when true (Android / iOS). Returning users: combined with [sub_splash] + [weekly_sub].
+    'splash_sub': false,
+    'splash_sub_ios': false,
     // Show discount dialog on Pro screen close: once per 24 hours (Android / iOS)
     'discount_popup': false,
     'discount_popup_ios': false,
     // Bottom banner on bottom nav screens only (Android / iOS)
-    'bottom_banner': false,
-    'bottom_banner_ios': false,
+    'bottom_banner': true,
+    'bottom_banner_ios': true,
+    // Small native fallback when bottom banner fails to load (same slot; RC must be true)
+    'bottom_native': true,
     'ai_chef': '5',
     // Supabase configuration (matching web app: VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY)
     'supabase_url': '',
@@ -400,6 +414,18 @@ class RemoteConfigService {
   static bool get bottomBannerIos =>
       _remoteConfig?.getBool('bottom_banner_ios') ?? _defaults['bottom_banner_ios'];
 
+  /// Bottom native fallback when anchored banner fails (Firebase key: `bottom_native`)
+  static bool get bottomNative =>
+      _remoteConfig?.getBool('bottom_native') ?? _defaults['bottom_native'];
+
+  /// When true (with [weeklySub] + [subSplash] rules), returning users may see Pro after splash.
+  static bool get splashSub =>
+      _remoteConfig?.getBool('splash_sub') ?? _defaults['splash_sub'];
+
+  /// iOS counterpart of [splashSub].
+  static bool get splashSubIos =>
+      _remoteConfig?.getBool('splash_sub_ios') ?? _defaults['splash_sub_ios'];
+
   // Interstitial ad configuration strings
   static String get bottomInter {
     if (_remoteConfig != null && _isInitialized) {
@@ -411,6 +437,125 @@ class RemoteConfigService {
       }
     }
     return _defaults['bottom_inter'] as String;
+  }
+
+  /// Bottom nav tab change interstitial — Android (`bottom_tab_inter` in Firebase).
+  static String get bottomTabInter {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value = _remoteConfig!.getString('bottom_tab_inter').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['bottom_tab_inter'] as String);
+      } catch (e) {
+        return _defaults['bottom_tab_inter'] as String;
+      }
+    }
+    return _defaults['bottom_tab_inter'] as String;
+  }
+
+  /// Bottom nav tab change interstitial — iOS (`bottom_tab_inter_ios` in Firebase).
+  static String get bottomTabInterIos {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value = _remoteConfig!.getString('bottom_tab_inter_ios').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['bottom_tab_inter_ios'] as String);
+      } catch (e) {
+        return _defaults['bottom_tab_inter_ios'] as String;
+      }
+    }
+    return _defaults['bottom_tab_inter_ios'] as String;
+  }
+
+  /// Recipe detail screen back press interstitial — Android (`recipe_backpress_inter`).
+  static String get recipeBackpressInter {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value = _remoteConfig!.getString('recipe_backpress_inter').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['recipe_backpress_inter'] as String);
+      } catch (e) {
+        return _defaults['recipe_backpress_inter'] as String;
+      }
+    }
+    return _defaults['recipe_backpress_inter'] as String;
+  }
+
+  /// Recipe detail screen back press interstitial — iOS (`recipe_backpress_inter_ios`).
+  static String get recipeBackpressInterIos {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value =
+            _remoteConfig!.getString('recipe_backpress_inter_ios').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['recipe_backpress_inter_ios'] as String);
+      } catch (e) {
+        return _defaults['recipe_backpress_inter_ios'] as String;
+      }
+    }
+    return _defaults['recipe_backpress_inter_ios'] as String;
+  }
+
+  /// Grocery smart suggestion add — Android (`add_sug_inter`).
+  static String get addSugInter {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value = _remoteConfig!.getString('add_sug_inter').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['add_sug_inter'] as String);
+      } catch (e) {
+        return _defaults['add_sug_inter'] as String;
+      }
+    }
+    return _defaults['add_sug_inter'] as String;
+  }
+
+  /// Grocery smart suggestion add — iOS (`add_sug_inter_ios`).
+  static String get addSugInterIos {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value = _remoteConfig!.getString('add_sug_inter_ios').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['add_sug_inter_ios'] as String);
+      } catch (e) {
+        return _defaults['add_sug_inter_ios'] as String;
+      }
+    }
+    return _defaults['add_sug_inter_ios'] as String;
+  }
+
+  /// Log line for debugging tab-switch interstitial (raw RC + [ValueSource]).
+  static String describeBottomTabInterRc() {
+    final buf = StringBuffer(
+      '[BottomTabInter RC] isInitialized=$isInitialized showAds=$showAds ',
+    );
+    if (_remoteConfig == null || !_isInitialized) {
+      buf.write(
+        'noRemoteInstance androidDefault="${_defaults['bottom_tab_inter']}" '
+        'iosDefault="${_defaults['bottom_tab_inter_ios']}"',
+      );
+      return buf.toString();
+    }
+    try {
+      final va = _remoteConfig!.getValue('bottom_tab_inter');
+      final vi = _remoteConfig!.getValue('bottom_tab_inter_ios');
+      buf.write(
+        'android="${va.asString()}"(${va.source}) '
+        'ios="${vi.asString()}"(${vi.source}) ',
+      );
+      buf.write(
+        'resolvedGetters android="$bottomTabInter" ios="$bottomTabInterIos"',
+      );
+    } catch (e) {
+      buf.write('readError=$e');
+    }
+    return buf.toString();
   }
 
   static String get cardInter {
@@ -654,6 +799,9 @@ class RemoteConfigService {
       'discount_popup_ios',
       'bottom_banner',
       'bottom_banner_ios',
+      'bottom_native',
+      'splash_sub',
+      'splash_sub_ios',
     ];
 
     print('\n📌 Boolean Values:');
@@ -676,6 +824,12 @@ class RemoteConfigService {
     // String values
     final stringKeys = [
       'bottom_inter',
+      'bottom_tab_inter',
+      'bottom_tab_inter_ios',
+      'recipe_backpress_inter',
+      'recipe_backpress_inter_ios',
+      'add_sug_inter',
+      'add_sug_inter_ios',
       'card_inter',
       'generateplan_inter',
       'cookingai_inter',

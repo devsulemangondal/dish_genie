@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
+import '../../services/splash_sub_iap_gate.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/ads/custom_native_ad_widget.dart';
 import '../../widgets/ads/screen_native_ad_widget.dart';
@@ -101,20 +102,22 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         _slideController.forward();
       });
     } else {
-      await StorageService.setOnboardingComplete(true);
-      if (mounted) {
-        // Skip Pro on first session; go to home (Pro shows every 3rd+ session via splash)
-        context.go('/');
-      }
+      await _completeOnboardingAndContinue();
     }
   }
 
   Future<void> _handleSkip() async {
+    await _completeOnboardingAndContinue();
+  }
+
+  Future<void> _completeOnboardingAndContinue() async {
     await StorageService.setOnboardingComplete(true);
-    if (mounted) {
-      // Skip Pro on first session; go to home (Pro shows every 3rd+ session via splash)
-      context.go('/');
-    }
+    if (!mounted) return;
+
+    // On first-install completion, optionally open Pro before home based on RC gate.
+    final proRoute = await splashSubProRouteBeforeHomeIfNeeded();
+    if (!mounted) return;
+    context.go(proRoute ?? '/');
   }
 
   @override
@@ -297,91 +300,93 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     },
                   ),
                 ),
-                // Onboarding Native Ad (Medium)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: const ScreenNativeAdWidget(
-                    screenKey: 'onboarding',
-                    size: CustomNativeAdSize.medium,
-                  ),
-                ),
-                const SizedBox(height: 16),
                 // Progress Dots & Button
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom + 24,
-                    left: 24,
-                    right: 24,
-                  ),
-                  child: Column(
-                    children: [
-                      // Progress Dots
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(_steps.length, (index) {
-                          final isActive = index == _currentStep;
-                          final isPast = index < _currentStep;
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            width: isActive ? 32 : 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              gradient: isActive
-                                  ? LinearGradient(
-                                      colors: AppColors.gradientPrimary.colors,
-                                    )
-                                  : null,
-                              color: isActive
-                                  ? null
-                                  : isPast
-                                  ? AppColors.primary.withOpacity(0.6)
-                                  : Colors.grey[300],
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          );
-                        }),
-                      ),
-                      const SizedBox(height: 24),
-                      // Next Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: ElevatedButton(
-                          onPressed: _handleNext,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (_currentStep == _steps.length - 1) ...[
-                                const Icon(Icons.check, size: 20),
-                                const SizedBox(width: 8),
-                              ],
-                              Text(
-                                _currentStep == _steps.length - 1
-                                    ? context.t('onboarding.get.started')
-                                    : context.t('onboarding.next'),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 24,
+                      right: 24,
+                      bottom: 0,
+                    ),
+                    child: Column(
+                      children: [
+                        // Progress Dots
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(_steps.length, (index) {
+                            final isActive = index == _currentStep;
+                            final isPast = index < _currentStep;
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              width: isActive ? 32 : 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                gradient: isActive
+                                    ? LinearGradient(
+                                        colors:
+                                            AppColors.gradientPrimary.colors,
+                                      )
+                                    : null,
+                                color: isActive
+                                    ? null
+                                    : isPast
+                                    ? AppColors.primary.withOpacity(0.6)
+                                    : Colors.grey[300],
+                                borderRadius: BorderRadius.circular(4),
                               ),
-                              if (_currentStep < _steps.length - 1) ...[
-                                const SizedBox(width: 8),
-                                const RtlForwardIcon(size: 20),
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 24),
+                        // Next Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton(
+                            onPressed: _handleNext,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (_currentStep == _steps.length - 1) ...[
+                                  const Icon(Icons.check, size: 20),
+                                  const SizedBox(width: 8),
+                                ],
+                                Text(
+                                  _currentStep == _steps.length - 1
+                                      ? context.t('onboarding.get.started')
+                                      : context.t('onboarding.next'),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                if (_currentStep < _steps.length - 1) ...[
+                                  const SizedBox(width: 8),
+                                  const RtlForwardIcon(size: 20),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 16),
+                        // Onboarding Native Ad (Medium) - keep at the full end
+                        const ScreenNativeAdWidget(
+                          screenKey: 'onboarding',
+                          size: CustomNativeAdSize.medium,
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
                   ),
                 ),
               ],

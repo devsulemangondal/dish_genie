@@ -34,6 +34,12 @@ const Duration _kFirstLaunchMinDisplayDuration = Duration(seconds: 3);
 /// Set to true to enable discount popup on Pro screen close (for later releases).
 const bool kShowDiscountPopup = false;
 
+bool _proScreenNeedsCompactScrollLayout(BoxConstraints c) {
+  final shortest =
+      c.maxWidth < c.maxHeight ? c.maxWidth : c.maxHeight;
+  return c.maxHeight < 696 || shortest < 392;
+}
+
 class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   StreamSubscription? _purchaseSubscription;
   StreamSubscription? _billingErrorSubscription;
@@ -569,6 +575,31 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     }
   }
 
+  List<Widget> _proCorePageSections({
+    required bool isPremium,
+    required ProductDetails? weeklyProduct,
+    required ProductDetails? annualProduct,
+    required ProductDetails? lifetimeProduct,
+  }) {
+    return [
+      const SizedBox(height: 4),
+      _buildTopHeroImage(),
+      const SizedBox(height: 10),
+      _buildScreenshotTitle(),
+      const SizedBox(height: 14),
+      _buildScreenshotFeatures(),
+      const SizedBox(height: 18),
+      if (!isPremium) ...[
+        _buildPaywallThreeCards(
+          weeklyProduct: weeklyProduct,
+          annualProduct: annualProduct,
+          lifetimeProduct: lifetimeProduct,
+        ),
+        const SizedBox(height: 16),
+      ],
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final isPremium = context.watch<PremiumProvider>().isPremium;
@@ -612,30 +643,100 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
         backgroundColor: Colors.transparent,
         body: LayoutBuilder(
           builder: (context, constraints) {
-            // Match the provided reference layout exactly, while keeping it
-            // non-scrollable by scaling down on short devices.
+            // Match reference layout with fixed frame + scale on taller phones.
+            // Short / narrow phones: scroll + SafeArea so legal links stay above nav.
             const designW = 360.0;
             const designH = 800.0;
             final scaleW = constraints.maxWidth / designW;
             final scaleH = constraints.maxHeight / designH;
-            final scale = (scaleW < scaleH ? scaleW : scaleH).clamp(0.72, 1.0);
+            final scale =
+                (scaleW < scaleH ? scaleW : scaleH).clamp(0.72, 1.0);
+            final mq = MediaQuery.of(context);
 
-            return Stack(
-              children: [
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: isDark ? bg : null,
-                      gradient: isDark
-                          ? null
-                          : const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Color(0xFFF5FAFF), Color(0xFFFFFFFF)],
-                            ),
+            Widget backgroundDecor() {
+              return Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: isDark ? bg : null,
+                    gradient: isDark
+                        ? null
+                        : const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0xFFF5FAFF), Color(0xFFFFFFFF)],
+                          ),
+                  ),
+                ),
+              );
+            }
+
+            final closeChip = Positioned(
+              top: mq.padding.top + 10,
+              left: 14,
+              child: SizedBox(
+                width: 28,
+                height: 28,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Opacity(
+                    opacity: (_canExitProScreen && !blockExitDuringPurchase)
+                        ? 1.0
+                        : 0.4,
+                    child: InkWell(
+                      onTap:
+                          (_canExitProScreen && !blockExitDuringPurchase)
+                          ? _exitProFlow
+                          : null,
+                      customBorder: const CircleBorder(),
+                      child: const Center(child: _ScreenshotCloseButton()),
                     ),
                   ),
                 ),
+              ),
+            );
+
+            if (_proScreenNeedsCompactScrollLayout(constraints)) {
+              return Stack(
+                children: [
+                  backgroundDecor(),
+                  SafeArea(
+                    child: SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      clipBehavior: Clip.none,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ..._proCorePageSections(
+                              isPremium: isPremium,
+                              weeklyProduct: weeklyProduct,
+                              annualProduct: annualProduct,
+                              lifetimeProduct: lifetimeProduct,
+                            ),
+                            const SizedBox(height: 12),
+                            _buildCancelTermsPrivacyLine(
+                              compactLayout: true,
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  closeChip,
+                ],
+              );
+            }
+
+            // Transform.scale shrinks painted padding; inflate pre-scale bottom inset.
+            final bottomForLinks =
+                ((mq.padding.bottom + 8) / scale).clamp(12.0, 160.0);
+
+            return Stack(
+              children: [
+                backgroundDecor(),
                 SafeArea(
                   bottom: false,
                   child: Align(
@@ -651,30 +752,21 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              const SizedBox(height: 4),
-                              _buildTopHeroImage(),
-                              const SizedBox(height: 10),
-                              _buildScreenshotTitle(),
-                              const SizedBox(height: 14),
-                              _buildScreenshotFeatures(),
-                              const SizedBox(height: 18),
-                              if (!isPremium) ...[
-                                _buildPaywallThreeCards(
-                                  weeklyProduct: weeklyProduct,
-                                  annualProduct: annualProduct,
-                                  lifetimeProduct: lifetimeProduct,
-                                ),
-                                const SizedBox(height: 16),
-                              ],
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).padding.bottom +
-                                      12,
-                                ),
-                                child: _buildCancelTermsPrivacyLine(designW),
+                              ..._proCorePageSections(
+                                isPremium: isPremium,
+                                weeklyProduct: weeklyProduct,
+                                annualProduct: annualProduct,
+                                lifetimeProduct: lifetimeProduct,
                               ),
                               const Spacer(),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: bottomForLinks,
+                                ),
+                                child: _buildCancelTermsPrivacyLine(
+                                  compactLayout: false,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -682,29 +774,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: MediaQuery.of(context).padding.top + 10,
-                  left: 14,
-                  child: SizedBox(
-                    width: 28,
-                    height: 28,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Opacity(
-                        opacity: (_canExitProScreen && !blockExitDuringPurchase)
-                            ? 1.0
-                            : 0.4,
-                        child: InkWell(
-                          onTap: (_canExitProScreen && !blockExitDuringPurchase)
-                              ? _exitProFlow
-                              : null,
-                          customBorder: const CircleBorder(),
-                          child: const Center(child: _ScreenshotCloseButton()),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                closeChip,
               ],
             );
           },
@@ -795,7 +865,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
           Expanded(
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
+              alignment: AlignmentDirectional.centerStart,
               child: Text(
                 text,
                 style: GoogleFonts.poppins(
@@ -805,6 +875,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
                 ),
                 maxLines: 1,
                 softWrap: false,
+                textAlign: TextAlign.start,
               ),
             ),
           ),
@@ -1329,24 +1400,20 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             ),
             elevation: 0,
           ),
-          child: _isLoadingProducts || (_isLoading && selectedProduct != null)
-              ? const SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                )
-              : Text(
-                  context.t('premium.unlock.unlimited.recipes.now'),
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+          child: Opacity(
+            opacity: (_isLoadingProducts || (_isLoading && selectedProduct != null))
+                ? 0.85
+                : 1.0,
+            child: Text(
+              context.t('premium.unlock.unlimited.recipes.now'),
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ),
       ),
     );
@@ -1950,30 +2017,26 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
               ),
             ),
             alignment: Alignment.center,
-            child: _isLoadingProducts || (_isLoading && selectedProduct != null)
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            child: Opacity(
+              opacity: (_isLoadingProducts || (_isLoading && selectedProduct != null))
+                  ? 0.85
+                  : 1.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.bolt, color: Colors.white, size: 22),
+                  const SizedBox(width: 8),
+                  Text(
+                    context.t('common.continue'),
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
                     ),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.bolt, color: Colors.white, size: 22),
-                      const SizedBox(width: 8),
-                      Text(
-                        context.t('common.continue'),
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
                   ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -2212,17 +2275,77 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
   }
 
   /// Privacy Policy • Cancel Anytime • Terms of Use (each tappable).
-  /// Keep it on a single line (scale down if needed).
-  Widget _buildCancelTermsPrivacyLine(double screenWidth) {
+  /// [compactLayout]: narrow/short screens — wrap lines + scroll (see build).
+  Widget _buildCancelTermsPrivacyLine({required bool compactLayout}) {
     final linkColor = Theme.of(context).brightness == Brightness.dark
         ? AppColors.mutedForegroundDark
         : const Color(0xFF707070);
     final style = GoogleFonts.poppins(
-      fontSize: 12,
+      fontSize: compactLayout ? 11 : 12,
       fontWeight: FontWeight.w500,
       color: linkColor,
       decoration: TextDecoration.none,
     );
+
+    final linkTerms = _LinkText(
+      text: context.t('premium.terms.of.use'),
+      style: style,
+      textAlign: TextAlign.center,
+      maxLines: compactLayout ? 4 : 1,
+      softWrap: compactLayout,
+      overflow: compactLayout ? TextOverflow.visible : TextOverflow.ellipsis,
+      onTap: () => _launchURL(
+        'https://sites.google.com/view/dodishgenieterms/home',
+      ),
+    );
+    final linkCancel = _LinkText(
+      text: context.t('premium.cancel.any.time'),
+      style: style,
+      textAlign: TextAlign.center,
+      maxLines: compactLayout ? 4 : 1,
+      softWrap: compactLayout,
+      overflow: compactLayout ? TextOverflow.visible : TextOverflow.ellipsis,
+      onTap: () => _launchURL(
+        'https://play.google.com/store/account/subscriptions',
+      ),
+    );
+    final linkPrivacy = _LinkText(
+      text: context.t('premium.privacy.policy'),
+      style: style,
+      textAlign: TextAlign.center,
+      maxLines: compactLayout ? 4 : 1,
+      softWrap: compactLayout,
+      overflow: compactLayout ? TextOverflow.visible : TextOverflow.ellipsis,
+      onTap: () => _launchURL(
+        'https://sites.google.com/view/dodishgenie/home',
+      ),
+    );
+
+    if (compactLayout) {
+      Widget sep() => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Text('|', style: style.copyWith(height: 1.2)),
+      );
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Align(
+          alignment: Alignment.center,
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 2,
+            runSpacing: 8,
+            children: [
+              linkTerms,
+              sep(),
+              linkCancel,
+              sep(),
+              linkPrivacy,
+            ],
+          ),
+        ),
+      );
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -2232,44 +2355,17 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _LinkText(
-                text: context.t('premium.terms.of.use'),
-                style: style,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                softWrap: false,
-                onTap: () => _launchURL(
-                  'https://sites.google.com/view/dodishgenieterms/home',
-                ),
-              ),
+              linkTerms,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text('|', style: style),
               ),
-              _LinkText(
-                text: context.t('premium.cancel.any.time'),
-                style: style,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                softWrap: false,
-                onTap: () => _launchURL(
-                  'https://play.google.com/store/account/subscriptions',
-                ),
-              ),
+              linkCancel,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text('|', style: style),
               ),
-              _LinkText(
-                text: context.t('premium.privacy.policy'),
-                style: style,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                softWrap: false,
-                onTap: () => _launchURL(
-                  'https://sites.google.com/view/dodishgenie/home',
-                ),
-              ),
+              linkPrivacy,
             ],
           ),
         ),
@@ -2302,6 +2398,7 @@ class _LinkText extends StatelessWidget {
   final int maxLines;
   final TextAlign textAlign;
   final bool softWrap;
+  final TextOverflow overflow;
 
   const _LinkText({
     required this.text,
@@ -2310,6 +2407,7 @@ class _LinkText extends StatelessWidget {
     this.maxLines = 1,
     this.textAlign = TextAlign.center,
     this.softWrap = false,
+    this.overflow = TextOverflow.ellipsis,
   });
 
   @override
@@ -2323,7 +2421,7 @@ class _LinkText extends StatelessWidget {
         maxLines: maxLines,
         textAlign: textAlign,
         softWrap: softWrap,
-        overflow: TextOverflow.ellipsis,
+        overflow: overflow,
       ),
     );
   }
@@ -2670,16 +2768,24 @@ class _ScreenshotCloseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: 26,
       height: 26,
       decoration: BoxDecoration(
-        color: const Color(0xFFD4D4D4),
+        color: isDark ? Colors.white24 : const Color(0xFFD4D4D4),
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 1.5),
+        border: Border.all(
+          color: isDark ? Colors.white38 : Colors.white,
+          width: 1.5,
+        ),
       ),
-      child: const Center(
-        child: Icon(Icons.close, size: 16, color: Colors.white),
+      child: Center(
+        child: Icon(
+          Icons.close,
+          size: 16,
+          color: isDark ? Colors.white : Colors.white,
+        ),
       ),
     );
   }
@@ -2715,44 +2821,38 @@ class _ScreenshotCtaButton extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        child: isLoading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        child: Opacity(
+          opacity: isLoading ? 0.85 : 1.0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.poppins(
+                  fontSize: 14.5,
+                  fontWeight: FontWeight.w600,
+                  height: 1.0,
                 ),
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.poppins(
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w600,
-                      height: 1.0,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle!,
-                      style: GoogleFonts.poppins(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w500,
-                        height: 1.0,
-                        color: Colors.white.withOpacity(0.92),
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ],
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
+              if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  subtitle!,
+                  style: GoogleFonts.poppins(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w500,
+                    height: 1.0,
+                    color: Colors.white.withOpacity(0.92),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -2982,16 +3082,7 @@ class _ScreenshotPlanCard extends StatelessWidget {
                 Positioned.fill(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(14),
-                    child: ColoredBox(
-                      color: Colors.white.withOpacity(0.72),
-                      child: const Center(
-                        child: SizedBox(
-                          width: 26,
-                          height: 26,
-                          child: CircularProgressIndicator(strokeWidth: 2.5),
-                        ),
-                      ),
-                    ),
+                    child: ColoredBox(color: Colors.white.withOpacity(0.10)),
                   ),
                 ),
             ],

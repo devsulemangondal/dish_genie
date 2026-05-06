@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
+import '../../providers/recipe_provider.dart';
 import '../../services/ad_service.dart';
 import '../../services/remote_config_service.dart';
 
@@ -61,7 +63,9 @@ class _BackButtonHandlerState extends State<BackButtonHandler> {
         backgroundColor: Colors.transparent,
         isScrollControlled: false,
         useRootNavigator: true, // Use root navigator to ensure it shows
-        builder: (context) => const _ExitConfirmationBottomSheet(),
+        builder: (context) => const ExitConfirmationBottomSheet(
+          bottomNavOverlap: kExitSheetBottomNavOverlapFallback,
+        ),
       );
     } catch (e) {
       // If showing bottom sheet fails, reset the flag
@@ -77,13 +81,13 @@ class _BackButtonHandlerState extends State<BackButtonHandler> {
     try {
       // Try multiple methods to get the current path for better reliability
       String? path;
-      
+
       // Method 1: Try router.routerDelegate.currentConfiguration.uri.path (most reliable)
       try {
         final uri = router.routerDelegate.currentConfiguration.uri;
         path = uri.path;
       } catch (_) {}
-      
+
       // Method 2: Try routerDelegate.currentConfiguration.last.matchedLocation
       if (path == null || path.isEmpty) {
         try {
@@ -93,25 +97,26 @@ class _BackButtonHandlerState extends State<BackButtonHandler> {
           }
         } catch (_) {}
       }
-      
+
       // Method 3: Try router.routeInformationProvider.value.uri.path
       if (path == null || path.isEmpty) {
         try {
           path = router.routeInformationProvider.value.uri.path;
         } catch (_) {}
       }
-      
+
       // Method 4: Try router.routerDelegate.currentConfiguration.uri.toString() and parse
       if (path == null || path.isEmpty) {
         try {
-          final fullUri = router.routerDelegate.currentConfiguration.uri.toString();
+          final fullUri = router.routerDelegate.currentConfiguration.uri
+              .toString();
           final uri = Uri.parse(fullUri);
           path = uri.path;
         } catch (_) {}
       }
-      
+
       if (path == null || path.isEmpty) return '/';
-      
+
       // Normalize trailing slash (except for root '/')
       if (path.length > 1 && path.endsWith('/')) {
         return path.substring(0, path.length - 1);
@@ -205,15 +210,22 @@ class _BackButtonHandlerState extends State<BackButtonHandler> {
       final isHome = widget.homeRoutes.contains(routePath);
       final isBottomNavTab = _bottomNavRoutes.contains(routePath);
 
-      // Home => confirm exit
+      // Home => confirm exit (defer while AI recipe is generating — home PopScope shows cancel dialog)
       if (isHome) {
+        try {
+          final rp = Provider.of<RecipeProvider>(context, listen: false);
+          if (rp.isLoading) {
+            return;
+          }
+        } catch (_) {}
         _showExitConfirmation(context);
         return;
       }
 
-      // Bottom nav tabs (recipes, plan, shop, chat) => always go to home first
+      // Bottom nav tabs: each tab's [PopScope] (or [MainTabShell] delegating
+      // [Navigator.maybePop] to the branch) handles back — e.g. meal planner
+      // cancel-while-loading. Do not [router.go] here; it raced those handlers.
       if (isBottomNavTab) {
-        router.go('/');
         return;
       }
 
@@ -234,9 +246,21 @@ class _BackButtonHandlerState extends State<BackButtonHandler> {
   }
 }
 
-/// Exit confirmation bottom sheet widget
-class _ExitConfirmationBottomSheet extends StatelessWidget {
-  const _ExitConfirmationBottomSheet();
+/// Fallback bottom inset when the live [BottomNav] height cannot be read yet.
+/// Clears the tab row + typical banner strip above system gesture / nav bar.
+const double kExitSheetBottomNavOverlapFallback = 108;
+
+/// Exit confirmation bottom sheet (exit interstitial + [SystemNavigator.pop]).
+/// Used from [BackButtonHandler] and [MainTabShell].
+class ExitConfirmationBottomSheet extends StatelessWidget {
+  const ExitConfirmationBottomSheet({
+    super.key,
+    this.bottomNavOverlap = kExitSheetBottomNavOverlapFallback,
+  });
+
+  /// Extra space below the action row so buttons stay above the main tab bar
+  /// when the sheet stacks with the shell (and for system inset via [SafeArea]).
+  final double bottomNavOverlap;
 
   @override
   Widget build(BuildContext context) {
@@ -247,9 +271,10 @@ class _ExitConfirmationBottomSheet extends StatelessWidget {
         color: theme.scaffoldBackgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
       child: SafeArea(
-        bottom: false,
+        top: false,
+        bottom: true,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -367,14 +392,13 @@ class _ExitConfirmationBottomSheet extends StatelessWidget {
                     ),
                     child: Text(
                       context.t('exit.dialog.exit'),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
               ],
             ),
+            SizedBox(height: bottomNavOverlap.clamp(0, 10)),
           ],
         ),
       ),

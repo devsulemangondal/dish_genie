@@ -331,6 +331,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get smartChefTitle => 'سرآشپز هوشمند';
 
   @override
+  String get smartGroceryTitle => 'خواروبار فروشی هوشمند';
+
+  @override
   String get smartChefPro => 'پرو';
 
   @override
@@ -408,6 +411,10 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'دستور پخت جدید';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'برای دیدن دستور پخت کامل، روی کارت ضربه بزنید.';
 
   @override
   String get recipesWhatCraving => 'هوس چه غذایی دارید؟';
@@ -761,7 +768,35 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get groceryBudgetPlaceholder =>
-      'بودجه را وارد کنید (به عنوان مثال، 2000 PKR)';
+      'بودجه را وارد کنید (به عنوان مثال، 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'برآورد فهرست شما $total است. بودجه را حداقل به این مبلغ برسانید یا اقلام را حذف کنید.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'بودجه کمتر از فهرست است';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'برآورد فهرست شما $total است. حالت بودجه روشن می‌ماند — مبلغ را در فیلد پایین افزایش دهید یا آیتم‌ها را حذف کنید.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'ویرایش بودجه';
+
+  @override
+  String get groceryBudgetLowOk => 'باشه';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'فهرست حدود $total است، بالاتر از این بودجه. مبلغ بالا را بیشتر کنید یا آیتم حذف کنید — با روشن بودن حالت بودجه می‌توانید ویرایش کنید.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'برای پیگیری هزینه، بالا یک بودجه وارد کنید.';
 
   @override
   String get groceryOn => 'روشن';
@@ -789,6 +824,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'نام مورد الزامی است';
+
+  @override
+  String get groceryQuantityRequired => 'لطفاً مقدار این مورد را وارد کنید';
 
   @override
   String get groceryCreateMealPlanFirst =>
@@ -993,11 +1031,11 @@ class AppLocalizationsFa extends AppLocalizations {
   String get chatNewChat => 'گفتگوی جدید';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'گفتگوی جدید؟';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'گفتگوی جدید شروع شود؟ گفتگوی فعلی شما ذخیره می‌شود.';
 
   @override
   String get chatCopy => 'کپی';
@@ -1324,11 +1362,11 @@ class AppLocalizationsFa extends AppLocalizations {
   String get scannerAnalyzing => 'در حال تحلیل مواد شما...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'لغو تحلیل؟';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'مواد در حال تحلیل هستند. آیا مطمئنید می‌خواهید لغو کنید و برگردید؟';
 
   @override
   String get scannerDetected => 'مواد شناسایی شده';
@@ -1845,6 +1883,10 @@ class AppLocalizationsFa extends AppLocalizations {
       'با عرض پوزش، نتوانستم درخواست شما را پردازش کنم. لطفا دوباره امتحان کنید.';
 
   @override
+  String get errorNoInternet =>
+      'اتصال اینترنت وجود ندارد. لطفاً اتصال خود را بررسی کنید و دوباره تلاش کنید.';
+
+  @override
   String get premiumPurchaseFailed => 'خرید ناموفق بود';
 
   @override
@@ -2245,11 +2287,11 @@ class AppLocalizationsFa extends AppLocalizations {
   String get premiumPlanYearly => 'سالانه';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'مادام‌العمر';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'خرید یک‌باره • دسترسی کامل شامل می‌شود';
 
   @override
   String get premiumStartFreeTrialTitle =>
@@ -2261,7 +2303,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'همین الآن باز کنید';
 
   @override
   String get premiumBestOffer => 'Best offer';

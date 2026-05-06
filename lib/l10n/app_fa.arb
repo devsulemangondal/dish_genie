@@ -122,6 +122,7 @@
   "chatCopy": "کپی",
   "chatEdit": "ویرایش",
   "chatErrorGeneric": "با عرض پوزش، نتوانستم درخواست شما را پردازش کنم. لطفا دوباره امتحان کنید.",
+  "errorNoInternet": "اتصال اینترنت وجود ندارد. لطفاً اتصال خود را بررسی کنید و دوباره تلاش کنید.",
   "chatErrorNotConfigured": "Chat API پیکربندی نشده است. لطفاً با پشتیبانی تماس بگیرید یا تنظیمات برنامه خود را بررسی کنید.",
   "chatErrorRateLimit": "از حد مجاز فراتر رفت. لطفاً بعداً دوباره امتحان کنید.",
   "chatGreeting": "سلام، من Smart Chef هستم!",
@@ -154,6 +155,8 @@
   "chatListening": "در حال گوش دادن...",
   "chatMessageCopied": "پیام کپی شد",
   "chatNewChat": "گفتگوی جدید",
+  "chatNewChatConfirmTitle": "گفتگوی جدید؟",
+  "chatNewChatConfirmMessage": "گفتگوی جدید شروع شود؟ گفتگوی فعلی شما ذخیره می‌شود.",
   "chatPlaceholder": "هر چیزی بپرسید...",
   "chatSubtitle": "دستیار آشپزی هوشمند شما",
   "chatSuggestion1": "با مرغ و برنج چه چیزی می‌توانم بپزم؟",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "اضافه شد",
   "groceryBought": "خریداری شده",
   "groceryBudgetMode": "حالت بودجه",
-  "groceryBudgetPlaceholder": "بودجه را وارد کنید (به عنوان مثال، 2000 PKR)",
+  "groceryBudgetPlaceholder": "بودجه را وارد کنید (به عنوان مثال، 2000)",
+  "groceryBudgetMustCoverEstimate": "برآورد فهرست شما {total} است. بودجه را حداقل به این مبلغ برسانید یا اقلام را حذف کنید.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "بودجه کمتر از فهرست است",
+  "groceryBudgetLowBody": "برآورد فهرست شما {total} است. حالت بودجه روشن می‌ماند — مبلغ را در فیلد پایین افزایش دهید یا آیتم‌ها را حذف کنید.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "ویرایش بودجه",
+  "groceryBudgetLowOk": "باشه",
+  "groceryBudgetInlineOverHint": "فهرست حدود {total} است، بالاتر از این بودجه. مبلغ بالا را بیشتر کنید یا آیتم حذف کنید — با روشن بودن حالت بودجه می‌توانید ویرایش کنید.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "برای پیگیری هزینه، بالا یک بودجه وارد کنید.",
+
   "groceryCategories": "دسته‌بندی‌ها",
   "groceryCategory": "دسته‌بندی",
   "groceryCreateMealPlanFirst": "لطفاً ابتدا یک برنامه غذایی ایجاد کنید",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "مورد اضافه شد!",
   "groceryItemName": "نام مورد",
   "groceryItemRequired": "نام مورد الزامی است",
+  "groceryQuantityRequired": "لطفاً مقدار این مورد را وارد کنید",
   "groceryItems": "مورد",
   "groceryItemsIn": "آیتم‌ها در",
   "groceryList": "فهرست",
@@ -478,6 +511,9 @@
   "premiumBestValue": "بهترین ارزش",
   "premiumPlanWeekly": "هفتگی",
   "premiumPlanYearly": "سالانه",
+  "premiumPlanLifetime": "مادام‌العمر",
+  "premiumLifetimeFullAccessIncluded": "خرید یک‌باره • دسترسی کامل شامل می‌شود",
+  "premiumUnlockNow": "همین الآن باز کنید",
   "premiumStartFreeTrialTitle": "دوره آزمایشی رایگان خود را شروع کنید",
   "premiumStartFreeTrial": "شروع آزمایشی رایگان ۳ روزه {price}",
   "@premiumStartFreeTrial": {
@@ -593,6 +629,7 @@
   "recipesMoodsSpicyFix": "تند",
   "recipesMoodsSweetCravings": "شیرینی",
   "recipesNewRecipe": "دستور پخت جدید",
+  "recipesGeneratedTapForDetails": "برای دیدن دستور پخت کامل، روی کارت ضربه بزنید.",
   "recipesNoResults": "دستور پختی یافت نشد",
   "recipesQuick": "سریع",
   "recipesResultsFor": "نتایج برای",
@@ -610,6 +647,7 @@
   "recipesVoice": "صدا",
   "scannerCameraNotAvailable": "دوربین در دسترس نیست",
   "smartChefTitle": "سرآشپز هوشمند",
+  "smartGroceryTitle": "خواروبار فروشی هوشمند",
   "smartChefPro": "پرو",
   "smartChefWhatIngredientsLine1": "چه مواد غذایی",
   "smartChefWhatIngredientsLine2": "دارید؟",
@@ -647,6 +685,8 @@
   "scannerAiDisabled": "تولید دستور العمل هوش مصنوعی در حال حاضر غیرفعال است. برای دسترسی نامحدود به Premium ارتقا دهید!",
   "scannerAiIngredientScanner": "اسکنر عناصر هوش مصنوعی",
   "scannerAnalyzing": "در حال تحلیل مواد شما...",
+  "scannerCancelAnalysisTitle": "لغو تحلیل؟",
+  "scannerCancelAnalysisMessage": "مواد در حال تحلیل هستند. آیا مطمئنید می‌خواهید لغو کنید و برگردید؟",
   "scannerCalories": "کالری",
   "scannerCaptureOrUpload": "از مواد خود عکس بگیرید یا آپلود کنید",
   "scannerCategory": "دسته بندی",
@@ -747,7 +787,7 @@
   "settingsPreferencesSettings": "ترجیحات و تنظیمات",
   "settingsPrivacyPolicy": "سیاست حریم خصوصی",
   "settingsRateUs": "امتیاز دهید",
-  "settingsRateUsSubtitle": "برنامه را دوست دارید؟ امتیاز دهید!",
+  "settingsRateUsSubtitle": "برنامه را دوست دارید؟ امتیاز دهید!",
   "rateDialogTitle": "از Smart Chef لذت می‌برید؟",
   "rateDialogSubtitle": "به ما کمک کنید تجربه آشپزی‌تان را بهتر کنیم 🍳",
   "rateDialogBody": "بازخورد شما به ما کمک می‌کند\nدستورهای بهتری برای شما بسازیم",

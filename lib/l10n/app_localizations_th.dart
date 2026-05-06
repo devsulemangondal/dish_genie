@@ -330,6 +330,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get smartChefTitle => 'เชฟอัจฉริยะ';
 
   @override
+  String get smartGroceryTitle => 'ซูเปอร์มาร์ทอัจฉริยะ';
+
+  @override
   String get smartChefPro => 'โปร';
 
   @override
@@ -408,6 +411,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'สูตรใหม่';
+
+  @override
+  String get recipesGeneratedTapForDetails => 'แตะการ์ดเพื่อดูสูตรทั้งหมด';
 
   @override
   String get recipesWhatCraving => 'อยากกินอะไร?';
@@ -757,7 +763,35 @@ class AppLocalizationsTh extends AppLocalizations {
   String get groceryBudgetMode => 'โหมดงบประมาณ';
 
   @override
-  String get groceryBudgetPlaceholder => 'ป้อนงบประมาณ (เช่น 2,000 PKR)';
+  String get groceryBudgetPlaceholder => 'ป้อนงบประมาณ (เช่น 2,000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'รายการของคุณประมาณ $total เพิ่มงบให้อย่างน้อยเท่านี้ หรือลบรายการ';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'งบประมาณต่ำกว่ารายการ';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'รายการประมาณ $total โหมดงบประมาณยังเปิดอยู่ — เพิ่มจำนวนในช่องด้านล่างหรือลบรายการ';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'แก้ไขงบประมาณ';
+
+  @override
+  String get groceryBudgetLowOk => 'ตกลง';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'รายการประมาณ $total เกินงบนี้ เพิ่มจำนวนด้านบนหรือลบรายการ — แก้ไขได้ขณะเปิดโหมดงบประมาณ';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'ใส่งบประมาณด้านบนเพื่อติดตามค่าใช้จ่าย';
 
   @override
   String get groceryOn => 'เปิด';
@@ -785,6 +819,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'ต้องระบุชื่อรายการ';
+
+  @override
+  String get groceryQuantityRequired => 'โปรดระบุจำนวนสำหรับรายการนี้';
 
   @override
   String get groceryCreateMealPlanFirst => 'กรุณาสร้างแผนอาหารก่อน';
@@ -985,11 +1022,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get chatNewChat => 'แชทใหม่';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'เริ่มการสนทนาใหม่?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'เริ่มการสนทนาใหม่ไหม? แชทปัจจุบันของคุณจะถูกบันทึก';
 
   @override
   String get chatCopy => 'คัดลอก';
@@ -1308,11 +1345,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get scannerAnalyzing => 'กำลังวิเคราะห์วัตถุดิบ...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'ยกเลิกการวิเคราะห์?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'กำลังวิเคราะห์วัตถุดิบอยู่ คุณแน่ใจหรือไม่ว่าต้องการยกเลิกและย้อนกลับ?';
 
   @override
   String get scannerDetected => 'วัตถุดิบที่ตรวจพบ';
@@ -1822,6 +1859,10 @@ class AppLocalizationsTh extends AppLocalizations {
       'ขออภัย ฉันไม่สามารถดำเนินการตามคำขอของคุณได้ โปรดลองอีกครั้ง';
 
   @override
+  String get errorNoInternet =>
+      'ไม่มีการเชื่อมต่ออินเทอร์เน็ต โปรดตรวจสอบการเชื่อมต่อและลองอีกครั้ง';
+
+  @override
   String get premiumPurchaseFailed => 'การซื้อล้มเหลว';
 
   @override
@@ -2217,11 +2258,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumPlanYearly => 'รายปี';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'ตลอดชีพ';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'ซื้อครั้งเดียว • รวมการเข้าถึงแบบเต็ม';
 
   @override
   String get premiumStartFreeTrialTitle => 'เริ่มทดลองใช้ฟรีของคุณ';
@@ -2232,7 +2273,7 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'ปลดล็อกเลย';
 
   @override
   String get premiumBestOffer => 'Best offer';

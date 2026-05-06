@@ -350,19 +350,27 @@ class _SavedListDetailScreenState extends State<SavedListDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.gradientHeroDark
-                  : AppColors.gradientHero,
+    // Bind system back to this route so it matches header back (see [MainTabShell]).
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (didPop) return;
+        if (!mounted) return;
+        context.go('/grocery');
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.gradientHeroDark
+                    : AppColors.gradientHero,
+              ),
             ),
-          ),
-          const FloatingSparkles(),
-          Column(
-            children: [
+            const FloatingSparkles(),
+            Column(
+              children: [
               StickyHeader(
                 title:
                     _groceryList?.name ??
@@ -590,6 +598,7 @@ class _SavedListDetailScreenState extends State<SavedListDetailScreen> {
             ],
           ),
         ],
+      ),
       ),
     );
   }

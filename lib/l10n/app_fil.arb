@@ -122,6 +122,7 @@
   "chatCopy": "Kopyahin",
   "chatEdit": "I-edit",
   "chatErrorGeneric": "Paumanhin, hindi ko maproseso ang iyong kahilingan. Pakisubukang muli.",
+  "errorNoInternet": "Walang koneksyon sa internet. Pakisuri ang iyong koneksyon at subukang muli.",
   "chatErrorNotConfigured": "Hindi naka-configure ang Chat API. Mangyaring makipag-ugnayan sa suporta o tingnan ang iyong mga setting ng app.",
   "chatErrorRateLimit": "Lumampas sa limitasyon sa rate. Pakisubukang muli mamaya.",
   "chatGreeting": "Hi, ako si Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "Nakikinig...",
   "chatMessageCopied": "Nakopya ang mensahe",
   "chatNewChat": "Bagong chat",
+  "chatNewChatConfirmTitle": "Bagong usapan?",
+  "chatNewChatConfirmMessage": "Magsimula ng bagong usapan? Maisasave ang kasalukuyan mong chat.",
   "chatPlaceholder": "Tanungin mo ako...",
   "chatSubtitle": "Ang iyong AI cooking assistant",
   "chatSuggestion1": "Ano ang magagawa ko gamit ang manok at bigas?",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "Idinagdag",
   "groceryBought": "Nabili",
   "groceryBudgetMode": "Mode ng Badyet",
-  "groceryBudgetPlaceholder": "Ilagay ang badyet (hal., 2000 PKR)",
+  "groceryBudgetPlaceholder": "Ilagay ang badyet (hal., 2000)",
+  "groceryBudgetMustCoverEstimate": "Ang tinatayang kabuuan ng listahan mo ay {total}. Dagdagan ang badyet nang hindi bababa roon, o alisin ang mga item.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Mas mababa ang budget kaysa sa listahan",
+  "groceryBudgetLowBody": "Ang tinatayang listahan mo ay {total}. Naka-on ang budget mode — dagdagan ang halaga sa field sa ibaba o alisin ang mga item.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "I-edit ang budget",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "Ang listahan ay humigit-kumulang {total}, lampas sa budget na ito. Dagdagan ang halaga sa itaas o alisin ang mga item — puwedeng mag-edit habang naka-on ang budget mode.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Maglagay ng budget sa itaas para subaybayan ang gastos.",
+
   "groceryCategories": "Mga Kategorya",
   "groceryCategory": "Kategorya",
   "groceryCreateMealPlanFirst": "Mangyaring gumawa muna ng plano ng pagkain",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "Nadagdag ang item!",
   "groceryItemName": "Pangalan ng item",
   "groceryItemRequired": "Kinakailangan ang pangalan ng item",
+  "groceryQuantityRequired": "Pakilagay ang dami para sa item na ito",
   "groceryItems": "mga item",
   "groceryItemsIn": "Mga item sa",
   "groceryList": "Listahan",
@@ -478,6 +511,9 @@
   "premiumBestValue": "Pinakamagandang halaga",
   "premiumPlanWeekly": "Lingguhan",
   "premiumPlanYearly": "Taunan",
+  "premiumPlanLifetime": "Habambuhay",
+  "premiumLifetimeFullAccessIncluded": "Isang beses na pagbili • Kasama ang buong access",
+  "premiumUnlockNow": "I-unlock ngayon",
   "premiumStartFreeTrialTitle": "Simulan ang iyong libreng trial",
   "premiumStartFreeTrial": "Simulan ang 3-araw na libreng trial {price}",
   "@premiumStartFreeTrial": {
@@ -593,6 +629,7 @@
   "recipesMoodsSpicyFix": "Maanghang",
   "recipesMoodsSweetCravings": "Matamis",
   "recipesNewRecipe": "Bagong Resipe",
+  "recipesGeneratedTapForDetails": "I-tap ang card para makita ang buong resipe.",
   "recipesNoResults": "Walang nahanap na resipe",
   "recipesQuick": "Mabilis",
   "recipesResultsFor": "Mga resulta para sa",
@@ -610,6 +647,7 @@
   "recipesVoice": "Boses",
   "scannerCameraNotAvailable": "Hindi available ang camera",
   "smartChefTitle": "Smart Chef",
+  "smartGroceryTitle": "Smart na Groceries",
   "smartChefPro": "Pro",
   "smartChefWhatIngredientsLine1": "Anong mga sangkap",
   "smartChefWhatIngredientsLine2": "ang meron ka?",
@@ -647,6 +685,8 @@
   "scannerAiDisabled": "Kasalukuyang hindi pinagana ang pagbuo ng recipe ng AI. Mag-upgrade sa premium para sa walang limitasyong pag-access!",
   "scannerAiIngredientScanner": "AI Ingredient Scanner",
   "scannerAnalyzing": "Sinusuri ang iyong mga sangkap...",
+  "scannerCancelAnalysisTitle": "Kanselahin ang pagsusuri?",
+  "scannerCancelAnalysisMessage": "Sinusuri ang mga sangkap. Sigurado ka bang gusto mong kanselahin at bumalik?",
   "scannerCalories": "Mga calorie",
   "scannerCaptureOrUpload": "Kumuha o mag-upload ng larawan ng iyong mga sangkap",
   "scannerCategory": "Kategorya",
@@ -747,7 +787,7 @@
   "settingsPreferencesSettings": "Mga kagustuhan at setting",
   "settingsPrivacyPolicy": "Patakaran sa Privacy",
   "settingsRateUs": "I-rate Kami",
-  "settingsRateUsSubtitle": "Gusto mo ang app? I-rate kami!",
+  "settingsRateUsSubtitle": "Gusto mo ang app? I-rate kami!",
   "rateDialogTitle": "Nag-e-enjoy ka ba sa Smart Chef?",
   "rateDialogSubtitle": "Tulungan kaming pagandahin ang iyong cooking experience 🍳",
   "rateDialogBody": "Ang feedback mo ay tumutulong sa amin\nna gumawa ng mas magagandang recipe para sa iyo",

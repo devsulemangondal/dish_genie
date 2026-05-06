@@ -41,9 +41,17 @@ class GroceryProvider with ChangeNotifier {
         // Parse JSON - for very large lists, this could be optimized with compute()
         // but for typical grocery lists, direct parsing is fast enough
         final data = jsonDecode(json) as Map<String, dynamic>;
-        _groceryList = GroceryList.fromJson(data);
-        // Ensure all items have prices and recalculate total (in case it was wrong or zero)
-        _recalculateEstimatedCost();
+        final loaded = GroceryList.fromJson(data);
+
+        // Avoid clobbering in-memory changes with a late storage load.
+        // This can happen if user adds an item immediately after app start while
+        // the async storage load is still in flight.
+        final hasInMemoryItems = _groceryList != null && _groceryList!.items.isNotEmpty;
+        if (!hasInMemoryItems) {
+          _groceryList = loaded;
+          // Ensure all items have prices and recalculate total (in case it was wrong or zero)
+          _recalculateEstimatedCost();
+        }
       }
     } catch (e) {
       print('Error loading grocery list: $e');
@@ -106,22 +114,99 @@ class GroceryProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addItem(GroceryItem item) async {
-    if (_groceryList != null) {
-      final items = List<GroceryItem>.from(_groceryList!.items)..add(item);
-      _groceryList = _groceryList!.copyWith(items: items);
-      _recalculateEstimatedCost();
-      try {
-        await _saveToStorage();
-      } catch (e) {
-        print('Error saving after adding item: $e');
-        // Continue to update UI even if save fails
+  double? _parseMoneyToDouble(String? input) {
+    if (input == null) return null;
+    final cleaned = input.replaceAll(RegExp(r'[^\d.]'), '');
+    if (cleaned.isEmpty) return null;
+    return double.tryParse(cleaned);
+  }
+
+  double _estimatePriceValue(String? estimatedPrice, {required String itemName}) {
+    if (estimatedPrice != null &&
+        estimatedPrice.isNotEmpty &&
+        estimatedPrice != '\$0' &&
+        estimatedPrice != '0') {
+      final price = estimatedPrice;
+      if (price.contains('-')) {
+        final parts = price.split('-');
+        if (parts.length == 2) {
+          final min = _parseMoneyToDouble(parts[0]) ?? 0.0;
+          final max = _parseMoneyToDouble(parts[1]) ?? 0.0;
+          if (min > 0 && max > 0) return (min + max) / 2;
+        }
+      } else {
+        final v = _parseMoneyToDouble(price);
+        if (v != null && v > 0) return v;
       }
-      notifyListeners();
+    }
+
+    // Fallback estimate based on name (matches _calculateEstimatedTotal)
+    final name = itemName.toLowerCase();
+    if (name.contains('chicken') || name.contains('meat') || name.contains('beef')) {
+      return 3.5;
+    } else if (name.contains('milk') ||
+        name.contains('cheese') ||
+        name.contains('yogurt')) {
+      return 4.5;
+    } else if (name.contains('bread') || name.contains('rice') || name.contains('pasta')) {
+      return 2.0;
+    } else if (name.contains('vegetable') ||
+        name.contains('fruit') ||
+        name.contains('produce')) {
+      return 2.5;
+    } else {
+      return 3.5;
     }
   }
 
-  Future<void> addItemsByName(List<String> names) async {
+  double _projectedTotalAfterAdding(List<GroceryItem> newItems) {
+    final current = _groceryList?.items ?? const <GroceryItem>[];
+    double total = 0.0;
+    for (final item in current) {
+      total += _estimatePriceValue(item.estimatedPrice, itemName: item.name);
+    }
+    for (final item in newItems) {
+      total += _estimatePriceValue(item.estimatedPrice, itemName: item.name);
+    }
+    return total;
+  }
+
+  Future<bool> addItem(
+    GroceryItem item, {
+    double? maxBudget,
+  }) async {
+    if (_groceryList == null) {
+      _groceryList = GroceryList(
+        name: 'Grocery List',
+        estimatedCost: '\$0',
+        items: [],
+        categoriesSummary: {},
+        budgetTips: [],
+        mealPrepOrder: [],
+      );
+    }
+
+    if (maxBudget != null) {
+      final projected = _projectedTotalAfterAdding([item]);
+      if (projected > maxBudget) return false;
+    }
+
+    final items = List<GroceryItem>.from(_groceryList!.items)..add(item);
+    _groceryList = _groceryList!.copyWith(items: items);
+    _recalculateEstimatedCost();
+    try {
+      await _saveToStorage();
+    } catch (e) {
+      print('Error saving after adding item: $e');
+    }
+    notifyListeners();
+    return true;
+  }
+
+  Future<bool> addItemsByName(
+    List<String> names, {
+    double? maxBudget,
+  }) async {
     if (_groceryList == null) {
       _groceryList = GroceryList(
         name: 'Grocery List',
@@ -147,6 +232,11 @@ class GroceryProvider with ChangeNotifier {
       );
     }).toList();
 
+    if (maxBudget != null) {
+      final projected = _projectedTotalAfterAdding(newItems);
+      if (projected > maxBudget) return false;
+    }
+
     final items = List<GroceryItem>.from(_groceryList!.items)..addAll(newItems);
     _groceryList = _groceryList!.copyWith(items: items);
     _recalculateEstimatedCost();
@@ -157,6 +247,7 @@ class GroceryProvider with ChangeNotifier {
       // Continue to update UI even if save fails
     }
     notifyListeners();
+    return true;
   }
 
   /// Generate price range for an item based on its name

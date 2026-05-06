@@ -16,6 +16,8 @@ class StorageService {
   static const String _languageKey = 'app_language';
   static const String _onboardingKey = 'dishgenie_onboarding_complete';
   static const String _groceryListKey = 'dishgenie_grocery_list';
+  static const String _groceryBudgetModeKey = 'dishgenie_grocery_budget_mode';
+  static const String _groceryBudgetValueKey = 'dishgenie_grocery_budget_value';
   static const String _favoritesKey = 'dishgenie_favorites';
   static const String _firstLaunchKey = 'dishgenie_first_launch';
   static const String _appSessionCountKey = 'dishgenie_app_session_count';
@@ -125,6 +127,27 @@ class StorageService {
   static Future<void> clearGroceryList() async {
     final prefs = await _prefs;
     await prefs.remove(_groceryListKey);
+  }
+
+  // Grocery Budget (UI state)
+  static Future<void> setGroceryBudgetMode(bool enabled) async {
+    final prefs = await _prefs;
+    await prefs.setBool(_groceryBudgetModeKey, enabled);
+  }
+
+  static Future<bool> getGroceryBudgetMode() async {
+    final prefs = await _prefs;
+    return prefs.getBool(_groceryBudgetModeKey) ?? false;
+  }
+
+  static Future<void> setGroceryBudgetValue(String value) async {
+    final prefs = await _prefs;
+    await prefs.setString(_groceryBudgetValueKey, value);
+  }
+
+  static Future<String?> getGroceryBudgetValue() async {
+    final prefs = await _prefs;
+    return prefs.getString(_groceryBudgetValueKey);
   }
 
   // Favorites

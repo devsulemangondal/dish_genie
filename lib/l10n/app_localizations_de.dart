@@ -330,6 +330,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get smartChefTitle => 'Smart Chef';
 
   @override
+  String get smartGroceryTitle => 'Smart-Einkauf';
+
+  @override
   String get smartChefPro => 'Pro';
 
   @override
@@ -408,6 +411,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Neues Rezept';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'Tippen Sie auf die Karte, um das vollständige Rezept zu sehen.';
 
   @override
   String get recipesWhatCraving => 'Worauf hast du Lust?';
@@ -762,7 +769,35 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get groceryBudgetPlaceholder =>
-      'Geben Sie das Budget ein (z. B. 2000 PKR)';
+      'Geben Sie das Budget ein (z. B. 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Ihre Liste wird auf $total geschätzt. Erhöhen Sie Ihr Budget mindestens auf diesen Betrag oder entfernen Sie Artikel.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Budget liegt unter Ihrer Liste';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Ihre Liste wird auf $total geschätzt. Der Budgetmodus bleibt an — erhöhen Sie den Betrag im Feld unten oder entfernen Sie Artikel.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Budget bearbeiten';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'Die Liste liegt bei etwa $total, über diesem Budget. Betrag oben erhöhen oder Artikel entfernen — Bearbeiten ist mit eingeschaltetem Budgetmodus möglich.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Geben Sie oben ein Budget ein, um Ihre Ausgaben zu verfolgen.';
 
   @override
   String get groceryOn => 'EIN';
@@ -790,6 +825,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Artikelname erforderlich';
+
+  @override
+  String get groceryQuantityRequired =>
+      'Bitte gib eine Menge für diesen Artikel ein';
 
   @override
   String get groceryCreateMealPlanFirst =>
@@ -995,11 +1034,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get chatNewChat => 'Neuer Chat';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Neues Gespräch?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Ein neues Gespräch beginnen? Dein aktueller Chat wird gespeichert.';
 
   @override
   String get chatCopy => 'Kopieren';
@@ -1321,11 +1360,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get scannerAnalyzing => 'Analysiere Zutaten...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Analyse abbrechen?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Die Zutaten werden analysiert. Möchten Sie abbrechen und zurückgehen?';
 
   @override
   String get scannerDetected => 'Erkannte Zutaten';
@@ -1843,6 +1882,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Entschuldigung, ich konnte Ihre Anfrage nicht verarbeiten. Bitte versuchen Sie es erneut.';
 
   @override
+  String get errorNoInternet =>
+      'Keine Internetverbindung. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.';
+
+  @override
   String get premiumPurchaseFailed => 'Kauf fehlgeschlagen';
 
   @override
@@ -2246,11 +2289,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get premiumPlanYearly => 'Jährlich';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Lebenslang';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Einmalkauf • Voller Zugang inklusive';
 
   @override
   String get premiumStartFreeTrialTitle => 'Starte deine kostenlose Testphase';
@@ -2261,7 +2304,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'Jetzt freischalten';
 
   @override
   String get premiumBestOffer => 'Best offer';

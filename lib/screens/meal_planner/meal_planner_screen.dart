@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
 import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
 import '../../core/theme/colors.dart';
-import '../../widgets/common/bottom_nav.dart';
-import '../../widgets/common/sticky_header.dart';
-import '../../widgets/common/floating_sparkles.dart';
-import '../../widgets/common/loading_genie.dart';
-import '../../providers/meal_plan_provider.dart';
-import '../../providers/premium_provider.dart';
-import '../../data/models/meal_plan.dart';
-import '../../data/models/recipe.dart';
 import '../../data/models/ingredient.dart';
 import '../../data/models/instruction.dart';
+import '../../data/models/meal_plan.dart';
 import '../../data/models/nutrition.dart';
+import '../../data/models/recipe.dart';
+import '../../providers/meal_plan_provider.dart';
+import '../../providers/premium_provider.dart';
+import '../../widgets/common/floating_sparkles.dart';
+import '../../widgets/common/loading_genie.dart';
+import '../../widgets/common/sticky_header.dart';
 
 class MealPlannerScreen extends StatefulWidget {
   const MealPlannerScreen({super.key});
@@ -55,7 +55,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
           });
           // Initialize selected day to today or the start date
           final today = DateTime.now();
-          final selectedDate = (today.isAfter(mealPlan.startDate) && today.isBefore(mealPlan.endDate.add(const Duration(days: 1))))
+          final selectedDate =
+              (today.isAfter(mealPlan.startDate) &&
+                  today.isBefore(mealPlan.endDate.add(const Duration(days: 1))))
               ? today
               : mealPlan.startDate;
           mealPlanProvider.setSelectedDay(selectedDate);
@@ -75,40 +77,33 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
     super.dispose();
   }
 
-  Future<void> _handleBack() async {
-    // If generating plan with AI, show confirmation before going back.
-    final mealPlanProvider = Provider.of<MealPlanProvider>(context, listen: false);
-    if (mealPlanProvider.isLoading) {
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(context.t('meal.planner.cancel.generation.title')),
-          content: Text(context.t('meal.planner.cancel.generation.message')),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: Text(context.t('common.cancel')),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              child: Text(context.t('common.confirm')),
-            ),
-          ],
-        ),
-      );
-      if (confirmed == true && mounted) {
-        mealPlanProvider.cancelPlanGeneration();
-        setState(() => _showForm = true);
-      }
-      return;
-    }
+  Future<void> _maybeConfirmCancelGenerationOnPop() async {
+    final mealPlanProvider = Provider.of<MealPlanProvider>(
+      context,
+      listen: false,
+    );
+    if (!mealPlanProvider.isLoading) return;
 
-    if (mounted) {
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/');
-      }
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(ctx.t('meal.planner.cancel.generation.title')),
+        content: Text(ctx.t('meal.planner.cancel.generation.message')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(ctx.t('common.cancel')),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(ctx.t('common.confirm')),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && mounted) {
+      mealPlanProvider.cancelPlanGeneration();
+      setState(() => _showForm = true);
     }
   }
 
@@ -149,7 +144,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
         });
         // Set selected day to today or start date
         final today = DateTime.now();
-        final selectedDate = (today.isAfter(plan.startDate) && today.isBefore(plan.endDate.add(const Duration(days: 1))))
+        final selectedDate =
+            (today.isAfter(plan.startDate) &&
+                today.isBefore(plan.endDate.add(const Duration(days: 1))))
             ? today
             : plan.startDate;
         provider.setSelectedDay(selectedDate);
@@ -163,9 +160,7 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
         // Show error message if generation failed
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              context.t('meal.planner.generation.failed'),
-            ),
+            content: Text(context.t('meal.planner.generation.failed')),
             backgroundColor: AppColors.destructive,
             duration: const Duration(seconds: 4),
           ),
@@ -179,12 +174,21 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
         if (errorMessage.startsWith('Exception: ')) {
           errorMessage = errorMessage.substring(11);
         }
-        
+
+        // Normalize network/offline errors to a localized message key.
+        if (errorMessage == 'error.no.internet' ||
+            errorMessage.contains('ClientException') ||
+            errorMessage.contains('SocketException') ||
+            errorMessage.contains('Failed host lookup') ||
+            errorMessage.contains('No address associated')) {
+          errorMessage = context.t('error.no.internet');
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              errorMessage.isNotEmpty 
-                  ? errorMessage 
+              errorMessage.isNotEmpty
+                  ? errorMessage
                   : context.t('meal.planner.generation.failed'),
             ),
             backgroundColor: AppColors.destructive,
@@ -216,16 +220,8 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
       });
     }
 
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) async {
-        if (!didPop) {
-          await _handleBack();
-        }
-      },
-      child: Scaffold(
-        bottomNavigationBar: const BottomNav(activeTab: 'planner'),
-        body: Stack(
+    final scaffold = Scaffold(
+      body: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -240,27 +236,30 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
               children: [
                 StickyHeader(
                   title: context.t('meal.planner.title'),
-                  onBack: _handleBack,
+                  titleStyle: StickyHeader.shellTabTitleStyle(context),
+                  showBack: false,
+                  onBack: null,
                   backgroundColor: Colors.transparent,
-                  statusBarColor: Theme.of(context).brightness == Brightness.dark
+                  statusBarColor:
+                      Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF1A1F35)
                       : AppColors.genieBlush,
-                  rightContent: !premiumProvider.isPremium && mealPlanLimit != null
+                  rightContent:
+                      !premiumProvider.isPremium && mealPlanLimit != null
                       ? Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surface
-                                .withOpacity(0.9),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surface.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: Theme.of(context)
-                                  .dividerColor
-                                  .withOpacity(0.3),
+                              color: Theme.of(
+                                context,
+                              ).dividerColor.withOpacity(0.3),
                             ),
                           ),
                           child: Text(
@@ -276,17 +275,31 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                 ),
                 Expanded(
                   child: isLoading
-                      ? LoadingGenie(message: context.t('meal.planner.creating.plan'))
+                      ? LoadingGenie(
+                          message: context.t('meal.planner.creating.plan'),
+                        )
                       : mealPlan != null && !_showForm
-                          ? _buildMealPlanView(context, mealPlan, mealPlanProvider)
-                          : _buildFormView(context),
+                      ? _buildMealPlanView(context, mealPlan, mealPlanProvider)
+                      : _buildFormView(context),
                 ),
               ],
             ),
           ),
         ],
       ),
-      ),
+    );
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        if (didPop) return;
+        if (isLoading) {
+          await _maybeConfirmCancelGenerationOnPop();
+        } else if (mounted) {
+          context.go('/');
+        }
+      },
+      child: scaffold,
     );
   }
 
@@ -302,365 +315,377 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
-            // Your Profile Section
-            _buildSection(
-              context,
-              title: context.t('meal.planner.your.profile'),
-              icon: Icons.show_chart,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final screenWidth = MediaQuery.of(context).size.width;
-                  final availableWidth = constraints.maxWidth;
-                  
-                  // Use column layout on small screens (< 360px) to prevent overflow
-                  // Also check available width in case of padding constraints
-                  final useColumnLayout = screenWidth < 360 || availableWidth < 280;
-                  
-                  // Adaptive spacing and sizing based on screen width
-                  final horizontalSpacing = screenWidth < 400 ? 12.0 : 16.0;
-                  final buttonPadding = screenWidth < 360 ? 6.0 : 8.0;
-                  final numberBoxWidth = screenWidth < 360 ? 45.0 : 50.0;
-                  final fontSize = screenWidth < 360 ? 16.0 : 18.0;
-                  final buttonFontSize = screenWidth < 360 ? 18.0 : 20.0;
-                  
-                  // Build Family Size widget
-                  Widget buildFamilySize() {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          context.t('meal.planner.family.size'),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: () {
-                                  if (_familySize > 1) {
-                                    setState(() => _familySize--);
-                                  }
-                                },
-                                borderRadius: BorderRadius.circular(8),
-                                child: Container(
-                                  padding: EdgeInsets.all(buttonPadding),
-                                  child: Text(
-                                    '-',
-                                    style: TextStyle(
-                                      fontSize: buttonFontSize,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: numberBoxWidth,
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.surface,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                '$_familySize',
-                                textAlign: TextAlign.center,
+                  // Your Profile Section
+                  _buildSection(
+                    context,
+                    title: context.t('meal.planner.your.profile'),
+                    icon: Icons.show_chart,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final screenWidth = MediaQuery.of(context).size.width;
+                        final availableWidth = constraints.maxWidth;
+
+                        // Use column layout on small screens (< 360px) to prevent overflow
+                        // Also check available width in case of padding constraints
+                        final useColumnLayout =
+                            screenWidth < 360 || availableWidth < 280;
+
+                        // Adaptive spacing and sizing based on screen width
+                        final horizontalSpacing = screenWidth < 400
+                            ? 12.0
+                            : 16.0;
+                        final buttonPadding = screenWidth < 360 ? 6.0 : 8.0;
+                        final numberBoxWidth = screenWidth < 360 ? 45.0 : 50.0;
+                        final fontSize = screenWidth < 360 ? 16.0 : 18.0;
+                        final buttonFontSize = screenWidth < 360 ? 18.0 : 20.0;
+
+                        // Build Family Size widget
+                        Widget buildFamilySize() {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                context.t('meal.planner.family.size'),
                                 style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface.withOpacity(0.6),
                                 ),
                               ),
-                            ),
-                            Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: () {
-                                  if (_familySize < 8) {
-                                    setState(() => _familySize++);
-                                  }
-                                },
-                                borderRadius: BorderRadius.circular(8),
-                                child: Container(
-                                  padding: EdgeInsets.all(buttonPadding),
-                                  child: Text(
-                                    '+',
-                                    style: TextStyle(
-                                      fontSize: buttonFontSize,
-                                      fontWeight: FontWeight.bold,
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (_familySize > 1) {
+                                          setState(() => _familySize--);
+                                        }
+                                      },
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Container(
+                                        padding: EdgeInsets.all(buttonPadding),
+                                        child: Text(
+                                          '-',
+                                          style: TextStyle(
+                                            fontSize: buttonFontSize,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
+                                  Container(
+                                    width: numberBoxWidth,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      '$_familySize',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: fontSize,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (_familySize < 8) {
+                                          setState(() => _familySize++);
+                                        }
+                                      },
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Container(
+                                        padding: EdgeInsets.all(buttonPadding),
+                                        child: Text(
+                                          '+',
+                                          style: TextStyle(
+                                            fontSize: buttonFontSize,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        }
+
+                        // Build Daily Calories widget
+                        Widget buildDailyCalories() {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                context.t('meal.planner.daily.calories'),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface.withOpacity(0.6),
                                 ),
                               ),
-                            ),
+                              const SizedBox(height: 8),
+                              TextField(
+                                controller: _caloriesController,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(
+                                  fontSize: screenWidth < 360 ? 14 : 16,
+                                ),
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.local_fire_department,
+                                    size: screenWidth < 360 ? 18 : 20,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth < 360 ? 12 : 16,
+                                    vertical: screenWidth < 360 ? 10 : 12,
+                                  ),
+                                  isDense: true,
+                                ),
+                                onChanged: (value) {
+                                  final calories = int.tryParse(value);
+                                  if (calories != null &&
+                                      calories >= 1000 &&
+                                      calories <= 5000) {
+                                    setState(() => _dailyCalories = calories);
+                                  }
+                                },
+                              ),
+                            ],
+                          );
+                        }
+
+                        if (useColumnLayout) {
+                          // Column layout for small screens
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              buildFamilySize(),
+                              SizedBox(height: horizontalSpacing),
+                              buildDailyCalories(),
+                            ],
+                          );
+                        }
+
+                        // Row layout for larger screens
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Flexible(flex: 1, child: buildFamilySize()),
+                            SizedBox(width: horizontalSpacing),
+                            Flexible(flex: 1, child: buildDailyCalories()),
                           ],
-                        ),
-                      ],
-                    );
-                  }
-                  
-                  // Build Daily Calories widget
-                  Widget buildDailyCalories() {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Plan Duration
+                  _buildSection(
+                    context,
+                    title: context.t('meal.planner.plan.duration'),
+                    icon: Icons.calendar_today,
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
                       children: [
-                        Text(
-                          context.t('meal.planner.daily.calories'),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        TextField(
-                          controller: _caloriesController,
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(fontSize: screenWidth < 360 ? 14 : 16),
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.local_fire_department,
-                              size: screenWidth < 360 ? 18 : 20,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: screenWidth < 360 ? 12 : 16,
-                              vertical: screenWidth < 360 ? 10 : 12,
-                            ),
-                            isDense: true,
-                          ),
-                          onChanged: (value) {
-                            final calories = int.tryParse(value);
-                            if (calories != null && calories >= 1000 && calories <= 5000) {
-                              setState(() => _dailyCalories = calories);
-                            }
-                          },
-                        ),
+                        _buildDurationChip('7', 7),
+                        _buildDurationChip('14', 14),
+                        _buildDurationChip('30', 30),
                       ],
-                    );
-                  }
-                  
-                  if (useColumnLayout) {
-                    // Column layout for small screens
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Health Goal
+                  _buildSection(
+                    context,
+                    title: context.t('meal.planner.health.goal'),
+                    icon: Icons.balance,
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
                       children: [
-                        buildFamilySize(),
-                        SizedBox(height: horizontalSpacing),
-                        buildDailyCalories(),
+                        _buildChip(
+                          context.t('meal.planner.lose.weight'),
+                          _selectedGoal == 'lose_weight',
+                          () => setState(() => _selectedGoal = 'lose_weight'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.build.muscle'),
+                          _selectedGoal == 'build_muscle',
+                          () => setState(() => _selectedGoal = 'build_muscle'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.stay.healthy'),
+                          _selectedGoal == 'stay_healthy',
+                          () => setState(() => _selectedGoal = 'stay_healthy'),
+                        ),
                       ],
-                    );
-                  }
-                  
-                  // Row layout for larger screens
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: buildFamilySize(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Diet Type
+                  _buildSection(
+                    context,
+                    title: context.t('meal.planner.diet.type'),
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _buildChip(
+                          context.t('meal.planner.balanced'),
+                          _selectedDiet == 'balanced',
+                          () => setState(() => _selectedDiet = 'balanced'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.keto'),
+                          _selectedDiet == 'keto',
+                          () => setState(() => _selectedDiet = 'keto'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.vegan'),
+                          _selectedDiet == 'vegan',
+                          () => setState(() => _selectedDiet = 'vegan'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.halal'),
+                          _selectedDiet == 'halal',
+                          () => setState(() => _selectedDiet = 'halal'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.high.protein'),
+                          _selectedDiet == 'high_protein',
+                          () => setState(() => _selectedDiet = 'high_protein'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Budget
+                  _buildSection(
+                    context,
+                    title: '\$ ${context.t('meal.planner.budget')}',
+                    icon: Icons.attach_money,
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _buildChip(
+                          context.t('meal.planner.budget'),
+                          _selectedBudget == 'budget',
+                          () => setState(() => _selectedBudget = 'budget'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.moderate'),
+                          _selectedBudget == 'moderate',
+                          () => setState(() => _selectedBudget = 'moderate'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.premium'),
+                          _selectedBudget == 'premium',
+                          () => setState(() => _selectedBudget = 'premium'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Skill Level
+                  _buildSection(
+                    context,
+                    title: context.t('meal.planner.skill'),
+                    icon: Icons.restaurant_menu,
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _buildChip(
+                          context.t('meal.planner.beginner'),
+                          _selectedSkill == 'beginner',
+                          () => setState(() => _selectedSkill = 'beginner'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.intermediate'),
+                          _selectedSkill == 'intermediate',
+                          () => setState(() => _selectedSkill = 'intermediate'),
+                        ),
+                        _buildChip(
+                          context.t('meal.planner.advanced'),
+                          _selectedSkill == 'advanced',
+                          () => setState(() => _selectedSkill = 'advanced'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Intermittent Fasting
+                  _buildSection(
+                    context,
+                    title: context.t('meal.planner.intermittent.fasting'),
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _buildChip(
+                          context.t('meal.planner.none'),
+                          _selectedFasting == null ||
+                              _selectedFasting == 'none',
+                          () => setState(() => _selectedFasting = 'none'),
+                        ),
+                        _buildChip(
+                          '16:8',
+                          _selectedFasting == '16:8',
+                          () => setState(() => _selectedFasting = '16:8'),
+                        ),
+                        _buildChip(
+                          '18:6',
+                          _selectedFasting == '18:6',
+                          () => setState(() => _selectedFasting = '18:6'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Allergies
+                  _buildSection(
+                    context,
+                    title: context.t('meal.planner.allergies'),
+                    child: TextField(
+                      controller: _allergiesController,
+                      decoration: InputDecoration(
+                        hintText: context.t(
+                          'meal.planner.allergies.placeholder',
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      SizedBox(width: horizontalSpacing),
-                      Flexible(
-                        flex: 1,
-                        child: buildDailyCalories(),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Plan Duration
-            _buildSection(
-              context,
-              title: context.t('meal.planner.plan.duration'),
-              icon: Icons.calendar_today,
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _buildDurationChip('7', 7),
-                  _buildDurationChip('14', 14),
-                  _buildDurationChip('30', 30),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Health Goal
-            _buildSection(
-              context,
-              title: context.t('meal.planner.health.goal'),
-              icon: Icons.balance,
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _buildChip(
-                    context.t('meal.planner.lose.weight'),
-                    _selectedGoal == 'lose_weight',
-                    () => setState(() => _selectedGoal = 'lose_weight'),
+                      onChanged: (value) {
+                        _allergies = value
+                            .split(',')
+                            .map((e) => e.trim())
+                            .where((e) => e.isNotEmpty)
+                            .toList();
+                      },
+                    ),
                   ),
-                  _buildChip(
-                    context.t('meal.planner.build.muscle'),
-                    _selectedGoal == 'build_muscle',
-                    () => setState(() => _selectedGoal = 'build_muscle'),
-                  ),
-                  _buildChip(
-                    context.t('meal.planner.stay.healthy'),
-                    _selectedGoal == 'stay_healthy',
-                    () => setState(() => _selectedGoal = 'stay_healthy'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Diet Type
-            _buildSection(
-              context,
-              title: context.t('meal.planner.diet.type'),
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _buildChip(
-                    context.t('meal.planner.balanced'),
-                    _selectedDiet == 'balanced',
-                    () => setState(() => _selectedDiet = 'balanced'),
-                  ),
-                  _buildChip(
-                    context.t('meal.planner.keto'),
-                    _selectedDiet == 'keto',
-                    () => setState(() => _selectedDiet = 'keto'),
-                  ),
-                  _buildChip(
-                    context.t('meal.planner.vegan'),
-                    _selectedDiet == 'vegan',
-                    () => setState(() => _selectedDiet = 'vegan'),
-                  ),
-                  _buildChip(
-                    context.t('meal.planner.halal'),
-                    _selectedDiet == 'halal',
-                    () => setState(() => _selectedDiet = 'halal'),
-                  ),
-                  _buildChip(
-                    context.t('meal.planner.high.protein'),
-                    _selectedDiet == 'high_protein',
-                    () => setState(() => _selectedDiet = 'high_protein'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Budget
-            _buildSection(
-              context,
-              title: '\$ ${context.t('meal.planner.budget')}',
-              icon: Icons.attach_money,
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _buildChip(
-                    context.t('meal.planner.budget'),
-                    _selectedBudget == 'budget',
-                    () => setState(() => _selectedBudget = 'budget'),
-                  ),
-                  _buildChip(
-                    context.t('meal.planner.moderate'),
-                    _selectedBudget == 'moderate',
-                    () => setState(() => _selectedBudget = 'moderate'),
-                  ),
-                  _buildChip(
-                    context.t('meal.planner.premium'),
-                    _selectedBudget == 'premium',
-                    () => setState(() => _selectedBudget = 'premium'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Skill Level
-            _buildSection(
-              context,
-              title: context.t('meal.planner.skill'),
-              icon: Icons.restaurant_menu,
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _buildChip(
-                    context.t('meal.planner.beginner'),
-                    _selectedSkill == 'beginner',
-                    () => setState(() => _selectedSkill = 'beginner'),
-                  ),
-                  _buildChip(
-                    context.t('meal.planner.intermediate'),
-                    _selectedSkill == 'intermediate',
-                    () => setState(() => _selectedSkill = 'intermediate'),
-                  ),
-                  _buildChip(
-                    context.t('meal.planner.advanced'),
-                    _selectedSkill == 'advanced',
-                    () => setState(() => _selectedSkill = 'advanced'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Intermittent Fasting
-            _buildSection(
-              context,
-              title: context.t('meal.planner.intermittent.fasting'),
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _buildChip(
-                    context.t('meal.planner.none'),
-                    _selectedFasting == null || _selectedFasting == 'none',
-                    () => setState(() => _selectedFasting = 'none'),
-                  ),
-                  _buildChip(
-                    '16:8',
-                    _selectedFasting == '16:8',
-                    () => setState(() => _selectedFasting = '16:8'),
-                  ),
-                  _buildChip(
-                    '18:6',
-                    _selectedFasting == '18:6',
-                    () => setState(() => _selectedFasting = '18:6'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Allergies
-            _buildSection(
-              context,
-              title: context.t('meal.planner.allergies'),
-              child: TextField(
-                controller: _allergiesController,
-                decoration: InputDecoration(
-                  hintText: context.t('meal.planner.allergies.placeholder'),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onChanged: (value) {
-                  _allergies = value
-                      .split(',')
-                      .map((e) => e.trim())
-                      .where((e) => e.isNotEmpty)
-                      .toList();
-                },
-              ),
-            ),
                 ],
               ),
             ),
@@ -672,16 +697,19 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _generatePlan,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ).copyWith(
-                backgroundColor: MaterialStateProperty.all(Colors.transparent),
-              ),
+              style:
+                  ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ).copyWith(
+                    backgroundColor: WidgetStateProperty.all(
+                      Colors.transparent,
+                    ),
+                  ),
               child: Container(
                 decoration: BoxDecoration(
                   gradient: AppColors.gradientPrimary,
@@ -710,8 +738,12 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
     );
   }
 
-  Widget _buildSection(BuildContext context,
-      {required String title, required Widget child, IconData? icon}) {
+  Widget _buildSection(
+    BuildContext context, {
+    required String title,
+    required Widget child,
+    IconData? icon,
+  }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
       padding: const EdgeInsets.all(16),
@@ -764,17 +796,16 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
           borderRadius: BorderRadius.circular(20),
           border: isSelected
               ? null
-              : Border.all(
-                  color: AppColors.border.withOpacity(0.8),
-                  width: 1,
-                ),
+              : Border.all(color: AppColors.border.withOpacity(0.8), width: 1),
         ),
         child: Text(
           '$label ${context.t('meal.planner.days')}',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: isSelected ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurface,
+            color: isSelected
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.onSurface,
           ),
         ),
       ),
@@ -792,17 +823,16 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
           borderRadius: BorderRadius.circular(20),
           border: isSelected
               ? null
-              : Border.all(
-                  color: AppColors.border.withOpacity(0.8),
-                  width: 1,
-                ),
+              : Border.all(color: AppColors.border.withOpacity(0.8), width: 1),
         ),
         child: Text(
           label,
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: isSelected ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurface,
+            color: isSelected
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.onSurface,
           ),
         ),
       ),
@@ -810,7 +840,10 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
   }
 
   Widget _buildMealPlanView(
-      BuildContext context, MealPlan plan, MealPlanProvider provider) {
+    BuildContext context,
+    MealPlan plan,
+    MealPlanProvider provider,
+  ) {
     final days = plan.endDate.difference(plan.startDate).inDays + 1;
     final mealsByDay = <int, Map<String, MealPlanMeal>>{};
     final snacksByDay = <int, List<MealPlanMeal>>{};
@@ -832,11 +865,13 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
       _selectedDayIndex = 0;
     }
 
-    final selectedDayDate = plan.startDate.add(Duration(days: _selectedDayIndex));
+    final selectedDayDate = plan.startDate.add(
+      Duration(days: _selectedDayIndex),
+    );
     final selectedDayMeals = mealsByDay[_selectedDayIndex] ?? {};
-    final selectedSnacks = snacksByDay[_selectedDayIndex] ?? const <MealPlanMeal>[];
+    final selectedSnacks =
+        snacksByDay[_selectedDayIndex] ?? const <MealPlanMeal>[];
     final dayTotals = _calculateDayTotals(selectedDayMeals, selectedSnacks);
-
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -875,15 +910,19 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                     plan.description!,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.7),
                     ),
                   )
                 else
                   Text(
-                    'A ${days}-day meal plan designed for individuals following a halal diet and aiming to maintain overall health with balanced nutrition.',
+                    'A $days-day meal plan designed for individuals following a halal diet and aiming to maintain overall health with balanced nutrition.',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.7),
                     ),
                   ),
                 const SizedBox(height: 12),
@@ -891,7 +930,11 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.local_fire_department, size: 18, color: AppColors.geniePink),
+                        const Icon(
+                          Icons.local_fire_department,
+                          size: 18,
+                          color: AppColors.geniePink,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '${plan.dailyCalories} ${context.t('meal.planner.cal')}',
@@ -905,7 +948,11 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                     const SizedBox(width: 16),
                     Row(
                       children: [
-                        const Icon(Icons.calendar_today, size: 18, color: AppColors.geniePurple),
+                        const Icon(
+                          Icons.calendar_today,
+                          size: 18,
+                          color: AppColors.geniePurple,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '$days ${context.t('meal.planner.days')}',
@@ -945,13 +992,15 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                       if (mealPlan == null || mealPlan.meals.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(context.t('grocery.create.meal.plan.first')),
+                            content: Text(
+                              context.t('grocery.create.meal.plan.first'),
+                            ),
                             backgroundColor: AppColors.destructive,
                           ),
                         );
                         return;
                       }
-                      
+
                       // Navigate immediately - generation will happen in grocery screen
                       // This matches web app pattern for better UX
                       if (mounted) {
@@ -963,7 +1012,10 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                       foregroundColor: Theme.of(context).colorScheme.onSurface,
                       shadowColor: Colors.transparent,
                       elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       shape: RoundedRectangleBorder(
@@ -1035,7 +1087,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                         if (!mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(context.t('meal.planner.generation.failed')),
+                            content: Text(
+                              context.t('meal.planner.generation.failed'),
+                            ),
                             backgroundColor: AppColors.destructive,
                           ),
                         );
@@ -1079,7 +1133,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                       ? () {
                           setState(() => _selectedDayIndex--);
                           context.read<MealPlanProvider>().setSelectedDay(
-                            plan.startDate.add(Duration(days: _selectedDayIndex)),
+                            plan.startDate.add(
+                              Duration(days: _selectedDayIndex),
+                            ),
                           );
                         }
                       : null,
@@ -1097,7 +1153,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                       ? () {
                           setState(() => _selectedDayIndex++);
                           context.read<MealPlanProvider>().setSelectedDay(
-                            plan.startDate.add(Duration(days: _selectedDayIndex)),
+                            plan.startDate.add(
+                              Duration(days: _selectedDayIndex),
+                            ),
                           );
                         }
                       : null,
@@ -1185,7 +1243,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(context.t('meal.planner.generation.failed')),
+                      content: Text(
+                        context.t('meal.planner.generation.failed'),
+                      ),
                       backgroundColor: AppColors.destructive,
                     ),
                   );
@@ -1211,7 +1271,10 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                   alignment: Alignment.center,
                   child: Text(
                     context.t('meal.planner.create.new.plan'),
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -1262,7 +1325,10 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
               const SizedBox(width: 8),
               Text(
                 context.t('meal.planner.snacks'),
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -1270,7 +1336,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
           if (snacks.isEmpty)
             Text(
               '—',
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              ),
             )
           else
             ...snacks.map((snack) {
@@ -1282,13 +1350,19 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                 },
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 4,
+                  ),
                   child: Row(
                     children: [
                       Expanded(
                         child: Text(
                           snack.recipeTitle,
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -1299,7 +1373,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.65),
                         ),
                       ),
                     ],
@@ -1321,7 +1397,10 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.primary.withOpacity(0.55), width: 2),
+        border: Border.all(
+          color: AppColors.primary.withOpacity(0.55),
+          width: 2,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1334,10 +1413,30 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildDailyTotalStat(context, '${totals.calories}', context.t('meal.planner.cal'), AppColors.geniePink),
-              _buildDailyTotalStat(context, '${totals.protein}g', context.t('meal.planner.protein'), AppColors.geniePurple),
-              _buildDailyTotalStat(context, '${totals.carbs}g', context.t('meal.planner.carbs'), AppColors.genieGold),
-              _buildDailyTotalStat(context, '${totals.fat}g', context.t('meal.planner.fat'), AppColors.primary),
+              _buildDailyTotalStat(
+                context,
+                '${totals.calories}',
+                context.t('meal.planner.cal'),
+                AppColors.geniePink,
+              ),
+              _buildDailyTotalStat(
+                context,
+                '${totals.protein}g',
+                context.t('meal.planner.protein'),
+                AppColors.geniePurple,
+              ),
+              _buildDailyTotalStat(
+                context,
+                '${totals.carbs}g',
+                context.t('meal.planner.carbs'),
+                AppColors.genieGold,
+              ),
+              _buildDailyTotalStat(
+                context,
+                '${totals.fat}g',
+                context.t('meal.planner.fat'),
+                AppColors.primary,
+              ),
             ],
           ),
         ],
@@ -1345,17 +1444,29 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
     );
   }
 
-  Widget _buildDailyTotalStat(BuildContext context, String value, String label, Color color) {
+  Widget _buildDailyTotalStat(
+    BuildContext context,
+    String value,
+    String label,
+    Color color,
+  ) {
     return Column(
       children: [
         Text(
           value,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
         const SizedBox(height: 4),
         Text(
           label,
-          style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
+          style: TextStyle(
+            fontSize: 11,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+          ),
         ),
       ],
     );
@@ -1377,7 +1488,10 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.genieGold.withOpacity(0.55), width: 2),
+        border: Border.all(
+          color: AppColors.genieGold.withOpacity(0.55),
+          width: 2,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1387,34 +1501,38 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-          ...tips.map((tip) => Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      margin: const EdgeInsets.only(top: 6),
-                      decoration: BoxDecoration(
-                        color: AppColors.genieGold,
-                        borderRadius: BorderRadius.circular(3),
+          ...tips.map(
+            (tip) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    margin: const EdgeInsets.only(top: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.genieGold,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      tip,
+                      style: TextStyle(
+                        fontSize: 12,
+                        height: 1.35,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withOpacity(0.85),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        tip,
-                        style: TextStyle(
-                          fontSize: 12,
-                          height: 1.35,
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.85),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -1424,16 +1542,15 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final dateOnly = DateTime(date.year, date.month, date.day);
-    
+
     if (dateOnly == today) {
       return context.t('meal.planner.today');
     }
-    
+
     // Use localized day name
     final locale = Localizations.localeOf(context);
     return DateFormat('EEEE', locale.toString()).format(date);
   }
-
 
   String _createSlug(String title) {
     return title.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '-');
@@ -1463,7 +1580,13 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
       description: desc,
       ingredients: desc.isEmpty
           ? [Ingredient(name: meal.recipeTitle, quantity: '1', unit: 'serving')]
-          : [Ingredient(name: 'See recipe description', quantity: '', unit: '')],
+          : [
+              Ingredient(
+                name: 'See recipe description',
+                quantity: '',
+                unit: '',
+              ),
+            ],
       instructions: desc.isEmpty
           ? [Instruction(step: 1, text: meal.recipeTitle)]
           : [Instruction(step: 1, text: desc)],
@@ -1535,48 +1658,51 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                     ),
                   ],
                 ),
-              // Swap Button (right side, top aligned)
-              TextButton.icon(
-                onPressed: provider.swappingMealType == mealTypeKey
-                    ? null
-                    : () => provider.swapMeal(dayIndex, mealTypeKey),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  foregroundColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                ),
-                icon: provider.swappingMealType == mealTypeKey
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Icon(
-                        Icons.refresh,
-                        size: 18,
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                      ),
-                label: Text(
-                  provider.swappingMealType == mealTypeKey
-                      ? context.t('meal.planner.swapping')
-                      : context.t('meal.planner.swap'),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                // Swap Button (right side, top aligned)
+                TextButton.icon(
+                  onPressed: provider.swappingMealType == mealTypeKey
+                      ? null
+                      : () => provider.swapMeal(dayIndex, mealTypeKey),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    foregroundColor: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withOpacity(0.6),
+                  ),
+                  icon: provider.swappingMealType == mealTypeKey
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Icon(
+                          Icons.refresh,
+                          size: 18,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.6),
+                        ),
+                  label: Text(
+                    provider.swappingMealType == mealTypeKey
+                        ? context.t('meal.planner.swapping')
+                        : context.t('meal.planner.swap'),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.6),
+                    ),
                   ),
                 ),
-              ),
               ],
             ),
             const SizedBox(height: 12),
             // Meal Title
             Text(
               meal.recipeTitle,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             // Meal Description (full text, no truncation)
@@ -1585,7 +1711,9 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                 meal.description!,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withOpacity(0.7),
                   height: 1.4,
                 ),
               ),

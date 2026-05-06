@@ -327,6 +327,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get smartChefTitle => '智能厨师';
 
   @override
+  String get smartGroceryTitle => '智能杂货';
+
+  @override
   String get smartChefPro => '专业版';
 
   @override
@@ -402,6 +405,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => '新食谱';
+
+  @override
+  String get recipesGeneratedTapForDetails => '点击卡片查看完整食谱。';
 
   @override
   String get recipesWhatCraving => '您想吃什么？';
@@ -749,7 +755,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String get groceryBudgetMode => '预算模式';
 
   @override
-  String get groceryBudgetPlaceholder => '输入预算（例如 2000 PKR）';
+  String get groceryBudgetPlaceholder => '输入预算（例如 2000）';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return '购物清单预估合计为 $total。请将预算提高到至少该金额，或移除部分商品。';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => '预算低于清单估算';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return '您的清单估算为 $total。预算模式保持开启 — 在下方提高金额或移除商品。';
+  }
+
+  @override
+  String get groceryBudgetEditField => '编辑预算';
+
+  @override
+  String get groceryBudgetLowOk => '好的';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return '清单约 $total，超过此预算。提高上方金额或移除商品 — 预算模式开启时也可编辑。';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint => '在上方输入预算金额以跟踪支出。';
 
   @override
   String get groceryOn => '开启';
@@ -777,6 +810,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get groceryItemRequired => '需要物品名称';
+
+  @override
+  String get groceryQuantityRequired => '请填写此项的数量';
 
   @override
   String get groceryCreateMealPlanFirst => '请先创建膳食计划';
@@ -974,11 +1010,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chatNewChat => '新对话';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => '新对话？';
 
   @override
-  String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+  String get chatNewChatConfirmMessage => '开始新对话？当前聊天记录将会保存。';
 
   @override
   String get chatCopy => '复制';
@@ -1290,11 +1325,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get scannerAnalyzing => '正在分析您的食材...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => '取消分析？';
 
   @override
-  String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+  String get scannerCancelAnalysisMessage => '正在分析食材。确定要取消并返回吗？';
 
   @override
   String get scannerDetected => '检测到的食材';
@@ -1796,6 +1830,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chatErrorGeneric => '抱歉，我无法处理您的请求。请再试一次。';
 
   @override
+  String get errorNoInternet => '没有网络连接。请检查网络后重试。';
+
+  @override
   String get premiumPurchaseFailed => '购买失败';
 
   @override
@@ -2178,11 +2215,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumPlanYearly => '每年';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => '终身';
 
   @override
-  String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+  String get premiumLifetimeFullAccessIncluded => '一次性购买 • 包含完整访问权限';
 
   @override
   String get premiumStartFreeTrialTitle => '开始免费试用';
@@ -2193,7 +2229,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => '立即解锁';
 
   @override
   String get premiumBestOffer => 'Best offer';

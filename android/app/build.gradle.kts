@@ -22,6 +22,10 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -51,7 +55,15 @@ android {
     }
 
     buildTypes {
+        debug {
+            // UMP (GDPR) debug helpers (ONLY for testing)
+            buildConfigField("boolean", "UMP_DEBUG_FORCE_EEA", "false")
+            buildConfigField("String", "UMP_TEST_DEVICE_HASHED_ID", "\"\"")
+        }
         release {
+            // Release MUST NOT force EEA / test devices
+            buildConfigField("boolean", "UMP_DEBUG_FORCE_EEA", "false")
+            buildConfigField("String", "UMP_TEST_DEVICE_HASHED_ID", "\"\"")
             signingConfig = if (keystorePropertiesFile.exists()) {
                 signingConfigs.getByName("release")
             } else {
@@ -68,4 +80,8 @@ dependencies {
   // Use BOM so all Firebase libs (from Flutter plugins) share one version. Do not add duplicate
   // implementation("com.google.firebase:firebase-analytics") here—Flutter firebase_analytics plugin provides it; duplicate can cause crash on launch.
   implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+
+  // Google User Messaging Platform (UMP) SDK for GDPR consent (AdMob).
+  // Ref: https://developers.google.com/ad-manager/mobile-ads-sdk/android/privacy
+  implementation("com.google.android.ump:user-messaging-platform:4.0.0")
 }

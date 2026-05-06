@@ -122,6 +122,7 @@
   "chatCopy": "Kopieren",
   "chatEdit": "Bearbeiten",
   "chatErrorGeneric": "Entschuldigung, ich konnte Ihre Anfrage nicht verarbeiten. Bitte versuchen Sie es erneut.",
+  "errorNoInternet": "Keine Internetverbindung. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
   "chatErrorNotConfigured": "Chat-API ist nicht konfiguriert. Bitte kontaktieren Sie den Support oder überprüfen Sie Ihre App-Einstellungen.",
   "chatErrorRateLimit": "Rate-Limit überschritten. Bitte versuchen Sie es später erneut.",
   "chatGreeting": "Hallo, ich bin Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "Höre zu...",
   "chatMessageCopied": "Nachricht kopiert",
   "chatNewChat": "Neuer Chat",
+  "chatNewChatConfirmTitle": "Neues Gespräch?",
+  "chatNewChatConfirmMessage": "Ein neues Gespräch beginnen? Dein aktueller Chat wird gespeichert.",
   "chatPlaceholder": "Frag mich etwas...",
   "chatSubtitle": "Dein KI-Kochassistent",
   "chatSuggestion1": "Was kann ich mit Hähnchen und Reis machen?",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "Hinzugefügt",
   "groceryBought": "Gekauft",
   "groceryBudgetMode": "Budgetmodus",
-  "groceryBudgetPlaceholder": "Geben Sie das Budget ein (z. B. 2000 PKR)",
+  "groceryBudgetPlaceholder": "Geben Sie das Budget ein (z. B. 2000)",
+  "groceryBudgetMustCoverEstimate": "Ihre Liste wird auf {total} geschätzt. Erhöhen Sie Ihr Budget mindestens auf diesen Betrag oder entfernen Sie Artikel.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Budget liegt unter Ihrer Liste",
+  "groceryBudgetLowBody": "Ihre Liste wird auf {total} geschätzt. Der Budgetmodus bleibt an — erhöhen Sie den Betrag im Feld unten oder entfernen Sie Artikel.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "Budget bearbeiten",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "Die Liste liegt bei etwa {total}, über diesem Budget. Betrag oben erhöhen oder Artikel entfernen — Bearbeiten ist mit eingeschaltetem Budgetmodus möglich.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Geben Sie oben ein Budget ein, um Ihre Ausgaben zu verfolgen.",
+
   "groceryCategories": "Kategorien",
   "groceryCategory": "Kategorie",
   "groceryCreateMealPlanFirst": "Bitte erstelle zuerst einen Mahlzeitenplan",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "Artikel hinzugefügt!",
   "groceryItemName": "Artikelname",
   "groceryItemRequired": "Artikelname erforderlich",
+  "groceryQuantityRequired": "Bitte gib eine Menge für diesen Artikel ein",
   "groceryItems": "Artikel",
   "groceryItemsIn": "Artikel in",
   "groceryList": "Liste",
@@ -537,6 +570,7 @@
   "recipesMoodsSpicyFix": "Scharf",
   "recipesMoodsSweetCravings": "Süßes",
   "recipesNewRecipe": "Neues Rezept",
+  "recipesGeneratedTapForDetails": "Tippen Sie auf die Karte, um das vollständige Rezept zu sehen.",
   "recipesNoResults": "Keine Rezepte gefunden",
   "recipesQuick": "Schnell",
   "recipesResultsFor": "Ergebnisse für",
@@ -554,6 +588,7 @@
   "recipesVoice": "Sprache",
   "scannerCameraNotAvailable": "Kamera nicht verfügbar",
   "smartChefTitle": "Smart Chef",
+  "smartGroceryTitle": "Smart-Einkauf",
   "smartChefPro": "Pro",
   "smartChefWhatIngredientsLine1": "Welche Zutaten",
   "smartChefWhatIngredientsLine2": "hast du?",
@@ -591,6 +626,8 @@
   "scannerAiDisabled": "Die Generierung von KI-Rezepten ist derzeit deaktiviert. Upgrade auf Premium für unbegrenzten Zugriff!",
   "scannerAiIngredientScanner": "KI-Zutatenscanner",
   "scannerAnalyzing": "Analysiere Zutaten...",
+  "scannerCancelAnalysisTitle": "Analyse abbrechen?",
+  "scannerCancelAnalysisMessage": "Die Zutaten werden analysiert. Möchten Sie abbrechen und zurückgehen?",
   "scannerCalories": "Kalorien",
   "scannerCaptureOrUpload": "Nehmen Sie ein Foto Ihrer Zutaten auf oder laden Sie es hoch",
   "scannerCategory": "Kategorie",
@@ -792,6 +829,9 @@
   "premiumBestValue": "Bester Wert",
   "premiumPlanWeekly": "Wöchentlich",
   "premiumPlanYearly": "Jährlich",
+  "premiumPlanLifetime": "Lebenslang",
+  "premiumLifetimeFullAccessIncluded": "Einmalkauf • Voller Zugang inklusive",
+  "premiumUnlockNow": "Jetzt freischalten",
   "premiumStartFreeTrialTitle": "Starte deine kostenlose Testphase",
   "premiumStartFreeTrial": "Starte 3 Tage kostenlos {price}",
   "@premiumStartFreeTrial": {

@@ -206,6 +206,7 @@ extension L10nExtension on BuildContext {
     'grocery.item.added': (l) => l.groceryItemAdded,
     'grocery.item.name': (l) => l.groceryItemName,
     'grocery.item.required': (l) => l.groceryItemRequired,
+    'grocery.quantity.required': (l) => l.groceryQuantityRequired,
     'grocery.items': (l) => l.groceryItems,
     'grocery.items.in': (l) => l.groceryItemsIn,
     'grocery.list': (l) => l.groceryList,
@@ -460,6 +461,7 @@ extension L10nExtension on BuildContext {
     'recipes.eggs': (l) => l.recipesEggs,
     'recipes.enter.ingredients': (l) => l.recipesEnterIngredients,
     'recipes.enterIngredients': (l) => l.recipesEnterIngredients,
+    'recipes.generated.tap.for.details': (l) => l.recipesGeneratedTapForDetails,
     'recipes.generate.recipe': (l) => l.recipesGenerateRecipe,
     'recipes.generating': (l) => l.recipesGenerating,
     'recipes.cancel.generation.title': (l) => l.recipesCancelGenerationTitle,
@@ -512,6 +514,7 @@ extension L10nExtension on BuildContext {
 
     // Smart Chef (Home AI Generate)
     'smartChefTitle': (l) => l.smartChefTitle,
+    'smartGroceryTitle': (l) => l.smartGroceryTitle,
     'smartChefPro': (l) => l.smartChefPro,
     'smartChefWhatIngredientsLine1': (l) => l.smartChefWhatIngredientsLine1,
     'smartChefWhatIngredientsLine2': (l) => l.smartChefWhatIngredientsLine2,
@@ -775,6 +778,7 @@ extension L10nExtension on BuildContext {
     'ingredient.bread': (l) => l.ingredientBread,
     'ingredient.oil': (l) => l.ingredientOil,
     'scanner.limit.reached.title': (l) => l.scannerLimitReachedTitle,
+    'error.no.internet': (l) => l.errorNoInternet,
     'recipes.limitReached': (l) => l.recipesLimitReached,
     'landing.app.name': (l) => l.landingAppName,
     'landing.hero.title': (l) => l.landingHeroTitle,

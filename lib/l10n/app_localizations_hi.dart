@@ -331,6 +331,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get smartChefTitle => 'स्मार्ट शेफ';
 
   @override
+  String get smartGroceryTitle => 'स्मार्ट किराना';
+
+  @override
   String get smartChefPro => 'प्रो';
 
   @override
@@ -408,6 +411,10 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'नई रेसिपी';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'पूरी रेसिपी देखने के लिए कार्ड पर टैप करें।';
 
   @override
   String get recipesWhatCraving => 'आपको क्या खाने का मन है?';
@@ -763,6 +770,34 @@ class AppLocalizationsHi extends AppLocalizations {
       'बजट दर्ज करें (उदाहरण के लिए, 2000 पीकेआर)';
 
   @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'आपकी सूची का अनुमानित कुल $total है। बजट कम से कम इतना बढ़ाएं या आइटम हटाएं।';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'बजट आपकी सूची से कम है';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'आपकी सूची का अनुमान $total है। बजट मोड चालू रहेगा — नीचे राशि बढ़ाएँ या आइटम हटाएँ।';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'बजट संपादित करें';
+
+  @override
+  String get groceryBudgetLowOk => 'ठीक है';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'सूची लगभग $total है, इस बजट से ऊपर। ऊपर राशि बढ़ाएँ या आइटम हटाएँ — बजट मोड चालू रहते ही संपादन कर सकते हैं।';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'खर्च ट्रैक करने के लिए ऊपर बजट राशि दर्ज करें।';
+
+  @override
   String get groceryOn => 'चालू';
 
   @override
@@ -788,6 +823,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'आइटम का नाम आवश्यक है';
+
+  @override
+  String get groceryQuantityRequired => 'कृपया इस आइटम की मात्रा दर्ज करें';
 
   @override
   String get groceryCreateMealPlanFirst => 'कृपया पहले भोजन योजना बनाएं';
@@ -989,11 +1027,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get chatNewChat => 'नई चैट';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'नई बातचीत?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'नई बातचीत शुरू करें? आपकी वर्तमान चैट सहेज ली जाएगी।';
 
   @override
   String get chatCopy => 'कॉपी करें';
@@ -1320,11 +1358,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get scannerAnalyzing => 'आपकी सामग्री का विश्लेषण हो रहा है...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'विश्लेषण रद्द करें?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'सामग्री का विश्लेषण हो रहा है। क्या आप रद्द करके वापस जाना चाहते हैं?';
 
   @override
   String get scannerDetected => 'पहचानी गई सामग्री';
@@ -1838,6 +1876,10 @@ class AppLocalizationsHi extends AppLocalizations {
       'क्षमा करें, मैं आपका अनुरोध संसाधित नहीं कर सका। कृपया पुन: प्रयास करें।';
 
   @override
+  String get errorNoInternet =>
+      'इंटरनेट कनेक्शन नहीं है। कृपया अपना इंटरनेट जांचें और फिर से कोशिश करें।';
+
+  @override
   String get premiumPurchaseFailed => 'खरीदारी विफल';
 
   @override
@@ -2236,11 +2278,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get premiumPlanYearly => 'वार्षिक';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'आजीवन';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'एक बार की खरीद • पूर्ण एक्सेस शामिल';
 
   @override
   String get premiumStartFreeTrialTitle => 'अपना मुफ्त ट्रायल शुरू करें';
@@ -2251,7 +2293,7 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'अभी अनलॉक करें';
 
   @override
   String get premiumBestOffer => 'Best offer';

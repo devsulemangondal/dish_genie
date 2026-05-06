@@ -122,6 +122,7 @@
   "chatCopy": "Көшіру",
   "chatEdit": "Өңдеу",
   "chatErrorGeneric": "Кешіріңіз, сұрауыңызды өңдей алмадым. Қайталап көріңіз.",
+  "errorNoInternet": "Интернетке қосылым жоқ. Қосылымды тексеріп, қайтадан көріңіз.",
   "chatErrorNotConfigured": "Chat API конфигурацияланбаған. Қолдау қызметіне хабарласыңыз немесе қолданба параметрлерін тексеріңіз.",
   "chatErrorRateLimit": "Тариф шегінен асып кетті. Тағы жасауды сәл кейінірек көріңізді өтінеміз.",
   "chatGreeting": "Сәлем, мен Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "Тыңдалуда...",
   "chatMessageCopied": "Хабарлама көшірілді",
   "chatNewChat": "Жаңа чат",
+  "chatNewChatConfirmTitle": "Жаңа сұхбат?",
+  "chatNewChatConfirmMessage": "Жаңа сұхбат бастала ма? Ағымдағы чатыңыз сақталады.",
   "chatPlaceholder": "Кез келген сұрақ қойыңыз...",
   "chatSubtitle": "AI аспаздық көмекшіңіз",
   "chatSuggestion1": "Тауық пен күрішпен не жасай аламын?",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "Қосылды",
   "groceryBought": "Сатып алынды",
   "groceryBudgetMode": "Бюджет режимі",
-  "groceryBudgetPlaceholder": "Бюджетті енгізіңіз (мысалы, 2000 PKR)",
+  "groceryBudgetPlaceholder": "Бюджетті енгізіңіз (мысалы, 2000)",
+  "groceryBudgetMustCoverEstimate": "Тізіміңіздің болжамы {total}. Бюджетті кемінде сонша көбейтіңіз немесе элементтерді алып тастаңыз.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Бюджет тізімнен төмен",
+  "groceryBudgetLowBody": "Тізіміңіз шамамен {total}. Бюджет режимі қосулы қалады — төмендегі өрісте соманы арттырыңыз немесе элементтерді алып тастаңыз.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "Бюджетті өңдеу",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "Тізім шамамен {total}, осы бюджеттен жоғары. Жоғарыдағы соманы арттырыңыз немесе элементтерді алып тастаңыз — бюджет режимі қосулы кезде өңдеуге болады.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Шығындарды бақылау үшін жоғарыға бюджет енгізіңіз.",
+
   "groceryCategories": "Санаттар",
   "groceryCategory": "Санат",
   "groceryCreateMealPlanFirst": "Алдымен тамақ жоспарын жасаңыз",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "Элемент қосылды!",
   "groceryItemName": "Элемент атауы",
   "groceryItemRequired": "Элемент атауы қажет",
+  "groceryQuantityRequired": "Осы зат үшін мөлшерді енгізіңіз",
   "groceryItems": "элемент",
   "groceryItemsIn": "Тауарлар",
   "groceryList": "Тізім",
@@ -478,6 +511,9 @@
   "premiumBestValue": "Ең тиімді",
   "premiumPlanWeekly": "Апталық",
   "premiumPlanYearly": "Жылдық",
+  "premiumPlanLifetime": "Өмір бойы",
+  "premiumLifetimeFullAccessIncluded": "Бір реттік сатып алу • Толық қолжетімділік қосылған",
+  "premiumUnlockNow": "Қазір ашыңыз",
   "premiumStartFreeTrialTitle": "Тегін сынақты бастаңыз",
   "premiumStartFreeTrial": "3 күндік тегін сынақты бастаңыз {price}",
   "@premiumStartFreeTrial": {
@@ -593,6 +629,7 @@
   "recipesMoodsSpicyFix": "Ащы",
   "recipesMoodsSweetCravings": "Тәтті",
   "recipesNewRecipe": "Жаңа Рецепт",
+  "recipesGeneratedTapForDetails": "Толық рецептті көру үшін картаға басыңыз.",
   "recipesNoResults": "Рецепт табылмады",
   "recipesQuick": "Жылдам",
   "recipesResultsFor": "Нәтижелер",
@@ -610,6 +647,7 @@
   "recipesVoice": "Дауыс",
   "scannerCameraNotAvailable": "Камера қолжетімді емес",
   "smartChefTitle": "Ақылды аспаз",
+  "smartGroceryTitle": "Ақылды азық-түлік",
   "smartChefPro": "Pro",
   "smartChefWhatIngredientsLine1": "Қандай ингредиенттер",
   "smartChefWhatIngredientsLine2": "бар?",
@@ -647,6 +685,8 @@
   "scannerAiDisabled": "AI рецептін жасау қазір өшірілген. Шексіз қолжетімділік үшін премиумға жаңартыңыз!",
   "scannerAiIngredientScanner": "AI ингредиенттер сканері",
   "scannerAnalyzing": "Ингредиенттеріңіз талдануда...",
+  "scannerCancelAnalysisTitle": "Талдауды тоқтатасыз ба?",
+  "scannerCancelAnalysisMessage": "Ингредиенттер талдануда. Тоқтатып, артқа қайтқыңыз келе ме?",
   "scannerCalories": "Калориялар",
   "scannerCaptureOrUpload": "Ингредиенттеріңіздің фотосуретін түсіріңіз немесе жүктеңіз",
   "scannerCategory": "Санат",
@@ -747,7 +787,7 @@
   "settingsPreferencesSettings": "Қалаулар мен параметрлер",
   "settingsPrivacyPolicy": "Құпиялылық Саясаты",
   "settingsRateUs": "Бағалаңыз",
-  "settingsRateUsSubtitle": "Қолданба ұнады ма? Бағалаңыз!",
+  "settingsRateUsSubtitle": "Қолданба ұнады ма? Бағалаңыз!",
   "rateDialogTitle": "Smart Chef ұнай ма?",
   "rateDialogSubtitle": "Пісіру тәжірибеңізді жақсартуға көмектесіңіз 🍳",
   "rateDialogBody": "Пікіріңіз бізге\nсіз үшін жақсырақ рецепттер жасауға көмектеседі",

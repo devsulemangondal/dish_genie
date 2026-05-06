@@ -332,6 +332,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get smartChefTitle => 'Ақылды аспаз';
 
   @override
+  String get smartGroceryTitle => 'Ақылды азық-түлік';
+
+  @override
   String get smartChefPro => 'Pro';
 
   @override
@@ -410,6 +413,10 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Жаңа Рецепт';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'Толық рецептті көру үшін картаға басыңыз.';
 
   @override
   String get recipesWhatCraving => 'Не жегіңіз келеді?';
@@ -762,8 +769,35 @@ class AppLocalizationsKk extends AppLocalizations {
   String get groceryBudgetMode => 'Бюджет режимі';
 
   @override
-  String get groceryBudgetPlaceholder =>
-      'Бюджетті енгізіңіз (мысалы, 2000 PKR)';
+  String get groceryBudgetPlaceholder => 'Бюджетті енгізіңіз (мысалы, 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Тізіміңіздің болжамы $total. Бюджетті кемінде сонша көбейтіңіз немесе элементтерді алып тастаңыз.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Бюджет тізімнен төмен';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Тізіміңіз шамамен $total. Бюджет режимі қосулы қалады — төмендегі өрісте соманы арттырыңыз немесе элементтерді алып тастаңыз.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Бюджетті өңдеу';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'Тізім шамамен $total, осы бюджеттен жоғары. Жоғарыдағы соманы арттырыңыз немесе элементтерді алып тастаңыз — бюджет режимі қосулы кезде өңдеуге болады.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Шығындарды бақылау үшін жоғарыға бюджет енгізіңіз.';
 
   @override
   String get groceryOn => 'ҚОСУЛЫ';
@@ -791,6 +825,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Элемент атауы қажет';
+
+  @override
+  String get groceryQuantityRequired => 'Осы зат үшін мөлшерді енгізіңіз';
 
   @override
   String get groceryCreateMealPlanFirst => 'Алдымен тамақ жоспарын жасаңыз';
@@ -994,11 +1031,11 @@ class AppLocalizationsKk extends AppLocalizations {
   String get chatNewChat => 'Жаңа чат';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Жаңа сұхбат?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Жаңа сұхбат бастала ма? Ағымдағы чатыңыз сақталады.';
 
   @override
   String get chatCopy => 'Көшіру';
@@ -1327,11 +1364,11 @@ class AppLocalizationsKk extends AppLocalizations {
   String get scannerAnalyzing => 'Ингредиенттеріңіз талдануда...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Талдауды тоқтатасыз ба?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Ингредиенттер талдануда. Тоқтатып, артқа қайтқыңыз келе ме?';
 
   @override
   String get scannerDetected => 'Табылған Ингредиенттер';
@@ -1848,6 +1885,10 @@ class AppLocalizationsKk extends AppLocalizations {
       'Кешіріңіз, сұрауыңызды өңдей алмадым. Қайталап көріңіз.';
 
   @override
+  String get errorNoInternet =>
+      'Интернетке қосылым жоқ. Қосылымды тексеріп, қайтадан көріңіз.';
+
+  @override
   String get premiumPurchaseFailed => 'Сатып алу сәтсіз аяқталды';
 
   @override
@@ -2251,11 +2292,11 @@ class AppLocalizationsKk extends AppLocalizations {
   String get premiumPlanYearly => 'Жылдық';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Өмір бойы';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Бір реттік сатып алу • Толық қолжетімділік қосылған';
 
   @override
   String get premiumStartFreeTrialTitle => 'Тегін сынақты бастаңыз';
@@ -2266,7 +2307,7 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'Қазір ашыңыз';
 
   @override
   String get premiumBestOffer => 'Best offer';

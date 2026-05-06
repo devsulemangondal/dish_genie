@@ -353,12 +353,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Navigator.of(ctx).pop();
           if (currentRating <= 3) {
             if (kDebugMode) {
-              debugPrint('[Settings] Rate dialog -> feedback rating=$currentRating');
+              debugPrint(
+                '[Settings] Rate dialog -> feedback rating=$currentRating',
+              );
             }
             await _openFeedbackEmail();
           } else {
             if (kDebugMode) {
-              debugPrint('[Settings] Rate dialog -> store rating=$currentRating');
+              debugPrint(
+                '[Settings] Rate dialog -> store rating=$currentRating',
+              );
             }
             await _rateApp();
           }
@@ -369,141 +373,174 @@ class _SettingsScreenState extends State<SettingsScreen> {
             final primaryText = rating <= 3
                 ? ctx.t('rate.dialog.feedback')
                 : ctx.t('rate.dialog.rate.now');
+            final screenW = MediaQuery.sizeOf(ctx).width;
+            final dialogInsetH = screenW < 360 ? 12.0 : 24.0;
+            final starIconSize = screenW < 340 ? 30.0 : 38.0;
+            final starSplash = starIconSize * 0.55;
 
             return Dialog(
-              insetPadding: const EdgeInsets.symmetric(
-                horizontal: 24,
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: dialogInsetH,
                 vertical: 24,
               ),
               backgroundColor: Colors.transparent,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(22),
-                child: Container(
-                  color: isDark ? theme.cardColor : Colors.white,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [gradientA, gradientB],
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: (screenW - dialogInsetH * 2).clamp(0.0, 420),
+                  ),
+                  child: Container(
+                    color: isDark ? theme.cardColor : Colors.white,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [gradientA, gradientB],
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.18),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.restaurant,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                ctx.t('rate.dialog.title'),
+                                style: titleStyle(),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                ctx.t('rate.dialog.subtitle'),
+                                style: subtitleStyle(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.18),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Center(
-                                child: Icon(
-                                  Icons.restaurant,
-                                  color: Colors.white,
-                                  size: 22,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              ctx.t('rate.dialog.title'),
-                              style: titleStyle(),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              ctx.t('rate.dialog.subtitle'),
-                              style: subtitleStyle(),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 18, 18, 10),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(5, (i) {
-                                final idx = i + 1;
-                                final active = idx <= rating;
-                                return IconButton(
-                                  onPressed: () =>
-                                      setLocal(() => rating = idx),
-                                  splashRadius: 20,
-                                  icon: Icon(
-                                    active ? Icons.star : Icons.star_border,
-                                    color: active ? starOn : starOff,
-                                    size: 38,
-                                  ),
-                                );
-                              }),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              ctx.t('rate.dialog.body'),
-                              style: bodyStyle(),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 16),
-                            SizedBox(
-                              width: double.infinity,
-                              height: 48,
-                              child: DecoratedBox(
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [gradientA, gradientB],
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(28),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 18, 18, 10),
+                          child: Column(
+                            children: [
+                              Center(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: List.generate(5, (i) {
+                                      final idx = i + 1;
+                                      final active = idx <= rating;
+                                      return IconButton(
+                                        onPressed: () =>
+                                            setLocal(() => rating = idx),
+                                        splashRadius: starSplash,
+                                        constraints: BoxConstraints.tightFor(
+                                          width: starIconSize + 18,
+                                          height: starIconSize + 18,
+                                        ),
+                                        padding: EdgeInsets.zero,
+                                        icon: Icon(
+                                          active
+                                              ? Icons.star
+                                              : Icons.star_border,
+                                          color: active ? starOn : starOff,
+                                          size: starIconSize,
+                                        ),
+                                      );
+                                    }),
                                   ),
                                 ),
-                                child: ElevatedButton(
-                                  onPressed: () => handlePrimary(rating),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    shadowColor: Colors.transparent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(28),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                ctx.t('rate.dialog.body'),
+                                style: bodyStyle(),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 48,
+                                child: DecoratedBox(
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [gradientA, gradientB],
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(28),
                                     ),
                                   ),
-                                  child: Text(
-                                    primaryText,
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
+                                  child: ElevatedButton(
+                                    onPressed: () => handlePrimary(rating),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 8,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(28),
+                                      ),
+                                    ),
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        primaryText,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            TextButton(
-                              onPressed: () => Navigator.of(ctx).pop(),
-                              child: Text(
-                                ctx.t('rate.dialog.maybe.later'),
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 13.5,
-                                  fontWeight: FontWeight.w500,
-                                  color: maybeLaterColor,
+                              const SizedBox(height: 10),
+                              TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(),
+                                child: Text(
+                                  ctx.t('rate.dialog.maybe.later'),
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.w500,
+                                    color: maybeLaterColor,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

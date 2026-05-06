@@ -122,6 +122,7 @@
   "chatCopy": "Копировать",
   "chatEdit": "Редактировать",
   "chatErrorGeneric": "Извините, я не смог обработать ваш запрос. Пожалуйста, попробуйте еще раз.",
+  "errorNoInternet": "Нет подключения к интернету. Проверьте соединение и попробуйте снова.",
   "chatErrorNotConfigured": "API чата не настроен. Пожалуйста, обратитесь в службу поддержки или проверьте настройки приложения.",
   "chatErrorRateLimit": "Превышен лимит скорости. Пожалуйста, повторите попытку позже.",
   "chatGreeting": "Привет, я Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "Слушаю...",
   "chatMessageCopied": "Сообщение скопировано",
   "chatNewChat": "Новый чат",
+  "chatNewChatConfirmTitle": "Новый разговор?",
+  "chatNewChatConfirmMessage": "Начать новый разговор? Текущий чат будет сохранён.",
   "chatPlaceholder": "Спросите меня о чём угодно...",
   "chatSubtitle": "Ваш ИИ-помощник по кулинарии",
   "chatSuggestion1": "Что можно приготовить из курицы и риса?",
@@ -231,6 +234,35 @@
   "groceryBought": "Куплено",
   "groceryBudgetMode": "Бюджетный режим",
   "groceryBudgetPlaceholder": "Введите бюджет (например, 2000 рупий)",
+  "groceryBudgetMustCoverEstimate": "Ориентировочная сумма списка — {total}. Увеличьте бюджет как минимум до этой суммы или удалите позиции.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Бюджет ниже суммы списка",
+  "groceryBudgetLowBody": "Оценка списка — {total}. Режим бюджета остаётся включённым — увеличьте сумму в поле ниже или удалите позиции.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "Изменить бюджет",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "Список около {total}, выше этого бюджета. Увеличьте сумму выше или удалите позиции — можно редактировать при включённом режиме бюджета.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Введите бюджет выше, чтобы отслеживать расходы.",
+
   "groceryCategories": "Категории",
   "groceryCategory": "Категория",
   "groceryCreateMealPlanFirst": "Сначала создайте план питания",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "Товар добавлен!",
   "groceryItemName": "Название товара",
   "groceryItemRequired": "Название товара обязательно",
+  "groceryQuantityRequired": "Укажите количество для этого товара",
   "groceryItems": "товаров",
   "groceryItemsIn": "Товары в",
   "groceryList": "Список",
@@ -478,6 +511,9 @@
   "premiumBestValue": "Лучшая выгода",
   "premiumPlanWeekly": "Еженедельно",
   "premiumPlanYearly": "Ежегодно",
+  "premiumPlanLifetime": "Навсегда",
+  "premiumLifetimeFullAccessIncluded": "Разовая покупка • Полный доступ включён",
+  "premiumUnlockNow": "Открыть сейчас",
   "premiumStartFreeTrialTitle": "Начните бесплатный пробный период",
   "premiumStartFreeTrial": "Начните 3‑дневный бесплатный пробный период {price}",
   "@premiumStartFreeTrial": {
@@ -593,6 +629,7 @@
   "recipesMoodsSpicyFix": "Острое",
   "recipesMoodsSweetCravings": "Сладкое",
   "recipesNewRecipe": "Новый рецепт",
+  "recipesGeneratedTapForDetails": "Нажмите на карточку, чтобы увидеть полный рецепт.",
   "recipesNoResults": "Рецепты не найдены",
   "recipesQuick": "Быстрые",
   "recipesResultsFor": "Результаты для",
@@ -610,6 +647,7 @@
   "recipesVoice": "Голос",
   "scannerCameraNotAvailable": "Камера недоступна",
   "smartChefTitle": "Умный шеф",
+  "smartGroceryTitle": "Умные покупки",
   "smartChefPro": "ПРО",
   "smartChefWhatIngredientsLine1": "Какие ингредиенты",
   "smartChefWhatIngredientsLine2": "у вас есть?",
@@ -647,6 +685,8 @@
   "scannerAiDisabled": "Генерация рецептов ИИ в настоящее время отключена. Перейдите на премиум-версию и получите неограниченный доступ!",
   "scannerAiIngredientScanner": "Сканер ингредиентов с искусственным интеллектом",
   "scannerAnalyzing": "Анализ ингредиентов...",
+  "scannerCancelAnalysisTitle": "Отменить анализ?",
+  "scannerCancelAnalysisMessage": "Ингредиенты анализируются. Вы уверены, что хотите отменить и вернуться назад?",
   "scannerCalories": "Калории",
   "scannerCaptureOrUpload": "Сделайте или загрузите фотографию ингредиентов.",
   "scannerCategory": "Категория",
@@ -747,7 +787,7 @@
   "settingsPreferencesSettings": "Настройки и предпочтения",
   "settingsPrivacyPolicy": "Политика конфиденциальности",
   "settingsRateUs": "Оценить",
-  "settingsRateUsSubtitle": "Нравится приложение? Оцените!",
+  "settingsRateUsSubtitle": "Нравится приложение? Оцените!",
   "rateDialogTitle": "Нравится Smart Chef?",
   "rateDialogSubtitle": "Помогите нам улучшить ваш опыт готовки 🍳",
   "rateDialogBody": "Ваш отзыв помогает нам создавать\nдля вас лучшие рецепты",

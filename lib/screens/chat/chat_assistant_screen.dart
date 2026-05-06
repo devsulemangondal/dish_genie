@@ -18,15 +18,16 @@ import '../../providers/chat_provider.dart';
 import '../../providers/premium_provider.dart';
 import '../../widgets/voice/voice_input_dialog.dart';
 import '../../widgets/chat/typewriter_text.dart';
-import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/common/sticky_header.dart';
 
 class ChatAssistantScreen extends StatefulWidget {
   final Recipe? initialRecipe;
+  /// Changes whenever "Start cooking" is tapped (used to re-trigger prompt send).
+  final String? cookLaunchId;
 
-  const ChatAssistantScreen({super.key, this.initialRecipe});
+  const ChatAssistantScreen({super.key, this.initialRecipe, this.cookLaunchId});
 
   @override
   State<ChatAssistantScreen> createState() => _ChatAssistantScreenState();
@@ -86,6 +87,24 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
       context.read<ChatProvider>().ensureChatLoaded();
       _maybeAutoStartCookingFromRecipe();
     });
+  }
+
+  @override
+  void didUpdateWidget(ChatAssistantScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final oldR = oldWidget.initialRecipe;
+    final newR = widget.initialRecipe;
+    final cookLaunchChanged = oldWidget.cookLaunchId != widget.cookLaunchId;
+    final recipeIdentityChanged =
+        (oldR?.slug ?? oldR?.id) != (newR?.slug ?? newR?.id) ||
+        (oldR == null) != (newR == null);
+    if (newR != null && (recipeIdentityChanged || cookLaunchChanged)) {
+      _autoStartedFromRecipe = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _maybeAutoStartCookingFromRecipe();
+      });
+    }
   }
 
   /// Track when card screen is opened (ads removed - reserved for future ad plan)
@@ -174,29 +193,18 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     final recipe = widget.initialRecipe;
     if (recipe == null) return;
 
-    final premiumProvider = Provider.of<PremiumProvider>(context, listen: false);
+    final premiumProvider = Provider.of<PremiumProvider>(
+      context,
+      listen: false,
+    );
     if (!premiumProvider.isPremium && !premiumProvider.canSendAiChefMessage()) {
       // User hit free limit — don't auto-send anything.
       return;
     }
 
-    final chatProvider = context.read<ChatProvider>();
-    // Start a fresh chat for a recipe cooking session.
-    chatProvider.startNewChat();
-
     final prompt = _buildCookingPromptFromRecipe(context, recipe);
     _autoStartedFromRecipe = true;
     await _proceedWithMessage(prompt);
-  }
-
-  Future<void> _handleBack() async {
-    if (mounted) {
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/');
-      }
-    }
   }
 
   Future<void> _showChatResetInterThenStartNewChat(
@@ -285,14 +293,12 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async {
-        if (!didPop) {
-          await _handleBack();
-        }
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (didPop) return;
+        if (mounted) context.go('/');
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        bottomNavigationBar: const BottomNav(activeTab: 'chat'),
         body: Stack(
           children: [
             Container(
@@ -308,7 +314,9 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                 children: [
                   StickyHeader(
                     title: context.t('chat.title'),
-                    onBack: _handleBack,
+                    titleStyle: StickyHeader.shellTabTitleStyle(context),
+                    showBack: false,
+                    onBack: null,
                     backgroundColor: Colors.transparent,
                     statusBarColor:
                         Theme.of(context).brightness == Brightness.dark
@@ -326,15 +334,14 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .surface
-                                  .withOpacity(0.9),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.surface.withOpacity(0.9),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: Theme.of(context)
-                                    .dividerColor
-                                    .withOpacity(0.3),
+                                color: Theme.of(
+                                  context,
+                                ).dividerColor.withOpacity(0.3),
                               ),
                             ),
                             child: Text(
@@ -747,8 +754,8 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     final padding = _getResponsivePadding(context);
     // Only show separate typing row when waiting for first AI response (last msg is user)
     // When we have an assistant message (empty or not), show typing inside that bubble only
-    final showTypingRow = isLoading &&
-        (messages.isEmpty || messages.last.isUser);
+    final showTypingRow =
+        isLoading && (messages.isEmpty || messages.last.isUser);
     return ListView.builder(
       controller: _scrollController,
       padding: EdgeInsets.all(padding),
@@ -852,39 +859,41 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                       )
                     : isStreaming
                     ? (message.content.isEmpty
-                        ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                context.t('chat.thinking'),
-                                style: TextStyle(
-                                  fontSize: messageFontSize,
-                                  color: Theme.of(context).colorScheme.onSurface,
-                                ),
-                              ),
-                              SizedBox(width: screenWidth < 360 ? 6 : 8),
-                              SizedBox(
-                                width: screenWidth < 360 ? 18 : 20,
-                                height: screenWidth < 360 ? 18 : 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    AppColors.primary,
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  context.t('chat.thinking'),
+                                  style: TextStyle(
+                                    fontSize: messageFontSize,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
                                   ),
                                 ),
+                                SizedBox(width: screenWidth < 360 ? 6 : 8),
+                                SizedBox(
+                                  width: screenWidth < 360 ? 18 : 20,
+                                  height: screenWidth < 360 ? 18 : 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.primary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : TypewriterText(
+                              key: ValueKey('typewriter_${message.id}'),
+                              text: message.content,
+                              style: TextStyle(
+                                fontSize: messageFontSize,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
-                            ],
-                          )
-                        : TypewriterText(
-                            key: ValueKey('typewriter_${message.id}'),
-                            text: message.content,
-                            style: TextStyle(
-                              fontSize: messageFontSize,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                            speed: const Duration(milliseconds: 15),
-                            animate: false,
-                          ))
+                              speed: const Duration(milliseconds: 15),
+                              animate: false,
+                            ))
                     : SelectableText(
                         _getMessageContent(context, message.content),
                         style: TextStyle(

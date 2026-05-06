@@ -122,6 +122,7 @@
   "chatCopy": "کاپی کریں",
   "chatEdit": "ترمیم کریں",
   "chatErrorGeneric": "معذرت ، میں آپ کی درخواست پر کارروائی نہیں کرسکتا۔ براہ کرم دوبارہ کوشش کریں۔",
+  "errorNoInternet": "انٹرنیٹ کنکشن نہیں ہے۔ براہ کرم اپنا انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔",
   "chatErrorNotConfigured": "چیٹ API تشکیل نہیں دیا گیا ہے۔ براہ کرم سپورٹ سے رابطہ کریں یا اپنی ایپ کی ترتیبات کو چیک کریں۔",
   "chatErrorRateLimit": "شرح کی حد سے تجاوز براہ کرم بعد میں دوبارہ کوشش کریں۔",
   "chatGreeting": "ہیلو، میں Smart Chef ہوں!",
@@ -154,6 +155,8 @@
   "chatListening": "سن رہا ہے...",
   "chatMessageCopied": "پیغام کاپی ہو گیا",
   "chatNewChat": "نیا چیٹ",
+  "chatNewChatConfirmTitle": "نئی گفتگو؟",
+  "chatNewChatConfirmMessage": "نئی گفتگو شروع کریں؟ آپ کی موجودہ چیٹ محفوظ ہو جائے گی۔",
   "chatPlaceholder": "مجھ سے کچھ بھی پوچھیں...",
   "chatSubtitle": "آپ کا AI کھانا پکانے کا اسسٹنٹ",
   "chatSuggestion1": "مرغی اور چاول کے ساتھ میں کیا بنا سکتا ہوں؟",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "شامل کیا گیا",
   "groceryBought": "خریدا",
   "groceryBudgetMode": "بجٹ موڈ",
-  "groceryBudgetPlaceholder": "بجٹ درج کریں (جیسے ، 2000 پی کے آر)",
+  "groceryBudgetPlaceholder": "بجٹ درج کریں (جیسے ، 2000)",
+  "groceryBudgetMustCoverEstimate": "آپ کی فہرست کا تخمینہ {total} ہے۔ بجٹ کم از کم اتنا بڑھائیں یا اشیاء ہٹائیں۔",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "بجٹ فہرست سے کم ہے",
+  "groceryBudgetLowBody": "آپ کی فہرست کا تخمینہ {total} ہے۔ بجٹ موڈ آن رہے گا — نیچے رقم بڑھائیں یا اشیاء ہٹائیں۔",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "بجٹ میں ترمیم",
+  "groceryBudgetLowOk": "ٹھیک ہے",
+  "groceryBudgetInlineOverHint": "فہرست تقریباً {total}، اس بجٹ سے زیادہ۔ اوپر رقم بڑھائیں یا اشیاء ہٹائیں — بجٹ موڈ آن رہتے ہوئے ترمیم کر سکتے ہیں۔",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "خرچ ٹریک کرنے کے لیے اوپر بجٹ درج کریں۔",
+
   "groceryCategories": "اقسام",
   "groceryCategory": "قسم",
   "groceryCreateMealPlanFirst": "براہ کرم پہلے کھانے کا پلان بنائیں",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "آئٹم شامل ہو گیا!",
   "groceryItemName": "آئٹم کا نام...",
   "groceryItemRequired": "آئٹم کا نام ضروری ہے",
+  "groceryQuantityRequired": "براہ کرم اس آئٹم کی مقدار درج کریں",
   "groceryItems": "اشیاء",
   "groceryItemsIn": "آئٹمز میں",
   "groceryList": "فہرست",
@@ -478,6 +511,9 @@
   "premiumBestValue": "بہترین قیمت",
   "premiumPlanWeekly": "ہفتہ وار",
   "premiumPlanYearly": "سالانہ",
+  "premiumPlanLifetime": "زندگی بھر",
+  "premiumLifetimeFullAccessIncluded": "ایک بار کی خرید • مکمل رسائی شامل",
+  "premiumUnlockNow": "ابھی ان لاک کریں",
   "premiumStartFreeTrialTitle": "اپنا مفت ٹرائل شروع کریں",
   "premiumStartFreeTrial": "3 دن کا مفت ٹرائل شروع کریں {price}",
   "@premiumStartFreeTrial": {
@@ -583,6 +619,7 @@
   "recipesMoodsSpicyFix": "مسالے دار",
   "recipesMoodsSweetCravings": "میٹھا کی خواہش",
   "recipesNewRecipe": "نیا ترکیب",
+  "recipesGeneratedTapForDetails": "مکمل ترکیب دیکھنے کے لیے کارڈ پر تھپتھپائیں۔",
   "recipesNoResults": "کوئی ترکیب نہیں ملی",
   "recipesQuick": "فوری",
   "recipesResultsFor": "نتائج برائے",
@@ -600,6 +637,7 @@
   "recipesVoice": "آواز",
   "scannerCameraNotAvailable": "کیمرہ دستیاب نہیں ہے",
   "smartChefTitle": "اسمارٹ شیف",
+  "smartGroceryTitle": "اسمارٹ گروسری",
   "smartChefPro": "پرو",
   "smartChefWhatIngredientsLine1": "آپ کے پاس کون سے اجزاء",
   "smartChefWhatIngredientsLine2": "موجود ہیں؟",
@@ -637,6 +675,8 @@
   "scannerAiDisabled": "AI نسخہ جنریشن فی الحال غیر فعال ہے۔ لامحدود رسائی کے لئے پریمیم میں اپ گریڈ کریں!",
   "scannerAiIngredientScanner": "AI اجزاء اسکینر",
   "scannerAnalyzing": "آپ کے اجزاء کا تجزیہ کیا جا رہا ہے...",
+  "scannerCancelAnalysisTitle": "تجزیہ منسوخ کریں؟",
+  "scannerCancelAnalysisMessage": "اجزاء کا تجزیہ ہو رہا ہے۔ کیا آپ منسوخ کر کے واپس جانا چاہتے ہیں؟",
   "scannerCalories": "کیلوری",
   "scannerCaptureOrUpload": "اپنے اجزاء کی تصویر پر قبضہ یا اپ لوڈ کریں",
   "scannerCategory": "زمرہ",
@@ -737,7 +777,7 @@
   "settingsPreferencesSettings": "ترجیحات اور ترتیبات",
   "settingsPrivacyPolicy": "رازداری کی پالیسی",
   "settingsRateUs": "ہمیں ریٹ کریں",
-  "settingsRateUsSubtitle": "ایپ پسند آئی؟ ہمیں ریٹ کریں!",
+  "settingsRateUsSubtitle": "ایپ پسند آئی؟ ہمیں ریٹ کریں!",
   "rateDialogTitle": "کیا آپ Smart Chef سے لطف اندوز ہو رہے ہیں؟",
   "rateDialogSubtitle": "اپنے کھانا پکانے کے تجربے کو بہتر بنانے میں ہماری مدد کریں 🍳",
   "rateDialogBody": "آپ کی رائے ہمیں\nآپ کے لیے بہتر ترکیبیں بنانے میں مدد دیتی ہے",

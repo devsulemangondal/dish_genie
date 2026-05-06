@@ -122,6 +122,7 @@
   "chatCopy": "复制",
   "chatEdit": "编辑",
   "chatErrorGeneric": "抱歉，我无法处理您的请求。请再试一次。",
+  "errorNoInternet": "没有网络连接。请检查网络后重试。",
   "chatErrorNotConfigured": "未配置聊天 API。请联系支持人员或检查您的应用程序设置。",
   "chatErrorRateLimit": "超出速率限制。请稍后重试。",
   "chatGreeting": "你好，我是Smart Chef！",
@@ -154,6 +155,8 @@
   "chatListening": "聆听中...",
   "chatMessageCopied": "消息已复制",
   "chatNewChat": "新对话",
+  "chatNewChatConfirmTitle": "新对话？",
+  "chatNewChatConfirmMessage": "开始新对话？当前聊天记录将会保存。",
   "chatPlaceholder": "问我任何问题...",
   "chatSubtitle": "您的AI烹饪助手",
   "chatSuggestion1": "用鸡肉和米饭能做什么？",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "已添加",
   "groceryBought": "已购买",
   "groceryBudgetMode": "预算模式",
-  "groceryBudgetPlaceholder": "输入预算（例如 2000 PKR）",
+  "groceryBudgetPlaceholder": "输入预算（例如 2000）",
+  "groceryBudgetMustCoverEstimate": "购物清单预估合计为 {total}。请将预算提高到至少该金额，或移除部分商品。",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "预算低于清单估算",
+  "groceryBudgetLowBody": "您的清单估算为 {total}。预算模式保持开启 — 在下方提高金额或移除商品。",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "编辑预算",
+  "groceryBudgetLowOk": "好的",
+  "groceryBudgetInlineOverHint": "清单约 {total}，超过此预算。提高上方金额或移除商品 — 预算模式开启时也可编辑。",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "在上方输入预算金额以跟踪支出。",
+
   "groceryCategories": "分类",
   "groceryCategory": "分类",
   "groceryCreateMealPlanFirst": "请先创建膳食计划",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "物品已添加！",
   "groceryItemName": "物品名称",
   "groceryItemRequired": "需要物品名称",
+  "groceryQuantityRequired": "请填写此项的数量",
   "groceryItems": "件物品",
   "groceryItemsIn": "物品在",
   "groceryList": "列表",
@@ -478,6 +511,9 @@
   "premiumBestValue": "超值之选",
   "premiumPlanWeekly": "每周",
   "premiumPlanYearly": "每年",
+  "premiumPlanLifetime": "终身",
+  "premiumLifetimeFullAccessIncluded": "一次性购买 • 包含完整访问权限",
+  "premiumUnlockNow": "立即解锁",
   "premiumStartFreeTrialTitle": "开始免费试用",
   "premiumStartFreeTrial": "开始3天免费试用 {price}",
   "@premiumStartFreeTrial": {
@@ -583,6 +619,7 @@
   "recipesMoodsSpicyFix": "辣味",
   "recipesMoodsSweetCravings": "甜食",
   "recipesNewRecipe": "新食谱",
+  "recipesGeneratedTapForDetails": "点击卡片查看完整食谱。",
   "recipesNoResults": "未找到食谱",
   "recipesQuick": "快速",
   "recipesResultsFor": "搜索结果",
@@ -600,6 +637,7 @@
   "recipesVoice": "语音",
   "scannerCameraNotAvailable": "相机不可用",
   "smartChefTitle": "智能厨师",
+  "smartGroceryTitle": "智能杂货",
   "smartChefPro": "专业版",
   "smartChefWhatIngredientsLine1": "你有哪些",
   "smartChefWhatIngredientsLine2": "食材？",
@@ -637,6 +675,8 @@
   "scannerAiDisabled": "AI 食谱生成目前已禁用。升级到高级版即可无限制访问！",
   "scannerAiIngredientScanner": "人工智能成分扫描仪",
   "scannerAnalyzing": "正在分析您的食材...",
+  "scannerCancelAnalysisTitle": "取消分析？",
+  "scannerCancelAnalysisMessage": "正在分析食材。确定要取消并返回吗？",
   "scannerCalories": "卡路里",
   "scannerCaptureOrUpload": "拍摄或上传您的成分照片",
   "scannerCategory": "类别",
@@ -737,7 +777,7 @@
   "settingsPreferencesSettings": "偏好和设置",
   "settingsPrivacyPolicy": "隐私政策",
   "settingsRateUs": "给我们评分",
-  "settingsRateUsSubtitle": "喜欢这个应用？给我们评分！",
+  "settingsRateUsSubtitle": "喜欢这个应用？给我们评分！",
   "rateDialogTitle": "喜欢 Smart Chef 吗？",
   "rateDialogSubtitle": "帮助我们提升你的烹饪体验 🍳",
   "rateDialogBody": "你的反馈将帮助我们\n为你打造更好的食谱",

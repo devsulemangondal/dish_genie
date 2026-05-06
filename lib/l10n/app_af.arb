@@ -122,6 +122,7 @@
   "chatCopy": "Kopieer",
   "chatEdit": "Redigeer",
   "chatErrorGeneric": "Jammer, ek kon nie jou versoek verwerk nie. Probeer asseblief weer.",
+  "errorNoInternet": "Geen internetverbinding nie. Gaan jou verbinding na en probeer weer.",
   "chatErrorNotConfigured": "Chat API is nie opgestel nie. Kontak asseblief ondersteuning of gaan jou programinstellings na.",
   "chatErrorRateLimit": "Tarieflimiet oorskry. Probeer asseblief later weer.",
   "chatGreeting": "Hallo, ek is Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "Luister...",
   "chatMessageCopied": "Boodskap gekopieer",
   "chatNewChat": "Nuwe klets",
+  "chatNewChatConfirmTitle": "Nuwe gesprek?",
+  "chatNewChatConfirmMessage": "Begin 'n nuwe gesprek? Jou huidige klets sal gestoor word.",
   "chatPlaceholder": "Vra my enigiets...",
   "chatSubtitle": "Jou KI kook assistent",
   "chatSuggestion1": "Wat kan ek maak met hoender en rys?",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "Bygevoeg",
   "groceryBought": "Gekoop",
   "groceryBudgetMode": "Begrotingsmodus",
-  "groceryBudgetPlaceholder": "Voer begroting in (bv. 2000 PKR)",
+  "groceryBudgetPlaceholder": "Voer begroting in (bv. 2000)",
+  "groceryBudgetMustCoverEstimate": "Jou lys word op {total} geraam. Verhoog jou begroting tot minstens daardie bedrag of verwyder artikels.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Begroting is onder jou lys",
+  "groceryBudgetLowBody": "Jou lys word op {total} geskat. Begrotingmodus bly aan — verhoog die bedrag in die veld hieronder of verwyder items.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "Wysig begroting",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "Die lys is ongeveer {total}, bo hierdie begroting. Verhoog die bedrag hierbo of verwyder items — jy kan wysig met begrotingmodus aan.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Voer bo ’n begroting in om uitgawes na te spoor.",
+
   "groceryCategories": "Kategorieë",
   "groceryCategory": "Kategorie",
   "groceryCreateMealPlanFirst": "Skep eers 'n eteplan",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "Item bygevoeg!",
   "groceryItemName": "Item naam",
   "groceryItemRequired": "Item naam is vereis",
+  "groceryQuantityRequired": "Voer asseblief 'n hoeveelheid vir hierdie item in",
   "groceryItems": "items",
   "groceryItemsIn": "Items in",
   "groceryList": "Lys",
@@ -478,6 +511,9 @@
   "premiumBestValue": "Beste waarde",
   "premiumPlanWeekly": "Weekliks",
   "premiumPlanYearly": "Jaarliks",
+  "premiumPlanLifetime": "Lewensduur",
+  "premiumLifetimeFullAccessIncluded": "Eenmalige aankoop • Volle toegang ingesluit",
+  "premiumUnlockNow": "Ontsluit nou",
   "premiumStartFreeTrialTitle": "Begin jou gratis proef",
   "premiumStartFreeTrial": "Begin 3-dae gratis proef {price}",
   "@premiumStartFreeTrial": {
@@ -593,6 +629,7 @@
   "recipesMoodsSpicyFix": "Speserye",
   "recipesMoodsSweetCravings": "Soet",
   "recipesNewRecipe": "Nuwe Resep",
+  "recipesGeneratedTapForDetails": "Tik op die kaart om die volledige resep te sien.",
   "recipesNoResults": "Geen resepte gevind nie",
   "recipesQuick": "Vinnig",
   "recipesResultsFor": "Resultate vir",
@@ -610,6 +647,7 @@
   "recipesVoice": "Stem",
   "scannerCameraNotAvailable": "Kamera nie beskikbaar nie",
   "smartChefTitle": "Slim Sjef",
+  "smartGroceryTitle": "Slim kruideniersware",
   "smartChefPro": "Pro",
   "smartChefWhatIngredientsLine1": "Watter bestanddele",
   "smartChefWhatIngredientsLine2": "het jy?",
@@ -647,6 +685,8 @@
   "scannerAiDisabled": "KI-resepgenerering is tans gedeaktiveer. Gradeer op na premium vir onbeperkte toegang!",
   "scannerAiIngredientScanner": "KI-bestanddeelskandeerder",
   "scannerAnalyzing": "Besig om jou bestanddele te analiseer...",
+  "scannerCancelAnalysisTitle": "Kanselleer analise?",
+  "scannerCancelAnalysisMessage": "Bestanddele word ontleed. Is jy seker jy wil kanselleer en teruggaan?",
   "scannerCalories": "Kalorieë",
   "scannerCaptureOrUpload": "Vang of laai 'n foto van jou bestanddele op",
   "scannerCategory": "Kategorie",

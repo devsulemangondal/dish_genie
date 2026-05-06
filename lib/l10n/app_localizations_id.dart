@@ -331,6 +331,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get smartChefTitle => 'Koki Cerdas';
 
   @override
+  String get smartGroceryTitle => 'Belanja pintar';
+
+  @override
   String get smartChefPro => 'Pro';
 
   @override
@@ -408,6 +411,10 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Resep Baru';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'Ketuk kartu untuk melihat resep lengkapnya.';
 
   @override
   String get recipesWhatCraving => 'Ingin makan apa?';
@@ -761,8 +768,35 @@ class AppLocalizationsId extends AppLocalizations {
   String get groceryBudgetMode => 'Modus Anggaran';
 
   @override
-  String get groceryBudgetPlaceholder =>
-      'Masukkan anggaran (misalnya, PKR 2000)';
+  String get groceryBudgetPlaceholder => 'Masukkan anggaran (misalnya, 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Perkiraan total daftar Anda $total. Naikkan anggaran setidaknya hingga jumlah itu, atau hapus item.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Anggaran di bawah daftar Anda';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Perkiraan daftar Anda $total. Mode anggaran tetap aktif — naikkan jumlah di kolom di bawah atau hapus item.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Edit anggaran';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'Daftar sekitar $total, di atas anggaran ini. Naikkan jumlah di atas atau hapus item — Anda bisa mengedit saat mode anggaran aktif.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Masukkan anggaran di atas untuk melacak pengeluaran.';
 
   @override
   String get groceryOn => 'HIDUP';
@@ -790,6 +824,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Nama item diperlukan';
+
+  @override
+  String get groceryQuantityRequired => 'Harap masukkan jumlah untuk item ini';
 
   @override
   String get groceryCreateMealPlanFirst =>
@@ -992,11 +1029,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get chatNewChat => 'Obrolan baru';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Obrolan baru?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Mulai obrolan baru? Obrolan saat ini akan disimpan.';
 
   @override
   String get chatCopy => 'Salin';
@@ -1324,11 +1361,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get scannerAnalyzing => 'Menganalisis bahan Anda...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Batalkan analisis?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Bahan sedang dianalisis. Yakin ingin membatalkan dan kembali?';
 
   @override
   String get scannerDetected => 'Bahan Terdeteksi';
@@ -1843,6 +1880,10 @@ class AppLocalizationsId extends AppLocalizations {
       'Maaf, saya tidak dapat memproses permintaan Anda. Silakan coba lagi.';
 
   @override
+  String get errorNoInternet =>
+      'Tidak ada koneksi internet. Periksa koneksi Anda dan coba lagi.';
+
+  @override
   String get premiumPurchaseFailed => 'Pembelian gagal';
 
   @override
@@ -2242,11 +2283,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get premiumPlanYearly => 'Tahunan';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Seumur hidup';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Pembelian sekali • Akses penuh termasuk';
 
   @override
   String get premiumStartFreeTrialTitle => 'Mulai uji coba gratis Anda';
@@ -2257,7 +2298,7 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'Buka sekarang';
 
   @override
   String get premiumBestOffer => 'Best offer';

@@ -8,6 +8,7 @@ import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
 import '../../data/models/recipe.dart';
 import '../../providers/recipe_provider.dart';
+import '../../services/interstitial_ad_helper.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/common/genie_mascot.dart';
 import '../../widgets/common/standard_back_button.dart';
@@ -30,6 +31,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   bool _isLiked = false;
   bool _isSaved = false;
   bool _isLoading = true;
+  bool _recipeBackInProgress = false;
 
   // Consistent spacing for the detail content
   static const double _pad = 24;
@@ -157,9 +159,21 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   /// Track card open (ads removed - reserved for future ad plan)
   Future<void> _trackCardOpen() async {}
 
-  /// Handle back button press
+  /// System back, PopScope, or app bar — optional interstitial then pop.
   Future<void> _handleBack() async {
-    _popOrGoRecipes();
+    if (!mounted || _recipeBackInProgress) return;
+    _recipeBackInProgress = true;
+    await InterstitialAdHelper.showRecipeDetailBackInterstitial(
+      context: context,
+      onLeave: () {
+        if (!mounted) {
+          _recipeBackInProgress = false;
+          return;
+        }
+        _recipeBackInProgress = false;
+        _popOrGoRecipes();
+      },
+    );
   }
 
   void _loadRecipe() {
@@ -892,7 +906,19 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                         onTap: () {
                                           final r = _recipe;
                                           if (r == null) return;
-                                          context.push('/chat', extra: r);
+                                          // Use go (not push): /chat lives under the shell navigator while
+                                          // recipe detail is on the root. Pushing stacks both and can trigger
+                                          // Navigator keyReservation / HeroControllerScope assertions.
+                                          // Unique `cook` query forces the shell chat route to rebuild with a
+                                          // fresh [ChatAssistantScreen] state so "Start cooking" works every time.
+                                          final uri = Uri(
+                                            path: '/chat',
+                                            queryParameters: {
+                                              'cook':
+                                                  '${DateTime.now().microsecondsSinceEpoch}',
+                                            },
+                                          );
+                                          context.go(uri.toString(), extra: r);
                                         },
                                         borderRadius: BorderRadius.circular(20),
                                         child: Center(

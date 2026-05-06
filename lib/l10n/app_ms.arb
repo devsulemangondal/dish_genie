@@ -122,6 +122,7 @@
   "chatCopy": "Salin",
   "chatEdit": "Sunting",
   "chatErrorGeneric": "Maaf, saya tidak dapat memproses permintaan anda. Sila cuba lagi.",
+  "errorNoInternet": "Tiada sambungan internet. Sila semak sambungan anda dan cuba lagi.",
   "chatErrorNotConfigured": "API Sembang tidak dikonfigurasikan. Sila hubungi sokongan atau semak tetapan apl anda.",
   "chatErrorRateLimit": "Had kadar melebihi. Sila cuba lagi kemudian.",
   "chatGreeting": "Hai, saya Smart Chef!",
@@ -154,6 +155,8 @@
   "chatListening": "Mendengar...",
   "chatMessageCopied": "Mesej disalin",
   "chatNewChat": "Sembang baru",
+  "chatNewChatConfirmTitle": "Perbualan baru?",
+  "chatNewChatConfirmMessage": "Mulakan perbualan baru? Sembang semasa anda akan disimpan.",
   "chatPlaceholder": "Tanya saya apa-apa...",
   "chatSubtitle": "Pembantu memasak AI anda",
   "chatSuggestion1": "Apa yang boleh saya buat dengan ayam dan beras?",
@@ -230,7 +233,36 @@
   "groceryAddedStatus": "Ditambah",
   "groceryBought": "Dibeli",
   "groceryBudgetMode": "Mod Belanjawan",
-  "groceryBudgetPlaceholder": "Masukkan belanjawan (cth., 2000 PKR)",
+  "groceryBudgetPlaceholder": "Masukkan belanjawan (cth., 2000)",
+  "groceryBudgetMustCoverEstimate": "Anggaran senarai anda ialah {total}. Naikkan belanjawan sekurang-kurangnya sebanyak itu, atau buang item.",
+  "@groceryBudgetMustCoverEstimate": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Bajet di bawah senarai anda",
+  "groceryBudgetLowBody": "Anggaran senarai anda ialah {total}. Mod bajet kekal hidup — naikkan jumlah dalam medan di bawah atau buang item.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEditField": "Edit bajet",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "Senarai kira-kira {total}, melebihi bajet ini. Naikkan jumlah di atas atau buang item — anda boleh edit semasa mod bajet dihidupkan.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Masukkan bajet di atas untuk menjejak perbelanjaan.",
+
   "groceryCategories": "Kategori",
   "groceryCategory": "Kategori",
   "groceryCreateMealPlanFirst": "Sila buat pelan makanan terlebih dahulu",
@@ -252,6 +284,7 @@
   "groceryItemAdded": "Item ditambah!",
   "groceryItemName": "Nama item",
   "groceryItemRequired": "Nama item diperlukan",
+  "groceryQuantityRequired": "Sila masukkan kuantiti untuk item ini",
   "groceryItems": "item",
   "groceryItemsIn": "Item dalam",
   "groceryList": "Senarai",
@@ -478,6 +511,9 @@
   "premiumBestValue": "Nilai terbaik",
   "premiumPlanWeekly": "Mingguan",
   "premiumPlanYearly": "Tahunan",
+  "premiumPlanLifetime": "Seumur hidup",
+  "premiumLifetimeFullAccessIncluded": "Pembelian sekali • Akses penuh termasuk",
+  "premiumUnlockNow": "Buka sekarang",
   "premiumStartFreeTrialTitle": "Mulakan percubaan percuma anda",
   "premiumStartFreeTrial": "Mulakan percubaan percuma 3 hari {price}",
   "@premiumStartFreeTrial": {
@@ -593,6 +629,7 @@
   "recipesMoodsSpicyFix": "Pedas",
   "recipesMoodsSweetCravings": "Manis",
   "recipesNewRecipe": "Resipi Baru",
+  "recipesGeneratedTapForDetails": "Ketik kad untuk melihat resipi penuh.",
   "recipesNoResults": "Tiada resipi dijumpai",
   "recipesQuick": "Pantas",
   "recipesResultsFor": "Keputusan untuk",
@@ -610,6 +647,7 @@
   "recipesVoice": "Suara",
   "scannerCameraNotAvailable": "Kamera tidak tersedia",
   "smartChefTitle": "Chef Pintar",
+  "smartGroceryTitle": "Runcit pintar",
   "smartChefPro": "Pro",
   "smartChefWhatIngredientsLine1": "Bahan apa",
   "smartChefWhatIngredientsLine2": "yang anda ada?",
@@ -647,6 +685,8 @@
   "scannerAiDisabled": "Penjanaan resipi AI dilumpuhkan pada masa ini. Naik taraf kepada premium untuk akses tanpa had!",
   "scannerAiIngredientScanner": "Pengimbas Bahan AI",
   "scannerAnalyzing": "Menganalisis bahan-bahan anda...",
+  "scannerCancelAnalysisTitle": "Batalkan analisis?",
+  "scannerCancelAnalysisMessage": "Bahan sedang dianalisis. Anda pasti mahu batalkan dan kembali?",
   "scannerCalories": "Kalori",
   "scannerCaptureOrUpload": "Tangkap atau muat naik foto bahan-bahan anda",
   "scannerCategory": "kategori",
@@ -747,7 +787,7 @@
   "settingsPreferencesSettings": "Keutamaan dan tetapan",
   "settingsPrivacyPolicy": "Dasar Privasi",
   "settingsRateUs": "Nilai Kami",
-  "settingsRateUsSubtitle": "Suka aplikasi ini? Nilai kami!",
+  "settingsRateUsSubtitle": "Suka aplikasi ini? Nilai kami!",
   "rateDialogTitle": "Sedang menikmati Smart Chef?",
   "rateDialogSubtitle": "Bantu kami tingkatkan pengalaman memasak anda 🍳",
   "rateDialogBody": "Maklum balas anda membantu kami\nmencipta resipi yang lebih baik untuk anda",

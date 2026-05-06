@@ -331,6 +331,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get smartChefTitle => 'Chef Inteligente';
 
   @override
+  String get smartGroceryTitle => 'Compras inteligentes';
+
+  @override
   String get smartChefPro => 'Pro';
 
   @override
@@ -408,6 +411,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Nova Receita';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'Toque no cartão para ver a receita completa.';
 
   @override
   String get recipesWhatCraving => 'O que você está com vontade?';
@@ -761,7 +768,35 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get groceryBudgetPlaceholder =>
-      'Insira o orçamento (por exemplo, 2.000 PKR)';
+      'Insira o orçamento (por exemplo, 2.000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'O total estimado da lista é $total. Aumente o orçamento pelo menos para esse valor ou remova itens.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Orçamento abaixo da sua lista';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Sua lista é estimada em $total. O modo orçamento permanece ligado — aumente o valor no campo abaixo ou remova itens.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'Editar orçamento';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'A lista é cerca de $total, acima deste orçamento. Aumente o valor acima ou remova itens — pode editar com o modo orçamento ligado.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Digite um orçamento acima para acompanhar os gastos.';
 
   @override
   String get groceryOn => 'LIGADO';
@@ -789,6 +824,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Nome do item é obrigatório';
+
+  @override
+  String get groceryQuantityRequired => 'Insira a quantidade deste item';
 
   @override
   String get groceryCreateMealPlanFirst =>
@@ -992,11 +1030,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get chatNewChat => 'Nova conversa';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Nova conversa?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Iniciar uma nova conversa? O seu chat atual será guardado.';
 
   @override
   String get chatCopy => 'Copiar';
@@ -1323,11 +1361,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get scannerAnalyzing => 'Analisando seus ingredientes...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Cancelar análise?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Os ingredientes estão sendo analisados. Tem certeza de que deseja cancelar e voltar?';
 
   @override
   String get scannerDetected => 'Ingredientes Detectados';
@@ -1843,6 +1881,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Desculpe, não consegui processar sua solicitação. Por favor, tente novamente.';
 
   @override
+  String get errorNoInternet =>
+      'Sem conexão com a internet. Verifique sua conexão e tente novamente.';
+
+  @override
   String get premiumPurchaseFailed => 'Falha na compra';
 
   @override
@@ -2248,11 +2290,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get premiumPlanYearly => 'Anual';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Vitalício';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Compra única • Acesso total incluído';
 
   @override
   String get premiumStartFreeTrialTitle => 'Comece seu teste grátis';
@@ -2263,7 +2305,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'Desbloquear agora';
 
   @override
   String get premiumBestOffer => 'Best offer';

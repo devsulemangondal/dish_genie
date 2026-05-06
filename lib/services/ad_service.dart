@@ -12,6 +12,7 @@ import '../config/ad_config.dart';
 import '../core/router/app_router.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/language_provider.dart';
+import 'gdpr_consent_service.dart';
 import 'remote_config_service.dart';
 import 'storage_service.dart';
 
@@ -61,6 +62,10 @@ class AdService {
       'ca-app-pub-6882687050623219/6329636711';
   static const String _productionBottomInterAdUnitId =
       'ca-app-pub-6882687050623219/8916948280';
+
+  /// Interstitial when user switches bottom tabs (RC: bottom_tab_inter / bottom_tab_inter_ios)
+  static const String _productionBottomTabChangeInterAdUnitId =
+      'ca-app-pub-6882687050623219/2365011322';
   static const String _productionCardInterAdUnitId =
       'ca-app-pub-6882687050623219/5160895477';
   static const String _productionGeneratePlanInterAdUnitId =
@@ -82,6 +87,14 @@ class AdService {
       'ca-app-pub-6882687050623219/2773535082';
   static const String _productionViewPlanContinueInterIos =
       'ca-app-pub-6882687050623219/9422703914';
+
+  /// Recipe detail screen back (system / app bar) — same unit Android & iOS unless split in AdMob.
+  static const String _productionRecipeDetailBackInterAdUnitId =
+      'ca-app-pub-6882687050623219/3678092993';
+
+  /// Grocery screen smart suggestion row — Add tap (same unit Android & iOS unless split in AdMob).
+  static const String _productionGroceryAddSugInterAdUnitId =
+      'ca-app-pub-6882687050623219/2243698188';
   // Resume app open ad when app returns from background (Android / iOS)
   static const String _productionResumeAppOpenAndroid =
       'ca-app-pub-6882687050623219/7730206739';
@@ -108,29 +121,23 @@ class AdService {
   static const String _productionBottomBannerIos =
       'ca-app-pub-6882687050623219/9541648057';
 
+  /// Native strip fallback when bottom anchored banner fails (RC: `bottom_native`).
+  static const String _productionBottomNativeAdUnitId =
+      'ca-app-pub-6882687050623219/7110423193';
+
   // ========== FOR TESTING ONLY: Test ads in release APK ==========
   // Set to true: release APK shows Google test ads (for testing).
   // Set to false: release APK uses production ad units (real ads).
   static const bool _forceTestAds = false;
   // ================================================================
 
-  // Get ad unit IDs. When _forceTestAds is true we always use test IDs (no kReleaseMode check).
+  // Get ad unit IDs. Production IDs are used in all build modes unless
+  // _forceTestAds is explicitly enabled.
   static String _getAdUnitId(String productionId, {String? testAdType}) {
-    final testBannerId =
-        Platform.isIOS ? _testBannerAdUnitIdIos : _testBannerAdUnitIdAndroid;
+    final testBannerId = Platform.isIOS
+        ? _testBannerAdUnitIdIos
+        : _testBannerAdUnitIdAndroid;
     if (_forceTestAds) {
-      if (testAdType == 'native' || testAdType == 'Native')
-        return _testNativeAdUnitId;
-      if (testAdType == 'interstitial' || testAdType == 'Inter')
-        return _testInterstitialAdUnitId;
-      if (testAdType == 'appOpen' || testAdType == 'AppOpen')
-        return _testAppOpenAdUnitId;
-      if (testAdType == 'banner' || testAdType == 'Banner') return testBannerId;
-      if (productionId.contains('Native')) return _testNativeAdUnitId;
-      if (productionId.contains('Inter')) return _testInterstitialAdUnitId;
-      return _testAppOpenAdUnitId;
-    }
-    if (!kReleaseMode) {
       if (testAdType == 'native' || testAdType == 'Native')
         return _testNativeAdUnitId;
       if (testAdType == 'interstitial' || testAdType == 'Inter')
@@ -147,51 +154,40 @@ class AdService {
 
   static String get appOpenAdUnitId =>
       _getAdUnitId(_productionAppOpenAdUnitId, testAdType: 'appOpen');
+
   /// Resume app open ad - shown when app returns from background
-  static String get resumeAppOpenAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(_productionResumeAppOpenIos, testAdType: 'appOpen')
-          : _getAdUnitId(
-              _productionResumeAppOpenAndroid,
-              testAdType: 'appOpen',
-            );
-  static String get splashAppOpen1stTimeAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(_productionSplashAppOpen1stTimeIos, testAdType: 'appOpen')
-          : _getAdUnitId(
-              _productionSplashAppOpen1stTimeAndroid,
-              testAdType: 'appOpen',
-            );
-  static String get splashAppOpen2ndTimeAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(_productionSplashAppOpen2ndTimeIos, testAdType: 'appOpen')
-          : _getAdUnitId(
-              _productionSplashAppOpen2ndTimeAndroid,
-              testAdType: 'appOpen',
-            );
+  static String get resumeAppOpenAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionResumeAppOpenIos, testAdType: 'appOpen')
+      : _getAdUnitId(_productionResumeAppOpenAndroid, testAdType: 'appOpen');
+  static String get splashAppOpen1stTimeAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionSplashAppOpen1stTimeIos, testAdType: 'appOpen')
+      : _getAdUnitId(
+          _productionSplashAppOpen1stTimeAndroid,
+          testAdType: 'appOpen',
+        );
+  static String get splashAppOpen2ndTimeAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionSplashAppOpen2ndTimeIos, testAdType: 'appOpen')
+      : _getAdUnitId(
+          _productionSplashAppOpen2ndTimeAndroid,
+          testAdType: 'appOpen',
+        );
   static String get splashInterAdUnitId =>
       _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial');
-  static String get splashInter1stTimeAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial')
-          : _getAdUnitId(
-              _productionSplashInter1stTimeAndroid,
-              testAdType: 'interstitial',
-            );
-  static String get splashInter2ndTimeAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial')
-          : _getAdUnitId(
-              _productionSplashInter2ndTimeAndroid,
-              testAdType: 'interstitial',
-            );
-  static String get languageNativeAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(_productionLanguageNativeIos, testAdType: 'native')
-          : _getAdUnitId(
-              _productionLanguageNativeAndroid,
-              testAdType: 'native',
-            );
+  static String get splashInter1stTimeAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial')
+      : _getAdUnitId(
+          _productionSplashInter1stTimeAndroid,
+          testAdType: 'interstitial',
+        );
+  static String get splashInter2ndTimeAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial')
+      : _getAdUnitId(
+          _productionSplashInter2ndTimeAndroid,
+          testAdType: 'interstitial',
+        );
+  static String get languageNativeAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionLanguageNativeIos, testAdType: 'native')
+      : _getAdUnitId(_productionLanguageNativeAndroid, testAdType: 'native');
   static String get homeNativeAdUnitId =>
       _getAdUnitId(_productionHomeNativeAdUnitId, testAdType: 'native');
   static String get recipeNativeAdUnitId =>
@@ -206,15 +202,15 @@ class AdService {
       _getAdUnitId(_productionRecipeDetailNativeAdUnitId, testAdType: 'native');
   static String get cameraNativeAdUnitId =>
       _getAdUnitId(_productionCameraNativeAdUnitId, testAdType: 'native');
-  static String get onboardingNativeAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(_productionOnboardingNativeIos, testAdType: 'native')
-          : _getAdUnitId(
-              _productionOnboardingNativeAndroid,
-              testAdType: 'native',
-            );
+  static String get onboardingNativeAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionOnboardingNativeIos, testAdType: 'native')
+      : _getAdUnitId(_productionOnboardingNativeAndroid, testAdType: 'native');
   static String get bottomInterAdUnitId =>
       _getAdUnitId(_productionBottomInterAdUnitId, testAdType: 'interstitial');
+  static String get bottomTabChangeInterAdUnitId => _getAdUnitId(
+    _productionBottomTabChangeInterAdUnitId,
+    testAdType: 'interstitial',
+  );
   static String get cardInterAdUnitId =>
       _getAdUnitId(_productionCardInterAdUnitId, testAdType: 'interstitial');
   static String get generatePlanInterAdUnitId => _getAdUnitId(
@@ -225,39 +221,45 @@ class AdService {
     _productionCookingAiInterAdUnitId,
     testAdType: 'interstitial',
   );
-  static String get exitInterAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(_productionExitInterIos, testAdType: 'interstitial')
-          : _getAdUnitId(
-              _productionExitInterAndroid,
-              testAdType: 'interstitial',
-            );
-  static String get chatResetInterAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(
-              _productionChatResetInterIos,
-              testAdType: 'interstitial',
-            )
-          : _getAdUnitId(
-              _productionChatResetInterAndroid,
-              testAdType: 'interstitial',
-            );
-  static String get viewPlanContinueInterAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(
-              _productionViewPlanContinueInterIos,
-              testAdType: 'interstitial',
-            )
-          : _getAdUnitId(
-              _productionViewPlanContinueInterAndroid,
-              testAdType: 'interstitial',
-            );
-  static String get bottomBannerAdUnitId =>
-      Platform.isIOS
-          ? _getAdUnitId(_productionBottomBannerIos, testAdType: 'banner')
-          : _getAdUnitId(_productionBottomBannerAndroid, testAdType: 'banner');
+  static String get exitInterAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionExitInterIos, testAdType: 'interstitial')
+      : _getAdUnitId(_productionExitInterAndroid, testAdType: 'interstitial');
+  static String get chatResetInterAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionChatResetInterIos, testAdType: 'interstitial')
+      : _getAdUnitId(
+          _productionChatResetInterAndroid,
+          testAdType: 'interstitial',
+        );
+  static String get viewPlanContinueInterAdUnitId => Platform.isIOS
+      ? _getAdUnitId(
+          _productionViewPlanContinueInterIos,
+          testAdType: 'interstitial',
+        )
+      : _getAdUnitId(
+          _productionViewPlanContinueInterAndroid,
+          testAdType: 'interstitial',
+        );
+  static String get recipeDetailBackInterAdUnitId => _getAdUnitId(
+    _productionRecipeDetailBackInterAdUnitId,
+    testAdType: 'interstitial',
+  );
+  static String get groceryAddSugInterAdUnitId => _getAdUnitId(
+    _productionGroceryAddSugInterAdUnitId,
+    testAdType: 'interstitial',
+  );
+  static String get bottomBannerAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionBottomBannerIos, testAdType: 'banner')
+      : _getAdUnitId(_productionBottomBannerAndroid, testAdType: 'banner');
+
+  static String get bottomNativeAdUnitId =>
+      _getAdUnitId(_productionBottomNativeAdUnitId, testAdType: 'native');
 
   static bool _isInitialized = false;
+  // Default to "blocked" on Android until we gather consent (prevents early ad requests).
+  static bool _gdprAllowsAds = Platform.isAndroid ? false : true;
+
+  /// True when GDPR/UMP consent allows requesting ads (Android). Always true on non-Android.
+  static bool get gdprAllowsAds => _gdprAllowsAds;
 
   /// When false: no ads on iOS. When true: show ads on iOS. Android always shows ads.
   static bool get _shouldShowAdsOnPlatform {
@@ -275,6 +277,14 @@ class AdService {
           '🚫 [AdService] Skipping MobileAds initialization on iOS (ads disabled)',
         );
       }
+      _isInitialized = true;
+      return;
+    }
+
+    // GDPR/UMP consent gate (Android). If consent flow blocks ad requests,
+    // we skip initializing ads and treat ads as disabled for this run.
+    _gdprAllowsAds = await GdprConsentService.gatherConsentIfRequired();
+    if (!_gdprAllowsAds) {
       _isInitialized = true;
       return;
     }
@@ -309,6 +319,7 @@ class AdService {
     Function(LoadAdError)? onAdFailedToLoad,
   }) async {
     if (!_shouldShowAdsOnPlatform) return null;
+    if (!_gdprAllowsAds) return null;
 
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
@@ -328,6 +339,7 @@ class AdService {
     if (!_isInitialized) {
       await initialize();
     }
+    if (!_gdprAllowsAds) return null;
 
     // If already loading or loaded, return existing
     if (_isLoadingNative[screenKey] == true && _nativeAds[screenKey] != null) {
@@ -543,8 +555,10 @@ class AdService {
   static final Map<String, InterstitialAd?> _interstitialAds = {};
   static final Map<String, bool> _isLoadingInterstitial = {};
   static final Map<String, bool> _isShowingInterstitial = {};
+
   /// Tracks show attempt from entry - blocks overlapping calls (e.g. rapid bottom nav taps)
   static final Map<String, bool> _isShowInterstitialInProgress = {};
+
   /// Global lock: only one interstitial (any type) can load/show at a time.
   /// Prevents double ads when user navigates quickly on slow internet.
   static bool _isAnyInterstitialInProgress = false;
@@ -567,6 +581,7 @@ class AdService {
     int retryCount = 0,
   }) async {
     if (!_shouldShowAdsOnPlatform) return;
+    if (!_gdprAllowsAds) return;
 
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
@@ -581,6 +596,7 @@ class AdService {
     if (!_isInitialized) {
       await initialize();
     }
+    if (!_gdprAllowsAds) return;
 
     if (_isLoadingInterstitial[adType] == true) return;
 
@@ -602,7 +618,8 @@ class AdService {
 
           // Retry once for common transient failures.
           // (0 = internal error, 2 = no fill, 3 = internal/invalid request in some SDKs)
-          final shouldRetry = retryCount == 0 &&
+          final shouldRetry =
+              retryCount == 0 &&
               (error.code == 0 || error.code == 2 || error.code == 3);
           if (shouldRetry) {
             if (kDebugMode) {
@@ -638,12 +655,25 @@ class AdService {
     Future<void> Function()? loadAdFunction,
     bool showLoader = true,
   }) async {
+    void logBottomTab(String msg) {
+      if (adType == 'bottomTab') {
+        debugPrint('📢 [BottomTabAd] $msg');
+      }
+    }
+
     if (!_shouldShowAdsOnPlatform) {
+      logBottomTab('skip: ads disabled on this platform (AdConfig)');
+      onAdFailedToShow?.call(null);
+      return;
+    }
+    if (!_gdprAllowsAds) {
+      logBottomTab('skip: GDPR consent blocked ad requests');
       onAdFailedToShow?.call(null);
       return;
     }
     // Block overlapping show attempts (e.g. rapid bottom nav taps)
     if (_isShowInterstitialInProgress[adType] == true) {
+      logBottomTab('skip: show already in progress for this adType');
       if (kDebugMode) {
         print(
           '⚠️ [AdService] Interstitial show already in progress for "$adType", skipping duplicate',
@@ -654,6 +684,7 @@ class AdService {
     }
     // Global lock: only one interstitial of any type at a time (prevents double ads on fast navigation)
     if (_isAnyInterstitialInProgress) {
+      logBottomTab('skip: another interstitial is loading or showing');
       if (kDebugMode) {
         print(
           '⚠️ [AdService] Another interstitial already loading or showing, skipping "$adType"',
@@ -667,6 +698,19 @@ class AdService {
 
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
+      logBottomTab('skip: user is premium');
+      _isShowInterstitialInProgress[adType] = false;
+      _isAnyInterstitialInProgress = false;
+      onAdFailedToShow?.call(null);
+      return;
+    }
+
+    // Make sure consent is gathered before any show attempt.
+    if (!_isInitialized) {
+      await initialize();
+    }
+    if (!_gdprAllowsAds) {
+      logBottomTab('skip: GDPR consent blocked ad requests (post-initialize)');
       _isShowInterstitialInProgress[adType] = false;
       _isAnyInterstitialInProgress = false;
       onAdFailedToShow?.call(null);
@@ -680,6 +724,9 @@ class AdService {
         _lastAppOpenAdDismissedTime!,
       );
       if (timeSinceAppOpenAd < _cooldownAfterAppOpenAd) {
+        logBottomTab(
+          'skip: cooldown after app open ad (${timeSinceAppOpenAd.inMilliseconds}ms < ${_cooldownAfterAppOpenAd.inMilliseconds}ms)',
+        );
         if (kDebugMode) {
           print(
             '⚠️ [AdService] Cooldown active after app open ad dismissal: ${timeSinceAppOpenAd.inSeconds}s / ${_cooldownAfterAppOpenAd.inSeconds}s, skipping interstitial ad',
@@ -693,8 +740,13 @@ class AdService {
     }
     // Short cooldown after last interstitial to avoid rapid chaining on fast navigation
     if (_lastInterstitialDismissedTime != null) {
-      final timeSince = DateTime.now().difference(_lastInterstitialDismissedTime!);
+      final timeSince = DateTime.now().difference(
+        _lastInterstitialDismissedTime!,
+      );
       if (timeSince < _cooldownAfterInterstitialAd) {
+        logBottomTab(
+          'skip: cooldown after last interstitial (${timeSince.inMilliseconds}ms < ${_cooldownAfterInterstitialAd.inMilliseconds}ms)',
+        );
         if (kDebugMode) {
           print(
             '⚠️ [AdService] Cooldown active after interstitial: ${timeSince.inMilliseconds}ms, skipping "$adType"',
@@ -719,13 +771,18 @@ class AdService {
       final NavigatorState? navigator =
           rootNavigator ?? AppRouter.getNavigatorKey()?.currentState;
 
-      // Fallback if no navigator captured and we still have a mounted context.
+      // Fallback: caller context, then app root (tab-switch interstitial may unmount caller).
       final NavigatorState? fallbackNavigator =
           (navigator == null && context != null && context.mounted)
           ? Navigator.of(context, rootNavigator: true)
           : null;
+      final NavigatorState? rootKeyNav =
+          navigator == null && fallbackNavigator == null
+          ? AppRouter.getNavigatorKey()?.currentState
+          : null;
 
-      final NavigatorState? navToUse = navigator ?? fallbackNavigator;
+      final NavigatorState? navToUse =
+          navigator ?? fallbackNavigator ?? rootKeyNav;
       if (navToUse == null || !navToUse.mounted) return;
 
       if (!navToUse.canPop()) return;
@@ -743,22 +800,35 @@ class AdService {
       }
     }
 
-    // Show loader dialog first if context is provided (optional)
+    // Loader: prefer caller context's root navigator; after go_router tab switches the
+    // caller may unmount before load finishes — fall back to app root navigator.
     try {
-      if (showLoader && context != null && context.mounted) {
-        // Capture the root navigator now (safe even if caller context unmounts later).
-        rootNavigator = Navigator.of(context, rootNavigator: true);
-
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          barrierColor: Colors.black.withValues(alpha: 0.7),
-          useRootNavigator: true, // Use root navigator to show on top
-          builder: (dialogContext) => const _AdLoadingDialog(),
-        );
-        loaderShown = true;
-        if (kDebugMode) {
-          print('📥 [AdService] Loader shown for ad type: $adType');
+      if (showLoader) {
+        final NavigatorState? navForLoader =
+            (context != null && context.mounted)
+            ? Navigator.of(context, rootNavigator: true)
+            : AppRouter.getNavigatorKey()?.currentState;
+        rootNavigator = navForLoader;
+        if (navForLoader != null && navForLoader.mounted) {
+          showDialog(
+            context: navForLoader.context,
+            barrierDismissible: false,
+            barrierColor: Colors.black.withValues(alpha: 0.7),
+            useRootNavigator: true,
+            useSafeArea: false,
+            builder: (dialogContext) => const _AdLoadingDialog(),
+          );
+          loaderShown = true;
+          logBottomTab(
+            'loader shown via ${context != null && context.mounted ? "caller context" : "AppRouter root"}',
+          );
+          if (kDebugMode) {
+            print('📥 [AdService] Loader shown for ad type: $adType');
+          }
+        } else {
+          logBottomTab(
+            'loader skipped: no mounted navigator (callerMounted=${context?.mounted})',
+          );
         }
       }
     } catch (e) {
@@ -847,8 +917,13 @@ class AdService {
       pollTimer?.cancel();
     }
 
+    logBottomTab(
+      'after load/wait: ad=${ad != null ? "loaded" : "null (no fill / error / timeout)"}',
+    );
+
     // Check if ad is already being shown to prevent duplicate shows
     if (_isShowingInterstitial[adType] == true) {
+      logBottomTab('skip: interstitial already showing for this adType');
       if (kDebugMode) {
         print(
           '⚠️ [AdService] Interstitial ad for type "$adType" is already being shown, skipping duplicate',
@@ -861,8 +936,12 @@ class AdService {
       return;
     }
 
-    // Show the ad if available
-    if (ad != null && context != null && context.mounted) {
+    // Interstitial.show() does not need the caller's BuildContext; caller may be unmounted
+    // after go_router navigates while we were loading (e.g. bottom tab interstitial).
+    if (ad != null) {
+      logBottomTab(
+        'showing interstitial (callerContextMounted=${context?.mounted ?? "null"})',
+      );
       // Mark as showing to prevent duplicate shows
       _isShowingInterstitial[adType] = true;
 
@@ -893,6 +972,11 @@ class AdService {
           onAdDismissed?.call();
         },
         onAdFailedToShowFullScreenContent: (ad, error) {
+          if (adType == 'bottomTab') {
+            debugPrint(
+              '📢 [BottomTabAd] onAdFailedToShowFullScreenContent: $error',
+            );
+          }
           if (kDebugMode) {
             print(
               '❌ [AdService] Ad failed to show for type: $adType, error: $error',
@@ -929,6 +1013,12 @@ class AdService {
       // (onAdShown won't be called if ad fails)
       dismissLoader();
       // Ad not available - call failed callback
+      if (adType == 'bottomTab') {
+        debugPrint(
+          '📢 [BottomTabAd] skip: ad not shown — adNull=${ad == null} '
+          '(callerContextMounted=${context?.mounted ?? "null"})',
+        );
+      }
       if (kDebugMode) {
         print(
           '⚠️ [AdService] Interstitial ad for type "$adType" not available, skipping',
@@ -991,6 +1081,18 @@ class AdService {
     return loadInterstitialAdForType(
       adType: 'bottom',
       adUnitId: bottomInterAdUnitId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+    );
+  }
+
+  static Future<void> loadBottomTabChangeInterstitialAd({
+    Function(InterstitialAd)? onAdLoaded,
+    Function(LoadAdError)? onAdFailedToLoad,
+  }) {
+    return loadInterstitialAdForType(
+      adType: 'bottomTab',
+      adUnitId: bottomTabChangeInterAdUnitId,
       onAdLoaded: onAdLoaded,
       onAdFailedToLoad: onAdFailedToLoad,
     );
@@ -1068,6 +1170,30 @@ class AdService {
     );
   }
 
+  static Future<void> loadRecipeDetailBackInterstitialAd({
+    Function(InterstitialAd)? onAdLoaded,
+    Function(LoadAdError)? onAdFailedToLoad,
+  }) {
+    return loadInterstitialAdForType(
+      adType: 'recipeDetailBack',
+      adUnitId: recipeDetailBackInterAdUnitId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+    );
+  }
+
+  static Future<void> loadGroceryAddSuggestionInterstitialAd({
+    Function(InterstitialAd)? onAdLoaded,
+    Function(LoadAdError)? onAdFailedToLoad,
+  }) {
+    return loadInterstitialAdForType(
+      adType: 'groceryAddSug',
+      adUnitId: groceryAddSugInterAdUnitId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
+    );
+  }
+
   // App Open Ad
   static AppOpenAd? _appOpenAd;
   static bool _isLoadingAppOpen = false;
@@ -1078,6 +1204,7 @@ class AdService {
     Function(LoadAdError)? onAdFailedToLoad,
   }) async {
     if (!_shouldShowAdsOnPlatform) return;
+    if (!_gdprAllowsAds) return;
 
     // Premium users never see ads (local-only entitlement).
     if (await StorageService.getIsPremium()) {
@@ -1097,6 +1224,7 @@ class AdService {
     if (!_isInitialized) {
       await initialize();
     }
+    if (!_gdprAllowsAds) return;
 
     if (_isLoadingAppOpen) return;
 
@@ -1127,9 +1255,14 @@ class AdService {
     required BuildContext context,
     required VoidCallback onComplete,
   }) async {
-    // Ensure Mobile Ads is initialized (bypass platform check for this first-install ad)
-    await MobileAds.instance.initialize();
-    _isInitialized = true;
+    // Consent gate first; if user didn't consent, skip ads entirely.
+    if (!_isInitialized) {
+      await initialize();
+    }
+    if (!_gdprAllowsAds) {
+      onComplete();
+      return;
+    }
 
     if (!await _checkInternetConnectivity()) {
       onComplete();
@@ -1164,6 +1297,7 @@ class AdService {
         barrierDismissible: false,
         barrierColor: Colors.black.withValues(alpha: 0.7),
         useRootNavigator: true,
+        useSafeArea: false,
         builder: (dialogContext) => const _AdLoadingDialog(),
       );
       loaderShown = true;
@@ -1215,7 +1349,9 @@ class AdService {
               },
               onAdDismissedFullScreenContent: (_) {
                 if (kDebugMode) {
-                  print('✅ [AdService] Splash first-time app open ad dismissed');
+                  print(
+                    '✅ [AdService] Splash first-time app open ad dismissed',
+                  );
                 }
                 ad?.dispose();
                 ad = null;
@@ -1248,7 +1384,8 @@ class AdService {
 
             // Retry once for common transient failures (network / internal / SDK timing).
             // If it's truly a configuration problem, this won't help, but it improves resilience.
-            final shouldRetry = retryCount < 1 &&
+            final shouldRetry =
+                retryCount < 1 &&
                 (error.code == 0 || error.code == 2 || error.code == 3);
             if (shouldRetry) {
               retryCount++;
@@ -1293,8 +1430,14 @@ class AdService {
     required BuildContext context,
     required VoidCallback onComplete,
   }) async {
-    await MobileAds.instance.initialize();
-    _isInitialized = true;
+    // Consent gate first; if user didn't consent, skip ads entirely.
+    if (!_isInitialized) {
+      await initialize();
+    }
+    if (!_gdprAllowsAds) {
+      onComplete();
+      return;
+    }
 
     if (!await _checkInternetConnectivity()) {
       onComplete();
@@ -1330,6 +1473,7 @@ class AdService {
         barrierDismissible: false,
         barrierColor: Colors.black.withValues(alpha: 0.7),
         useRootNavigator: true,
+        useSafeArea: false,
         builder: (dialogContext) => const _AdLoadingDialog(),
       );
       loaderShown = true;
@@ -1419,7 +1563,8 @@ class AdService {
             }
 
             // Retry once for common transient failures (network / internal / SDK timing).
-            final shouldRetry = retryCount < 1 &&
+            final shouldRetry =
+                retryCount < 1 &&
                 (error.code == 0 || error.code == 2 || error.code == 3);
             if (shouldRetry) {
               retryCount++;
@@ -1494,6 +1639,7 @@ class AdService {
     Function(AppOpenAd)? onAdFailedToShow,
   }) {
     if (!_shouldShowAdsOnPlatform) return;
+    if (!_gdprAllowsAds) return;
     if (_appOpenAd != null && !_isShowingAppOpen) {
       _isShowingAppOpen = true;
       _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
@@ -1617,83 +1763,83 @@ class _AdLoadingDialogState extends State<_AdLoadingDialog> {
       statusBarColor: backgroundColor,
       systemNavigationBarColor: backgroundColor,
       statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
-      systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness: isDark
+          ? Brightness.light
+          : Brightness.dark,
     );
 
     return PopScope(
       canPop: false, // Prevent dismissing while loading
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: overlayStyle,
-        child: Dialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          insetPadding: EdgeInsets.zero,
+        child: Material(
+          type: MaterialType.canvas,
+          color: backgroundColor,
           child: MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          removeBottom: true,
-          removeLeft: true,
-          removeRight: true,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // Background container covering entire screen including status bar
-              Container(color: backgroundColor),
-              // Content centered on screen
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Loader icon - matching web app Loader2 icon size (w-12 h-12 = 48px)
-                    SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 3,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          theme.colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24), // gap-6 in web = 24px
-                    // Loading text with animated dots - matching web app
-                    Builder(
-                      builder: (context) {
-                        final languageProvider = Provider.of<LanguageProvider>(
-                          context,
-                          listen: false,
-                        );
-                        final isRTL = languageProvider.isRTL;
-                        final localizations = AppLocalizations.of(context);
-                        final loadingText =
-                            (localizations?.adLoading ?? 'Loading ad')
-                                .replaceAll('...', '')
-                                .trim();
-                        final textWithDots = isRTL
-                            ? '$_dots$loadingText'
-                            : '$loadingText$_dots';
-                        return Text(
-                          textWithDots,
-                          textDirection: isRTL
-                              ? TextDirection.rtl
-                              : TextDirection.ltr,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: theme.textTheme.bodyMedium?.color
-                                ?.withValues(alpha: 0.7),
+            context: context,
+            removeTop: true,
+            removeBottom: true,
+            removeLeft: true,
+            removeRight: true,
+            child: SizedBox.expand(
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ColoredBox(color: backgroundColor),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 48,
+                          height: 48,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              theme.colorScheme.primary,
+                            ),
                           ),
-                        );
-                      },
+                        ),
+                        const SizedBox(height: 24),
+                        Builder(
+                          builder: (context) {
+                            final languageProvider =
+                                Provider.of<LanguageProvider>(
+                                  context,
+                                  listen: false,
+                                );
+                            final isRTL = languageProvider.isRTL;
+                            final localizations = AppLocalizations.of(context);
+                            final loadingText =
+                                (localizations?.adLoading ?? 'Loading ad')
+                                    .replaceAll('...', '')
+                                    .trim();
+                            final textWithDots = isRTL
+                                ? '$_dots$loadingText'
+                                : '$loadingText$_dots';
+                            return Text(
+                              textWithDots,
+                              textDirection: isRTL
+                                  ? TextDirection.rtl
+                                  : TextDirection.ltr,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: theme.textTheme.bodyMedium?.color
+                                    ?.withValues(alpha: 0.7),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
-        ),
     );
   }
 }

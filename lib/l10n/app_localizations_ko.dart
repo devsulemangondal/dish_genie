@@ -328,6 +328,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get smartChefTitle => '스마트 셰프';
 
   @override
+  String get smartGroceryTitle => '스마트 장보기';
+
+  @override
   String get smartChefPro => '프로';
 
   @override
@@ -403,6 +406,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => '새 레시피';
+
+  @override
+  String get recipesGeneratedTapForDetails => '카드를 탭하면 전체 레시피를 볼 수 있습니다.';
 
   @override
   String get recipesWhatCraving => '무엇을 드시고 싶으세요?';
@@ -752,7 +758,34 @@ class AppLocalizationsKo extends AppLocalizations {
   String get groceryBudgetMode => '예산 모드';
 
   @override
-  String get groceryBudgetPlaceholder => '예산 입력(예: 2000 PKR)';
+  String get groceryBudgetPlaceholder => '예산 입력(예: 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return '장바구니 추정 합계는 $total입니다. 예산을 최소 그만큼 늘리거나 항목을 삭제하세요.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => '예산이 목록보다 낮습니다';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return '목록 추정액은 $total입니다. 예산 모드는 켜진 채로 유지됩니다 — 아래 입력란에서 금액을 올리거나 항목을 삭제하세요.';
+  }
+
+  @override
+  String get groceryBudgetEditField => '예산 편집';
+
+  @override
+  String get groceryBudgetLowOk => '확인';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return '목록은 약 $total로 이 예산보다 큽니다. 위 금액을 올리거나 항목을 삭제하세요 — 예산 모드를 켠 채로 편집할 수 있습니다.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint => '지출을 추적하려면 위에 예산 금액을 입력하세요.';
 
   @override
   String get groceryOn => '켜짐';
@@ -780,6 +813,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get groceryItemRequired => '항목 이름이 필요합니다';
+
+  @override
+  String get groceryQuantityRequired => '이 품목의 수량을 입력하세요';
 
   @override
   String get groceryCreateMealPlanFirst => '먼저 식사 계획을 만드세요';
@@ -978,11 +1014,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chatNewChat => '새 채팅';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => '새 대화?';
 
   @override
-  String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+  String get chatNewChatConfirmMessage => '새 대화를 시작할까요? 현재 채팅은 저장됩니다.';
 
   @override
   String get chatCopy => '복사';
@@ -1297,11 +1332,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get scannerAnalyzing => '재료 분석 중...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => '분석을 취소할까요?';
 
   @override
-  String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+  String get scannerCancelAnalysisMessage => '재료를 분석 중입니다. 취소하고 돌아가시겠습니까?';
 
   @override
   String get scannerDetected => '감지된 재료';
@@ -1806,6 +1840,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chatErrorGeneric => '죄송합니다. 요청을 처리할 수 없습니다. 다시 시도해 주세요.';
 
   @override
+  String get errorNoInternet => '인터넷 연결이 없습니다. 연결을 확인하고 다시 시도해 주세요.';
+
+  @override
   String get premiumPurchaseFailed => '구매 실패';
 
   @override
@@ -2194,11 +2231,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumPlanYearly => '연간';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => '평생';
 
   @override
-  String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+  String get premiumLifetimeFullAccessIncluded => '일회성 구매 • 전체 액세스 포함';
 
   @override
   String get premiumStartFreeTrialTitle => '무료 체험 시작하기';
@@ -2209,7 +2245,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => '지금 잠금 해제';
 
   @override
   String get premiumBestOffer => 'Best offer';

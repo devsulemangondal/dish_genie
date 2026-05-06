@@ -31,6 +31,7 @@ import '../../screens/premium/pro_screen.dart';
 import '../../screens/app_open_ad_loader_screen.dart';
 import '../../providers/language_provider.dart';
 import '../../data/models/recipe.dart';
+import '../../widgets/common/main_tab_shell.dart';
 
 class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -129,39 +130,97 @@ class AppRouter {
           name: 'auth',
           builder: (context, state) => const AuthScreen(),
         ),
-        GoRoute(
-          path: '/',
-          name: 'home',
-          builder: (context, state) => const RecipeGeneratorScreen(
-            initialTabIndex: 1,
-            lockToAiGenerateTab: true,
-            showAsHomeTab: true,
-          ),
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return MainTabShell(navigationShell: navigationShell);
+          },
+          branches: <StatefulShellBranch>[
+            StatefulShellBranch(
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/',
+                  name: 'home',
+                  builder: (context, state) => const RecipeGeneratorScreen(
+                    initialTabIndex: 1,
+                    lockToAiGenerateTab: true,
+                    showAsHomeTab: true,
+                    isBottomTabRoot: true,
+                  ),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/recipes',
+                  name: 'recipes',
+                  builder: (context, state) {
+                    final search = state.uri.queryParameters['search'];
+                    final category = state.uri.queryParameters['category'];
+                    return RecipeGeneratorScreen(
+                      searchQuery: search,
+                      category: category,
+                      isBottomTabRoot: true,
+                    );
+                  },
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/planner',
+                  name: 'planner',
+                  builder: (context, state) => const MealPlannerScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/grocery',
+                  name: 'grocery',
+                  builder: (context, state) {
+                    final fromPlan =
+                        state.uri.queryParameters['fromPlan'] == 'true';
+                    return GroceryListScreen(fromPlan: fromPlan);
+                  },
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/chat',
+                  name: 'chat',
+                  builder: (context, state) {
+                    final extra = state.extra;
+                    final recipe = extra is Recipe ? extra : null;
+                    final cookLaunch = state.uri.queryParameters['cook'];
+                    return ChatAssistantScreen(
+                      initialRecipe: recipe,
+                      cookLaunchId: cookLaunch,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
-          // Old Home screen (Quick Actions, etc.)
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/home',
           name: 'home-old',
           builder: (context, state) => const HomeScreen(),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/search',
           name: 'search',
           builder: (context, state) => const SearchScreen(),
         ),
         GoRoute(
-          path: '/recipes',
-          name: 'recipes',
-          builder: (context, state) {
-            final search = state.uri.queryParameters['search'];
-            final category = state.uri.queryParameters['category'];
-            return RecipeGeneratorScreen(
-              searchQuery: search,
-              category: category,
-            );
-          },
-        ),
-        GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/recipe/:slug',
           name: 'recipe-detail',
           builder: (context, state) {
@@ -170,6 +229,7 @@ class AppRouter {
           },
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/ai-recipe',
           name: 'ai-recipe-detail',
           builder: (context, state) {
@@ -184,19 +244,7 @@ class AppRouter {
           },
         ),
         GoRoute(
-          path: '/planner',
-          name: 'planner',
-          builder: (context, state) => const MealPlannerScreen(),
-        ),
-        GoRoute(
-          path: '/grocery',
-          name: 'grocery',
-          builder: (context, state) {
-            final fromPlan = state.uri.queryParameters['fromPlan'] == 'true';
-            return GroceryListScreen(fromPlan: fromPlan);
-          },
-        ),
-        GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/grocery/:id',
           name: 'saved-list-detail',
           builder: (context, state) {
@@ -205,26 +253,19 @@ class AppRouter {
           },
         ),
         GoRoute(
-          path: '/chat',
-          name: 'chat',
-          builder: (context, state) {
-            final extra = state.extra;
-            return ChatAssistantScreen(
-              initialRecipe: extra is Recipe ? extra : null,
-            );
-          },
-        ),
-        GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/chat-history',
           name: 'chat-history',
           builder: (context, state) => const ChatHistoryScreen(),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/scan-camera',
           name: 'scan-camera',
           builder: (context, state) => const CustomCameraScreen(),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/scan-crop',
           name: 'scan-crop',
           builder: (context, state) {
@@ -234,6 +275,7 @@ class AppRouter {
           },
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/scan',
           name: 'scan',
           builder: (context, state) {
@@ -244,31 +286,37 @@ class AppRouter {
           },
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/favorites',
           name: 'favorites',
           builder: (context, state) => const FavoritesScreen(),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/settings',
           name: 'settings',
           builder: (context, state) => const SettingsScreen(),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/pro',
           name: 'pro',
           builder: (context, state) => const ProScreen(),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/landing',
           name: 'landing',
           builder: (context, state) => const LandingScreen(),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/app-open-ad-loader',
           name: 'app-open-ad-loader',
           builder: (context, state) => const AppOpenAdLoaderScreen(),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/:pathMatch(.*)*',
           name: 'not-found',
           builder: (context, state) => const NotFoundScreen(),

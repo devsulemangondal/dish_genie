@@ -331,6 +331,9 @@ class AppLocalizationsFil extends AppLocalizations {
   String get smartChefTitle => 'Smart Chef';
 
   @override
+  String get smartGroceryTitle => 'Smart na Groceries';
+
+  @override
   String get smartChefPro => 'Pro';
 
   @override
@@ -410,6 +413,10 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get recipesNewRecipe => 'Bagong Resipe';
+
+  @override
+  String get recipesGeneratedTapForDetails =>
+      'I-tap ang card para makita ang buong resipe.';
 
   @override
   String get recipesWhatCraving => 'Anong gusto mong kainin?';
@@ -766,7 +773,35 @@ class AppLocalizationsFil extends AppLocalizations {
   String get groceryBudgetMode => 'Mode ng Badyet';
 
   @override
-  String get groceryBudgetPlaceholder => 'Ilagay ang badyet (hal., 2000 PKR)';
+  String get groceryBudgetPlaceholder => 'Ilagay ang badyet (hal., 2000)';
+
+  @override
+  String groceryBudgetMustCoverEstimate(String total) {
+    return 'Ang tinatayang kabuuan ng listahan mo ay $total. Dagdagan ang badyet nang hindi bababa roon, o alisin ang mga item.';
+  }
+
+  @override
+  String get groceryBudgetLowTitle => 'Mas mababa ang budget kaysa sa listahan';
+
+  @override
+  String groceryBudgetLowBody(String total) {
+    return 'Ang tinatayang listahan mo ay $total. Naka-on ang budget mode — dagdagan ang halaga sa field sa ibaba o alisin ang mga item.';
+  }
+
+  @override
+  String get groceryBudgetEditField => 'I-edit ang budget';
+
+  @override
+  String get groceryBudgetLowOk => 'OK';
+
+  @override
+  String groceryBudgetInlineOverHint(String total) {
+    return 'Ang listahan ay humigit-kumulang $total, lampas sa budget na ito. Dagdagan ang halaga sa itaas o alisin ang mga item — puwedeng mag-edit habang naka-on ang budget mode.';
+  }
+
+  @override
+  String get groceryBudgetEnterAmountHint =>
+      'Maglagay ng budget sa itaas para subaybayan ang gastos.';
 
   @override
   String get groceryOn => 'NAKA-ON';
@@ -794,6 +829,10 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get groceryItemRequired => 'Kinakailangan ang pangalan ng item';
+
+  @override
+  String get groceryQuantityRequired =>
+      'Pakilagay ang dami para sa item na ito';
 
   @override
   String get groceryCreateMealPlanFirst =>
@@ -1002,11 +1041,11 @@ class AppLocalizationsFil extends AppLocalizations {
   String get chatNewChat => 'Bagong chat';
 
   @override
-  String get chatNewChatConfirmTitle => 'New Conversation?';
+  String get chatNewChatConfirmTitle => 'Bagong usapan?';
 
   @override
   String get chatNewChatConfirmMessage =>
-      'Start a new conversation? Your current chat will be saved.';
+      'Magsimula ng bagong usapan? Maisasave ang kasalukuyan mong chat.';
 
   @override
   String get chatCopy => 'Kopyahin';
@@ -1335,11 +1374,11 @@ class AppLocalizationsFil extends AppLocalizations {
   String get scannerAnalyzing => 'Sinusuri ang iyong mga sangkap...';
 
   @override
-  String get scannerCancelAnalysisTitle => 'Cancel Analysis?';
+  String get scannerCancelAnalysisTitle => 'Kanselahin ang pagsusuri?';
 
   @override
   String get scannerCancelAnalysisMessage =>
-      'Ingredients are being analyzed. Are you sure you want to cancel and go back?';
+      'Sinusuri ang mga sangkap. Sigurado ka bang gusto mong kanselahin at bumalik?';
 
   @override
   String get scannerDetected => 'Mga Natuklasang Sangkap';
@@ -1858,6 +1897,10 @@ class AppLocalizationsFil extends AppLocalizations {
       'Paumanhin, hindi ko maproseso ang iyong kahilingan. Pakisubukang muli.';
 
   @override
+  String get errorNoInternet =>
+      'Walang koneksyon sa internet. Pakisuri ang iyong koneksyon at subukang muli.';
+
+  @override
   String get premiumPurchaseFailed => 'Nabigo ang pagbili';
 
   @override
@@ -2262,11 +2305,11 @@ class AppLocalizationsFil extends AppLocalizations {
   String get premiumPlanYearly => 'Taunan';
 
   @override
-  String get premiumPlanLifetime => 'Lifetime';
+  String get premiumPlanLifetime => 'Habambuhay';
 
   @override
   String get premiumLifetimeFullAccessIncluded =>
-      'One-time purchase • Full access included';
+      'Isang beses na pagbili • Kasama ang buong access';
 
   @override
   String get premiumStartFreeTrialTitle => 'Simulan ang iyong libreng trial';
@@ -2277,7 +2320,7 @@ class AppLocalizationsFil extends AppLocalizations {
   }
 
   @override
-  String get premiumUnlockNow => 'Unlock now';
+  String get premiumUnlockNow => 'I-unlock ngayon';
 
   @override
   String get premiumBestOffer => 'Best offer';

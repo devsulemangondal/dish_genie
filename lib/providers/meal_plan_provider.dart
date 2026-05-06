@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import '../data/models/meal_plan.dart';
 import '../services/supabase_service.dart';
 import '../services/storage_service.dart';
@@ -310,6 +312,19 @@ class MealPlanProvider with ChangeNotifier {
 
       // Extract meaningful error message
       String errorMessage;
+
+      // Network/offline errors: don't leak technical exception strings.
+      if (e is SocketException ||
+          e is TimeoutException ||
+          e is http.ClientException ||
+          e.toString().contains('ClientException') ||
+          e.toString().contains('SocketException') ||
+          e.toString().contains('Failed host lookup') ||
+          e.toString().contains('No address associated') ||
+          e.toString().contains('Connection closed') ||
+          e.toString().contains('Connection refused')) {
+        throw Exception('error.no.internet');
+      }
 
       if (e is Exception) {
         final errorString = e.toString();

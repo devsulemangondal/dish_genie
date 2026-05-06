@@ -776,6 +776,12 @@ abstract class AppLocalizations {
   /// **'Smart Chef'**
   String get smartChefTitle;
 
+  /// No description provided for @smartGroceryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Grocery'**
+  String get smartGroceryTitle;
+
   /// No description provided for @smartChefPro.
   ///
   /// In en, this message translates to:
@@ -857,7 +863,7 @@ abstract class AppLocalizations {
   /// No description provided for @recipesCreatingRecipe.
   ///
   /// In en, this message translates to:
-  /// **'Creating Your Recipe...'**
+  /// **'Generating Recipe'**
   String get recipesCreatingRecipe;
 
   /// No description provided for @recipesCreatingRecipeWith.
@@ -925,6 +931,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New Recipe'**
   String get recipesNewRecipe;
+
+  /// No description provided for @recipesGeneratedTapForDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the card to see the full recipe.'**
+  String get recipesGeneratedTapForDetails;
 
   /// No description provided for @recipesWhatCraving.
   ///
@@ -1619,8 +1631,50 @@ abstract class AppLocalizations {
   /// No description provided for @groceryBudgetPlaceholder.
   ///
   /// In en, this message translates to:
-  /// **'Enter budget (e.g., 2000 PKR)'**
+  /// **'Enter budget (e.g., 2000)'**
   String get groceryBudgetPlaceholder;
+
+  /// Budget mode or budget value is below the current list estimated cost
+  ///
+  /// In en, this message translates to:
+  /// **'Your list is estimated at {total}. Increase your budget to at least that amount, or remove items.'**
+  String groceryBudgetMustCoverEstimate(String total);
+
+  /// No description provided for @groceryBudgetLowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget is below your list'**
+  String get groceryBudgetLowTitle;
+
+  /// No description provided for @groceryBudgetLowBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your list is estimated at {total}. Budget mode stays on — raise the amount in the field below or remove items.'**
+  String groceryBudgetLowBody(String total);
+
+  /// No description provided for @groceryBudgetEditField.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit budget'**
+  String get groceryBudgetEditField;
+
+  /// No description provided for @groceryBudgetLowOk.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get groceryBudgetLowOk;
+
+  /// No description provided for @groceryBudgetInlineOverHint.
+  ///
+  /// In en, this message translates to:
+  /// **'List is about {total}, above this budget. Increase the amount above or remove items — you can edit with budget mode on.'**
+  String groceryBudgetInlineOverHint(String total);
+
+  /// No description provided for @groceryBudgetEnterAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a budget amount above to track spending.'**
+  String get groceryBudgetEnterAmountHint;
 
   /// No description provided for @groceryOn.
   ///
@@ -1675,6 +1729,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Item name is required'**
   String get groceryItemRequired;
+
+  /// No description provided for @groceryQuantityRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a quantity for this item'**
+  String get groceryQuantityRequired;
 
   /// No description provided for @groceryCreateMealPlanFirst.
   ///
@@ -2147,7 +2207,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatHistoryStartChatting.
   ///
   /// In en, this message translates to:
-  /// **'Start Chatting'**
+  /// **'Start Chating'**
   String get chatHistoryStartChatting;
 
   /// No description provided for @chatHistoryToday.
@@ -3652,6 +3712,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sorry, I couldn\'t process your request. Please try again.'**
   String get chatErrorGeneric;
+
+  /// No description provided for @errorNoInternet.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your connection and try again.'**
+  String get errorNoInternet;
 
   /// No description provided for @premiumPurchaseFailed.
   ///

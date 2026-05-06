@@ -104,6 +104,7 @@
   "recipesVoice": "Voice",
   "scannerCameraNotAvailable": "Camera not available",
   "smartChefTitle": "Smart Chef",
+  "smartGroceryTitle": "Smart Grocery",
   "smartChefPro": "Pro",
   "smartChefWhatIngredientsLine1": "What ingredients",
   "smartChefWhatIngredientsLine2": "do you have?",
@@ -117,7 +118,7 @@
   "recipesCookingTime": "Cooking Time",
   "recipesTargetCalories": "Target Calories",
   "recipesGenerateRecipe": "Generate Recipe",
-  "recipesCreatingRecipe": "Creating Your Recipe...",
+  "recipesCreatingRecipe": "Generating Recipe",
   "recipesCreatingRecipeWith": "Creating recipes with {ingredients}...",
   "@recipesCreatingRecipeWith": {
     "placeholders": {
@@ -137,6 +138,7 @@
   "recipesCancelGenerationTitle": "Cancel Generation?",
   "recipesCancelGenerationMessage": "A recipe is being generated. Are you sure you want to cancel and go back?",
   "recipesNewRecipe": "New Recipe",
+  "recipesGeneratedTapForDetails": "Tap the card to see the full recipe.",
   "recipesWhatCraving": "What are you craving?",
   "recipesMoodsComfortFood": "Comfort Food",
   "recipesMoodsLightFresh": "Light & Fresh",
@@ -252,7 +254,39 @@
   "groceryShoppingMode": "Shopping",
   "groceryShopMode": "Shop Mode",
   "groceryBudgetMode": "Budget Mode",
-  "groceryBudgetPlaceholder": "Enter budget (e.g., 2000 PKR)",
+  "groceryBudgetPlaceholder": "Enter budget (e.g., 2000)",
+  "groceryBudgetMustCoverEstimate": "Your list is estimated at {total}. Increase your budget to at least that amount, or remove items.",
+  "@groceryBudgetMustCoverEstimate": {
+    "description": "Budget mode or budget value is below the current list estimated cost",
+    "placeholders": {
+      "total": {
+        "type": "String",
+        "example": "$12.50"
+      }
+    }
+  },
+  "groceryBudgetLowTitle": "Budget is below your list",
+  "groceryBudgetLowBody": "Your list is estimated at {total}. Budget mode stays on — raise the amount in the field below or remove items.",
+  "@groceryBudgetLowBody": {
+    "placeholders": {
+      "total": {
+        "type": "String",
+        "example": "$12.50"
+      }
+    }
+  },
+  "groceryBudgetEditField": "Edit budget",
+  "groceryBudgetLowOk": "OK",
+  "groceryBudgetInlineOverHint": "List is about {total}, above this budget. Increase the amount above or remove items — you can edit with budget mode on.",
+  "@groceryBudgetInlineOverHint": {
+    "placeholders": {
+      "total": {
+        "type": "String",
+        "example": "$12.50"
+      }
+    }
+  },
+  "groceryBudgetEnterAmountHint": "Enter a budget amount above to track spending.",
   "groceryOn": "ON",
   "groceryOff": "OFF",
   "groceryAddItemPlaceholder": "Add item...",
@@ -262,6 +296,7 @@
   "groceryAddToList": "Add to List",
   "groceryItemAdded": "Item added!",
   "groceryItemRequired": "Item name is required",
+  "groceryQuantityRequired": "Please enter a quantity for this item",
   "groceryCreateMealPlanFirst": "Please create a meal plan first",
   "groceryItems": "items",
   "groceryResetList": "Reset List",
@@ -340,7 +375,7 @@
   "chatHistoryEmptyHint": "Your conversations will appear here automatically",
   "chatHistoryNoResults": "No chats found",
   "chatHistoryTryDifferent": "Try a different search term",
-  "chatHistoryStartChatting": "Start Chatting",
+  "chatHistoryStartChatting": "Start Chating",
   "chatHistoryToday": "Today",
   "chatHistoryYesterday": "Yesterday",
   "chatHistoryDaysAgo": "days ago",
@@ -655,6 +690,7 @@
   "chatErrorNotConfigured": "Chat API is not configured. Please contact support or check your app settings.",
   "chatErrorRateLimit": "Rate limit exceeded. Please try again later.",
   "chatErrorGeneric": "Sorry, I couldn't process your request. Please try again.",
+  "errorNoInternet": "No internet connection. Please check your connection and try again.",
   "premiumPurchaseFailed": "Purchase failed",
   "premiumUpgrade": "Upgrade",
   "scannerLimitReached": "You have reached your limit of {limit} free recipe generations. Upgrade to premium for unlimited access!",

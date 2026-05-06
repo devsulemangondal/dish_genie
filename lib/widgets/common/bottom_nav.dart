@@ -2,20 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/colors.dart';
 import '../../core/localization/l10n_extension.dart';
+import '../../services/interstitial_ad_helper.dart';
 import '../ads/bottom_banner_ad_widget.dart';
 
 /// Shared lock to prevent double interstitial when tapping bottom nav rapidly
 bool _bottomNavProcessing = false;
 
 class BottomNav extends StatelessWidget {
+  /// When null, [activeTab] and [context.go] are used (e.g. legacy `/home`).
+  final StatefulNavigationShell? navigationShell;
   final String activeTab;
   final bool hideWhenKeyboardVisible;
+  /// Stable key for the bottom banner when using [navigationShell] (main tab shell).
+  final GlobalKey? bannerKey;
+
+  /// Optional key on the outer bar (tabs + banner) for measuring height (e.g. exit sheet padding).
+  final Key? bottomBarMeasureKey;
 
   const BottomNav({
     super.key,
-    required this.activeTab,
+    this.navigationShell,
+    this.activeTab = 'home',
     this.hideWhenKeyboardVisible = true,
-  });
+    this.bannerKey,
+    this.bottomBarMeasureKey,
+  }) : assert(
+          navigationShell == null || bannerKey != null,
+          'Use bannerKey with navigationShell so the banner keeps one AdWidget.',
+        );
+
+  static const List<String> _tabIds = [
+    'home',
+    'recipes',
+    'planner',
+    'grocery',
+    'chat',
+  ];
+
+  bool _isActive(int index) {
+    if (navigationShell != null) {
+      return navigationShell!.currentIndex == index;
+    }
+    return activeTab == _tabIds[index];
+  }
+
+  void _goBranch(BuildContext context, int index) {
+    if (navigationShell != null) {
+      final shell = navigationShell!;
+      shell.goBranch(
+        index,
+        initialLocation: index == shell.currentIndex,
+      );
+      return;
+    }
+    switch (index) {
+      case 0:
+        context.go('/');
+        break;
+      case 1:
+        context.go('/recipes');
+        break;
+      case 2:
+        context.go('/planner');
+        break;
+      case 3:
+        context.go('/grocery');
+        break;
+      case 4:
+        context.go('/chat');
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +99,7 @@ class BottomNav extends StatelessWidget {
 
     final theme = Theme.of(context);
     return Container(
+      key: bottomBarMeasureKey,
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor.withOpacity(0.95),
         boxShadow: [
@@ -67,50 +125,50 @@ class BottomNav extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _NavItem(
-                          icon: Icons.home_outlined,
+                      icon: Icons.home_outlined,
                       label: context.t('common.home'),
-                      isActive: activeTab == 'home',
-                      onTap: () => context.go('/'),
+                      isActive: _isActive(0),
+                      onTap: () => _goBranch(context, 0),
                       screenWidth: screenWidth,
                       textScaleFactor: textScaleFactor,
                     ),
                   ),
                   Expanded(
                     child: _NavItem(
-                          icon: Icons.restaurant_menu_outlined,
+                      icon: Icons.restaurant_menu_outlined,
                       label: context.t('common.recipes'),
-                      isActive: activeTab == 'recipes',
-                      onTap: () => context.go('/recipes'),
+                      isActive: _isActive(1),
+                      onTap: () => _goBranch(context, 1),
                       screenWidth: screenWidth,
                       textScaleFactor: textScaleFactor,
                     ),
                   ),
                   Expanded(
                     child: _NavItem(
-                          icon: Icons.calendar_month_outlined,
+                      icon: Icons.calendar_month_outlined,
                       label: context.t('common.plan'),
-                      isActive: activeTab == 'planner',
-                      onTap: () => context.go('/planner'),
+                      isActive: _isActive(2),
+                      onTap: () => _goBranch(context, 2),
                       screenWidth: screenWidth,
                       textScaleFactor: textScaleFactor,
                     ),
                   ),
                   Expanded(
                     child: _NavItem(
-                          icon: Icons.shopping_cart_outlined,
+                      icon: Icons.shopping_cart_outlined,
                       label: context.t('common.shop'),
-                      isActive: activeTab == 'grocery',
-                      onTap: () => context.go('/grocery'),
+                      isActive: _isActive(3),
+                      onTap: () => _goBranch(context, 3),
                       screenWidth: screenWidth,
                       textScaleFactor: textScaleFactor,
                     ),
                   ),
                   Expanded(
                     child: _NavItem(
-                          icon: Icons.chat_bubble_outline,
+                      icon: Icons.chat_bubble_outline,
                       label: context.t('common.chat'),
-                      isActive: activeTab == 'chat',
-                      onTap: () => context.go('/chat'),
+                      isActive: _isActive(4),
+                      onTap: () => _goBranch(context, 4),
                       screenWidth: screenWidth,
                       textScaleFactor: textScaleFactor,
                     ),
@@ -118,7 +176,10 @@ class BottomNav extends StatelessWidget {
                 ],
               ),
             ),
-            const BottomBannerAdWidget(),
+            if (navigationShell == null)
+              const BottomBannerAdWidget()
+            else
+              BottomBannerAdWidget(key: bannerKey),
           ],
         ),
       ),
@@ -162,8 +223,11 @@ class _NavItemState extends State<_NavItem> {
     });
 
     try {
-      // Navigate immediately
+      final switchingTab = !widget.isActive;
       widget.onTap();
+      if (switchingTab) {
+        InterstitialAdHelper.showBottomTabInterstitial(context: context);
+      }
     } finally {
       // Reset both flags after a delay to prevent rapid taps
       Future.delayed(const Duration(milliseconds: 600), () {

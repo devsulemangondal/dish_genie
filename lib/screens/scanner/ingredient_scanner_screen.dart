@@ -432,7 +432,7 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
                   ? AppColors.gradientHeroDark
                   : AppColors.gradientHero,
             ),
-            child: const LoadingGenie(message: 'Analyzing your ingredients...'),
+            child: LoadingGenie(message: context.t('scanner.analyzing')),
           ),
         ),
       );
@@ -987,7 +987,8 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              // Keep label white in both light/dark modes.
+              foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
               minimumSize: const Size(double.infinity, 56),
               shape: RoundedRectangleBorder(
@@ -1003,8 +1004,13 @@ class _IngredientScannerScreenState extends State<IngredientScannerScreen> {
               style:
                   Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ) ??
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
             ),
           ),
         ),
