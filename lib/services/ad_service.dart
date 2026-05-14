@@ -329,15 +329,17 @@ class AdService {
       return;
     }
 
-    // GDPR/UMP consent gate (Android + iOS). If consent blocks ad requests,
-    // skip initializing ads for this run.
+    // Initialize the Mobile Ads SDK before UMP so the native layer (especially
+    // iOS) has a stable app/window context when presenting the consent form.
+    // Ad traffic remains gated on [_gdprAllowsAds] / canRequestAds.
+    await MobileAds.instance.initialize();
+
     _gdprAllowsAds = await GdprConsentService.gatherConsentIfRequired();
     if (!_gdprAllowsAds) {
       _isInitialized = true;
       return;
     }
 
-    await MobileAds.instance.initialize();
     _isInitialized = true;
   }
 

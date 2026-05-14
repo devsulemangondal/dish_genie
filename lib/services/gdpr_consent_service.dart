@@ -2,12 +2,18 @@ import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 /// GDPR / AdMob UMP consent via [google_mobile_ads] (Android + iOS).
 ///
-/// In [kDebugMode], consent is requested as if the device were in the EEA so
-/// the form is easy to test. Release builds use normal geography.
+/// In [kDebugMode], geography is forced to EEA so the form is easy to test.
+/// [ConsentInformation.reset] runs first in debug so each launch behaves like
+/// a fresh install (UMP otherwise reuses stored consent and may not show UI).
+///
+/// If the consent UI still does not appear on a **physical** iOS device, add
+/// your hashed test device ID from Xcode logs to [ConsentDebugSettings]
+/// `testIdentifiers` (see AdMob Flutter EU consent guide).
 class GdprConsentService {
   static bool _didGather = false;
   static bool _canRequestAds = true;
@@ -35,19 +41,33 @@ class GdprConsentService {
     if (_didGather) return _canRequestAds;
 
     try {
+      // iOS: UMP presents from UIApplication.delegate.window.rootViewController.
+      // Wait until the first frame so the Flutter view hierarchy (and window)
+      // is ready; otherwise the form may never appear on simulator/device.
+      if (Platform.isIOS) {
+        await WidgetsBinding.instance.endOfFrame;
+        await Future<void>.delayed(const Duration(milliseconds: 120));
+      }
+
+      if (kDebugMode) {
+        try {
+          await ConsentInformation.instance.reset();
+        } catch (e) {
+          debugPrint('[GDPR] debug reset (ignored): $e');
+        }
+      }
+
       final params = _consentRequestParameters();
       final done = Completer<void>();
 
       ConsentInformation.instance.requestConsentInfoUpdate(
         params,
-        () {
-          Future.microtask(() async {
-            try {
-              await ConsentForm.loadAndShowConsentFormIfRequired((_) {});
-            } finally {
-              if (!done.isCompleted) done.complete();
-            }
-          });
+        () async {
+          try {
+            await ConsentForm.loadAndShowConsentFormIfRequired((_) {});
+          } finally {
+            if (!done.isCompleted) done.complete();
+          }
         },
         (_) {
           if (!done.isCompleted) done.complete();
