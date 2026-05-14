@@ -1,39 +1,66 @@
+import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+/// GDPR / AdMob UMP consent via [google_mobile_ads] (Android + iOS).
+///
+/// In [kDebugMode], consent is requested as if the device were in the EEA so
+/// the form is easy to test. Release builds use normal geography.
 class GdprConsentService {
-  static const MethodChannel _channel = MethodChannel(
-    'com.dishgenie.recipeapp/gdpr_consent',
-  );
-
   static bool _didGather = false;
   static bool _canRequestAds = true;
 
   static bool get canRequestAds => _canRequestAds;
 
-  /// Gathers consent (Android UMP). Safe to call multiple times.
+  static bool get _isMobile =>
+      Platform.isAndroid || Platform.isIOS;
+
+  static ConsentRequestParameters _consentRequestParameters() {
+    if (kDebugMode && _isMobile) {
+      return ConsentRequestParameters(
+        consentDebugSettings: ConsentDebugSettings(
+          debugGeography: DebugGeography.debugGeographyEea,
+        ),
+      );
+    }
+    return ConsentRequestParameters();
+  }
+
+  /// Gathers consent (UMP). Safe to call multiple times.
   /// Returns whether ads can be requested afterward.
   static Future<bool> gatherConsentIfRequired() async {
-    if (!Platform.isAndroid) return true;
+    if (!_isMobile) return true;
     if (_didGather) return _canRequestAds;
 
     try {
-      final res = await _channel.invokeMethod<dynamic>('gatherConsent');
-      final map = (res is Map) ? res : const {};
-      final can = map['canRequestAds'];
-      _canRequestAds = can is bool ? can : true;
+      final params = _consentRequestParameters();
+      final done = Completer<void>();
+
+      ConsentInformation.instance.requestConsentInfoUpdate(
+        params,
+        () {
+          Future.microtask(() async {
+            try {
+              await ConsentForm.loadAndShowConsentFormIfRequired((_) {});
+            } finally {
+              if (!done.isCompleted) done.complete();
+            }
+          });
+        },
+        (_) {
+          if (!done.isCompleted) done.complete();
+        },
+      );
+
+      await done.future;
+      _canRequestAds = await ConsentInformation.instance.canRequestAds();
 
       if (kDebugMode) {
-        final errCode = map['errorCode'];
-        final errMsg = map['errorMessage'];
-        debugPrint(
-          '[GDPR] gatherConsent done canRequestAds=$_canRequestAds error=$errCode $errMsg',
-        );
+        debugPrint('[GDPR] gatherConsent done canRequestAds=$_canRequestAds');
       }
     } catch (e) {
-      // Fail closed: if consent flow is broken, we must not request ads.
       if (kDebugMode) {
         debugPrint('[GDPR] gatherConsent exception: $e');
       }
@@ -45,11 +72,11 @@ class GdprConsentService {
     return _canRequestAds;
   }
 
-  /// Opens privacy options UI if required (Android UMP).
+  /// Opens the UMP privacy options form when supported.
   static Future<void> showPrivacyOptionsForm() async {
-    if (!Platform.isAndroid) return;
+    if (!_isMobile) return;
     try {
-      await _channel.invokeMethod<dynamic>('showPrivacyOptionsForm');
+      await ConsentForm.showPrivacyOptionsForm((_) {});
     } catch (e) {
       if (kDebugMode) {
         debugPrint('[GDPR] showPrivacyOptionsForm exception: $e');
@@ -57,11 +84,11 @@ class GdprConsentService {
     }
   }
 
-  /// Resets consent state (Android UMP). Useful for testing in debug mode.
+  /// Resets UMP state. Intended for testing only.
   static Future<void> resetForDebug() async {
-    if (!Platform.isAndroid) return;
+    if (!_isMobile) return;
     try {
-      await _channel.invokeMethod<dynamic>('resetConsent');
+      await ConsentInformation.instance.reset();
     } catch (e) {
       if (kDebugMode) {
         debugPrint('[GDPR] resetForDebug exception: $e');

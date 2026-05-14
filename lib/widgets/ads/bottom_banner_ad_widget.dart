@@ -151,7 +151,10 @@ class _BottomBannerAdWidgetState extends State<BottomBannerAdWidget> {
         } catch (_) {}
       }
       if (!mounted) return;
-      final allowNative = force || RemoteConfigService.bottomNative;
+      final allowNative = force ||
+          (Platform.isIOS
+              ? RemoteConfigService.bottomNativeIos
+              : RemoteConfigService.bottomNative);
       if (!allowNative) {
         if (mounted) {
           setState(() {

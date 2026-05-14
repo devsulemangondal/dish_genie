@@ -73,7 +73,9 @@ class _ScreenNativeAdWidgetState extends State<ScreenNativeAdWidget> {
       await RemoteConfigService.initialize();
       _shouldShowAd = _getConfigValue();
     } catch (e) {
-      _shouldShowAd = RemoteConfigService.showAds; // Fallback
+      _shouldShowAd = Platform.isIOS
+          ? RemoteConfigService.showAdsIos
+          : RemoteConfigService.showAds; // Fallback
     }
 
     if (!_shouldShowAd) {
@@ -90,25 +92,41 @@ class _ScreenNativeAdWidgetState extends State<ScreenNativeAdWidget> {
             ? RemoteConfigService.languageNativeIos
             : RemoteConfigService.languageNative;
       case 'home':
-        return RemoteConfigService.homeNative;
+        return Platform.isIOS
+            ? RemoteConfigService.homeNativeIos
+            : RemoteConfigService.homeNative;
       case 'recipe':
-        return RemoteConfigService.recipeNative;
+        return Platform.isIOS
+            ? RemoteConfigService.recipeNativeIos
+            : RemoteConfigService.recipeNative;
       case 'plan':
-        return RemoteConfigService.planNative;
+        return Platform.isIOS
+            ? RemoteConfigService.planNativeIos
+            : RemoteConfigService.planNative;
       case 'shop':
-        return RemoteConfigService.shopNative;
+        return Platform.isIOS
+            ? RemoteConfigService.shopNativeIos
+            : RemoteConfigService.shopNative;
       case 'chat':
-        return RemoteConfigService.chatNative;
+        return Platform.isIOS
+            ? RemoteConfigService.chatNativeIos
+            : RemoteConfigService.chatNative;
       case 'recipeDetail':
-        return RemoteConfigService.recipeDetailNative;
+        return Platform.isIOS
+            ? RemoteConfigService.recipeDetailNativeIos
+            : RemoteConfigService.recipeDetailNative;
       case 'camera':
-        return RemoteConfigService.cameraNative;
+        return Platform.isIOS
+            ? RemoteConfigService.cameraNativeIos
+            : RemoteConfigService.cameraNative;
       case 'onboarding':
         return Platform.isIOS
             ? RemoteConfigService.onboardingNativeIos
             : RemoteConfigService.onboardingNative;
       default:
-        return RemoteConfigService.showAds;
+        return Platform.isIOS
+            ? RemoteConfigService.showAdsIos
+            : RemoteConfigService.showAds;
     }
   }
 

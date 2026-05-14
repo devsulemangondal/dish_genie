@@ -78,28 +78,44 @@ class _CustomNativeAdWidgetState extends State<CustomNativeAdWidget> {
               : RemoteConfigService.languageNative;
           break;
         case 'home':
-          shouldShow = RemoteConfigService.homeNative;
+          shouldShow = Platform.isIOS
+              ? RemoteConfigService.homeNativeIos
+              : RemoteConfigService.homeNative;
           break;
         case 'recipe':
-          shouldShow = RemoteConfigService.recipeNative;
+          shouldShow = Platform.isIOS
+              ? RemoteConfigService.recipeNativeIos
+              : RemoteConfigService.recipeNative;
           break;
         case 'plan':
-          shouldShow = RemoteConfigService.planNative;
+          shouldShow = Platform.isIOS
+              ? RemoteConfigService.planNativeIos
+              : RemoteConfigService.planNative;
           break;
         case 'shop':
-          shouldShow = RemoteConfigService.shopNative;
+          shouldShow = Platform.isIOS
+              ? RemoteConfigService.shopNativeIos
+              : RemoteConfigService.shopNative;
           break;
         case 'chat':
-          shouldShow = RemoteConfigService.chatNative;
+          shouldShow = Platform.isIOS
+              ? RemoteConfigService.chatNativeIos
+              : RemoteConfigService.chatNative;
           break;
         case 'recipeDetail':
-          shouldShow = RemoteConfigService.recipeDetailNative;
+          shouldShow = Platform.isIOS
+              ? RemoteConfigService.recipeDetailNativeIos
+              : RemoteConfigService.recipeDetailNative;
           break;
         case 'camera':
-          shouldShow = RemoteConfigService.cameraNative;
+          shouldShow = Platform.isIOS
+              ? RemoteConfigService.cameraNativeIos
+              : RemoteConfigService.cameraNative;
           break;
         default:
-          shouldShow = RemoteConfigService.showAds;
+          shouldShow = Platform.isIOS
+              ? RemoteConfigService.showAdsIos
+              : RemoteConfigService.showAds;
       }
       
       // If config says no ads, don't load or show loading

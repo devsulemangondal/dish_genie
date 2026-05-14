@@ -24,7 +24,9 @@ class InterstitialAdHelper {
       }
     } catch (_) {}
 
-    if (!RemoteConfigService.showAds) {
+    if (!(Platform.isIOS
+        ? RemoteConfigService.showAdsIos
+        : RemoteConfigService.showAds)) {
       await afterAdOrSkip();
       return;
     }
@@ -73,7 +75,9 @@ class InterstitialAdHelper {
       }
     } catch (_) {}
 
-    if (!RemoteConfigService.showAds) {
+    if (!(Platform.isIOS
+        ? RemoteConfigService.showAdsIos
+        : RemoteConfigService.showAds)) {
       onLeave();
       return;
     }
@@ -127,8 +131,10 @@ class InterstitialAdHelper {
 
     log(RemoteConfigService.describeBottomTabInterRc());
 
-    if (!RemoteConfigService.showAds) {
-      log('skip: Remote Config show_ads is false');
+    if (!(Platform.isIOS
+        ? RemoteConfigService.showAdsIos
+        : RemoteConfigService.showAds)) {
+      log('skip: Remote Config show_ads / show_ads_ios is false');
       return;
     }
 
@@ -172,9 +178,22 @@ class InterstitialAdHelper {
     Function()? onAdFailed,
   }) async {
     await RemoteConfigService.initialize();
-    
+
+    if (!(Platform.isIOS
+        ? RemoteConfigService.showAdsIos
+        : RemoteConfigService.showAds)) {
+      return;
+    }
+
     final count = _incrementCount('card_$action');
-    if (!RemoteConfigService.shouldShowCardInterstitial(action, count)) {
+    final cardCfg = Platform.isIOS
+        ? RemoteConfigService.cardInterIos
+        : RemoteConfigService.cardInter;
+    if (!RemoteConfigService.shouldShowCardInterstitial(
+      action,
+      count,
+      config: cardCfg,
+    )) {
       return;
     }
 
@@ -194,8 +213,16 @@ class InterstitialAdHelper {
     Function()? onAdFailed,
   }) async {
     await RemoteConfigService.initialize();
-    
-    final config = RemoteConfigService.generatePlanInter;
+
+    if (!(Platform.isIOS
+        ? RemoteConfigService.showAdsIos
+        : RemoteConfigService.showAds)) {
+      return;
+    }
+
+    final config = Platform.isIOS
+        ? RemoteConfigService.generatePlanInterIos
+        : RemoteConfigService.generatePlanInter;
     if (!RemoteConfigService.shouldShowInterstitial(config, _incrementCount('generatePlan'))) {
       return;
     }
@@ -216,8 +243,16 @@ class InterstitialAdHelper {
     Function()? onAdFailed,
   }) async {
     await RemoteConfigService.initialize();
-    
-    final config = RemoteConfigService.cookingAiInter;
+
+    if (!(Platform.isIOS
+        ? RemoteConfigService.showAdsIos
+        : RemoteConfigService.showAds)) {
+      return;
+    }
+
+    final config = Platform.isIOS
+        ? RemoteConfigService.cookingAiInterIos
+        : RemoteConfigService.cookingAiInter;
     if (!RemoteConfigService.shouldShowInterstitial(config, _incrementCount('cookingAi'))) {
       return;
     }

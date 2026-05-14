@@ -7,7 +7,7 @@ import 'remote_config_service.dart';
 import 'storage_service.dart';
 
 /// After first-launch flow (language + onboarding), optionally open Pro before home when
-/// Remote Config [splash_sub] / [splash_sub_ios] is true (and [weekly_sub] / premium / iOS Pro rules allow).
+/// Remote Config [splash_sub] / [splash_sub_ios] is true (and [weekly_sub] / [weekly_sub_ios] / premium / iOS Pro rules allow).
 ///
 /// Returns `/pro?src=splash_sub_first` or `null` to go straight home.
 Future<String?> splashSubProRouteBeforeHomeIfNeeded() async {
@@ -23,7 +23,11 @@ Future<String?> splashSubProRouteBeforeHomeIfNeeded() async {
     }
   }
 
-  if (!RemoteConfigService.weeklySub) return null;
+  if (!(Platform.isIOS
+      ? RemoteConfigService.weeklySubIos
+      : RemoteConfigService.weeklySub)) {
+    return null;
+  }
 
   final gate = Platform.isIOS
       ? RemoteConfigService.splashSubIos

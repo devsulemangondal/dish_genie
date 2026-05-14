@@ -39,6 +39,7 @@ class AdService {
   // Language native ad (Android / iOS)
   static const String _productionLanguageNativeAndroid =
       'ca-app-pub-6882687050623219/7841887375';
+  /// Native on language screen — iOS (RC: `language_native_ios`).
   static const String _productionLanguageNativeIos =
       'ca-app-pub-6882687050623219/3376170317';
   static const String _productionHomeNativeAdUnitId =
@@ -58,14 +59,18 @@ class AdService {
   // Onboarding native ad (Android / iOS)
   static const String _productionOnboardingNativeAndroid =
       'ca-app-pub-6882687050623219/8025861761';
+  /// Onboarding native — iOS (RC: `onboarding_native_ios`).
   static const String _productionOnboardingNativeIos =
       'ca-app-pub-6882687050623219/6329636711';
   static const String _productionBottomInterAdUnitId =
       'ca-app-pub-6882687050623219/8916948280';
 
-  /// Interstitial when user switches bottom tabs (RC: bottom_tab_inter / bottom_tab_inter_ios)
-  static const String _productionBottomTabChangeInterAdUnitId =
+  /// Bottom tab switch interstitial — Android (RC: `bottom_tab_inter`).
+  static const String _productionBottomTabChangeInterAndroid =
       'ca-app-pub-6882687050623219/2365011322';
+  /// Bottom tab switch interstitial — iOS (RC: `bottom_tab_inter_ios`).
+  static const String _productionBottomTabChangeInterIos =
+      'ca-app-pub-6882687050623219/3022675771';
   static const String _productionCardInterAdUnitId =
       'ca-app-pub-6882687050623219/5160895477';
   static const String _productionGeneratePlanInterAdUnitId =
@@ -75,29 +80,39 @@ class AdService {
   // Exit interstitial (when user confirms exit)
   static const String _productionExitInterAndroid =
       'ca-app-pub-6882687050623219/8775507081';
+  /// Exit interstitial — iOS (RC: `exit_inter_ios`).
   static const String _productionExitInterIos =
       'ca-app-pub-6882687050623219/9924937221';
   // Chat reset interstitial (when user starts new chat)
   static const String _productionChatResetInterAndroid =
       'ca-app-pub-6882687050623219/7462425415';
+  /// Chat reset / new chat interstitial — iOS (RC: `chatreset_inter_ios`).
   static const String _productionChatResetInterIos =
       'ca-app-pub-6882687050623219/2063088649';
   // View Plan / Continue Plan interstitial (returning user on home)
   static const String _productionViewPlanContinueInterAndroid =
       'ca-app-pub-6882687050623219/2773535082';
+  /// View plan / continue plan interstitial — iOS (RC: `viewplancontinue_inter_ios`).
   static const String _productionViewPlanContinueInterIos =
       'ca-app-pub-6882687050623219/9422703914';
 
-  /// Recipe detail screen back (system / app bar) — same unit Android & iOS unless split in AdMob.
-  static const String _productionRecipeDetailBackInterAdUnitId =
+  /// Recipe detail back (system / app bar) interstitial — Android (`recipe_backpress_inter`).
+  static const String _productionRecipeDetailBackInterAndroid =
       'ca-app-pub-6882687050623219/3678092993';
+  /// Recipe detail back interstitial — iOS (RC: `recipe_backpress_inter_ios`).
+  static const String _productionRecipeDetailBackInterIos =
+      'ca-app-pub-6882687050623219/1877115068';
 
-  /// Grocery screen smart suggestion row — Add tap (same unit Android & iOS unless split in AdMob).
-  static const String _productionGroceryAddSugInterAdUnitId =
+  /// Grocery smart suggestion **Add** tap interstitial — Android (`add_sug_inter`).
+  static const String _productionGroceryAddSugInterAndroid =
       'ca-app-pub-6882687050623219/2243698188';
+  /// Grocery smart suggestion **Add** tap — iOS (RC: `add_sug_inter_ios`).
+  static const String _productionGroceryAddSugInterIos =
+      'ca-app-pub-6882687050623219/9564033396';
   // Resume app open ad when app returns from background (Android / iOS)
   static const String _productionResumeAppOpenAndroid =
       'ca-app-pub-6882687050623219/7730206739';
+  /// Resume app open — iOS (RC: `resume_appopen_ios`).
   static const String _productionResumeAppOpenIos =
       'ca-app-pub-6882687050623219/1854729725';
   // Splash app open ad on first install (Android / iOS)
@@ -113,17 +128,27 @@ class AdService {
   // Splash interstitial ad (Android first install / returning)
   static const String _productionSplashInter1stTimeAndroid =
       'ca-app-pub-6882687050623219/1089595004';
+  /// iOS first open splash interstitial (RC: `splash_inter_1sttime_ios`).
+  static const String _productionSplashInter1stTimeIos =
+      'ca-app-pub-6882687050623219/6959868047';
   static const String _productionSplashInter2ndTimeAndroid =
       'ca-app-pub-6882687050623219/5051550699';
+  /// iOS returning-user splash interstitial (RC: `splash_inter_2ndtime_ios`).
+  static const String _productionSplashInter2ndTimeIos =
+      'ca-app-pub-6882687050623219/5698757269';
   // Bottom banner on bottom nav screens (Android / iOS)
   static const String _productionBottomBannerAndroid =
       'ca-app-pub-6882687050623219/9130584518';
+  /// Bottom tab strip banner — iOS (RC: `bottom_banner_ios`).
   static const String _productionBottomBannerIos =
       'ca-app-pub-6882687050623219/9541648057';
 
-  /// Native strip fallback when bottom anchored banner fails (RC: `bottom_native`).
-  static const String _productionBottomNativeAdUnitId =
+  /// Native fallback when bottom banner fails — Android (RC: `bottom_native`).
+  static const String _productionBottomNativeAndroid =
       'ca-app-pub-6882687050623219/7110423193';
+  /// Native fallback when bottom banner fails — iOS (RC: `bottom_native_ios`).
+  static const String _productionBottomNativeIos =
+      'ca-app-pub-6882687050623219/4468224626';
 
   // ========== FOR TESTING ONLY: Test ads in release APK ==========
   // Set to true: release APK shows Google test ads (for testing).
@@ -174,13 +199,19 @@ class AdService {
   static String get splashInterAdUnitId =>
       _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial');
   static String get splashInter1stTimeAdUnitId => Platform.isIOS
-      ? _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial')
+      ? _getAdUnitId(
+          _productionSplashInter1stTimeIos,
+          testAdType: 'interstitial',
+        )
       : _getAdUnitId(
           _productionSplashInter1stTimeAndroid,
           testAdType: 'interstitial',
         );
   static String get splashInter2ndTimeAdUnitId => Platform.isIOS
-      ? _getAdUnitId(_productionSplashInterAdUnitId, testAdType: 'interstitial')
+      ? _getAdUnitId(
+          _productionSplashInter2ndTimeIos,
+          testAdType: 'interstitial',
+        )
       : _getAdUnitId(
           _productionSplashInter2ndTimeAndroid,
           testAdType: 'interstitial',
@@ -207,10 +238,15 @@ class AdService {
       : _getAdUnitId(_productionOnboardingNativeAndroid, testAdType: 'native');
   static String get bottomInterAdUnitId =>
       _getAdUnitId(_productionBottomInterAdUnitId, testAdType: 'interstitial');
-  static String get bottomTabChangeInterAdUnitId => _getAdUnitId(
-    _productionBottomTabChangeInterAdUnitId,
-    testAdType: 'interstitial',
-  );
+  static String get bottomTabChangeInterAdUnitId => Platform.isIOS
+      ? _getAdUnitId(
+          _productionBottomTabChangeInterIos,
+          testAdType: 'interstitial',
+        )
+      : _getAdUnitId(
+          _productionBottomTabChangeInterAndroid,
+          testAdType: 'interstitial',
+        );
   static String get cardInterAdUnitId =>
       _getAdUnitId(_productionCardInterAdUnitId, testAdType: 'interstitial');
   static String get generatePlanInterAdUnitId => _getAdUnitId(
@@ -239,26 +275,38 @@ class AdService {
           _productionViewPlanContinueInterAndroid,
           testAdType: 'interstitial',
         );
-  static String get recipeDetailBackInterAdUnitId => _getAdUnitId(
-    _productionRecipeDetailBackInterAdUnitId,
-    testAdType: 'interstitial',
-  );
-  static String get groceryAddSugInterAdUnitId => _getAdUnitId(
-    _productionGroceryAddSugInterAdUnitId,
-    testAdType: 'interstitial',
-  );
+  static String get recipeDetailBackInterAdUnitId => Platform.isIOS
+      ? _getAdUnitId(
+          _productionRecipeDetailBackInterIos,
+          testAdType: 'interstitial',
+        )
+      : _getAdUnitId(
+          _productionRecipeDetailBackInterAndroid,
+          testAdType: 'interstitial',
+        );
+  static String get groceryAddSugInterAdUnitId => Platform.isIOS
+      ? _getAdUnitId(
+          _productionGroceryAddSugInterIos,
+          testAdType: 'interstitial',
+        )
+      : _getAdUnitId(
+          _productionGroceryAddSugInterAndroid,
+          testAdType: 'interstitial',
+        );
   static String get bottomBannerAdUnitId => Platform.isIOS
       ? _getAdUnitId(_productionBottomBannerIos, testAdType: 'banner')
       : _getAdUnitId(_productionBottomBannerAndroid, testAdType: 'banner');
 
-  static String get bottomNativeAdUnitId =>
-      _getAdUnitId(_productionBottomNativeAdUnitId, testAdType: 'native');
+  static String get bottomNativeAdUnitId => Platform.isIOS
+      ? _getAdUnitId(_productionBottomNativeIos, testAdType: 'native')
+      : _getAdUnitId(_productionBottomNativeAndroid, testAdType: 'native');
 
   static bool _isInitialized = false;
-  // Default to "blocked" on Android until we gather consent (prevents early ad requests).
-  static bool _gdprAllowsAds = Platform.isAndroid ? false : true;
+  // Block ads on mobile until UMP consent completes (Android + iOS).
+  static bool _gdprAllowsAds =
+      (Platform.isAndroid || Platform.isIOS) ? false : true;
 
-  /// True when GDPR/UMP consent allows requesting ads (Android). Always true on non-Android.
+  /// True when GDPR/UMP consent allows requesting ads. Non-mobile defaults to true.
   static bool get gdprAllowsAds => _gdprAllowsAds;
 
   /// When false: no ads on iOS. When true: show ads on iOS. Android always shows ads.
@@ -281,8 +329,8 @@ class AdService {
       return;
     }
 
-    // GDPR/UMP consent gate (Android). If consent flow blocks ad requests,
-    // we skip initializing ads and treat ads as disabled for this run.
+    // GDPR/UMP consent gate (Android + iOS). If consent blocks ad requests,
+    // skip initializing ads for this run.
     _gdprAllowsAds = await GdprConsentService.gatherConsentIfRequired();
     if (!_gdprAllowsAds) {
       _isInitialized = true;
@@ -410,28 +458,46 @@ class AdService {
               ? RemoteConfigService.languageNativeIos
               : RemoteConfigService.languageNative;
         case 'home':
-          return RemoteConfigService.homeNative;
+          return Platform.isIOS
+              ? RemoteConfigService.homeNativeIos
+              : RemoteConfigService.homeNative;
         case 'recipe':
-          return RemoteConfigService.recipeNative;
+          return Platform.isIOS
+              ? RemoteConfigService.recipeNativeIos
+              : RemoteConfigService.recipeNative;
         case 'plan':
-          return RemoteConfigService.planNative;
+          return Platform.isIOS
+              ? RemoteConfigService.planNativeIos
+              : RemoteConfigService.planNative;
         case 'shop':
-          return RemoteConfigService.shopNative;
+          return Platform.isIOS
+              ? RemoteConfigService.shopNativeIos
+              : RemoteConfigService.shopNative;
         case 'chat':
-          return RemoteConfigService.chatNative;
+          return Platform.isIOS
+              ? RemoteConfigService.chatNativeIos
+              : RemoteConfigService.chatNative;
         case 'recipeDetail':
-          return RemoteConfigService.recipeDetailNative;
+          return Platform.isIOS
+              ? RemoteConfigService.recipeDetailNativeIos
+              : RemoteConfigService.recipeDetailNative;
         case 'camera':
-          return RemoteConfigService.cameraNative;
+          return Platform.isIOS
+              ? RemoteConfigService.cameraNativeIos
+              : RemoteConfigService.cameraNative;
         case 'onboarding':
           return Platform.isIOS
               ? RemoteConfigService.onboardingNativeIos
               : RemoteConfigService.onboardingNative;
         default:
-          return RemoteConfigService.showAds;
+          return Platform.isIOS
+              ? RemoteConfigService.showAdsIos
+              : RemoteConfigService.showAds;
       }
     } catch (e) {
-      return RemoteConfigService.showAds; // Fallback to default
+      return Platform.isIOS
+          ? RemoteConfigService.showAdsIos
+          : RemoteConfigService.showAds; // Fallback to default
     }
   }
 
@@ -1037,8 +1103,10 @@ class AdService {
     Function(InterstitialAd)? onAdLoaded,
     Function(LoadAdError)? onAdFailedToLoad,
   }) async {
-    // Check remote config
-    if (!RemoteConfigService.splashInter) {
+    final allowSplashInter = Platform.isIOS
+        ? RemoteConfigService.splashInterIos
+        : RemoteConfigService.splashInter;
+    if (!allowSplashInter) {
       return;
     }
 
@@ -1211,8 +1279,10 @@ class AdService {
       return;
     }
 
-    // Check remote config
-    if (!RemoteConfigService.appOpen) {
+    final allowAppOpen = Platform.isIOS
+        ? RemoteConfigService.appOpenIos
+        : RemoteConfigService.appOpen;
+    if (!allowAppOpen) {
       return;
     }
 
@@ -1602,7 +1672,7 @@ class AdService {
   }
 
   /// Load and show splash interstitial ad on first install.
-  /// Android RC key: splash_inter_1sttime
+  /// RC: `splash_inter_1sttime` (Android) / `splash_inter_1sttime_ios` (iOS).
   static Future<void> loadAndShowSplashFirstTimeInterstitialAd({
     required BuildContext context,
     required VoidCallback onComplete,
@@ -1618,7 +1688,7 @@ class AdService {
   }
 
   /// Load and show splash interstitial ad for returning users.
-  /// Android RC key: splash_inter_2ndtime
+  /// RC: `splash_inter_2ndtime` (Android) / `splash_inter_2ndtime_ios` (iOS).
   static Future<void> loadAndShowSplashReturningUserInterstitialAd({
     required BuildContext context,
     required VoidCallback onComplete,
@@ -1665,7 +1735,9 @@ class AdService {
     }
   }
 
-  static bool get showAds => RemoteConfigService.showAds;
+  static bool get showAds => Platform.isIOS
+      ? RemoteConfigService.showAdsIos
+      : RemoteConfigService.showAds;
 
   /// Get the time when last interstitial ad was dismissed
   /// Used by app open ad manager to prevent showing app open ad immediately after interstitial

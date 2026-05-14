@@ -12,22 +12,31 @@ class RemoteConfigService {
   // Default values
   static const Map<String, dynamic> _defaults = {
     'show_ads': true,
+    'show_ads_ios': true,
     'interstitial_ad_frequency': 5,
+    'interstitial_ad_frequency_ios': 5,
     'show_premium_features': true,
+    'show_premium_features_ios': true,
     'max_free_chats': 5,
+    'max_free_chats_ios': 5,
     'enable_voice_feature': true,
     'enable_scanner_feature': true,
     'app_version_required': '1.0.0',
     'maintenance_mode':
         false, // Should be false by default - only enable remotely when needed
     'premium_product_id_weekly': 'weekly_sub',
+    'premium_product_id_weekly_ios': 'weekly_sub',
     // Ad configuration flags
     // Fail-safe: keep Pro/paywall hidden unless explicitly enabled remotely.
     'weekly_sub': false,
+    'weekly_sub_ios': false,
     // Weekly plan: trial added from backend (Play Console/App Store) - show trial text when true
     'weekly_sub_trial': false,
+    'weekly_sub_trial_ios': false,
     'splash_inter': true,
+    'splash_inter_ios': true,
     'app_open': true,
+    'app_open_ios': true,
     // Resume app open ad when app returns from background (Android / iOS)
     'resume_appopen': true,
     'resume_appopen_ios': true,
@@ -37,24 +46,34 @@ class RemoteConfigService {
     // Splash app open ad for returning user (2nd+ open) (Android / iOS separate keys)
     'splash_appopen_2ndtime': false,
     'splash_appopen_2ndtime_ios': false,
-    // Splash interstitial ad keys for Android flow
+    // First launch / returning splash interstitial (Android + iOS; iOS uses `*_ios` keys)
     'splash_inter_1sttime': false,
+    'splash_inter_1sttime_ios': false,
     'splash_inter_2ndtime': false,
+    'splash_inter_2ndtime_ios': false,
     // Native ad flags
     'language_native': true,
     'language_native_ios': true,
     'home_native': true,
+    'home_native_ios': true,
     'recipe_native': true,
+    'recipe_native_ios': true,
     'plan_native': true,
+    'plan_native_ios': true,
     'shop_native': true,
+    'shop_native_ios': true,
     'chat_native': true,
+    'chat_native_ios': true,
     'reciepedetaile_native': true,
+    'reciepedetaile_native_ios': true,
     'camera_native': true,
+    'camera_native_ios': true,
     // Onboarding native ad (Android / iOS separate keys)
     'onboarding_native': true,
     'onboarding_native_ios': true,
     // Interstitial ad configuration
     'bottom_inter': '5',
+    'bottom_inter_ios': '5',
     // Bottom tab switch interstitial: string 'off' / '' = none; '3' = every 3rd tab change (3, 6, 9…)
     'bottom_tab_inter': 'off',
     'bottom_tab_inter_ios': 'off',
@@ -65,8 +84,11 @@ class RemoteConfigService {
     'add_sug_inter': 'off',
     'add_sug_inter_ios': 'off',
     'card_inter': 'open5',
+    'card_inter_ios': 'open5',
     'generateplan_inter': '5',
+    'generateplan_inter_ios': '5',
     'cookingai_inter': 'off',
+    'cookingai_inter_ios': 'off',
     // Exit interstitial (when user confirms exit from bottom sheet)
     'exit_inter': false,
     'exit_inter_ios': false,
@@ -108,7 +130,9 @@ class RemoteConfigService {
     'bottom_banner_ios': true,
     // Small native fallback when bottom banner fails to load (same slot; RC must be true)
     'bottom_native': true,
+    'bottom_native_ios': true,
     'ai_chef': '5',
+    'ai_chef_ios': '5',
     // Supabase configuration (matching web app: VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY)
     'supabase_url': '',
     'supabase_anon_key': '',
@@ -117,6 +141,11 @@ class RemoteConfigService {
   static String get premiumProductIdWeekly =>
       _remoteConfig?.getString('premium_product_id_weekly') ??
       _defaults['premium_product_id_weekly'];
+
+  /// App Store weekly product id from RC (`premium_product_id_weekly_ios`).
+  static String get premiumProductIdWeeklyIos =>
+      _remoteConfig?.getString('premium_product_id_weekly_ios') ??
+      _defaults['premium_product_id_weekly_ios'];
 
   static Future<bool> initialize() async {
     if (_isInitialized && _remoteConfig != null) {
@@ -184,16 +213,32 @@ class RemoteConfigService {
   static bool get showAds =>
       _remoteConfig?.getBool('show_ads') ?? _defaults['show_ads'];
 
+  /// Master ads toggle for iOS (`show_ads_ios` in Firebase).
+  static bool get showAdsIos =>
+      _remoteConfig?.getBool('show_ads_ios') ?? _defaults['show_ads_ios'];
+
   static int get interstitialAdFrequency =>
       _remoteConfig?.getInt('interstitial_ad_frequency') ??
       _defaults['interstitial_ad_frequency'];
+
+  static int get interstitialAdFrequencyIos =>
+      _remoteConfig?.getInt('interstitial_ad_frequency_ios') ??
+      _defaults['interstitial_ad_frequency_ios'];
 
   static bool get showPremiumFeatures =>
       _remoteConfig?.getBool('show_premium_features') ??
       _defaults['show_premium_features'];
 
+  static bool get showPremiumFeaturesIos =>
+      _remoteConfig?.getBool('show_premium_features_ios') ??
+      _defaults['show_premium_features_ios'];
+
   static int get maxFreeChats =>
       _remoteConfig?.getInt('max_free_chats') ?? _defaults['max_free_chats'];
+
+  static int get maxFreeChatsIos =>
+      _remoteConfig?.getInt('max_free_chats_ios') ??
+      _defaults['max_free_chats_ios'];
 
   static bool get enableVoiceFeature =>
       _remoteConfig?.getBool('enable_voice_feature') ??
@@ -218,6 +263,12 @@ class RemoteConfigService {
     return _remoteConfig!.getBool('weekly_sub');
   }
 
+  /// Weekly subscription flag for iOS (`weekly_sub_ios`).
+  static bool get weeklySubIos {
+    if (!isInitialized) return _defaults['weekly_sub_ios'] as bool;
+    return _remoteConfig!.getBool('weekly_sub_ios');
+  }
+
   /// Weekly subscription trial added from backend (Play Console / App Store).
   /// When true, Pro screen shows "3 Days Free Trial" for weekly plan.
   static bool get weeklySubTrial {
@@ -225,13 +276,27 @@ class RemoteConfigService {
     return _remoteConfig!.getBool('weekly_sub_trial');
   }
 
+  /// Weekly trial flag for iOS (`weekly_sub_trial_ios`).
+  static bool get weeklySubTrialIos {
+    if (!isInitialized) return _defaults['weekly_sub_trial_ios'] as bool;
+    return _remoteConfig!.getBool('weekly_sub_trial_ios');
+  }
+
   // Splash interstitial ad
   static bool get splashInter =>
       _remoteConfig?.getBool('splash_inter') ?? _defaults['splash_inter'];
 
+  /// Splash interstitial master toggle for iOS (`splash_inter_ios`).
+  static bool get splashInterIos =>
+      _remoteConfig?.getBool('splash_inter_ios') ?? _defaults['splash_inter_ios'];
+
   // App open ad
   static bool get appOpen =>
       _remoteConfig?.getBool('app_open') ?? _defaults['app_open'];
+
+  /// App open ad master toggle for iOS (`app_open_ios`).
+  static bool get appOpenIos =>
+      _remoteConfig?.getBool('app_open_ios') ?? _defaults['app_open_ios'];
 
   /// Resume app open ad when app returns from background - Android (show only when true)
   static bool get resumeAppOpen =>
@@ -268,10 +333,20 @@ class RemoteConfigService {
       _remoteConfig?.getBool('splash_inter_1sttime') ??
       _defaults['splash_inter_1sttime'];
 
+  /// Splash interstitial on first install — iOS (`splash_inter_1sttime_ios`).
+  static bool get splashInter1stTimeIos =>
+      _remoteConfig?.getBool('splash_inter_1sttime_ios') ??
+      _defaults['splash_inter_1sttime_ios'];
+
   /// Splash interstitial ad for returning user - Android (show only when true)
   static bool get splashInter2ndTime =>
       _remoteConfig?.getBool('splash_inter_2ndtime') ??
       _defaults['splash_inter_2ndtime'];
+
+  /// Splash interstitial for returning user — iOS (`splash_inter_2ndtime_ios`).
+  static bool get splashInter2ndTimeIos =>
+      _remoteConfig?.getBool('splash_inter_2ndtime_ios') ??
+      _defaults['splash_inter_2ndtime_ios'];
 
   // Native ad flags
   static bool get languageNative =>
@@ -285,24 +360,48 @@ class RemoteConfigService {
   static bool get homeNative =>
       _remoteConfig?.getBool('home_native') ?? _defaults['home_native'];
 
+  static bool get homeNativeIos =>
+      _remoteConfig?.getBool('home_native_ios') ?? _defaults['home_native_ios'];
+
   static bool get recipeNative =>
       _remoteConfig?.getBool('recipe_native') ?? _defaults['recipe_native'];
+
+  static bool get recipeNativeIos =>
+      _remoteConfig?.getBool('recipe_native_ios') ??
+      _defaults['recipe_native_ios'];
 
   static bool get planNative =>
       _remoteConfig?.getBool('plan_native') ?? _defaults['plan_native'];
 
+  static bool get planNativeIos =>
+      _remoteConfig?.getBool('plan_native_ios') ?? _defaults['plan_native_ios'];
+
   static bool get shopNative =>
       _remoteConfig?.getBool('shop_native') ?? _defaults['shop_native'];
 
+  static bool get shopNativeIos =>
+      _remoteConfig?.getBool('shop_native_ios') ?? _defaults['shop_native_ios'];
+
   static bool get chatNative =>
       _remoteConfig?.getBool('chat_native') ?? _defaults['chat_native'];
+
+  static bool get chatNativeIos =>
+      _remoteConfig?.getBool('chat_native_ios') ?? _defaults['chat_native_ios'];
 
   static bool get recipeDetailNative =>
       _remoteConfig?.getBool('reciepedetaile_native') ??
       _defaults['reciepedetaile_native'];
 
+  static bool get recipeDetailNativeIos =>
+      _remoteConfig?.getBool('reciepedetaile_native_ios') ??
+      _defaults['reciepedetaile_native_ios'];
+
   static bool get cameraNative =>
       _remoteConfig?.getBool('camera_native') ?? _defaults['camera_native'];
+
+  static bool get cameraNativeIos =>
+      _remoteConfig?.getBool('camera_native_ios') ??
+      _defaults['camera_native_ios'];
 
   /// Onboarding native ad - Android (show only when true)
   static bool get onboardingNative =>
@@ -418,6 +517,10 @@ class RemoteConfigService {
   static bool get bottomNative =>
       _remoteConfig?.getBool('bottom_native') ?? _defaults['bottom_native'];
 
+  /// Bottom native fallback — iOS (`bottom_native_ios`).
+  static bool get bottomNativeIos =>
+      _remoteConfig?.getBool('bottom_native_ios') ?? _defaults['bottom_native_ios'];
+
   /// When true (with [weeklySub] + [subSplash] rules), returning users may see Pro after splash.
   static bool get splashSub =>
       _remoteConfig?.getBool('splash_sub') ?? _defaults['splash_sub'];
@@ -437,6 +540,21 @@ class RemoteConfigService {
       }
     }
     return _defaults['bottom_inter'] as String;
+  }
+
+  /// Bottom interstitial frequency — iOS (`bottom_inter_ios`).
+  static String get bottomInterIos {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value = _remoteConfig!.getString('bottom_inter_ios').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['bottom_inter_ios'] as String);
+      } catch (e) {
+        return _defaults['bottom_inter_ios'] as String;
+      }
+    }
+    return _defaults['bottom_inter_ios'] as String;
   }
 
   /// Bottom nav tab change interstitial — Android (`bottom_tab_inter` in Firebase).
@@ -533,7 +651,7 @@ class RemoteConfigService {
   /// Log line for debugging tab-switch interstitial (raw RC + [ValueSource]).
   static String describeBottomTabInterRc() {
     final buf = StringBuffer(
-      '[BottomTabInter RC] isInitialized=$isInitialized showAds=$showAds ',
+      '[BottomTabInter RC] isInitialized=$isInitialized show_ads=$showAds show_ads_ios=$showAdsIos ',
     );
     if (_remoteConfig == null || !_isInitialized) {
       buf.write(
@@ -570,6 +688,20 @@ class RemoteConfigService {
     return _defaults['card_inter'] as String;
   }
 
+  static String get cardInterIos {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value = _remoteConfig!.getString('card_inter_ios').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['card_inter_ios'] as String);
+      } catch (e) {
+        return _defaults['card_inter_ios'] as String;
+      }
+    }
+    return _defaults['card_inter_ios'] as String;
+  }
+
   static String get generatePlanInter {
     if (_remoteConfig != null && _isInitialized) {
       try {
@@ -582,6 +714,21 @@ class RemoteConfigService {
       }
     }
     return _defaults['generateplan_inter'] as String;
+  }
+
+  static String get generatePlanInterIos {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value =
+            _remoteConfig!.getString('generateplan_inter_ios').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['generateplan_inter_ios'] as String);
+      } catch (e) {
+        return _defaults['generateplan_inter_ios'] as String;
+      }
+    }
+    return _defaults['generateplan_inter_ios'] as String;
   }
 
   static String get cookingAiInter {
@@ -598,6 +745,20 @@ class RemoteConfigService {
     return _defaults['cookingai_inter'] as String;
   }
 
+  static String get cookingAiInterIos {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value = _remoteConfig!.getString('cookingai_inter_ios').trim();
+        return value.isNotEmpty
+            ? value
+            : (_defaults['cookingai_inter_ios'] as String);
+      } catch (e) {
+        return _defaults['cookingai_inter_ios'] as String;
+      }
+    }
+    return _defaults['cookingai_inter_ios'] as String;
+  }
+
   static String get aiChef {
     if (_remoteConfig != null && _isInitialized) {
       try {
@@ -608,6 +769,18 @@ class RemoteConfigService {
       }
     }
     return _defaults['ai_chef'] as String;
+  }
+
+  static String get aiChefIos {
+    if (_remoteConfig != null && _isInitialized) {
+      try {
+        final value = _remoteConfig!.getString('ai_chef_ios').trim();
+        return value.isNotEmpty ? value : (_defaults['ai_chef_ios'] as String);
+      } catch (e) {
+        return _defaults['ai_chef_ios'] as String;
+      }
+    }
+    return _defaults['ai_chef_ios'] as String;
   }
 
   // Helper methods to check if interstitial should be shown
@@ -641,9 +814,14 @@ class RemoteConfigService {
   // Helper method to check card_inter pattern
   // Supports formats: "off", "open5", "back5" (single value only)
   // action should be "open" or "back"
-  static bool shouldShowCardInterstitial(String action, int triggerCount) {
-    final config = cardInter.trim().toLowerCase();
-    if (config == 'off' || config.isEmpty) return false;
+  /// When [config] is null, uses Android RC [card_inter].
+  static bool shouldShowCardInterstitial(
+    String action,
+    int triggerCount, {
+    String? config,
+  }) {
+    final configStr = (config ?? cardInter).trim().toLowerCase();
+    if (configStr == 'off' || configStr.isEmpty) return false;
 
     final actionLower = action.toLowerCase();
     if (actionLower != 'open' && actionLower != 'back') {
@@ -651,10 +829,10 @@ class RemoteConfigService {
     }
 
     // Check if config starts with the action (e.g., "open5" or "back5")
-    if (config.startsWith(actionLower)) {
+    if (configStr.startsWith(actionLower)) {
       try {
         // Extract number after "open" or "back"
-        final numStr = config.substring(actionLower.length);
+        final numStr = configStr.substring(actionLower.length);
         final threshold = int.parse(numStr);
         if (threshold > 0) {
           // Show ad when counter >= threshold
@@ -758,9 +936,15 @@ class RemoteConfigService {
     // Boolean values
     final booleanKeys = [
       'weekly_sub',
+      'weekly_sub_ios',
       'weekly_sub_trial',
+      'weekly_sub_trial_ios',
+      'show_ads',
+      'show_ads_ios',
       'splash_inter',
+      'splash_inter_ios',
       'app_open',
+      'app_open_ios',
       'resume_appopen',
       'resume_appopen_ios',
       'splash_appopen_1sttime',
@@ -768,16 +952,25 @@ class RemoteConfigService {
       'splash_appopen_2ndtime',
       'splash_appopen_2ndtime_ios',
       'splash_inter_1sttime',
+      'splash_inter_1sttime_ios',
       'splash_inter_2ndtime',
+      'splash_inter_2ndtime_ios',
       'language_native',
       'language_native_ios',
       'home_native',
+      'home_native_ios',
       'recipe_native',
+      'recipe_native_ios',
       'plan_native',
+      'plan_native_ios',
       'shop_native',
+      'shop_native_ios',
       'chat_native',
+      'chat_native_ios',
       'reciepedetaile_native',
+      'reciepedetaile_native_ios',
       'camera_native',
+      'camera_native_ios',
       'onboarding_native',
       'onboarding_native_ios',
       'exit_inter',
@@ -790,8 +983,8 @@ class RemoteConfigService {
       'sub_probutton_ios',
       'sub_card',
       'sub_card_ios',
-      'show_ads',
       'show_premium_features',
+      'show_premium_features_ios',
       'enable_voice_feature',
       'enable_scanner_feature',
       'maintenance_mode',
@@ -800,6 +993,7 @@ class RemoteConfigService {
       'bottom_banner',
       'bottom_banner_ios',
       'bottom_native',
+      'bottom_native_ios',
       'splash_sub',
       'splash_sub_ios',
     ];
@@ -824,6 +1018,7 @@ class RemoteConfigService {
     // String values
     final stringKeys = [
       'bottom_inter',
+      'bottom_inter_ios',
       'bottom_tab_inter',
       'bottom_tab_inter_ios',
       'recipe_backpress_inter',
@@ -831,9 +1026,13 @@ class RemoteConfigService {
       'add_sug_inter',
       'add_sug_inter_ios',
       'card_inter',
+      'card_inter_ios',
       'generateplan_inter',
+      'generateplan_inter_ios',
       'cookingai_inter',
+      'cookingai_inter_ios',
       'ai_chef',
+      'ai_chef_ios',
       'sub_scancamera',
       'sub_scancamera_ios',
       'sub_mealplan',
@@ -845,6 +1044,7 @@ class RemoteConfigService {
       'sub_splash',
       'sub_splash_ios',
       'premium_product_id_weekly',
+      'premium_product_id_weekly_ios',
       'app_version_required',
     ];
 
@@ -866,7 +1066,12 @@ class RemoteConfigService {
     }
 
     // Integer values
-    final intKeys = ['interstitial_ad_frequency', 'max_free_chats'];
+    final intKeys = [
+      'interstitial_ad_frequency',
+      'interstitial_ad_frequency_ios',
+      'max_free_chats',
+      'max_free_chats_ios',
+    ];
 
     print('\n📌 Integer Values:');
     for (final key in intKeys) {

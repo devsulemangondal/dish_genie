@@ -211,14 +211,14 @@ class _SplashScreenState extends State<SplashScreen>
       debugPrint(
         '[SplashScreen] 🧪 Forced first-launch onboarding for testing',
       );
-      await _showSplashFirstTimeAppOpenThenGo('/onboarding');
+      await _showSplashFirstTimeInterstitialThenGo('/onboarding');
       return;
     }
 
     if (isFirstLaunch) {
       // First launch: Splash → (App Open Ad if RC) → Language → Onboarding
       debugPrint('[SplashScreen] 📱 First launch: language then onboarding');
-      await _showSplashFirstTimeAppOpenThenGo('/language-selection');
+      await _showSplashFirstTimeInterstitialThenGo('/language-selection');
       return;
     }
 
@@ -231,10 +231,10 @@ class _SplashScreenState extends State<SplashScreen>
         final isLanguageSelected = languageSelectedResult ?? false;
         if (!mounted) return;
         final route = !isLanguageSelected ? '/language-selection' : '/';
-        await _showSplashReturningUserAppOpenThenGo(route);
+        await _showSplashReturningUserInterstitialThenGo(route);
         return;
       }
-      await _showSplashReturningUserAppOpenThenGo('/pro?src=splash');
+      await _showSplashReturningUserInterstitialThenGo('/pro?src=splash');
       return;
     }
 
@@ -243,19 +243,17 @@ class _SplashScreenState extends State<SplashScreen>
       final isLanguageSelected = languageSelectedResult ?? false;
       if (!mounted) return;
       final route = !isLanguageSelected ? '/language-selection' : '/';
-      await _showSplashReturningUserAppOpenThenGo(route);
+      await _showSplashReturningUserInterstitialThenGo(route);
     } catch (e) {
       debugPrint('[SplashScreen] ❌ Error checking language: $e');
       if (mounted) {
-        await _showSplashReturningUserAppOpenThenGo('/language-selection');
+        await _showSplashReturningUserInterstitialThenGo('/language-selection');
       }
     }
   }
 
-  /// First launch: show splash ad if RC allows, then navigate.
-  /// Android uses interstitial RC key: splash_inter_1sttime.
-  /// iOS keeps existing app open RC key: splash_appopen_1sttime_ios.
-  Future<void> _showSplashFirstTimeAppOpenThenGo(String route) async {
+  /// First launch: show splash interstitial if RC allows (Android: `splash_inter_1sttime`, iOS: `splash_inter_1sttime_ios`), then navigate.
+  Future<void> _showSplashFirstTimeInterstitialThenGo(String route) async {
     if (!mounted) return;
     try {
       await RemoteConfigService.initialize().timeout(
@@ -270,21 +268,11 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
 
     final shouldShow = Platform.isIOS
-        ? RemoteConfigService.splashAppOpen1stTimeIos
+        ? RemoteConfigService.splashInter1stTimeIos
         : RemoteConfigService.splashInter1stTime;
 
     if (!shouldShow) {
       if (mounted) context.go(route);
-      return;
-    }
-
-    if (Platform.isIOS) {
-      await AdService.loadAndShowSplashFirstTimeAppOpenAd(
-        context: context,
-        onComplete: () {
-          if (mounted) context.go(route);
-        },
-      );
       return;
     }
 
@@ -296,10 +284,8 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  /// Returning user: show splash ad if RC allows, then navigate.
-  /// Android uses interstitial RC key: splash_inter_2ndtime.
-  /// iOS keeps existing app open RC key: splash_appopen_2ndtime_ios.
-  Future<void> _showSplashReturningUserAppOpenThenGo(String route) async {
+  /// Returning user: show splash interstitial if RC allows (Android: `splash_inter_2ndtime`, iOS: `splash_inter_2ndtime_ios`), then navigate.
+  Future<void> _showSplashReturningUserInterstitialThenGo(String route) async {
     if (!mounted) return;
     try {
       await RemoteConfigService.initialize().timeout(
@@ -314,21 +300,11 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
 
     final shouldShow = Platform.isIOS
-        ? RemoteConfigService.splashAppOpen2ndTimeIos
+        ? RemoteConfigService.splashInter2ndTimeIos
         : RemoteConfigService.splashInter2ndTime;
 
     if (!shouldShow) {
       if (mounted) context.go(route);
-      return;
-    }
-
-    if (Platform.isIOS) {
-      await AdService.loadAndShowSplashReturningUserAppOpenAd(
-        context: context,
-        onComplete: () {
-          if (mounted) context.go(route);
-        },
-      );
       return;
     }
 
@@ -343,21 +319,28 @@ class _SplashScreenState extends State<SplashScreen>
   // _navigateAfterAd removed: interstitial is now after Pro, not on splash.
 
   /// Show Pro after splash when [RemoteConfigService.splashSub] / [splashSubIos] is true,
-  /// plus [weekly_sub] and [sub_splash] / [sub_splash_ios] session rules.
+  /// plus [weekly_sub] / [weekly_sub_ios] and [sub_splash] / [sub_splash_ios] session rules.
   Future<bool> _shouldOpenProAfterSplash(int sessionCount) async {
     try {
       final ok = await RemoteConfigService.initialize().timeout(
         const Duration(seconds: 3),
         onTimeout: () => false,
       );
-      if (!ok) return RemoteConfigService.weeklySub;
+      if (!ok) {
+        return Platform.isIOS
+            ? RemoteConfigService.weeklySubIos
+            : RemoteConfigService.weeklySub;
+      }
 
       await RemoteConfigService.fetchAndActivate().timeout(
         const Duration(seconds: 5),
         onTimeout: () {},
       );
 
-      if (!RemoteConfigService.weeklySub) return false;
+      final weeklyOk = Platform.isIOS
+          ? RemoteConfigService.weeklySubIos
+          : RemoteConfigService.weeklySub;
+      if (!weeklyOk) return false;
 
       final splashSubOk = Platform.isIOS
           ? RemoteConfigService.splashSubIos
@@ -377,7 +360,9 @@ class _SplashScreenState extends State<SplashScreen>
       if (n == null || n < 1) return true;
       return sessionCount >= n && sessionCount % n == 0;
     } catch (_) {
-      return RemoteConfigService.weeklySub;
+      return Platform.isIOS
+          ? RemoteConfigService.weeklySubIos
+          : RemoteConfigService.weeklySub;
     }
   }
 

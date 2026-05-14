@@ -51,7 +51,9 @@ class PremiumProvider with ChangeNotifier {
     
     // Get max free chats from remote config
     await RemoteConfigService.initialize();
-    _maxFreeChats = RemoteConfigService.maxFreeChats;
+    _maxFreeChats = Platform.isIOS
+        ? RemoteConfigService.maxFreeChatsIos
+        : RemoteConfigService.maxFreeChats;
 
     _isPremium = savedPremium;
     _chatCount = savedChatCount;
