@@ -329,10 +329,17 @@ class AdService {
       return;
     }
 
-    // Initialize the Mobile Ads SDK before UMP so the native layer (especially
-    // iOS) has a stable app/window context when presenting the consent form.
-    // Ad traffic remains gated on [_gdprAllowsAds] / canRequestAds.
+    // Initialize Mobile Ads before UMP so native UMP can resolve the host window.
     await MobileAds.instance.initialize();
+
+    // Match UMP testing flow: reset after SDK init in debug so each run can show CMP.
+    if (kDebugMode && (Platform.isAndroid || Platform.isIOS)) {
+      try {
+        await ConsentInformation.instance.reset();
+      } catch (e) {
+        debugPrint('[AdService] UMP reset after MobileAds init: $e');
+      }
+    }
 
     _gdprAllowsAds = await GdprConsentService.gatherConsentIfRequired();
     if (!_gdprAllowsAds) {
