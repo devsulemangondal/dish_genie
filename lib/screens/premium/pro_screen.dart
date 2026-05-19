@@ -650,12 +650,16 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             // Short / narrow phones: scroll + SafeArea so legal links stay above nav.
             const designW = 360.0;
             final designH = Platform.isIOS ? 720.0 : 800.0;
+            final mq = MediaQuery.of(context);
+            // Reserve space for the legal links row above the home-indicator safe area.
+            const linksBarHeight = 44.0;
+            final reservedBottom = linksBarHeight + mq.padding.bottom + 8;
             final scaleW = constraints.maxWidth / designW;
-            final scaleH = constraints.maxHeight / designH;
+            final scaleH =
+                (constraints.maxHeight - reservedBottom) / designH;
             final minScale = Platform.isIOS ? 0.58 : 0.72;
             final scale =
                 (scaleW < scaleH ? scaleW : scaleH).clamp(minScale, 1.0);
-            final mq = MediaQuery.of(context);
 
             Widget backgroundDecor() {
               return Positioned.fill(
@@ -699,34 +703,53 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
               ),
             );
 
+            Widget pinnedLegalLinks({required bool compactLayout}) {
+              return SafeArea(
+                top: false,
+                left: false,
+                right: false,
+                bottom: true,
+                minimum: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+                  child: _buildCancelTermsPrivacyLine(
+                    compactLayout: compactLayout,
+                  ),
+                ),
+              );
+            }
+
             if (_proScreenNeedsCompactScrollLayout(constraints)) {
               return Stack(
                 children: [
                   backgroundDecor(),
                   SafeArea(
-                    child: SingleChildScrollView(
-                      physics: const ClampingScrollPhysics(),
-                      clipBehavior: Clip.none,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            ..._proCorePageSections(
-                              isPremium: isPremium,
-                              weeklyProduct: weeklyProduct,
-                              annualProduct: annualProduct,
-                              lifetimeProduct: lifetimeProduct,
+                    bottom: false,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            physics: const ClampingScrollPhysics(),
+                            clipBehavior: Clip.none,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: _proCorePageSections(
+                                  isPremium: isPremium,
+                                  weeklyProduct: weeklyProduct,
+                                  annualProduct: annualProduct,
+                                  lifetimeProduct: lifetimeProduct,
+                                ),
+                              ),
                             ),
-                            const SizedBox(height: 12),
-                            _buildCancelTermsPrivacyLine(
-                              compactLayout: true,
-                            ),
-                            const SizedBox(height: 20),
-                          ],
+                          ),
                         ),
-                      ),
+                        pinnedLegalLinks(compactLayout: true),
+                      ],
                     ),
                   ),
                   closeChip,
@@ -734,48 +757,43 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
               );
             }
 
-            // Transform.scale shrinks painted padding; inflate pre-scale bottom inset.
-            final bottomForLinks =
-                ((mq.padding.bottom + 8) / scale).clamp(12.0, 160.0);
-
             return Stack(
               children: [
                 backgroundDecor(),
                 SafeArea(
                   bottom: false,
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Transform.scale(
-                      scale: scale,
-                      alignment: Alignment.topCenter,
-                      child: SizedBox(
-                        width: designW,
-                        height: designH,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              ..._proCorePageSections(
-                                isPremium: isPremium,
-                                weeklyProduct: weeklyProduct,
-                                annualProduct: annualProduct,
-                                lifetimeProduct: lifetimeProduct,
-                              ),
-                              const Spacer(),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  bottom: bottomForLinks,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.topCenter,
+                            child: SizedBox(
+                              width: designW,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
                                 ),
-                                child: _buildCancelTermsPrivacyLine(
-                                  compactLayout: false,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: _proCorePageSections(
+                                    isPremium: isPremium,
+                                    weeklyProduct: weeklyProduct,
+                                    annualProduct: annualProduct,
+                                    lifetimeProduct: lifetimeProduct,
+                                  ),
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      pinnedLegalLinks(compactLayout: false),
+                    ],
                   ),
                 ),
                 closeChip,
