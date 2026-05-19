@@ -126,6 +126,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get languageSelectionContinue => '계속';
 
   @override
+  String get languageScreenHeaderTitle => '언어';
+
+  @override
   String get onboardingSkip => '건너뛰기';
 
   @override
@@ -2248,7 +2251,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumUnlockNow => '지금 잠금 해제';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => '최고의 혜택';
 
   @override
   String premiumStartFreeTrial(String price) {

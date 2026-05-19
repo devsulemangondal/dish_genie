@@ -318,6 +318,7 @@ extension L10nExtension on BuildContext {
     'chatHistory.noMessages': (l) => l.chatHistoryNoMessages,
     'chatHistory.messages': (l) => l.chatHistoryMessages,
     'language.selection.continue': (l) => l.languageSelectionContinue,
+    'language.screen.header.title': (l) => l.languageScreenHeaderTitle,
     'language.selection.subtitle': (l) => l.languageSelectionSubtitle,
     'language.selection.title': (l) => l.languageSelectionTitle,
     'meal.planner.advanced': (l) => l.mealPlannerAdvanced,

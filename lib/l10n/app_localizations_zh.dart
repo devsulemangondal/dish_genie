@@ -126,6 +126,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageSelectionContinue => '继续';
 
   @override
+  String get languageScreenHeaderTitle => '语言';
+
+  @override
   String get onboardingSkip => '跳过';
 
   @override
@@ -2232,7 +2235,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumUnlockNow => '立即解锁';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => '最佳优惠';
 
   @override
   String premiumStartFreeTrial(String price) {

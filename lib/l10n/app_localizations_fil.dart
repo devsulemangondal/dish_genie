@@ -126,6 +126,9 @@ class AppLocalizationsFil extends AppLocalizations {
   String get languageSelectionContinue => 'Magpatuloy';
 
   @override
+  String get languageScreenHeaderTitle => 'Mga Wika';
+
+  @override
   String get onboardingSkip => 'Laktawan';
 
   @override
@@ -2323,7 +2326,7 @@ class AppLocalizationsFil extends AppLocalizations {
   String get premiumUnlockNow => 'I-unlock ngayon';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'Pinakamagandang alok';
 
   @override
   String premiumStartFreeTrial(String price) {

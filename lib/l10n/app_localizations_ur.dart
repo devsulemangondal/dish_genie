@@ -126,6 +126,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get languageSelectionContinue => 'جاری رکھیں';
 
   @override
+  String get languageScreenHeaderTitle => 'زبانیں';
+
+  @override
   String get onboardingSkip => 'چھوڑیں';
 
   @override
@@ -2302,7 +2305,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get premiumUnlockNow => 'ابھی ان لاک کریں';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'بہترین آفر';
 
   @override
   String premiumStartFreeTrial(String price) {

@@ -126,6 +126,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get languageSelectionContinue => 'Продовжити';
 
   @override
+  String get languageScreenHeaderTitle => 'Мови';
+
+  @override
   String get onboardingSkip => 'Пропустити';
 
   @override
@@ -2306,7 +2309,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get premiumUnlockNow => 'Розблокувати зараз';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'Найкраща пропозиція';
 
   @override
   String premiumStartFreeTrial(String price) {

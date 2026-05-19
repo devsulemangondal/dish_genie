@@ -126,6 +126,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageSelectionContinue => 'Continue';
 
   @override
+  String get languageScreenHeaderTitle => 'Languages';
+
+  @override
   String get onboardingSkip => 'Skip';
 
   @override

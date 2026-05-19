@@ -380,6 +380,12 @@ abstract class AppLocalizations {
   /// **'Continue'**
   String get languageSelectionContinue;
 
+  /// No description provided for @languageScreenHeaderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages'**
+  String get languageScreenHeaderTitle;
+
   /// No description provided for @onboardingSkip.
   ///
   /// In en, this message translates to:

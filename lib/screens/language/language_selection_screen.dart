@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/localization/l10n_extension.dart';
 import '../../core/localization/language_config.dart';
 import '../../core/theme/colors.dart';
 import '../../providers/language_provider.dart';
@@ -148,7 +149,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: StickyHeader(
-                  title: 'Languages',
+                  title: context.t('language.screen.header.title'),
                   showBack: _showBackButton,
                   onBack: () {
                     if (context.canPop()) {

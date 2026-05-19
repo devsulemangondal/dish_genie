@@ -126,6 +126,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get languageSelectionContinue => 'Жалғастыру';
 
   @override
+  String get languageScreenHeaderTitle => 'Тілдер';
+
+  @override
   String get onboardingSkip => 'Өткізу';
 
   @override
@@ -2310,7 +2313,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get premiumUnlockNow => 'Қазір ашыңыз';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'Ең жақсы ұсыныс';
 
   @override
   String premiumStartFreeTrial(String price) {

@@ -126,6 +126,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get languageSelectionContinue => 'Doorgaan';
 
   @override
+  String get languageScreenHeaderTitle => 'Talen';
+
+  @override
   String get onboardingSkip => 'Overslaan';
 
   @override
@@ -2301,7 +2304,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get premiumUnlockNow => 'Nu ontgrendelen';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'Beste aanbieding';
 
   @override
   String premiumStartFreeTrial(String price) {

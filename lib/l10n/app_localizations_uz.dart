@@ -126,6 +126,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get languageSelectionContinue => 'Davom etish';
 
   @override
+  String get languageScreenHeaderTitle => 'Tillar';
+
+  @override
   String get onboardingSkip => 'O\'tkazib yuborish';
 
   @override
@@ -2317,7 +2320,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get premiumUnlockNow => 'Hozir ochish';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'Eng yaxshi taklif';
 
   @override
   String premiumStartFreeTrial(String price) {

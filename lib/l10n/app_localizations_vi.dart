@@ -126,6 +126,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get languageSelectionContinue => 'Tiếp tục';
 
   @override
+  String get languageScreenHeaderTitle => 'Ngôn ngữ';
+
+  @override
   String get onboardingSkip => 'Bỏ qua';
 
   @override
@@ -2304,7 +2307,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get premiumUnlockNow => 'Mở khóa ngay';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'Ưu đãi tốt nhất';
 
   @override
   String premiumStartFreeTrial(String price) {

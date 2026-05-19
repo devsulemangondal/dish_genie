@@ -127,6 +127,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get languageSelectionContinue => 'Devam Et';
 
   @override
+  String get languageScreenHeaderTitle => 'Diller';
+
+  @override
   String get onboardingSkip => 'Atla';
 
   @override
@@ -2304,7 +2307,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get premiumUnlockNow => 'Şimdi aç';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'En iyi teklif';
 
   @override
   String premiumStartFreeTrial(String price) {

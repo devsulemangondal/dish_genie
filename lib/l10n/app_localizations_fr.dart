@@ -127,6 +127,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get languageSelectionContinue => 'Continuer';
 
   @override
+  String get languageScreenHeaderTitle => 'Langues';
+
+  @override
   String get onboardingSkip => 'Passer';
 
   @override
@@ -2305,7 +2308,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get premiumUnlockNow => 'Débloquer maintenant';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'Meilleure offre';
 
   @override
   String premiumStartFreeTrial(String price) {

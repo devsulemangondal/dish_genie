@@ -126,6 +126,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get languageSelectionContinue => 'Gaan voort';
 
   @override
+  String get languageScreenHeaderTitle => 'Tale';
+
+  @override
   String get onboardingSkip => 'Slaan oor';
 
   @override
@@ -2302,7 +2305,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get premiumUnlockNow => 'Ontsluit nou';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'Beste aanbod';
 
   @override
   String premiumStartFreeTrial(String price) {

@@ -126,6 +126,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get languageSelectionContinue => 'ดำเนินการต่อ';
 
   @override
+  String get languageScreenHeaderTitle => 'ภาษา';
+
+  @override
   String get onboardingSkip => 'ข้าม';
 
   @override
@@ -2276,7 +2279,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumUnlockNow => 'ปลดล็อกเลย';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'ข้อเสนอที่ดีที่สุด';
 
   @override
   String premiumStartFreeTrial(String price) {

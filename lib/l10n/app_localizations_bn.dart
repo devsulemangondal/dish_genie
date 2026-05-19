@@ -127,6 +127,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get languageSelectionContinue => 'চালিয়ে যান';
 
   @override
+  String get languageScreenHeaderTitle => 'ভাষাসমূহ';
+
+  @override
   String get onboardingSkip => 'এড়িয়ে যান';
 
   @override
@@ -2303,7 +2306,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get premiumUnlockNow => 'এখনই আনলক করুন';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'সেরা অফার';
 
   @override
   String premiumStartFreeTrial(String price) {

@@ -127,6 +127,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get languageSelectionContinue => 'ادامه';
 
   @override
+  String get languageScreenHeaderTitle => 'زبان‌ها';
+
+  @override
   String get onboardingSkip => 'رد کردن';
 
   @override
@@ -2306,7 +2309,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get premiumUnlockNow => 'همین الآن باز کنید';
 
   @override
-  String get premiumBestOffer => 'Best offer';
+  String get premiumBestOffer => 'بهترین پیشنهاد';
 
   @override
   String premiumStartFreeTrial(String price) {
