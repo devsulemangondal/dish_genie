@@ -583,22 +583,21 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
     required ProductDetails? annualProduct,
     required ProductDetails? lifetimeProduct,
   }) {
-    final compactIos = Platform.isIOS;
     return [
-      SizedBox(height: compactIos ? 2 : 4),
+      const SizedBox(height: 4),
       _buildTopHeroImage(),
-      SizedBox(height: compactIos ? 6 : 10),
+      const SizedBox(height: 10),
       _buildScreenshotTitle(),
-      SizedBox(height: compactIos ? 8 : 14),
+      const SizedBox(height: 14),
       _buildScreenshotFeatures(),
-      SizedBox(height: compactIos ? 10 : 18),
+      const SizedBox(height: 18),
       if (!isPremium) ...[
         _buildPaywallThreeCards(
           weeklyProduct: weeklyProduct,
           annualProduct: annualProduct,
           lifetimeProduct: lifetimeProduct,
         ),
-        SizedBox(height: compactIos ? 8 : 16),
+        const SizedBox(height: 16),
       ],
     ];
   }
@@ -649,7 +648,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             // Match reference layout with fixed frame + scale on taller phones.
             // Short / narrow phones: scroll + SafeArea so legal links stay above nav.
             const designW = 360.0;
-            final designH = Platform.isIOS ? 720.0 : 800.0;
+            const designH = 800.0;
             final mq = MediaQuery.of(context);
             // Reserve space for the legal links row above the home-indicator safe area.
             const linksBarHeight = 44.0;
@@ -657,7 +656,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
             final scaleW = constraints.maxWidth / designW;
             final scaleH =
                 (constraints.maxHeight - reservedBottom) / designH;
-            final minScale = Platform.isIOS ? 0.58 : 0.72;
+            const minScale = 0.72;
             final scale =
                 (scaleW < scaleH ? scaleW : scaleH).clamp(minScale, 1.0);
 
@@ -812,8 +811,8 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
 
   /// Scales the whole asset down uniformly (no cropping). Nudge toward 1.0 for larger art.
   static const double _kHeroImageScale = 0.92;
-  static const double _kHeroImageScaleIos = 0.66;
-  static const double _kHeroMaxHeightIos = 118.0;
+  /// iOS: only slightly smaller than Android so the paywall still fits without scrolling.
+  static const double _kHeroImageScaleIos = 0.86;
 
   double _heroImageWidthFactor() =>
       Platform.isIOS ? _kHeroImageScaleIos : _kHeroImageScale;
@@ -827,30 +826,19 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
       builder: (context, constraints) {
         final w = constraints.maxWidth;
         final imgW = w * _heroImageWidthFactor();
-        final image = Image.asset(
-          'assets/pro_top_new.png',
-          width: imgW,
-          fit: BoxFit.fitWidth,
-          alignment: Alignment.topCenter,
-          filterQuality: FilterQuality.medium,
-        );
         return ClipRRect(
           borderRadius: BorderRadius.circular(18),
           child: ColoredBox(
             color: bg,
             child: Align(
               alignment: Alignment.topCenter,
-              child: Platform.isIOS
-                  ? SizedBox(
-                      width: imgW,
-                      height: _kHeroMaxHeightIos,
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        alignment: Alignment.topCenter,
-                        child: image,
-                      ),
-                    )
-                  : image,
+              child: Image.asset(
+                'assets/pro_top_new.png',
+                width: imgW,
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.topCenter,
+                filterQuality: FilterQuality.medium,
+              ),
             ),
           ),
         );
@@ -887,9 +875,8 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
         ? Colors.white.withOpacity(0.90)
         : const Color(0xFF2F80ED);
 
-    final rowPad = Platform.isIOS ? 4.0 : 6.0;
     Widget row(String asset, String text) => Padding(
-      padding: EdgeInsets.symmetric(vertical: rowPad),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1039,7 +1026,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
           subtitle: trialSubtitle,
           onTap: () => _purchaseByProductId(wId),
         ),
-        SizedBox(height: Platform.isIOS ? 10 : 22),
+        const SizedBox(height: 22),
         _ScreenshotPlanCard.yearly(
           enabled: !purchasing,
           isLoading: cardBusy(yId),
@@ -1051,7 +1038,7 @@ class _ProScreenState extends State<ProScreen> with WidgetsBindingObserver {
           isSelected: true,
           onTap: () => _purchaseByProductId(yId),
         ),
-        SizedBox(height: Platform.isIOS ? 8 : 14),
+        const SizedBox(height: 14),
         _ScreenshotPlanCard.lifetimeStyle(
           enabled: !purchasing,
           isLoading: cardBusy(lId),
