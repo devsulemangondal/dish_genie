@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -24,18 +25,43 @@ class BillingService {
   static bool _isInitialized = false;
   static bool _hasPremiumEntitlement = false;
 
-  // Product IDs must match EXACTLY the subscription IDs in Play Console (Monetize → Subscriptions).
-  static const String weeklySubscriptionId = 'weekly_sub';
-  static const String yearlySubscriptionId = 'yearly_sub';
+  // Android — Google Play Console product IDs.
+  static const String weeklySubscriptionIdAndroid = 'weekly_sub';
+  static const String yearlySubscriptionIdAndroid = 'yearly_sub';
+  static const String lifetimeSubscriptionIdAndroid = 'lifetime_premium';
 
-  /// One-time lifetime unlock. Must match Play Console / App Store Connect exactly.
-  static const String lifetimeSubscriptionId = 'lifetime_premium';
+  // iOS — App Store Connect product IDs (hardcoded; not from Remote Config).
+  static const String weeklySubscriptionIdIos = 'weekly_sub_chef';
+  static const String yearlySubscriptionIdIos = 'yearly_sub_chef';
+  static const String lifetimeSubscriptionIdIos = 'lifetime_purchase_chef';
 
-  static final List<String> _productIds = [
+  /// Active weekly product ID for the current platform.
+  static String get weeklySubscriptionId =>
+      Platform.isIOS ? weeklySubscriptionIdIos : weeklySubscriptionIdAndroid;
+
+  /// Active yearly product ID for the current platform.
+  static String get yearlySubscriptionId =>
+      Platform.isIOS ? yearlySubscriptionIdIos : yearlySubscriptionIdAndroid;
+
+  /// Active lifetime product ID for the current platform.
+  static String get lifetimeSubscriptionId => Platform.isIOS
+      ? lifetimeSubscriptionIdIos
+      : lifetimeSubscriptionIdAndroid;
+
+  static List<String> get _productIds => [
     weeklySubscriptionId,
     yearlySubscriptionId,
     lifetimeSubscriptionId,
   ];
+
+  static const Set<String> _allPremiumProductIds = {
+    weeklySubscriptionIdAndroid,
+    yearlySubscriptionIdAndroid,
+    lifetimeSubscriptionIdAndroid,
+    weeklySubscriptionIdIos,
+    yearlySubscriptionIdIos,
+    lifetimeSubscriptionIdIos,
+  };
 
   static List<ProductDetails> _products = [];
   static final StreamController<PurchaseDetails> _purchaseController =
@@ -51,9 +77,7 @@ class BillingService {
   static bool get hasPremiumEntitlement => _hasPremiumEntitlement;
   static bool get isLoadingProducts => _isLoadingProducts;
   static bool isPremiumProductId(String productId) =>
-      productId == weeklySubscriptionId ||
-      productId == yearlySubscriptionId ||
-      productId == lifetimeSubscriptionId;
+      _allPremiumProductIds.contains(productId);
 
   static bool _isLoadingProducts = false;
   static String? _lastError;
@@ -214,9 +238,7 @@ class BillingService {
       // The actual subscription type is determined by how the product is configured
       // in Google Play Console (for Android) or App Store Connect (for iOS)
       // Subscriptions must be configured as subscription products in the store
-      if (product.id == weeklySubscriptionId ||
-          product.id == yearlySubscriptionId ||
-          product.id == lifetimeSubscriptionId) {
+      if (isPremiumProductId(product.id)) {
         await _iap.buyNonConsumable(purchaseParam: purchaseParam);
       } else {
         await _iap.buyConsumable(purchaseParam: purchaseParam);

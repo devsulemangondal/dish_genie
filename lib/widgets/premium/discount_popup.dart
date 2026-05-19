@@ -13,12 +13,12 @@ import '../../services/billing_service.dart';
 ///
 /// Pops with true when user taps Subscribe, false when dismissed.
 class DiscountPopup extends StatelessWidget {
-  const DiscountPopup({
+  DiscountPopup({
     super.key,
-    this.productId = BillingService.yearlySubscriptionId,
-  });
+    String? productId,
+  }) : productId = productId ?? BillingService.yearlySubscriptionId;
 
-  /// Product ID to load and display (e.g. yearly_sub). Loads from BillingService.
+  /// Product ID to load and display. Defaults to platform yearly ID from [BillingService].
   final String productId;
 
   static const double _designWidth = 375;

@@ -25,7 +25,6 @@ class RemoteConfigService {
     'maintenance_mode':
         false, // Should be false by default - only enable remotely when needed
     'premium_product_id_weekly': 'weekly_sub',
-    'premium_product_id_weekly_ios': 'weekly_sub',
     // Ad configuration flags
     // Fail-safe: keep Pro/paywall hidden unless explicitly enabled remotely.
     'weekly_sub': false,
@@ -138,14 +137,10 @@ class RemoteConfigService {
     'supabase_anon_key': '',
   };
 
+  /// Play Store weekly product id from RC (Android only). iOS IDs live in [BillingService].
   static String get premiumProductIdWeekly =>
       _remoteConfig?.getString('premium_product_id_weekly') ??
       _defaults['premium_product_id_weekly'];
-
-  /// App Store weekly product id from RC (`premium_product_id_weekly_ios`).
-  static String get premiumProductIdWeeklyIos =>
-      _remoteConfig?.getString('premium_product_id_weekly_ios') ??
-      _defaults['premium_product_id_weekly_ios'];
 
   static Future<bool> initialize() async {
     if (_isInitialized && _remoteConfig != null) {
@@ -1044,7 +1039,6 @@ class RemoteConfigService {
       'sub_splash',
       'sub_splash_ios',
       'premium_product_id_weekly',
-      'premium_product_id_weekly_ios',
       'app_version_required',
     ];
 
