@@ -22,10 +22,10 @@ class PremiumProvider with ChangeNotifier {
   int _scanCount = 0;
   int _mealPlanCount = 0;
   bool _isInitialized = false;
+  final Completer<void> _initCompleter = Completer<void>();
   StreamSubscription? _billingSubscription;
-  Timer? _subscriptionCheckTimer;
 
-  bool get isPremium => _isPremium;
+  bool get isPremium => _isPremium || BillingService.hasPremiumEntitlement;
   int get chatCount => _chatCount;
   int get maxFreeChats => _maxFreeChats;
   bool get canUseChat => _isPremium || _chatCount < _maxFreeChats;
@@ -38,8 +38,35 @@ class PremiumProvider with ChangeNotifier {
     _init();
   }
 
+  /// Completes when billing restore and local premium state are ready.
+  Future<void> ensureInitialized() => _initCompleter.future;
+
+  /// Restore subscription on splash before ads/navigation (reinstall flow).
+  Future<bool> restoreSubscriptionForSplash({
+    Duration timeout = const Duration(seconds: 5),
+  }) async {
+    await ensureInitialized();
+    if (isPremium) return true;
+
+    await BillingService.restorePurchases();
+    final found = await BillingService.waitForPremiumEntitlement(
+      timeout: timeout,
+    );
+    if (found) {
+      await setPremium(true);
+    }
+    notifyListeners();
+    return isPremium;
+  }
+
   Future<void> _init() async {
-    if (_isInitialized) return;
+    if (_isInitialized) {
+      if (!_initCompleter.isCompleted) _initCompleter.complete();
+      return;
+    }
+
+    try {
+    await StorageService.initialize();
 
     // Load from storage
     final savedPremium = await StorageService.getIsPremium();
@@ -62,6 +89,9 @@ class PremiumProvider with ChangeNotifier {
     _scanCount = savedScanCount;
     _mealPlanCount = savedMealPlanCount;
 
+    // Reflect stored entitlement immediately so premium UI hides before billing restore finishes.
+    notifyListeners();
+
     // Initialize billing and check for active purchases
     await _checkBillingStatus();
 
@@ -70,6 +100,11 @@ class PremiumProvider with ChangeNotifier {
 
     _isInitialized = true;
     notifyListeners();
+    } finally {
+      if (!_initCompleter.isCompleted) {
+        _initCompleter.complete();
+      }
+    }
   }
 
   Future<void> _checkBillingStatus() async {
@@ -82,7 +117,7 @@ class PremiumProvider with ChangeNotifier {
         await setPremium(true);
       }
 
-      // Keep listening for future purchase/restored events and update local flag.
+      // Listen for new purchases while the app is open.
       _billingSubscription?.cancel();
       _billingSubscription = BillingService.purchaseStream.listen((purchase) {
         if (!BillingService.isPremiumProductId(purchase.productID)) return;
@@ -90,15 +125,9 @@ class PremiumProvider with ChangeNotifier {
         if (purchase.status == PurchaseStatus.purchased ||
             purchase.status == PurchaseStatus.restored) {
           setPremium(true);
-        } else if (purchase.status == PurchaseStatus.canceled ||
-                   purchase.status == PurchaseStatus.error) {
-          // Subscription expired or canceled - revoke premium
-          setPremium(false);
         }
+        notifyListeners();
       });
-
-      // Start periodic subscription status check (every 24 hours)
-      _startSubscriptionStatusCheck();
     } catch (e) {
       // Handle error
     }
@@ -127,42 +156,21 @@ class PremiumProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Start periodic subscription status check
-  /// Checks subscription status every 24 hours to handle expiry
-  void _startSubscriptionStatusCheck() {
-    _subscriptionCheckTimer?.cancel();
-    _subscriptionCheckTimer = Timer.periodic(
-      const Duration(hours: 24),
-      (_) async {
-        if (_isPremium) {
-          // Only check if user is currently premium
-          await BillingService.checkSubscriptionStatus();
-          
-          // Update premium status based on billing service entitlement
-          if (!BillingService.hasPremiumEntitlement && _isPremium) {
-            await setPremium(false);
-          }
-        }
-      },
-    );
-  }
-
-  /// Manually check subscription status
-  /// Useful to call on app start or when user returns to app
+  /// Verify subscription with the store on app launch only.
   Future<void> refreshSubscriptionStatus() async {
-    await BillingService.checkSubscriptionStatus();
-    
-    // Update premium status based on billing service entitlement
-    final shouldBePremium = BillingService.hasPremiumEntitlement;
-    if (shouldBePremium != _isPremium) {
-      await setPremium(shouldBePremium);
+    final active = await BillingService.checkSubscriptionStatus();
+
+    if (active) {
+      if (!_isPremium) await setPremium(true);
+    } else if (_isPremium) {
+      await setPremium(false);
     }
+    notifyListeners();
   }
 
   @override
   void dispose() {
     _billingSubscription?.cancel();
-    _subscriptionCheckTimer?.cancel();
     super.dispose();
   }
 

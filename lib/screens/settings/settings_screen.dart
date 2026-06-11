@@ -17,6 +17,7 @@ import '../../providers/chat_provider.dart';
 import '../../providers/grocery_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/meal_plan_provider.dart';
+import '../../providers/premium_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../services/remote_config_service.dart';
 import '../../widgets/common/premium_card.dart';
@@ -588,10 +589,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     bottom: 12 + MediaQuery.of(context).padding.bottom,
                   ),
                   children: [
-                    // Premium Card (only if remote config enables it)
-                    if (Platform.isIOS
-                        ? RemoteConfigService.subCardIos
-                        : RemoteConfigService.subCard) ...[
+                    // Premium Card (only if remote config enables it and user is not premium)
+                    if (!context.watch<PremiumProvider>().isPremium &&
+                        (Platform.isIOS
+                            ? RemoteConfigService.subCardIos
+                            : RemoteConfigService.subCard)) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: const PremiumCard(),

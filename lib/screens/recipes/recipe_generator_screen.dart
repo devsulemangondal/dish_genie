@@ -291,52 +291,54 @@ class _RecipeGeneratorScreenState extends State<RecipeGeneratorScreen>
                       ? Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            GestureDetector(
-                              onTap: () => ProNavigation.tryOpen(
-                                context,
-                                replace: false,
-                              ),
-                              child: SizedBox(
-                                width: 70,
-                                height: 32,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                      colors: [
-                                        Color(0xFFFFB301),
-                                        Color(0xFFFD5C17),
-                                      ],
+                            if (!premiumProvider.isPremium) ...[
+                              GestureDetector(
+                                onTap: () => ProNavigation.tryOpen(
+                                  context,
+                                  replace: false,
+                                ),
+                                child: SizedBox(
+                                  width: 70,
+                                  height: 32,
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [
+                                          Color(0xFFFFB301),
+                                          Color(0xFFFD5C17),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(
-                                          Icons.auto_awesome,
-                                          size: 14,
-                                          color: Colors.white,
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          context.t('smartChefPro'),
-                                          style: GoogleFonts.inter(
-                                            fontSize: 12.5,
-                                            height: 1.0,
-                                            fontWeight: FontWeight.w700,
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(
+                                            Icons.auto_awesome,
+                                            size: 14,
                                             color: Colors.white,
                                           ),
-                                        ),
-                                      ],
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            context.t('smartChefPro'),
+                                            style: GoogleFonts.inter(
+                                              fontSize: 12.5,
+                                              height: 1.0,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 2),
+                              const SizedBox(width: 2),
+                            ],
                             IconButton(
                               onPressed: () => context.push('/settings'),
                               icon: const Icon(Icons.settings),

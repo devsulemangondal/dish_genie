@@ -12,11 +12,18 @@ import '../config/ad_config.dart';
 import '../core/router/app_router.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/language_provider.dart';
+import 'billing_service.dart';
 import 'gdpr_consent_service.dart';
 import 'remote_config_service.dart';
 import 'storage_service.dart';
 
 class AdService {
+  /// Premium from local storage or live billing entitlement (reinstall restore).
+  static Future<bool> _isUserPremium() async {
+    if (await StorageService.getIsPremium()) return true;
+    return BillingService.hasPremiumEntitlement;
+  }
+
   // Test Ad Unit IDs (for development)
   static const String _testNativeAdUnitId =
       'ca-app-pub-3940256099942544/2247696110';
@@ -379,7 +386,7 @@ class AdService {
     if (!_gdprAllowsAds) return null;
 
     // Premium users never see ads (local-only entitlement).
-    if (await StorageService.getIsPremium()) {
+    if (await _isUserPremium()) {
       return null;
     }
 
@@ -455,7 +462,7 @@ class AdService {
   static Future<bool> _shouldShowAdForScreen(String screenKey) async {
     try {
       // Premium users never see ads (local-only entitlement).
-      if (await StorageService.getIsPremium()) {
+      if (await _isUserPremium()) {
         return false;
       }
 
@@ -659,7 +666,7 @@ class AdService {
     if (!_gdprAllowsAds) return;
 
     // Premium users never see ads (local-only entitlement).
-    if (await StorageService.getIsPremium()) {
+    if (await _isUserPremium()) {
       return;
     }
 
@@ -772,7 +779,7 @@ class AdService {
     _isAnyInterstitialInProgress = true;
 
     // Premium users never see ads (local-only entitlement).
-    if (await StorageService.getIsPremium()) {
+    if (await _isUserPremium()) {
       logBottomTab('skip: user is premium');
       _isShowInterstitialInProgress[adType] = false;
       _isAnyInterstitialInProgress = false;
@@ -1284,7 +1291,7 @@ class AdService {
     if (!_gdprAllowsAds) return;
 
     // Premium users never see ads (local-only entitlement).
-    if (await StorageService.getIsPremium()) {
+    if (await _isUserPremium()) {
       return;
     }
 

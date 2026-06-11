@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../core/theme/colors.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/navigation/pro_navigation.dart';
 import '../../providers/premium_provider.dart';
@@ -19,6 +18,7 @@ class ProButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPremium = context.watch<PremiumProvider>().isPremium;
+    if (isPremium) return const SizedBox.shrink();
 
     return GestureDetector(
       onTap: () => ProNavigation.tryOpen(context, replace: false),
@@ -26,16 +26,14 @@ class ProButton extends StatelessWidget {
         width: _width,
         height: _height,
         decoration: BoxDecoration(
-          gradient: isPremium
-              ? AppColors.gradientPinkToPurple
-              : const LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    Color(0xFF7B4DFF),
-                    Color(0xFFA66BFF),
-                  ],
-                ),
+          gradient: const LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Color(0xFF7B4DFF),
+              Color(0xFFA66BFF),
+            ],
+          ),
           borderRadius: BorderRadius.circular(_radius),
         ),
         alignment: Alignment.center,

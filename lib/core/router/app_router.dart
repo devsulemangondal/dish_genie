@@ -59,9 +59,24 @@ class AppRouter {
         try {
           final path = state.matchedLocation;
 
+          // Premium users should never land on the Pro screen
+          if (path == '/pro') {
+            try {
+              if (context.mounted) {
+                final premiumProvider = Provider.of<PremiumProvider>(
+                  context,
+                  listen: false,
+                );
+                if (premiumProvider.isPremium) {
+                  return '/';
+                }
+              }
+            } catch (_) {}
+            return null;
+          }
+
           // Skip guard for these routes
           if (path == '/splash' ||
-              path == '/pro' ||
               path == '/language-selection' ||
               path == '/language-picker' ||
               path == '/onboarding' ||
@@ -73,26 +88,6 @@ class AppRouter {
           // Check language selection
           if (!languageProvider.isLanguageSelected) {
             return '/language-selection';
-          }
-
-          // Check premium status for pro screen
-          if (path == '/pro') {
-            try {
-              // Use context.mounted check and safe provider access
-              if (context.mounted) {
-                final premiumProvider = Provider.of<PremiumProvider>(
-                  context,
-                  listen: false,
-                );
-                if (premiumProvider.isPremium) {
-                  // Premium users should skip pro screen
-                  return '/';
-                }
-              }
-            } catch (e) {
-              // If provider not available, continue to pro screen
-              // Silently handle the error to prevent red screen
-            }
           }
 
           // Check onboarding

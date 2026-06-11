@@ -3,11 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/localization/l10n_extension.dart';
+import '../../providers/premium_provider.dart';
 import '../../core/theme/colors.dart';
 import '../../services/ad_service.dart';
+import '../../services/billing_service.dart';
 import '../../services/remote_config_service.dart';
+import '../../services/storage_service.dart';
 import '../../widgets/common/bottom_nav.dart';
 import '../../widgets/common/floating_sparkles.dart';
 import '../../widgets/common/genie_mascot.dart';
@@ -26,6 +30,38 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _isExitSheetOpen = false;
+  bool _storedPremium = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStoredPremium();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<PremiumProvider>().addListener(_onPremiumChanged);
+    });
+  }
+
+  @override
+  void dispose() {
+    try {
+      context.read<PremiumProvider>().removeListener(_onPremiumChanged);
+    } catch (_) {}
+    super.dispose();
+  }
+
+  void _onPremiumChanged() {
+    _loadStoredPremium();
+  }
+
+  Future<void> _loadStoredPremium() async {
+    await StorageService.initialize();
+    final stored = await StorageService.getIsPremium();
+    if (!mounted) return;
+    if (stored != _storedPremium) {
+      setState(() => _storedPremium = stored);
+    }
+  }
 
   bool get _shouldShowProButton => Platform.isIOS
       ? RemoteConfigService.subProButtonIos
@@ -189,6 +225,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isPremium = context.watch<PremiumProvider>().isPremium ||
+        _storedPremium ||
+        BillingService.hasPremiumEntitlement;
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
@@ -222,8 +262,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Pro button on the left (only if remote config enables it)
-                        if (_shouldShowProButton) const ProButton(),
+                        // Pro button on the left (remote config + non-premium only)
+                        if (_shouldShowProButton && !isPremium) const ProButton(),
                         // Settings button on the right
                         IconButton(
                           icon: const Icon(Icons.settings),

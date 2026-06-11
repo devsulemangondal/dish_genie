@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
@@ -81,6 +82,10 @@ class BillingService {
 
   static bool _isLoadingProducts = false;
   static String? _lastError;
+  static bool _isVerifyingSubscription = false;
+
+  /// True while [verifyActiveSubscription] is waiting on the purchase stream.
+  static bool get isVerifyingSubscription => _isVerifyingSubscription;
 
   static Future<void> initialize() async {
     if (_isInitialized) return;
@@ -221,6 +226,22 @@ class BillingService {
     await _restorePurchases();
   }
 
+  /// Waits for the purchase stream to set [hasPremiumEntitlement] after restore.
+  static Future<bool> waitForPremiumEntitlement({
+    Duration timeout = const Duration(seconds: 5),
+    Duration pollInterval = const Duration(milliseconds: 100),
+  }) async {
+    if (_hasPremiumEntitlement) return true;
+    if (!_isAvailable) return false;
+
+    final deadline = DateTime.now().add(timeout);
+    while (DateTime.now().isBefore(deadline)) {
+      if (_hasPremiumEntitlement) return true;
+      await Future.delayed(pollInterval);
+    }
+    return _hasPremiumEntitlement;
+  }
+
   static Future<bool> purchaseProduct(ProductDetails product) async {
     if (!_isAvailable) {
       _lastError = 'In-App Purchase is not available on this device';
@@ -272,12 +293,11 @@ class BillingService {
         if (kDebugMode) {
           print('Purchase successful: ${purchase.productID}');
         }
-        if (isPremiumProductId(purchase.productID)) {
-          // Verify purchase before granting entitlement
+        if (isPremiumProductId(purchase.productID) && _isPurchaseActive(purchase)) {
+          // Grant entitlement immediately so splash/ads can react before async verify.
+          _hasPremiumEntitlement = true;
           _verifyPurchase(purchase).then((isValid) {
-            if (isValid) {
-              _hasPremiumEntitlement = true;
-            }
+            if (!isValid) _hasPremiumEntitlement = false;
           });
         }
         _purchaseController.add(purchase);
@@ -286,12 +306,11 @@ class BillingService {
         if (kDebugMode) {
           print('Purchase restored: ${purchase.productID}');
         }
-        if (isPremiumProductId(purchase.productID)) {
-          // Verify restored purchase before granting entitlement
+        if (isPremiumProductId(purchase.productID) && _isPurchaseActive(purchase)) {
+          // Grant entitlement immediately so reinstall restore works on splash.
+          _hasPremiumEntitlement = true;
           _verifyPurchase(purchase).then((isValid) {
-            if (isValid) {
-              _hasPremiumEntitlement = true;
-            }
+            if (!isValid) _hasPremiumEntitlement = false;
           });
         }
         _purchaseController.add(purchase);
@@ -300,8 +319,7 @@ class BillingService {
         if (kDebugMode) {
           print('Purchase error: ${purchase.error}');
         }
-        // If error occurs for premium product, revoke entitlement
-        if (isPremiumProductId(purchase.productID)) {
+        if (isPremiumProductId(purchase.productID) && !_isVerifyingSubscription) {
           _hasPremiumEntitlement = false;
         }
         _purchaseController.add(purchase);
@@ -310,9 +328,7 @@ class BillingService {
         if (kDebugMode) {
           print('Purchase canceled: ${purchase.productID}');
         }
-        // For subscriptions, canceled status means subscription expired/canceled
-        // Revoke premium entitlement when subscription is canceled
-        if (isPremiumProductId(purchase.productID)) {
+        if (isPremiumProductId(purchase.productID) && !_isVerifyingSubscription) {
           _hasPremiumEntitlement = false;
         }
         _purchaseController.add(purchase);
@@ -369,21 +385,72 @@ class BillingService {
     return false;
   }
 
-  /// Check subscription status periodically
-  /// This should be called on app start and periodically to verify active subscriptions
-  static Future<void> checkSubscriptionStatus() async {
-    if (!_isAvailable || !_isInitialized) return;
+  /// Client-side check: purchase is purchased/restored and (Android) still owned.
+  static bool _isPurchaseActive(PurchaseDetails purchase) {
+    if (purchase.status != PurchaseStatus.purchased &&
+        purchase.status != PurchaseStatus.restored) {
+      return false;
+    }
+
+    if (Platform.isAndroid && purchase is GooglePlayPurchaseDetails) {
+      if (purchase.billingClientPurchase.purchaseState !=
+          PurchaseStateWrapper.purchased) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /// Re-query Play/App Store and return whether an active premium purchase exists.
+  /// Resets entitlement first, then waits for restore stream (ignores stale cancel
+  /// events during the verification window).
+  static Future<bool> verifyActiveSubscription({
+    Duration timeout = const Duration(seconds: 4),
+  }) async {
+    if (!_isAvailable) return _hasPremiumEntitlement;
+
+    if (!_isInitialized) {
+      await initialize();
+    }
+
+    _isVerifyingSubscription = true;
+    final previousEntitlement = _hasPremiumEntitlement;
+    _hasPremiumEntitlement = false;
 
     try {
-      // Restore purchases to get latest subscription status
       await _restorePurchases();
+      await waitForPremiumEntitlement(timeout: timeout);
+      if (kDebugMode) {
+        print(
+          '[BillingService] verifyActiveSubscription → $_hasPremiumEntitlement',
+        );
+      }
+      return _hasPremiumEntitlement;
+    } catch (e) {
+      if (kDebugMode) {
+        print('[BillingService] verifyActiveSubscription error: $e');
+      }
+      // Avoid false revoke on transient network errors.
+      _hasPremiumEntitlement = previousEntitlement;
+      return previousEntitlement;
+    } finally {
+      _isVerifyingSubscription = false;
+    }
+  }
 
-      // The purchase stream will automatically update _hasPremiumEntitlement
-      // based on the restored purchase status
+  /// Check subscription status periodically
+  /// This should be called on app start and periodically to verify active subscriptions
+  static Future<bool> checkSubscriptionStatus() async {
+    if (!_isAvailable || !_isInitialized) return _hasPremiumEntitlement;
+
+    try {
+      return await verifyActiveSubscription();
     } catch (e) {
       if (kDebugMode) {
         print('Error checking subscription status: $e');
       }
+      return _hasPremiumEntitlement;
     }
   }
 

@@ -4,10 +4,12 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../config/pro_config.dart';
 import '../../core/localization/l10n_extension.dart';
 import '../../core/theme/colors.dart';
+import '../../providers/premium_provider.dart';
 import '../../services/ad_service.dart';
 import '../../services/remote_config_service.dart';
 import '../../services/startup_service.dart';
@@ -36,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _glowAnimation;
   int _stage = 0;
   final bool _isVisible = true;
+  bool _restoreCompleted = false;
 
   @override
   void initState() {
@@ -105,6 +108,8 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _navigateNext() async {
+    final premiumProvider = context.read<PremiumProvider>();
+
     // Ensure splash is visible for proper minimum duration and wait for critical initialization
     const minSplash = _minSplashDuration; // 2.5 seconds minimum
     const maxTotalWait = Duration(seconds: 4); // Maximum 4 seconds total wait
@@ -112,6 +117,13 @@ class _SplashScreenState extends State<SplashScreen>
     final startTime = DateTime.now();
     bool? isFirstLaunchResult;
     bool? languageSelectedResult;
+
+    // Restore subscription in parallel with splash (reinstall: local premium is false).
+    final restoreFuture = premiumProvider.restoreSubscriptionForSplash().then((
+      _,
+    ) {
+      if (mounted) setState(() => _restoreCompleted = true);
+    });
 
     // Initialize StorageService first to ensure SharedPreferences is ready
     await StorageService.initialize();
@@ -165,6 +177,9 @@ class _SplashScreenState extends State<SplashScreen>
     // This prevents user from reaching next screens (and seeing ads) before consenting.
     await consentFuture;
 
+    // Wait for subscription restore before ads, Pro, or navigation.
+    await restoreFuture;
+
     // Calculate elapsed time and ensure we've waited at least the minimum
     final elapsed = DateTime.now().difference(startTime);
     if (elapsed < minSplash) {
@@ -216,9 +231,29 @@ class _SplashScreenState extends State<SplashScreen>
     }
 
     if (isFirstLaunch) {
+      if (premiumProvider.isPremium) {
+        debugPrint(
+          '[SplashScreen] ✅ Premium restored on splash (reinstall) — skipping ads',
+        );
+        final isLanguageSelected = languageSelectedResult ?? false;
+        final route = !isLanguageSelected ? '/language-selection' : '/';
+        if (mounted) context.go(route);
+        return;
+      }
       // First launch: Splash → (App Open Ad if RC) → Language → Onboarding
       debugPrint('[SplashScreen] 📱 First launch: language then onboarding');
       await _showSplashFirstTimeInterstitialThenGo('/language-selection');
+      return;
+    }
+
+    // Premium restored on splash: skip ads and Pro, go straight home.
+    if (premiumProvider.isPremium) {
+      debugPrint(
+        '[SplashScreen] ✅ Premium restored on splash — skipping ads and Pro',
+      );
+      final isLanguageSelected = languageSelectedResult ?? false;
+      final route = !isLanguageSelected ? '/language-selection' : '/';
+      if (mounted) context.go(route);
       return;
     }
 
@@ -255,6 +290,10 @@ class _SplashScreenState extends State<SplashScreen>
   /// First launch: show splash interstitial if RC allows (Android: `splash_inter_1sttime`, iOS: `splash_inter_1sttime_ios`), then navigate.
   Future<void> _showSplashFirstTimeInterstitialThenGo(String route) async {
     if (!mounted) return;
+    if (context.read<PremiumProvider>().isPremium) {
+      context.go(route);
+      return;
+    }
     try {
       await RemoteConfigService.initialize().timeout(
         const Duration(seconds: 3),
@@ -287,6 +326,10 @@ class _SplashScreenState extends State<SplashScreen>
   /// Returning user: show splash interstitial if RC allows (Android: `splash_inter_2ndtime`, iOS: `splash_inter_2ndtime_ios`), then navigate.
   Future<void> _showSplashReturningUserInterstitialThenGo(String route) async {
     if (!mounted) return;
+    if (context.read<PremiumProvider>().isPremium) {
+      context.go(route);
+      return;
+    }
     try {
       await RemoteConfigService.initialize().timeout(
         const Duration(seconds: 3),
@@ -321,6 +364,8 @@ class _SplashScreenState extends State<SplashScreen>
   /// Show Pro after splash when [RemoteConfigService.splashSub] / [splashSubIos] is true,
   /// plus [weekly_sub] / [weekly_sub_ios] and [sub_splash] / [sub_splash_ios] session rules.
   Future<bool> _shouldOpenProAfterSplash(int sessionCount) async {
+    if (context.read<PremiumProvider>().isPremium) return false;
+
     try {
       final ok = await RemoteConfigService.initialize().timeout(
         const Duration(seconds: 3),
@@ -379,6 +424,8 @@ class _SplashScreenState extends State<SplashScreen>
     if (!_isVisible) {
       return const SizedBox.shrink();
     }
+
+    final isPremiumUser = context.watch<PremiumProvider>().isPremium;
 
     return Scaffold(
       body: AnimatedOpacity(
@@ -620,25 +667,29 @@ class _SplashScreenState extends State<SplashScreen>
                   ],
                 ),
               ),
-              // Ad disclaimer at bottom - above system nav
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: SafeArea(
-                  top: false,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Center(
-                      child: Text(
-                        context.t('splashActionMayContainAd'),
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                        textDirection: Directionality.of(context),
+              // Ad disclaimer — only after restore, and only for non-premium users.
+              if (_restoreCompleted && !isPremiumUser)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: SafeArea(
+                    top: false,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Center(
+                        child: Text(
+                          context.t('splashActionMayContainAd'),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
+                          textDirection: Directionality.of(context),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

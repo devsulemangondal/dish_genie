@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 import '../config/pro_config.dart';
+import 'billing_service.dart';
 import 'remote_config_service.dart';
 import 'storage_service.dart';
 
@@ -34,7 +35,10 @@ Future<String?> splashSubProRouteBeforeHomeIfNeeded() async {
       : RemoteConfigService.splashSub;
   if (!gate) return null;
 
-  if (await StorageService.getIsPremium()) return null;
+  if (await StorageService.getIsPremium() ||
+      BillingService.hasPremiumEntitlement) {
+    return null;
+  }
 
   if (Platform.isIOS && !ProConfig.showProOnIos) return null;
 
